@@ -1,5 +1,12 @@
-import { cn } from "@/lib/utils";
+import Container from "@/components/Container";
+import Hero from "@/components/Hero";
+import Navbar from "@/components/Navbar";
 
 export default function Home() {
-  return <div className={cn("bg-red-200 p-5", "font-mono text-2xl font-bold")}>Hello World!</div>;
+  return (
+    <Container>
+      <Navbar />
+      <Hero />
+    </Container>
+  );
 }
