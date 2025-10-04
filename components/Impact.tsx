@@ -87,7 +87,7 @@ const Impact = () => {
 
           {/* Right Section - Map */}
           <div 
-            className="relative flex justify-center items-center ml-30"
+            className="relative flex justify-center items-center ml-16"
             style={{
               width: '500px',
               height: '550px'
@@ -112,7 +112,7 @@ const Impact = () => {
               </div>
               
               {/* Student 2 - Assam */}
-              <div className="absolute" style={{ top: '80px', right: '120px' }}>
+              <div className="absolute" style={{ top: '240px', right: '400px' }}>
                 <img 
                   src="/student2.svg" 
                   alt="Student 2" 
@@ -121,7 +121,7 @@ const Impact = () => {
               </div>
               
               {/* Student 3 - Gujarat */}
-              <div className="absolute" style={{ top: '220px', left: '80px' }}>
+              <div className="absolute" style={{ top: '140px', left: '130px' }}>
                 <img 
                   src="/student3.svg" 
                   alt="Student 3" 
@@ -130,7 +130,7 @@ const Impact = () => {
               </div>
               
               {/* Student 4 - Maharashtra */}
-              <div className="absolute" style={{ top: '200px', right: '100px' }}>
+              <div className="absolute" style={{ top: '430px', right: '320px' }}>
                 <img 
                   src="/student4.svg" 
                   alt="Student 4" 
@@ -139,7 +139,7 @@ const Impact = () => {
               </div>
               
               {/* Student 5 - Karnataka */}
-              <div className="absolute" style={{ bottom: '160px', left: '160px' }}>
+              <div className="absolute" style={{ bottom: '180px', left: '250px' }}>
                 <img 
                   src="/student5.svg" 
                   alt="Student 5" 
@@ -148,7 +148,7 @@ const Impact = () => {
               </div>
               
               {/* Student 6 - Tamil Nadu */}
-              <div className="absolute" style={{ bottom: '80px', right: '140px' }}>
+              <div className="absolute" style={{ bottom: '10px', right: '300px' }}>
                 <img 
                   src="/student6.svg" 
                   alt="Student 6" 
@@ -157,7 +157,7 @@ const Impact = () => {
               </div>
               
               {/* Student 7 - Odisha */}
-              <div className="absolute" style={{ bottom: '140px', right: '80px' }}>
+              <div className="absolute" style={{ bottom: '320px', right: '40px' }}>
                 <img 
                   src="/student7.svg" 
                   alt="Student 7" 
@@ -169,8 +169,8 @@ const Impact = () => {
               <div 
                 className="absolute flex items-center justify-center"
                 style={{
-                  top: '200px',
-                  left: '80px',
+                  top: '210px',
+                  left: '0px',
                   width: '149.25px',
                   height: '23.22px',
                   borderRadius: '11.61px',
@@ -194,8 +194,8 @@ const Impact = () => {
               <div 
                 className="absolute flex items-center justify-center"
                 style={{
-                  bottom: '80px',
-                  right: '80px',
+                  top: '295px',
+                  right: '100px',
                   width: '149.25px',
                   height: '23.22px',
                   borderRadius: '11.61px',
