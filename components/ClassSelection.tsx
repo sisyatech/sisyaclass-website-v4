@@ -88,9 +88,9 @@ const ClassSelection = () => {
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
         <RevealOnView from="left" durationMs={1500}>
-          <div className="text-center mb-12">
-            <h2 className="mb-8 font-montserrat font-bold text-[50px] leading-[45px] capitalize text-[#1A2439]">
-              <span className="block mb-2 font-montserrat font-normal text-[25px] leading-[45px] text-[#1A2439]">
+          <div className="text-center mb-10 sm:mb-12">
+            <h2 className="mb-6 sm:mb-8 font-montserrat font-bold text-[28px] leading-[34px] sm:text-[40px] sm:leading-[42px] lg:text-[50px] lg:leading-[45px] capitalize text-[#1A2439]">
+              <span className="block mb-2 font-montserrat font-normal text-[18px] leading-[28px] sm:text-[22px] sm:leading-[34px] lg:text-[25px] lg:leading-[45px] text-[#1A2439]">
                 Explore What You Can Learn
               </span>
               with SISYA, From Class 1 to 10
@@ -98,12 +98,12 @@ const ClassSelection = () => {
 
             {/* Class Selection Buttons */}
             <RevealOnView from="right" durationMs={1500}>
-              <div className="flex flex-wrap justify-center gap-4 mb-19">
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10">
                 {classOptions.map((option) => (
                   <button
                     key={option}
                     onClick={() => setActiveClass(option)}
-                    className={`font-montserrat font-semibold transition-all duration-300 w-[139px] h-[46px] rounded-[15px] px-[23.66px] py-[12.52px] shadow-[0px_5.57px_5.57px_0px_rgba(0,0,0,0.25)] ${
+                    className={`font-montserrat font-semibold text-[14px] sm:text-[15px] transition-all duration-300 w-[132px] h-[42px] sm:w-[139px] sm:h-[46px] rounded-[15px] px-[18px] sm:px-[23.66px] py-[10px] sm:py-[12.52px] shadow-[0px_5.57px_5.57px_0px_rgba(0,0,0,0.25)] ${
                       activeClass === option
                         ? "bg-[#0595CE] text-white border border-transparent"
                         : "bg-white text-[#1A2439] border border-[#1A2439]"
@@ -123,7 +123,7 @@ const ClassSelection = () => {
             {/* Navigation Arrows */}
             <button
               onClick={handlePrevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
             >
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -132,7 +132,7 @@ const ClassSelection = () => {
 
             <button
               onClick={handleNextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
             >
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -140,11 +140,11 @@ const ClassSelection = () => {
             </button>
 
             {/* Cards */}
-            <div className="flex justify-center gap-6 px-8">
+            <div className="flex flex-wrap md:flex-nowrap justify-center gap-4 sm:gap-6 px-2 sm:px-6 md:px-8">
               {currentSlideClasses.map((card, index) => (
                 <div
                   key={index}
-                  className={`shadow-lg hover:shadow-xl transition-all duration-[1500ms] ease-out relative w-[250px] h-[338px] rounded-[20px] ${
+                  className={`shadow-lg hover:shadow-xl transition-all duration-[1500ms] ease-out relative w-[210px] h-[338px] sm:w-[230px] md:w-[250px] rounded-[20px] ${
                     cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-95"
                   }`}
                   style={{
@@ -153,29 +153,29 @@ const ClassSelection = () => {
                   }}
                 >
                   {/* Teacher Image */}
-                  <div className="relative -top-[35px] left-[7.29px]">
-                    <Image src="/teacher.svg" alt="Teacher" width={247} height={246} className="object-cover w-[246.56px] h-[246.04px]" />
+                  <div className="relative -top-[28px] sm:-top-[32px] md:-top-[35px] left-[6px] sm:left-[7px]">
+                    <Image src="/teacher.svg" alt="Teacher" width={247} height={246} className="object-cover w-[200px] h-[200px] sm:w-[220px] sm:h-[220px] md:w-[246.56px] md:h-[246.04px]" />
                   </div>
 
                   {/* Class Number */}
-                  <div className="absolute top-[48px] left-[172px]">
-                    <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[18px] leading-none text-center text-[#1A2439]">
+                  <div className="absolute top-[42px] sm:top-[46px] md:top-[48px] right-3 md:left-[172px]">
+                    <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[16px] sm:text-[17px] md:text-[18px] leading-none text-center text-[#1A2439]">
                       {card.class}
                     </h3>
                   </div>
 
                   {/* Bottom Half - Course Features */}
-                  <div className="absolute w-[232px] h-[172px] top-[160px] left-[9px] rounded-[14px] bg-[#1A2439]">
+                  <div className="absolute w-[192px] h-[172px] sm:w-[212px] md:w-[232px] top-[150px] sm:top-[156px] md:top-[160px] left-[9px] rounded-[14px] bg-[#1A2439]">
                     <div className="p-4 h-full flex flex-col">
                       <div className="grid grid-cols-2 gap-2 mb-2 flex-1">
                         {courseFeatures.map((feature, featureIndex) => (
                           <button
                             key={featureIndex}
-                            className={`transition-colors duration-300 font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${
+                            className={`transition-colors duration-300 font-montserrat font-semibold text-[7px] sm:text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${
                               feature === "Olympiad Preparation" ? "col-span-2" : ""
                             }`}
                             style={{
-                              width: feature === "Olympiad Preparation" ? "auto" : "91.71px",
+                              width: feature === "Olympiad Preparation" ? "auto" : "86px",
                               height: "22.73px",
                               color: card.textColor,
                             }}
@@ -187,7 +187,7 @@ const ClassSelection = () => {
 
                       {/* Book Demo Button */}
                       <div className="flex justify-center">
-                        <button className="transition-colors duration-300 w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
+                        <button className="transition-colors duration-300 w-[112px] sm:w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
                           Book a Demo at ₹19
                         </button>
                       </div>
@@ -198,7 +198,7 @@ const ClassSelection = () => {
             </div>
 
             {/* Pagination Dots */}
-            <div className="flex justify-center mt-8 space-x-2">
+            <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
               {classOptions.map((_, index) => (
                 <button
                   key={index}

@@ -4,59 +4,59 @@ import Image from "next/image";
 
 const AIEcosystem = () => {
     return (
-        <div className="py-20 bg-white">
+        <div className="py-16 sm:py-20 bg-white">
             <div className="mx-auto max-w-7xl px-4">
                 <RevealOnView from="left" durationMs={1500}>
                     <div
-                        className="relative mx-auto rounded-[50px] p-12 w-[1176px] h-[746px] bg-[#1A2439] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)]"
+                        className="relative mx-auto rounded-[30px] sm:rounded-[40px] lg:rounded-[50px] p-6 sm:p-10 lg:p-12 w-full max-w-[1176px] min-h-[520px] lg:min-h-[746px] bg-[#1A2439] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)]"
                     >
                         {/* Top Headlines */}
-                        <div className="text-center mb-20">
-                            <h1 className="text-white text-2xl mb-2">Revolutionizing Learning</h1>
-                            <h2 className="text-yellow-400 text-4xl font-bold">With SISYA's AI Ecosystem</h2>
+                        <div className="text-center mb-10 sm:mb-16 lg:mb-20">
+                            <h1 className="text-white text-xl sm:text-2xl mb-2">Revolutionizing Learning</h1>
+                            <h2 className="text-yellow-400 text-2xl sm:text-3xl lg:text-4xl font-bold">With SISYA's AI Ecosystem</h2>
                         </div>
 
                         {/* Main Content - Two columns: left text, right phone mockups */}
-                        <div className="flex justify-between items-start gap-10">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-stretch gap-8 md:gap-10">
 
                             {/* Left - Text Content */}
-                            <div className="text-left space-y-8 max-w-2xl">
+                            <div className="text-left space-y-6 sm:space-y-8 max-w-full md:max-w-2xl">
                                 {/* Main Title */}
                                 <div>
-                                    <h3 className="text-white text-4xl mb-4">
+                                    <h3 className="text-white text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4">
                                         Meet Your <span className="text-yellow-400 font-bold">Child's 24/7 AI Learning Partner</span>
                                     </h3>
-                                    <p className="text-white text-xl">
+                                    <p className="text-white text-base sm:text-lg lg:text-xl">
                                         India's first EdTech with real AI-powered doubt solving
                                     </p>
                                 </div>
 
                                 {/* Features List */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
                                     <div>
-                                        <h4 className="text-white font-bold text-lg mb-2">Interactive Learning</h4>
-                                        <p className="text-white text-sm leading-relaxed">
+                                        <h4 className="text-white font-bold text-base sm:text-lg mb-2">Interactive Learning</h4>
+                                        <p className="text-white text-sm sm:text-base leading-relaxed">
                                             Get instant answers anytime with SISYA's AI-powered chat, making study time engaging and effective.
                                         </p>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-white font-bold text-lg mb-2">Step-by-Step Guidance</h4>
-                                        <p className="text-white text-sm leading-relaxed">
+                                        <h4 className="text-white font-bold text-base sm:text-lg mb-2">Step-by-Step Guidance</h4>
+                                        <p className="text-white text-sm sm:text-base leading-relaxed">
                                             SISYA breaks down concepts clearly and guides your child through problems, step by step.
                                         </p>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-white font-bold text-lg mb-2">Personalized Feedback</h4>
-                                        <p className="text-white text-sm leading-relaxed">
+                                        <h4 className="text-white font-bold text-base sm:text-lg mb-2">Personalized Feedback</h4>
+                                        <p className="text-white text-sm sm:text-base leading-relaxed">
                                             Receive tailored insights based on your child's learning progress to boost improvement.
                                         </p>
                                     </div>
 
                                     <div>
-                                        <h4 className="text-white font-bold text-lg mb-2">Grade-Specific Assistance</h4>
-                                        <p className="text-white text-sm leading-relaxed">
+                                        <h4 className="text-white font-bold text-base sm:text-lg mb-2">Grade-Specific Assistance</h4>
+                                        <p className="text-white text-sm sm:text-base leading-relaxed">
                                             SISYA delivers fun, easy-to-understand explanations aligned with your child's grade and syllabus.
                                         </p>
                                     </div>
@@ -64,14 +64,14 @@ const AIEcosystem = () => {
                             </div>
 
                             {/* Right - Phone mockups */}
-                            <div className="relative w-[520px] h-[480px] hidden md:block">
+                            <div className="relative w-full md:w-[520px] h-[320px] md:h-[480px] hidden md:block">
                                 {/* Left phone (eco1) */}
                                 <Image
                                     src="/eco1.svg"
                                     alt="SISYA AI Assistant"
                                     width={220}
                                     height={440}
-                                    className="absolute left-0 bottom-0 h-[440px] w-auto drop-shadow-xl z-10"
+                                    className="absolute left-0 bottom-0 h-[380px] md:h-[440px] w-auto drop-shadow-xl z-10"
                                 />
                                 {/* Right phone (eco2) */}
                                 <Image
@@ -79,22 +79,22 @@ const AIEcosystem = () => {
                                     alt="Get Started with AI Learning"
                                     width={220}
                                     height={440}
-                                    className="absolute right-0 top-0 h-[440px] w-auto drop-shadow-xl z-20"
+                                    className="absolute right-0 top-0 h-[380px] md:h-[440px] w-auto drop-shadow-xl z-20"
                                 />
                             </div>
                         </div>
 
                         {/* Navigation Controls */}
-                        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-4">
-                            <button className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white">
+                        <div className="mt-10 md:mt-0 md:absolute md:bottom-6 left-1/2 md:-translate-x-1/2 flex items-center justify-center gap-4">
+                            <button className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white active:scale-95">
                                 ←
                             </button>
                             <div className="flex gap-2">
-                                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                                <div className="w-3 h-3 rounded-full bg-white"></div>
-                                <div className="w-3 h-3 rounded-full bg-white"></div>
+                                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400"></div>
+                                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white"></div>
+                                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-white"></div>
                             </div>
-                            <button className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white">
+                            <button className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-white active:scale-95">
                                 →
                             </button>
                         </div>

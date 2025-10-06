@@ -3,9 +3,9 @@ import React from "react";
 import Image from "next/image";
 const Footer = () => {
   return (
-    <div className="relative py-16 px-8 w-[1442px] h-[475px] bg-[#DADADA66]">
+    <div className="relative py-12 sm:py-16 px-4 sm:px-8 w-full bg-[#DADADA66]">
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12">
           {/* Left Side - Download and Contact */}
           <div className="space-y-8">
             {/* Get link in SMS section */}
@@ -14,26 +14,26 @@ const Footer = () => {
                 Get link in SMS to download the App
               </h2>
               
-              <div className="flex gap-4 mb-8">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8">
                 <div className="flex">
                   <div className="flex">
-                    <div className="w-[80px] h-[53px] rounded-l-[6px] border border-[#E0E0E0] bg-[#FFFDFD] flex items-center justify-center font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
+                    <div className="w-[72px] sm:w-[80px] h-[48px] sm:h-[53px] rounded-l-[6px] border border-[#E0E0E0] bg-[#FFFDFD] flex items-center justify-center font-roboto font-medium text-[20px] sm:text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
                       +91
                     </div>
                     <input
                       type="tel"
                       placeholder="Enter your mobile number"
-                      className="w-[330px] h-[53px] border border-l-0 border-[#E0E0E0] bg-[#FFFDFD] px-4 font-['Nunito'] font-normal text-[14.15px] leading-[18.87px] text-[#1A2439] outline-none"
+                      className="w-[220px] sm:w-[330px] h-[48px] sm:h-[53px] border border-l-0 border-[#E0E0E0] bg-[#FFFDFD] px-4 font-['Nunito'] font-normal text-[14.15px] leading-[18.87px] text-[#1A2439] outline-none"
                     />
                   </div>
-                  <button className="w-[113px] h-[53px] rounded-r-[6px] bg-[#1A2439] text-white text-[16px]">
+                  <button className="w-[163px] h-[48px] sm:h-[53px] rounded-r-[6px] bg-[#1A2439] text-white text-[10px] sm:text-[15px]">
                     Get the link
                   </button>
                 </div>
               </div>
 
               {/* Google Play Button */}
-              <div className="mb-8 -mt-4">
+              <div className="mb-8 -mt-2 sm:-mt-4">
                 <Image 
                   src="/download/googleplay.svg" 
                   alt="Get it on Google Play" 
@@ -44,11 +44,11 @@ const Footer = () => {
               </div>
 
               {/* Demo class card */}
-              <div className="w-[410px] h-[120px] rounded-[14px] border border-[#E0E0E0] bg-[#FFFDFD] p-4 mb-[42px] relative">
+              <div className="w-full max-w-[410px] h-auto rounded-[14px] border border-[#E0E0E0] bg-[#FFFDFD] p-4 mb-[42px] relative">
                 <h3 className="font-montserrat font-semibold text-[18px] leading-none text-[#1A2439] mb-3">
                   Know more about our courses.<br />Book a demo class
                 </h3>
-                <div className="flex items-center justify-between -mt-6">
+                <div className="flex items-center justify-between -mt-4 sm:-mt-6">
                   <button className="w-[156px] h-[26.79px] rounded-[6.3px] bg-[#0595CE] font-['Rubik'] font-normal text-[14.18px] leading-none text-white flex-shrink-0">
                     Speak to an expert
                   </button>
@@ -87,40 +87,40 @@ const Footer = () => {
           </div>
 
           {/* Right Side - Navigation Columns */}
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-5 sm:gap-6">
             {/* Company Column 1 */}
             <div>
-              <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-4">
+              <h3 className="font-roboto font-medium text-[14px] sm:text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-3 sm:mb-4">
                 Company
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     About us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Contact us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Blogs
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     News
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Why SISYA
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Careers
                   </a>
                 </li>
@@ -129,37 +129,37 @@ const Footer = () => {
 
             {/* Company Column 2 */}
             <div>
-              <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-4">
+              <h3 className="font-roboto font-medium text-[14px] sm:text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-3 sm:mb-4">
                 Company
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     About us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Contact us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Blogs
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     News
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Why SISYA
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Careers
                   </a>
                 </li>
@@ -168,37 +168,37 @@ const Footer = () => {
 
             {/* Company Column 3 */}
             <div>
-              <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-4">
+              <h3 className="font-roboto font-medium text-[14px] sm:text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-3 sm:mb-4">
                 Company
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     About us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Contact us
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Blogs
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     News
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Why SISYA
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
+                  <a href="#" className="font-roboto font-normal text-[14px] sm:text-[16px] leading-[18px] sm:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Careers
                   </a>
                 </li>
