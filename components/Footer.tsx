@@ -94,7 +94,7 @@ const Footer = () => {
               </div>
 
               {/* Google Play Button */}
-              <div className="mb-8">
+              <div className="mb-8" style={{ marginTop: '-16px' }}>
                 <img 
                   src="/download/googleplay.svg" 
                   alt="Get it on Google Play" 
@@ -111,7 +111,7 @@ const Footer = () => {
                   border: '1px solid #E0E0E0',
                   background: '#FFFDFD',
                   padding: '16px',
-                  marginBottom: '32px',
+                  marginBottom: '42px',
                   position: 'relative'
                 }}
               >
@@ -128,7 +128,7 @@ const Footer = () => {
                 >
                   Know more about our courses.<br />Book a demo class
                 </h3>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between" style={{ marginTop: '-25px' }}>
                   <button 
                     style={{
                       width: '156px',
@@ -155,14 +155,13 @@ const Footer = () => {
                       width: '74px',
                       height: '74px',
                       flexShrink: 0
-                      
                     }}
                   />
                 </div>
               </div>
 
               {/* Contact Information */}
-              <div className="space-y-3">
+              <div className="space-y-3" style={{ marginTop: '-26px' }}>
                 <div className="flex items-center gap-3">
                   <div className="w-5 h-5">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -13,6 +13,9 @@ import Reviews from "@/components/Reviews";
 import FAQ from "@/components/FAQ";
 import AppDownload from "@/components/AppDownload";
 import Footer from "@/components/Footer";
+import StudyMaterial from "@/components/StudyMaterial";
+import Moto from "@/components/moto";
+import FooterBottom from "@/components/FooterBottom";
 export default function Home() {
   return (
     <Container>
@@ -30,6 +33,9 @@ export default function Home() {
       <FAQ />
       <AppDownload />
       <Footer />
+      <StudyMaterial />
+      <Moto />
+      <FooterBottom />
     </Container>
   );
 }
