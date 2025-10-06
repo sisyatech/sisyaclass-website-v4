@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 const Impact = () => {
   const numberColorClass = (hex: string) => {
     switch (hex) {
@@ -57,13 +57,35 @@ const Impact = () => {
     }
   ];
 
+  const [hasEntered, setHasEntered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasEntered(true);
+          observer.disconnect();
+        }
+      },
+      { root: null, threshold: 0.7, rootMargin: "0px 0px -10% 0px" }
+    );
+    observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="py-20 bg-white">
+    <div ref={sectionRef} className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           
           {/* Left Section - Statistics */}
-          <div className="space-y-8 ml-18">
+          <div
+            className={`space-y-8 ml-18 transition-all duration-[1500ms] ease-out ${
+              hasEntered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+            }`}
+          >
             <div className="space-y-2">
               <h2 className="font-montserrat font-extrabold text-3xl leading-none text-gray-900">
                 SISYA's Impact:
@@ -110,78 +132,58 @@ const Impact = () => {
 
           {/* Right Section - Map */}
           <div 
-            className="relative flex justify-center items-center ml-16 w-[500px] h-[550px]"
+            className={`relative flex justify-center items-center ml-16 w-[500px] h-[550px] transition-all duration-[1500ms] ease-out ${
+              hasEntered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"
+            }`}
           >
             {/* Map */}
-            <img 
+            <Image 
               src="/map.svg" 
               alt="India Map" 
+              width={500}
+              height={550}
               className="w-full h-full object-contain"
             />
             
             {/* Student Images positioned on the map */}
-            <div className="absolute inset-0">
+            <div
+              className={`absolute inset-0 transition-transform duration-[1900ms] ease-out ${
+                hasEntered ? "scale-100" : "scale-0"
+              }`}
+            >
               {/* Student 1 - Jammu & Kashmir */}
               <div className="absolute top-[350px] left-[174px]">
-                <img 
-                  src="/student1.svg" 
-                  alt="Student 1" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student1.svg" alt="Student 1" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Student 2 - Assam */}
               <div className="absolute top-[240px] right-[400px]">
-                <img 
-                  src="/student2.svg" 
-                  alt="Student 2" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student2.svg" alt="Student 2" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Student 3 - Gujarat */}
               <div className="absolute top-[140px] left-[130px]">
-                <img 
-                  src="/student3.svg" 
-                  alt="Student 3" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student3.svg" alt="Student 3" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Student 4 - Maharashtra */}
               <div className="absolute top-[430px] right-[320px]">
-                <img 
-                  src="/student4.svg" 
-                  alt="Student 4" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student4.svg" alt="Student 4" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Student 5 - Karnataka */}
               <div className="absolute bottom-[180px] left-[250px]">
-                <img 
-                  src="/student5.svg" 
-                  alt="Student 5" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student5.svg" alt="Student 5" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Student 6 - Tamil Nadu */}
               <div className="absolute bottom-[10px] right-[300px]">
-                <img 
-                  src="/student6.svg" 
-                  alt="Student 6" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student6.svg" alt="Student 6" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Student 7 - Odisha */}
               <div className="absolute bottom-[320px] right-[40px]">
-                <img 
-                  src="/student7.svg" 
-                  alt="Student 7" 
-                  className="w-12 h-12 object-contain rounded-full"
-                />
+                <Image src="/student7.svg" alt="Student 7" width={48} height={48} className="w-12 h-12 object-contain rounded-full" />
               </div>
               
               {/* Text Bubble 1 - Unlimited doubt solving (near Gujarat) */}

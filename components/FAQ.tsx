@@ -1,10 +1,7 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const FAQ = () => {
-  const [openItems, setOpenItems] = useState<number[]>([]);
-
   const faqs = [
     {
       id: 1,
@@ -28,6 +25,33 @@ const FAQ = () => {
     }
   ];
 
+  // First question will open once the section enters view
+  const [openItems, setOpenItems] = useState<number[]>([]);
+  const [entered, setEntered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Open the first FAQ AFTER the entrance animation finishes
+  useEffect(() => {
+    if (!entered) return;
+    const t = setTimeout(() => setOpenItems([faqs[0].id]), 1800);
+    return () => clearTimeout(t);
+  }, [entered]);
+
   const toggleItem = (id: number) => {
     setOpenItems(prev => 
       prev.includes(id) 
@@ -37,40 +61,45 @@ const FAQ = () => {
   };
 
   return (
-    <div className="py-20 bg-white">
+    <div ref={sectionRef} className="py-20 bg-white">
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 
-          className="text-center mb-12 font-montserrat font-bold text-[40px] leading-[1.2] text-[#1A2439]"
+          className={`text-center mb-12 font-montserrat font-bold text-[40px] leading-[1.2] text-[#1A2439] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 -translate-y-0' : 'opacity-0 -translate-y-[160px]'}`}
         >
           Frequently asked questions
         </h2>
 
         {/* FAQ Items */}
-        <div className="space-y-4 mb-50">
-          {faqs.map((faq) => (
+        <div className={`space-y-5 mb-50 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+          {faqs.map((faq, index) => (
             <div
               key={faq.id}
-              className="border border-gray-200 rounded-lg bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+              className={`rounded-xl bg-white transition-all shadow-md hover:shadow-lg ${
+                openItems.includes(faq.id)
+                  ? 'ring-2 ring-[#4A9FD8]'
+                  : 'ring-1 ring-gray-200'
+              }`}
+              style={{ transitionDelay: entered ? `${index * 120}ms` : '0ms' }}
             >
               {/* Question */}
               <button
                 onClick={() => toggleItem(faq.id)}
-                className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors rounded-xl"
               >
                 <span 
-                  className="font-roboto font-medium text-[16px] leading-[1.4] text-[#1A2439]"
+                  className="font-roboto font-medium text-[17px] leading-[1.5] text-[#1A2439]"
                 >
                   {faq.question}
                 </span>
                 
                 {/* Plus/Minus Icon */}
                 <div 
-                  className={`flex-shrink-0 ml-4 w-6 h-6 rounded-full bg-[#4A9FD8] flex items-center justify-center transition-transform duration-300 ${openItems.includes(faq.id) ? 'rotate-45' : 'rotate-0'}`}
+                  className={`flex-shrink-0 ml-4 w-7 h-7 rounded-full bg-[#4A9FD8] shadow-sm flex items-center justify-center transition-transform duration-300 ${openItems.includes(faq.id) ? 'rotate-45' : 'rotate-0'}`}
                 >
                   <svg
-                    width="16"
-                    height="16"
+                    width="18"
+                    height="18"
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -88,10 +117,10 @@ const FAQ = () => {
 
               {/* Answer */}
               <div
-                className={`overflow-hidden transition-all duration-300 ease-in-out ${openItems.includes(faq.id) ? 'max-h-[200px]' : 'max-h-0'}`}
+                className={`overflow-hidden transition-all duration-[1300ms] ease-in-out ${openItems.includes(faq.id) ? 'max-h-[320px]' : 'max-h-0'}`}
               >
                 <div 
-                  className="px-6 pb-4 font-roboto font-normal text-[14px] leading-[1.6] text-[#556A8E]"
+                  className="px-6 pb-5 pt-0 border-t border-gray-100 font-roboto font-normal text-[15px] leading-[1.7] text-[#556A8E]"
                 >
                   {faq.answer}
                 </div>

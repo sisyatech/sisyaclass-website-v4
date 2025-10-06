@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-
+import NextImage from "next/image";
 const Reviews = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -80,9 +80,11 @@ const Reviews = () => {
                     <div className="flex items-center gap-4">
                       {/* Profile Image */}
                       <div className="rounded-full overflow-hidden flex-shrink-0 w-[54px] h-[54px]">
-                        <img 
+                        <NextImage 
                           src={review.image}
                           alt={review.name}
+                          width={54}
+                          height={54}
                           className="w-full h-full object-cover"
                         />
                       </div>

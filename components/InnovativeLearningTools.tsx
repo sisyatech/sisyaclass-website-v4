@@ -1,13 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 const InnovativeLearningTools = () => {
+  const [entered, setEntered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div className="py-20 bg-white">
+    <div ref={sectionRef} className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         <div 
-          className="relative mx-auto rounded-[50px] p-12 w-[1176px] h-[1022px] bg-[#B9D9EB4D] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)]"
+          className={`relative mx-auto rounded-[50px] p-12 w-[1176px] h-[1022px] bg-[#B9D9EB4D] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-[160px]'}`}
         >
           {/* Top Headlines */}
           <div className="text-center mb-12">
@@ -28,9 +46,11 @@ const InnovativeLearningTools = () => {
             
             {/* Laptop with Video */}
             <div className="relative w-full max-w-3xl">
-              <img 
+              <Image 
                 src="/session4/pc.svg" 
                 alt="Laptop" 
+                width={1000}
+                height={1000}
                 className="w-full h-auto"
               />
               
@@ -47,7 +67,7 @@ const InnovativeLearningTools = () => {
               {/* Feature 1 - Personalized Feedback */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <img src="/session4/pic1.svg" alt="Personalized Feedback" className="w-[73px] h-[73px]" />
+                  <Image src="/session4/pic1.svg" alt="Personalized Feedback" width={73} height={73} className="w-[73px] h-[73px]" />
                 </div>
                 <div>
                   <h4 className="mb-1 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
@@ -62,7 +82,7 @@ const InnovativeLearningTools = () => {
               {/* Feature 2 - AI Study Buddy */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <img src="/session4/pic2.svg" alt="AI Study Buddy" className="w-[73px] h-[73px]" />
+                  <Image src="/session4/pic2.svg" alt="AI Study Buddy" width={73} height={73} className="w-[73px] h-[73px]" />
                 </div>
                 <div>
                   <h4 className="mb-1 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
@@ -77,7 +97,7 @@ const InnovativeLearningTools = () => {
               {/* Feature 3 - Skill Booster Challenges */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <img src="/session4/pic3.svg" alt="Skill Booster Challenges" className="w-[73px] h-[73px]" />
+                  <Image src="/session4/pic3.svg" alt="Skill Booster Challenges" width={73} height={73} className="w-[73px] h-[73px]" />
                 </div>
                 <div>
                   <h4 className="mb-1 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
@@ -96,7 +116,7 @@ const InnovativeLearningTools = () => {
               {/* Feature 4 - Performance Insights */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <img src="/session4/pic4.svg" alt="Performance Insights" className="w-[73px] h-[73px]" />
+                  <Image src="/session4/pic4.svg" alt="Performance Insights" width={73} height={73} className="w-[73px] h-[73px]" />
                 </div>
                 <div>
                   <h4 className="mb-1 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
@@ -111,7 +131,7 @@ const InnovativeLearningTools = () => {
               {/* Feature 5 - SISYA Play */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <img src="/session4/pic5.svg" alt="SISYA Play" className="w-[73px] h-[73px]" />
+                  <Image src="/session4/pic5.svg" alt="SISYA Play" width={73} height={73} className="w-[73px] h-[73px]" />
                 </div>
                 <div>
                   <h4 className="mb-1 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
@@ -126,7 +146,7 @@ const InnovativeLearningTools = () => {
               {/* Feature 6 - Parent Dashboard */}
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <img src="/session4/pic6.svg" alt="Parent Dashboard" className="w-[73px] h-[73px]" />
+                    <Image src="/session4/pic6.svg" alt="Parent Dashboard" width={73} height={73} className="w-[73px] h-[73px]" />
                 </div>
                 <div>
                   <h4 className="mb-1 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">

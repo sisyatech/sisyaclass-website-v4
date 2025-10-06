@@ -1,7 +1,6 @@
-"use client";
 
 import React from "react";
-
+import Image from "next/image";
 const Footer = () => {
   return (
     <div className="relative py-16 px-8 w-[1442px] h-[475px] bg-[#DADADA66]">
@@ -35,9 +34,11 @@ const Footer = () => {
 
               {/* Google Play Button */}
               <div className="mb-8 -mt-4">
-                <img 
+                <Image 
                   src="/download/googleplay.svg" 
                   alt="Get it on Google Play" 
+                  width={200}
+                  height={56}
                   className="h-14 w-auto cursor-pointer hover:opacity-80 transition-opacity"
                 />
               </div>
@@ -51,11 +52,13 @@ const Footer = () => {
                   <button className="w-[156px] h-[26.79px] rounded-[6.3px] bg-[#0595CE] font-['Rubik'] font-normal text-[14.18px] leading-none text-white flex-shrink-0">
                     Speak to an expert
                   </button>
-                  <img 
-                    src="/person.svg" 
-                    alt="Expert person" 
-                    className="w-[74px] h-[74px] flex-shrink-0"
-                  />
+                <Image 
+                  src="/person.svg" 
+                  alt="Expert person" 
+                  width={74}
+                  height={74}
+                  className="w-[74px] h-[74px] flex-shrink-0"
+                />
                 </div>
               </div>
 

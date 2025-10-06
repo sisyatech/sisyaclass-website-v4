@@ -1,9 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 const Teachers = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [entered, setEntered] = useState(false);
+  const [cardsEntered, setCardsEntered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
+  // Re-trigger card fade/scale on slide change
+  useEffect(() => {
+    setCardsEntered(false);
+    const id = requestAnimationFrame(() => setCardsEntered(true));
+    return () => cancelAnimationFrame(id);
+  }, [currentSlide]);
 
   const teachers = [
     {
@@ -47,11 +72,11 @@ const Teachers = () => {
   const visibleTeachers = teachers.slice(currentSlide, currentSlide + 4);
 
   return (
-    <div className="py-20 bg-white">
+    <div ref={sectionRef} className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         
         {/* Top Headlines */}
-        <div className="text-center mb-12">
+        <div className={`text-center mb-12 transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 -translate-x-0" : "opacity-0 -translate-x-[160px]"}`}>
           <h3 className="font-montserrat font-normal text-[25px] leading-[45px] text-center text-[#1A2439]">
             Meet the Minds
           </h3>
@@ -64,7 +89,7 @@ const Teachers = () => {
         </div>
 
         {/* Teachers Carousel */}
-        <div className="relative">
+        <div className={`relative transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[160px]"}`}>
           
           {/* Navigation Arrows */}
           <button 
@@ -86,16 +111,19 @@ const Teachers = () => {
             {visibleTeachers.map((teacher, index) => (
               <div 
                 key={index}
-                className="overflow-hidden w-[251.6px] h-[406.7px] rounded-[26.04px] bg-[#2C3E50] p-5"
+                className={`overflow-hidden w-[251.6px] h-[406.7px] rounded-[26.04px] bg-[#2C3E50] p-5 transition-all duration-[1500ms] ease-out ${cardsEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : '0ms' }}
               >
                 {/* Teacher Image */}
                 <div className="flex justify-center mb-4">
                   <div 
                     className="rounded-[20px] overflow-hidden w-[196.56px] h-[226.04px] bg-[#D9E3F0]"
                   >
-                    <img 
-                      src={teacher.image} 
+                    <Image 
+                      src={teacher.image}   
                       alt={teacher.name}
+                      width={196.56}
+                      height={226.04}
                       className="w-full h-full object-cover"
                     />
                   </div>

@@ -1,11 +1,28 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-
+import Image from "next/image";     
 const Testimonials = () => {
   const videoRefs = useRef<(HTMLIFrameElement | null)[]>([]);
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
   const [videoTitles, setVideoTitles] = useState<{ [key: string]: string }>({});
+  const [entered, setEntered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true); 
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
 
   const testimonials = [
     {
@@ -51,10 +68,10 @@ const Testimonials = () => {
   ];
 
   return (
-    <div className="py-2 bg-white">
+    <div id="testimonials" ref={sectionRef} className="py-2 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
-        <div className="text-center mb-6">
+        <div className={`text-center mb-6 transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 -translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}>
           <h3 
             className="mb-0 font-montserrat font-normal text-[25px] leading-[45px] text-[#1A2439]"
           >
@@ -68,11 +85,12 @@ const Testimonials = () => {
         </div>
 
         {/* Video Cards Grid */}
-        <div className="flex flex-wrap justify-center -mx-2">
+        <div className={`flex flex-wrap justify-center -mx-2 transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className="relative group px-2 mb-4 w-[260px] h-[400px]"
+              className={`relative group px-2 mb-4 w-[260px] h-[400px] transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+              style={{ transitionDelay: entered ? `${index * 120}ms` : '0ms' }}
               onMouseEnter={() => setActiveVideo(index)}
               onMouseLeave={() => setActiveVideo(null)}
             >
@@ -94,10 +112,13 @@ const Testimonials = () => {
                 ) : (
                   <div className="w-full h-full relative">
                     {/* YouTube Thumbnail */}
-                    <img 
+                    <Image 
+                      width={260}
+                      height={400}
                       src={testimonial.thumbnail}
                       alt={`${testimonial.name} - ${testimonial.grade}`}
                       className="w-full h-full object-cover"
+                      unoptimized
                     />
                     
                     {/* Video Title Overlay at Bottom when not Playing */}
