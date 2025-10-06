@@ -3,6 +3,29 @@
 import React from "react";
 
 const Impact = () => {
+  const numberColorClass = (hex: string) => {
+    switch (hex) {
+      case '#575CFB':
+        return 'text-[#575CFB]';
+      case '#41AC7D':
+        return 'text-[#41AC7D]';
+      case '#1BA8EF':
+        return 'text-[#1BA8EF]';
+      case '#E78F8E':
+        return 'text-[#E78F8E]';
+      default:
+        return 'text-[#1A2439]';
+    }
+  };
+
+  const descColorClass = (hex: string) => {
+    switch (hex) {
+      case '#556A8E':
+        return 'text-[#556A8E]';
+      default:
+        return 'text-[#1A2439]';
+    }
+  };
   const statistics = [
     {
       number: "2.1+",
@@ -87,11 +110,7 @@ const Impact = () => {
 
           {/* Right Section - Map */}
           <div 
-            className="relative flex justify-center items-center ml-16"
-            style={{
-              width: '500px',
-              height: '550px'
-            }}
+            className="relative flex justify-center items-center ml-16 w-[500px] h-[550px]"
           >
             {/* Map */}
             <img 
@@ -103,7 +122,7 @@ const Impact = () => {
             {/* Student Images positioned on the map */}
             <div className="absolute inset-0">
               {/* Student 1 - Jammu & Kashmir */}
-              <div className="absolute" style={{ top: '350px', left: '174px' }}>
+              <div className="absolute top-[350px] left-[174px]">
                 <img 
                   src="/student1.svg" 
                   alt="Student 1" 
@@ -112,7 +131,7 @@ const Impact = () => {
               </div>
               
               {/* Student 2 - Assam */}
-              <div className="absolute" style={{ top: '240px', right: '400px' }}>
+              <div className="absolute top-[240px] right-[400px]">
                 <img 
                   src="/student2.svg" 
                   alt="Student 2" 
@@ -121,7 +140,7 @@ const Impact = () => {
               </div>
               
               {/* Student 3 - Gujarat */}
-              <div className="absolute" style={{ top: '140px', left: '130px' }}>
+              <div className="absolute top-[140px] left-[130px]">
                 <img 
                   src="/student3.svg" 
                   alt="Student 3" 
@@ -130,7 +149,7 @@ const Impact = () => {
               </div>
               
               {/* Student 4 - Maharashtra */}
-              <div className="absolute" style={{ top: '430px', right: '320px' }}>
+              <div className="absolute top-[430px] right-[320px]">
                 <img 
                   src="/student4.svg" 
                   alt="Student 4" 
@@ -139,7 +158,7 @@ const Impact = () => {
               </div>
               
               {/* Student 5 - Karnataka */}
-              <div className="absolute" style={{ bottom: '180px', left: '250px' }}>
+              <div className="absolute bottom-[180px] left-[250px]">
                 <img 
                   src="/student5.svg" 
                   alt="Student 5" 
@@ -148,7 +167,7 @@ const Impact = () => {
               </div>
               
               {/* Student 6 - Tamil Nadu */}
-              <div className="absolute" style={{ bottom: '10px', right: '300px' }}>
+              <div className="absolute bottom-[10px] right-[300px]">
                 <img 
                   src="/student6.svg" 
                   alt="Student 6" 
@@ -157,7 +176,7 @@ const Impact = () => {
               </div>
               
               {/* Student 7 - Odisha */}
-              <div className="absolute" style={{ bottom: '320px', right: '40px' }}>
+              <div className="absolute bottom-[320px] right-[40px]">
                 <img 
                   src="/student7.svg" 
                   alt="Student 7" 
@@ -167,24 +186,10 @@ const Impact = () => {
               
               {/* Text Bubble 1 - Unlimited doubt solving (near Gujarat) */}
               <div 
-                className="absolute flex items-center justify-center"
-                style={{
-                  top: '210px',
-                  left: '0px',
-                  width: '149.25px',
-                  height: '23.22px',
-                  borderRadius: '11.61px',
-                  background: '#FFF9F9',
-                  boxShadow: '0px 0px 5.46px 0px #00000040'
-                }}
+                className="absolute flex items-center justify-center top-[210px] left-0 w-[149.25px] h-[23.22px] rounded-[11.61px] bg-[#FFF9F9] shadow-[0_0_5.46px_0_rgba(0,0,0,0.25)]"
               >
                 <span 
-                  className="font-montserrat font-normal text-center"
-                  style={{
-                    fontSize: '9.86px',
-                    lineHeight: '17.75px',
-                    color: '#1A2439'
-                  }}
+                  className="font-montserrat font-normal text-center text-[9.86px] leading-[17.75px] text-[#1A2439]"
                 >
                   Unlimited <span className="font-bold">doubt</span> solving
                 </span>
@@ -192,24 +197,10 @@ const Impact = () => {
               
               {/* Text Bubble 2 - Daily LIVE classes (near Odisha) */}
               <div 
-                className="absolute flex items-center justify-center"
-                style={{
-                  top: '295px',
-                  right: '100px',
-                  width: '149.25px',
-                  height: '23.22px',
-                  borderRadius: '11.61px',
-                  background: '#FFF9F9',
-                  boxShadow: '0px 0px 5.46px 0px #00000040'
-                }}
+                className="absolute flex items-center justify-center top-[295px] right-[100px] w-[149.25px] h-[23.22px] rounded-[11.61px] bg-[#FFF9F9] shadow-[0_0_5.46px_0_rgba(0,0,0,0.25)]"
               >
                 <span 
-                  className="font-montserrat font-normal text-center"
-                  style={{
-                    fontSize: '9.86px',
-                    lineHeight: '17.75px',
-                    color: '#1A2439'
-                  }}
+                  className="font-montserrat font-normal text-center text-[9.86px] leading-[17.75px] text-[#1A2439]"
                 >
                   Daily <span className="font-bold">LIVE</span> classes
                 </span>

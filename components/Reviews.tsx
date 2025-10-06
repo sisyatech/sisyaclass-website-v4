@@ -59,21 +59,12 @@ const Reviews = () => {
     <div className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         {/* Reviews Carousel Container */}
-        <div 
-          className="relative mx-auto"
-          style={{
-            maxWidth: '1086px', // 346px * 3 + 24px * 2 (gaps)
-            overflow: 'visible'
-          }}
-        >
-          <div style={{ overflow: 'hidden', padding: '0 20px' }}>
+        <div className="relative mx-auto max-w-[1086px] overflow-visible">
+          <div className="overflow-hidden px-5">
           {/* Cards Container */}
             <div 
-              className="flex transition-transform duration-500 ease-in-out py-4"
-              style={{
-                gap: '24px',
-                transform: `translateX(-${currentSlide * 100}%)`
-              }}
+              className="flex transition-transform duration-500 ease-in-out py-4 gap-6"
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
             {reviews.map((review) => (
               <div
@@ -82,27 +73,13 @@ const Reviews = () => {
               >
                 {/* Review Card */}
                 <div 
-                  className="bg-white p-6"
-                  style={{
-                    width: '346px',
-                    height: '257px',
-                    borderRadius: '27px',
-                    background: '#FFFFFF',
-                    boxShadow: '0px 4px 4px 0px #00000040'
-                  }}
+                  className="bg-white p-6 w-[346px] h-[257px] rounded-[27px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]"
                 >
                   {/* Header with Profile */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-4">
                       {/* Profile Image */}
-                      <div 
-                        className="rounded-full overflow-hidden flex-shrink-0"
-                        style={{
-                          width: '54px',
-                          height: '54px',
-                          borderRadius: '100px'
-                        }}
-                      >
+                      <div className="rounded-full overflow-hidden flex-shrink-0 w-[54px] h-[54px]">
                         <img 
                           src={review.image}
                           alt={review.name}
@@ -112,66 +89,23 @@ const Reviews = () => {
 
                       {/* Name and Grade */}
                       <div>
-                        <h3 
-                          style={{
-                            fontFamily: 'Roboto',
-                            fontWeight: 500,
-                            fontSize: '16px',
-                            lineHeight: '20px',
-                            letterSpacing: '3%',
-                            color: '#161A38',
-                            marginBottom: '4px'
-                          }}
-                        >
+                        <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-1">
                           {review.name}
                         </h3>
-                        <p 
-                          style={{
-                            fontFamily: 'Roboto',
-                            fontWeight: 400,
-                            fontSize: '14px',
-                            lineHeight: '20px',
-                            letterSpacing: '3%',
-                            color: '#161A38'
-                          }}
-                        >
+                        <p className="font-roboto font-normal text-[14px] leading-[20px] tracking-[0.03em] text-[#161A38]">
                           {review.grade}
                         </p>
                       </div>
                     </div>
 
                     {/* Role Badge */}
-                    <div 
-                      className="flex items-center justify-center"
-                      style={{
-                        width: '73px',
-                        height: '20px',
-                        borderRadius: '4.61px',
-                        background: '#0595CE',
-                        fontFamily: 'Rubik',
-                        fontWeight: 400,
-                        fontSize: '10.38px',
-                        lineHeight: '100%',
-                        letterSpacing: '0%',
-                        textAlign: 'center',
-                        color: '#FFFFFF'
-                      }}
-                    >
+                    <div className="flex items-center justify-center w-[73px] h-[20px] rounded-[4.61px] bg-[#0595CE] font-rubik font-normal text-[10.38px] leading-none text-center text-white">
                       {review.role}
                     </div>
                   </div>
 
                   {/* Review Text */}
-                  <p 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38'
-                    }}
-                  >
+                  <p className="font-roboto font-normal text-[14px] leading-[20px] tracking-[0.03em] text-[#161A38]">
                     {review.review}
                   </p>
                 </div>

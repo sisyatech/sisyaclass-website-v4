@@ -2,67 +2,25 @@ import React from "react";
 
 const FooterBottom = () => {
   return (
-    <div 
-      className="py-6 px-22 mb-16"
-      style={{
-        background: '#FFFFFF'
-      }}
-    >
+    <div className="py-6 px-22 mb-16 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
           {/* Copyright */}
           <div>
-            <p 
-              style={{
-                fontFamily: 'Roboto',
-                fontWeight: 400,
-                fontSize: '14px',
-                color: '#1A2439'
-              }}
-            >
+            <p className="font-roboto font-normal text-[14px] text-[#1A2439]">
               Copyright © 2025 SISYA Class. All rights reserved.
             </p>
           </div>
 
           {/* Policy Links */}
           <div className="flex items-center space-x-8">
-            <a 
-              href="#" 
-              className="hover:opacity-70 transition-opacity"
-              style={{
-                fontFamily: 'Roboto',
-                fontWeight: 400,
-                fontSize: '14px',
-                color: '#1A2439',
-                textDecoration: 'none'
-              }}
-            >
+            <a href="#" className="hover:opacity-70 transition-opacity font-roboto font-normal text-[14px] text-[#1A2439] no-underline">
               Privacy Policy
             </a>
-            <a 
-              href="#" 
-              className="hover:opacity-70 transition-opacity"
-              style={{
-                fontFamily: 'Roboto',
-                fontWeight: 400,
-                fontSize: '14px',
-                color: '#1A2439',
-                textDecoration: 'none'
-              }}
-            >
+            <a href="#" className="hover:opacity-70 transition-opacity font-roboto font-normal text-[14px] text-[#1A2439] no-underline">
               Terms & Conditions
             </a>
-            <a 
-              href="#" 
-              className="hover:opacity-70 transition-opacity"
-              style={{
-                fontFamily: 'Roboto',
-                fontWeight: 400,
-                fontSize: '14px',
-                color: '#1A2439',
-                textDecoration: 'none'
-              }}
-            >
+            <a href="#" className="hover:opacity-70 transition-opacity font-roboto font-normal text-[14px] text-[#1A2439] no-underline">
               Refund Policy
             </a>
           </div>

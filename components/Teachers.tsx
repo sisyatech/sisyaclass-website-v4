@@ -52,13 +52,13 @@ const Teachers = () => {
         
         {/* Top Headlines */}
         <div className="text-center mb-12">
-          <h3 className="font-montserrat font-400 text-2xl leading-[45px] text-center font-size-25px line-height-45px letter-spacing-0.01em" style={{ color: '#1A2439' }}>
+          <h3 className="font-montserrat font-normal text-[25px] leading-[45px] text-center text-[#1A2439]">
             Meet the Minds
           </h3>
-          <h2 className="font-montserrat font-bold text-5xl leading-[45px] text-center capitalize mb-7" style={{ color: '#1A2439' }}>
+          <h2 className="font-montserrat font-bold text-5xl leading-[45px] text-center capitalize mb-7 text-[#1A2439]">
             Behind Your Child's Success
           </h2>
-          <p className="font-montserrat font-semibold  font-size-18px text-lg leading-tight text-center" style={{ color: '#556A8E' }}>
+          <p className="font-montserrat font-semibold text-[18px] leading-tight text-center text-[#556A8E]">
             Learn from India's top educators — 98% IIT/NIT-qualified, with years of<br />experience in nurturing young minds.
           </p>
         </div>
@@ -86,25 +86,12 @@ const Teachers = () => {
             {visibleTeachers.map((teacher, index) => (
               <div 
                 key={index}
-                className="overflow-hidden"
-                style={{
-                  width: '251.6px',
-                  height: '406.7px',
-                  borderRadius: '26.04px',
-                  backgroundColor: '#2C3E50',
-                  padding: '20px'
-                }}
+                className="overflow-hidden w-[251.6px] h-[406.7px] rounded-[26.04px] bg-[#2C3E50] p-5"
               >
                 {/* Teacher Image */}
                 <div className="flex justify-center mb-4">
                   <div 
-                    className="rounded-2xl overflow-hidden"
-                    style={{
-                      backgroundColor: '#D9E3F0',
-                      width: '196.56px',
-                      height: '226.04px',
-                      borderRadius: '20px'
-                    }}
+                    className="rounded-[20px] overflow-hidden w-[196.56px] h-[226.04px] bg-[#D9E3F0]"
                   >
                     <img 
                       src={teacher.image} 
@@ -116,20 +103,20 @@ const Teachers = () => {
 
                 {/* Experience Badge */}
                 <div className="flex justify-center mb-3">
-                  <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm" style={{ color: '#1A2439' }}>
+                  <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm text-[#1A2439]">
                     {teacher.experience}
                   </div>
                 </div>
 
                 {/* Teacher Info */}
                 <div className="text-white text-center">
-                  <h3 className="font-montserrat font-black text-lg leading-none text-center mb-3" style={{ letterSpacing: '2%' }}>
+                  <h3 className="font-montserrat font-black text-lg leading-none text-center mb-3 tracking-[0.02em]">
                     {teacher.name}
                   </h3>
-                  <p className="font-montserrat font-semibold leading-none text-center mb-3" style={{ fontSize: '12.4px', letterSpacing: '2%' }}>
+                  <p className="font-montserrat font-semibold leading-none text-center mb-3 text-[12.4px] tracking-[0.02em]">
                     {teacher.title}
                   </p>
-                  <p className="font-montserrat font-semibold leading-none text-center" style={{ fontSize: '12.4px', letterSpacing: '2%' }}>
+                  <p className="font-montserrat font-semibold leading-none text-center text-[12.4px] tracking-[0.02em]">
                     {teacher.institution}
                   </p>
                 </div>

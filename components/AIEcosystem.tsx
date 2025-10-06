@@ -7,14 +7,7 @@ const AIEcosystem = () => {
     <div className="py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         <div 
-          className="relative mx-auto rounded-[50px] border p-12"
-          style={{
-            width: '1176px',
-            height: '746px',
-            background: '#1A2439',
-            border: '1px solid #EBEBEB',
-            boxShadow: '4px 4px 4px 0px #00000040'
-          }}
+          className="relative mx-auto rounded-[50px] p-12 w-[1176px] h-[746px] bg-[#1A2439] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)]"
         >
           {/* Top Headlines */}
           <div className="text-center mb-20">

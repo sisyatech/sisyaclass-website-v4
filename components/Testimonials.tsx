@@ -56,25 +56,12 @@ const Testimonials = () => {
         {/* Headline */}
         <div className="text-center mb-6">
           <h3 
-            className="mb-0"
-            style={{
-              fontFamily: 'Montserrat',
-              fontWeight: 400,
-              fontSize: '25px',
-              lineHeight: '45px',
-              color: '#1A2439'
-            }}
+            className="mb-0 font-montserrat font-normal text-[25px] leading-[45px] text-[#1A2439]"
           >
             Hear From
           </h3>
           <h2 
-            style={{
-              fontFamily: 'Montserrat',
-              fontWeight: 700,
-              fontSize: '50px',
-              lineHeight: '45px',
-              color: '#1A2439'
-            }}
+            className="font-montserrat font-bold text-[50px] leading-[45px] text-[#1A2439]"
           >
             Our Brightest Stars!
           </h2>
@@ -85,23 +72,13 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className="relative group px-2 mb-4"
-              style={{
-                width: '260px',
-                height: '400px',
-              }}
+              className="relative group px-2 mb-4 w-[260px] h-[400px]"
               onMouseEnter={() => setActiveVideo(index)}
               onMouseLeave={() => setActiveVideo(null)}
             >
               {/* Card Container - Full Video */}
               <div 
-                className="relative w-full h-full rounded-3xl overflow-hidden"
-                style={{
-                  backgroundColor: '#000000',
-                  border: activeVideo === index ? '3px solid #4A9FD8' : '3px solid transparent',
-                  boxShadow: activeVideo === index ? '0 8px 16px rgba(0,0,0,0.2)' : '0 4px 8px rgba(0,0,0,0.1)',
-                  transition: 'all 0.3s ease'
-                }}
+                className={`relative w-full h-full rounded-3xl overflow-hidden bg-black transition-all duration-300 ${activeVideo === index ? 'border-[3px] border-[#4A9FD8] shadow-[0_8px_16px_rgba(0,0,0,0.2)]' : 'border-[3px] border-transparent shadow-[0_4px_8px_rgba(0,0,0,0.1)]'}`}
               >
                 {activeVideo === index ? (
                   <iframe
@@ -126,18 +103,10 @@ const Testimonials = () => {
                     {/* Video Title Overlay at Bottom when not Playing */}
                     <div 
                       className="absolute bottom-0 left-0 right-0 px-4 py-3"
-                      style={{
-                        background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)'
-                      }}
+                      style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}
                     >
                       <div 
-                        className="text-white text-sm font-semibold"
-                        style={{
-                          fontFamily: 'Montserrat',
-                          fontWeight: 600,
-                          fontSize: '14px',
-                          lineHeight: '1.3'
-                        }}
+                        className="text-white text-sm font-semibold font-montserrat text-[14px] leading-[1.3]"
                       >
                         {testimonial.title}
                       </div>
@@ -147,13 +116,7 @@ const Testimonials = () => {
                     <div 
                       className="absolute inset-0 flex items-center justify-center z-10"
                     >
-                      <div 
-                        className="rounded-full bg-white bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg"
-                        style={{
-                          width: '70px',
-                          height: '70px'
-                        }}
-                      >
+                      <div className="rounded-full bg-transparent bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg w-[70px] h-[70px]">
                         <svg 
                           width="32" 
                           height="32" 
@@ -163,7 +126,7 @@ const Testimonials = () => {
                         >
                           <path 
                             d="M8 5v14l11-7L8 5z" 
-                            fill="#FF0000"
+                            fill="#FFFFFF"
                           />
                         </svg>
                       </div>

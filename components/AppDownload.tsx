@@ -2,15 +2,9 @@ import React from "react";
 
 const AppDownload = () => {
   return (
-    <div 
-      className="relative mb-42"
-      style={{
-        width: '1442px',
-        height: '393px'
-      }}
-    >
+    <div className="relative mb-42 w-[1442px] h-[393px]">
       {/* Phone Image - Positioned to overlay */}
-      <div className="absolute left-8 top-0 z-10" style={{ transform: 'translateY(-15%)' }}>
+      <div className="absolute left-8 top-0 z-10 -translate-y-[15%]">
         <img 
           src="/download/phonepic.svg" 
           alt="SISYA App Interface" 
@@ -19,24 +13,19 @@ const AppDownload = () => {
       </div>
 
       {/* Background Container */}
-      <div 
-        className="w-full py-12 px-8"
-        style={{
-          background: '#DDDEFE80'
-        }}
-      >
+      <div className="w-full py-12 px-8 bg-[#DDDEFE80]">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-16">
           {/* Spacer for phone */}
           <div className="flex-shrink-0 w-96"></div>
 
           {/* Right Side - Content */}
           <div className="flex-1 text-left ml-32">
-            <h2 className="font-montserrat font-bold text-3xl leading-none tracking-normal mb-6" style={{ color: '#1A2439' }}>
+            <h2 className="font-montserrat font-bold text-3xl leading-none tracking-normal mb-6 text-[#1A2439]">
               Learn Anytime, Anywhere<br />at Your Own Pace
             </h2>
             
             {/* Subtitle */}
-            <p className="font-montserrat font-medium text-lg leading-none tracking-normal mb-8" style={{ color: '#1A2439' }}>
+            <p className="font-montserrat font-medium text-lg leading-none tracking-normal mb-8 text-[#1A2439]">
               Download the SISYA App — India's<br />trusted learning platform
             </p>
 
@@ -51,7 +40,7 @@ const AppDownload = () => {
                     className="w-40 h-40"
                   />
                 </div>
-                <p className="text-sm" style={{ color: '#1A2439' }}>
+                <p className="text-sm text-[#1A2439]">
                   Scan here to get<br />SISYA CLASS mobile app
                 </p>
               </div>
@@ -60,10 +49,7 @@ const AppDownload = () => {
               <div className="flex flex-col gap-4">
                 {/* Download Now Button */}
                 <button 
-                  className="font-bold text-lg text-white rounded-2xl shadow-lg px-8 py-3"
-                  style={{
-                    background: '#1A2439'
-                  }}
+                  className="font-bold text-lg text-white rounded-2xl shadow-lg px-8 py-3 bg-[#1A2439]"
                 >
                   Download Now
                 </button>

@@ -4,97 +4,37 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div 
-      className="relative py-16 px-8"
-      style={{
-        width: '1442px',
-        height: '475px',
-        background: '#DADADA66'
-      }}
-    >
+    <div className="relative py-16 px-8 w-[1442px] h-[475px] bg-[#DADADA66]">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Side - Download and Contact */}
           <div className="space-y-8">
             {/* Get link in SMS section */}
             <div>
-              <h2 className="mb-6" style={{
-                fontFamily: 'Roboto',
-                fontWeight: 500,
-                fontSize: '24px',
-                lineHeight: '23.69px',
-                letterSpacing: '3%',
-                color: '#1A2439'
-              }}>
+              <h2 className="mb-6 font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
                 Get link in SMS to download the App
               </h2>
               
               <div className="flex gap-4 mb-8">
                 <div className="flex">
                   <div className="flex">
-                    <div 
-                      style={{
-                        width: '80px',
-                        height: '53px',
-                        borderTopLeftRadius: '6px',
-                        borderBottomLeftRadius: '6px',
-                        border: '1px solid #E0E0E0',
-                        background: '#FFFDFD',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontFamily: 'Roboto',
-                        fontWeight: 500,
-                        fontSize: '24px',
-                        lineHeight: '23.69px',
-                        letterSpacing: '3%',
-                        color: '#1A2439'
-                      }}
-                    >
+                    <div className="w-[80px] h-[53px] rounded-l-[6px] border border-[#E0E0E0] bg-[#FFFDFD] flex items-center justify-center font-roboto font-medium text-[24px] leading-[23.69px] tracking-[0.03em] text-[#1A2439]">
                       +91
                     </div>
                     <input
                       type="tel"
                       placeholder="Enter your mobile number"
-                      style={{
-                        width: '330px',
-                        height: '53px',
-                        borderTopRightRadius: '0px',
-                        borderBottomRightRadius: '0px',
-                        border: '1px solid #E0E0E0',
-                        borderLeft: 'none',
-                        background: '#FFFDFD',
-                        padding: '0 16px',
-                        fontFamily: 'Nunito',
-                        fontWeight: 400,
-                        fontSize: '14.15px',
-                        lineHeight: '18.87px',
-                        letterSpacing: '0px',
-                        color: '#1A2439',
-                        outline: 'none'
-                      }}
+                      className="w-[330px] h-[53px] border border-l-0 border-[#E0E0E0] bg-[#FFFDFD] px-4 font-['Nunito'] font-normal text-[14.15px] leading-[18.87px] text-[#1A2439] outline-none"
                     />
                   </div>
-                  <button 
-                    style={{
-                      width: '113px',
-                      height: '53px',
-                      borderTopRightRadius: '6px',
-                      borderBottomRightRadius: '6px',
-                      background: '#1A2439',
-                      border: 'none',
-                      color: 'white',
-                      fontSize: '16px',
-                      cursor: 'pointer'
-                    }}
-                  >
+                  <button className="w-[113px] h-[53px] rounded-r-[6px] bg-[#1A2439] text-white text-[16px]">
                     Get the link
                   </button>
                 </div>
               </div>
 
               {/* Google Play Button */}
-              <div className="mb-8" style={{ marginTop: '-16px' }}>
+              <div className="mb-8 -mt-4">
                 <img 
                   src="/download/googleplay.svg" 
                   alt="Get it on Google Play" 
@@ -103,65 +43,24 @@ const Footer = () => {
               </div>
 
               {/* Demo class card */}
-              <div 
-                style={{
-                  width: '410px',
-                  height: '120px',
-                  borderRadius: '14px',
-                  border: '1px solid #E0E0E0',
-                  background: '#FFFDFD',
-                  padding: '16px',
-                  marginBottom: '42px',
-                  position: 'relative'
-                }}
-              >
-                <h3 
-                  style={{
-                    fontFamily: 'Montserrat',
-                    fontWeight: 600,
-                    fontSize: '18px',
-                    lineHeight: '100%',
-                    letterSpacing: '0%',
-                    color: '#1A2439',
-                    marginBottom: '12px'
-                  }}
-                >
+              <div className="w-[410px] h-[120px] rounded-[14px] border border-[#E0E0E0] bg-[#FFFDFD] p-4 mb-[42px] relative">
+                <h3 className="font-montserrat font-semibold text-[18px] leading-none text-[#1A2439] mb-3">
                   Know more about our courses.<br />Book a demo class
                 </h3>
-                <div className="flex items-center justify-between" style={{ marginTop: '-25px' }}>
-                  <button 
-                    style={{
-                      width: '156px',
-                      height: '26.79px',
-                      borderRadius: '6.3px',
-                      background: '#0595CE',
-                      border: 'none',
-                      fontFamily: 'Rubik',
-                      fontWeight: 400,
-                      fontSize: '14.18px',
-                      lineHeight: '100%',
-                      letterSpacing: '0%',
-                      color: '#FFFFFF',
-                      cursor: 'pointer',
-                      flexShrink: 0
-                    }}
-                  >
+                <div className="flex items-center justify-between -mt-6">
+                  <button className="w-[156px] h-[26.79px] rounded-[6.3px] bg-[#0595CE] font-['Rubik'] font-normal text-[14.18px] leading-none text-white flex-shrink-0">
                     Speak to an expert
                   </button>
                   <img 
                     src="/person.svg" 
                     alt="Expert person" 
-                    style={{
-                      width: '74px',
-                      height: '74px',
-                      flexShrink: 0
-                    }}
+                    className="w-[74px] h-[74px] flex-shrink-0"
                   />
                 </div>
               </div>
 
               {/* Contact Information */}
-              <div className="space-y-3" style={{ marginTop: '-26px' }}>
+              <div className="space-y-3 -mt-6">
                 <div className="flex items-center gap-3">
                   <div className="w-5 h-5">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -188,125 +87,37 @@ const Footer = () => {
           <div className="grid grid-cols-3 gap-8">
             {/* Company Column 1 */}
             <div>
-              <h3 
-                style={{
-                  fontFamily: 'Roboto',
-                  fontWeight: 500,
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  letterSpacing: '3%',
-                  color: '#161A38',
-                  marginBottom: '16px'
-                }}
-              >
+              <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-4">
                 Company
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     About us
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Contact us
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Blogs
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     News
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Why SISYA
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Careers
                   </a>
                 </li>
@@ -315,125 +126,37 @@ const Footer = () => {
 
             {/* Company Column 2 */}
             <div>
-              <h3 
-                style={{
-                  fontFamily: 'Roboto',
-                  fontWeight: 500,
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  letterSpacing: '3%',
-                  color: '#161A38',
-                  marginBottom: '16px'
-                }}
-              >
+              <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-4">
                 Company
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     About us
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Contact us
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Blogs
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     News
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Why SISYA
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Careers
                   </a>
                 </li>
@@ -442,125 +165,37 @@ const Footer = () => {
 
             {/* Company Column 3 */}
             <div>
-              <h3 
-                style={{
-                  fontFamily: 'Roboto',
-                  fontWeight: 500,
-                  fontSize: '16px',
-                  lineHeight: '20px',
-                  letterSpacing: '3%',
-                  color: '#161A38',
-                  marginBottom: '16px'
-                }}
-              >
+              <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-4">
                 Company
               </h3>
               <ul className="space-y-3">
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     About us
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Contact us
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Blogs
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     News
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Why SISYA
                   </a>
                 </li>
                 <li>
-                  <a 
-                    href="#" 
-                    style={{
-                      fontFamily: 'Roboto',
-                      fontWeight: 400,
-                      fontSize: '16px',
-                      lineHeight: '20px',
-                      letterSpacing: '3%',
-                      color: '#161A38',
-                      textDecoration: 'none'
-                    }}
-                    onMouseEnter={(e) => (e.target as HTMLElement).style.opacity = '0.7'}
-                    onMouseLeave={(e) => (e.target as HTMLElement).style.opacity = '1'}
-                  >
+                  <a href="#" className="font-roboto font-normal text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70">
                     Careers
                   </a>
                 </li>

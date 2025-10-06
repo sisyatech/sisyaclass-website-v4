@@ -41,14 +41,7 @@ const FAQ = () => {
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 
-          className="text-center mb-12"
-          style={{
-            fontFamily: 'Montserrat',
-            fontWeight: 700,
-            fontSize: '40px',
-            lineHeight: '1.2',
-            color: '#1A2439'
-          }}
+          className="text-center mb-12 font-montserrat font-bold text-[40px] leading-[1.2] text-[#1A2439]"
         >
           Frequently asked questions
         </h2>
@@ -58,10 +51,7 @@ const FAQ = () => {
           {faqs.map((faq) => (
             <div
               key={faq.id}
-              className="border border-gray-200 rounded-lg bg-white"
-              style={{
-                boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)'
-              }}
+              className="border border-gray-200 rounded-lg bg-white shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
             >
               {/* Question */}
               <button
@@ -69,30 +59,14 @@ const FAQ = () => {
                 className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
               >
                 <span 
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontWeight: 500,
-                    fontSize: '16px',
-                    lineHeight: '1.4',
-                    color: '#1A2439'
-                  }}
+                  className="font-roboto font-medium text-[16px] leading-[1.4] text-[#1A2439]"
                 >
                   {faq.question}
                 </span>
                 
                 {/* Plus/Minus Icon */}
                 <div 
-                  className="flex-shrink-0 ml-4"
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    borderRadius: '50%',
-                    background: '#4A9FD8',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'transform 0.3s ease'
-                  }}
+                  className={`flex-shrink-0 ml-4 w-6 h-6 rounded-full bg-[#4A9FD8] flex items-center justify-center transition-transform duration-300 ${openItems.includes(faq.id) ? 'rotate-45' : 'rotate-0'}`}
                 >
                   <svg
                     width="16"
@@ -100,10 +74,6 @@ const FAQ = () => {
                     viewBox="0 0 24 24"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
-                    style={{
-                      transform: openItems.includes(faq.id) ? 'rotate(45deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.3s ease'
-                    }}
                   >
                     <path
                       d="M12 5V19M5 12H19"
@@ -118,20 +88,10 @@ const FAQ = () => {
 
               {/* Answer */}
               <div
-                className="overflow-hidden transition-all duration-300 ease-in-out"
-                style={{
-                  maxHeight: openItems.includes(faq.id) ? '200px' : '0px'
-                }}
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${openItems.includes(faq.id) ? 'max-h-[200px]' : 'max-h-0'}`}
               >
                 <div 
-                  className="px-6 pb-4"
-                  style={{
-                    fontFamily: 'Roboto',
-                    fontWeight: 400,
-                    fontSize: '14px',
-                    lineHeight: '1.6',
-                    color: '#556A8E'
-                  }}
+                  className="px-6 pb-4 font-roboto font-normal text-[14px] leading-[1.6] text-[#556A8E]"
                 >
                   {faq.answer}
                 </div>

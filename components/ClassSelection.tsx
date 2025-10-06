@@ -130,30 +130,10 @@ const ClassSelection = () => {
         {/* Main Headline */}
         <div className="text-center mb-12">
             <h2 
-              className="mb-8"
-              style={{
-                fontFamily: 'Montserrat',
-                fontWeight: 700,
-                fontSize: '50px',
-                lineHeight: '45px',
-                letterSpacing: '0%',
-                textAlign: 'center',
-                textTransform: 'capitalize',
-                color: '#1A2439'
-              }}
+              className="mb-8 font-montserrat font-bold text-[50px] leading-[45px] capitalize text-[#1A2439]"
             >
               <span 
-                style={{
-                  fontFamily: 'Montserrat',
-                  fontWeight: 400,
-                  fontSize: '25px',
-                  lineHeight: '45px',
-                  letterSpacing: '0%',
-                  textAlign: 'center',
-                  display: 'block',
-                  marginBottom: '8px',
-                  color: '#1A2439'
-                }}
+                className="block mb-2 font-montserrat font-normal text-[25px] leading-[45px] text-[#1A2439]"
               >
                 Explore What You Can Learn
               </span>
@@ -166,21 +146,11 @@ const ClassSelection = () => {
               <button
                 key={option}
                 onClick={() => setActiveClass(option)}
-                className="font-semibold transition-all duration-300"
-                style={{
-                  width: '139px',
-                  height: '46px',
-                  borderRadius: '15px',
-                  paddingTop: '12.52px',
-                  paddingRight: '23.66px',
-                  paddingBottom: '12.52px',
-                  paddingLeft: '23.66px',
-                  gap: '13.92px',
-                  backgroundColor: activeClass === option ? '#0595CE' : '#FFFFFF',
-                  color: activeClass === option ? '#FFFFFF' : '#1A2439',
-                  border: activeClass === option ? 'none' : '1px solid #1A2439',
-                  boxShadow: '0px 5.57px 5.57px 0px #00000040'
-                }}
+                className={`font-montserrat font-semibold transition-all duration-300 w-[139px] h-[46px] rounded-[15px] px-[23.66px] py-[12.52px] shadow-[0px_5.57px_5.57px_0px_rgba(0,0,0,0.25)] ${
+                  activeClass === option
+                    ? 'bg-[#0595CE] text-white border border-transparent'
+                    : 'bg-white text-[#1A2439] border border-[#1A2439]'
+                }`}
               >
                 {option}
               </button>
@@ -193,23 +163,13 @@ const ClassSelection = () => {
           {/* Navigation Arrows */}
           <button 
             onClick={handlePrevSlide}
-            className="absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-2 flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
-            style={{
-              width: '40px',
-              height: '40px',
-              border: '2px solid #D9D9D9',
-              borderRadius: '14px',
-              backgroundColor: '#FFFFFF'
-            }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
           >
             <svg 
               className="w-5 h-5 text-gray-600" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
-              style={{
-                opacity: 1
-              }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
@@ -217,23 +177,13 @@ const ClassSelection = () => {
           
           <button 
             onClick={handleNextSlide}
-            className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-2 flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
-            style={{
-              width: '40px',
-              height: '40px',
-              border: '2px solid #D9D9D9',
-              borderRadius: '14px',
-              backgroundColor: '#FFFFFF'
-            }}
+            className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
           >
             <svg 
               className="w-5 h-5 text-gray-600" 
               fill="none" 
               stroke="currentColor" 
               viewBox="0 0 24 24"
-              style={{
-                opacity: 1
-              }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
@@ -243,43 +193,24 @@ const ClassSelection = () => {
           <div className="flex justify-center gap-6 px-8">
             {currentSlideClasses.map((card, index) => (
                 
-               <div 
+              <div 
                  key={index} 
-                 className="shadow-lg hover:shadow-xl transition-shadow duration-300 relative"
-                 style={{
-                   width: '250px',
-                   height: '338px',
-                   borderRadius: '20px',
-                   backgroundColor: card.containerColor
-                 }}
+                 className="shadow-lg hover:shadow-xl transition-shadow duration-300 relative w-[250px] h-[338px] rounded-[20px]"
+                 style={{ backgroundColor: card.containerColor }}
                >
                  {/* Teacher Image */}
-                 <div className="relative" style={{ top: '-35px', left: '7.29px' }}>
+                 <div className="relative -top-[35px] left-[7.29px]">
                    <img 
                      src="/teacher.svg" 
                      alt="Teacher" 
-                     className="object-cover"
-                     style={{
-                       width: '246.56px',
-                       height: '246.04px'
-                     }}
+                     className="object-cover w-[246.56px] h-[246.04px]"
                    />
                  </div>
                  
                  {/* Class Number */}
-                 <div className="absolute" style={{ top: '48px', left: '172px' }}>
+                 <div className="absolute top-[48px] left-[172px]">
                    <h3 
-                     style={{
-                       width: '74px',
-                       height: '22px',
-                       fontFamily: 'Montserrat',
-                       fontWeight: 700,
-                       fontSize: '18px',
-                       lineHeight: '100%',
-                       letterSpacing: '0%',
-                       textAlign: 'center',
-                       color: '#1A2439'
-                     }}
+                     className="w-[74px] h-[22px] font-montserrat font-bold text-[18px] leading-none text-center text-[#1A2439]"
                    >
                      {card.class}
                    </h3>
@@ -287,38 +218,20 @@ const ClassSelection = () => {
 
                 {/* Bottom Half - Course Features */}
                 <div 
-                  className="absolute"
-                  style={{
-                    width: '232px',
-                    height: '172px',
-                    top: '160px',
-                    left: '9px',
-                    borderRadius: '14px',
-                    backgroundColor: '#1A2439'
-                  }}
+                  className="absolute w-[232px] h-[172px] top-[160px] left-[9px] rounded-[14px] bg-[#1A2439]"
                 >
                   <div className="p-4 h-full flex flex-col">
                     <div className="grid grid-cols-2 gap-2 mb-2 flex-1">
                       {courseFeatures.map((feature, featureIndex) => (
                         <button
                           key={featureIndex}
-                          className={`transition-colors duration-300 ${
+                          className={`transition-colors duration-300 font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${
                             feature === "Olympiad Preparation" ? "col-span-2" : ""
                           }`}
                           style={{
                             width: feature === "Olympiad Preparation" ? 'auto' : '91.71px',
                             height: '22.73px',
-                            borderRadius: '9.5px',
-                            backgroundColor: '#FFFFFF',
-                            color: card.textColor,
-                            fontFamily: 'Montserrat',
-                            fontWeight: 600,
-                            fontSize: '8px',
-                            lineHeight: '100%',
-                            letterSpacing: '2%',
-                            textAlign: 'center',
-                            border: 'none',
-                            padding: '0'
+                            color: card.textColor
                           }}
                         >
                           {feature}
@@ -329,22 +242,7 @@ const ClassSelection = () => {
                     {/* Book Demo Button */}
                     <div className="flex justify-center">
                       <button 
-                        className="transition-colors duration-300"
-                        style={{
-                          width: '124px',
-                          height: '22px',
-                          borderRadius: '8px',
-                          backgroundColor: '#FED700',
-                          color: '#1A2439',
-                          fontFamily: 'Montserrat',
-                          fontWeight: 600,
-                          fontSize: '8px',
-                          lineHeight: '100%',
-                          letterSpacing: '2%',
-                          textAlign: 'center',
-                          border: 'none',
-                          padding: '0'
-                        }}
+                        className="transition-colors duration-300 w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]"
                       >
                         Book a Demo at ₹19
                       </button>
