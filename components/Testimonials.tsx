@@ -8,6 +8,7 @@ const Testimonials = () => {
   const [videoTitles, setVideoTitles] = useState<{ [key: string]: string }>({});
   const [entered, setEntered] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0); // mobile index
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -67,8 +68,18 @@ const Testimonials = () => {
     },
   ];
 
+  const handlePrev = () => {
+    setActiveVideo(null);
+    setCurrentIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setActiveVideo(null);
+    setCurrentIndex((prev) => (prev >= testimonials.length - 1 ? 0 : prev + 1));
+  };
+
   return (
-    <div id="testimonials" ref={sectionRef} className="py-2 bg-white">
+    <div id="testimonials" ref={sectionRef} className="py-2 bg-white mb-15">
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
         <div className={`text-center mb-6 transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 -translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}>
@@ -84,8 +95,8 @@ const Testimonials = () => {
           </h2>
         </div>
 
-        {/* Video Cards Grid */}
-        <div className={`flex flex-wrap justify-center -mx-2 transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+        {/* Desktop/Tablet grid */}
+        <div className={`hidden md:flex flex-wrap justify-center -mx-2 transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
@@ -94,7 +105,6 @@ const Testimonials = () => {
               onMouseEnter={() => setActiveVideo(index)}
               onMouseLeave={() => setActiveVideo(null)}
             >
-              {/* Card Container - Full Video */}
               <div 
                 className={`relative w-full h-full rounded-3xl overflow-hidden bg-black transition-all duration-300 ${activeVideo === index ? 'border-[3px] border-[#4A9FD8] shadow-[0_8px_16px_rgba(0,0,0,0.2)]' : 'border-[3px] border-transparent shadow-[0_4px_8px_rgba(0,0,0,0.1)]'}`}
               >
@@ -111,45 +121,13 @@ const Testimonials = () => {
                   />
                 ) : (
                   <div className="w-full h-full relative">
-                    {/* YouTube Thumbnail */}
-                    <Image 
-                      width={260}
-                      height={400}
-                      src={testimonial.thumbnail}
-                      alt={`${testimonial.name} - ${testimonial.grade}`}
-                      className="w-full h-full object-cover"
-                      unoptimized
-                    />
-                    
-                    {/* Video Title Overlay at Bottom when not Playing */}
-                    <div 
-                      className="absolute bottom-0 left-0 right-0 px-4 py-3"
-                      style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}
-                    >
-                      <div 
-                        className="text-white text-sm font-semibold font-montserrat text-[14px] leading-[1.3]"
-                      >
-                        {testimonial.title}
-                      </div>
+                    <Image width={260} height={400} src={testimonial.thumbnail} alt={`${testimonial.name} - ${testimonial.grade}`} className="w-full h-full object-cover" unoptimized />
+                    <div className="absolute bottom-0 left-0 right-0 px-4 py-3" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
+                      <div className="text-white text-sm font-semibold font-montserrat text-[14px] leading-[1.3]">{testimonial.title}</div>
                     </div>
-
-                    {/* Play button overlay */}
-                    <div 
-                      className="absolute inset-0 flex items-center justify-center z-10"
-                    >
+                    <div className="absolute inset-0 flex items-center justify-center z-10">
                       <div className="rounded-full bg-transparent bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg w-[70px] h-[70px]">
-                        <svg 
-                          width="32" 
-                          height="32" 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path 
-                            d="M8 5v14l11-7L8 5z" 
-                            fill="#FFFFFF"
-                          />
-                        </svg>
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z" fill="#FFFFFF"/></svg>
                       </div>
                     </div>
                   </div>
@@ -157,6 +135,51 @@ const Testimonials = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Mobile single card with bottom arrows */}
+        <div className={`md:hidden transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+          {(() => {
+            const t = testimonials[currentIndex % testimonials.length];
+            return (
+              <div className="flex justify-center px-3">
+                <div className="relative group w-[260px] h-[400px]">
+                  <div className={`relative w-full h-full rounded-3xl overflow-hidden bg-black transition-all duration-300 ${activeVideo === currentIndex ? 'border-[3px] border-[#4A9FD8] shadow-[0_8px_16px_rgba(0,0,0,0.2)]' : 'border-[3px] border-transparent shadow-[0_4px_8px_rgba(0,0,0,0.1)]'}`}>
+                    {activeVideo === currentIndex ? (
+                      <iframe
+                        ref={(el) => { videoRefs.current[currentIndex] = el!; }}
+                        src={t.embedUrl}
+                        className="w-full h-full"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        style={{ border: 'none' }}
+                      />
+                    ) : (
+                      <div className="w-full h-full relative">
+                        <Image width={260} height={400} src={t.thumbnail} alt={`${t.name} - ${t.grade}`} className="w-full h-full object-cover" unoptimized />
+                        <div className="absolute bottom-0 left-0 right-0 px-4 py-3" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
+                          <div className="text-white text-sm font-semibold font-montserrat text-[14px] leading-[1.3]">{t.title}</div>
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center z-10">
+                          <div className="rounded-full bg-transparent bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg w-[70px] h-[70px]">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z" fill="#FFFFFF"/></svg>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+          <div className="mt-4 flex items-center justify-center gap-6">
+            <button onClick={handlePrev} className="w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white flex items-center justify-center hover:bg-gray-100">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+            <button onClick={handleNext} className="w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white flex items-center justify-center hover:bg-gray-100">
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>

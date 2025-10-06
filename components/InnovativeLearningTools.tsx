@@ -177,7 +177,7 @@ const HoverPlayVideo: React.FC = () => {
 
   return (
     <div
-      className="absolute top-2.5 sm:top-5 left-1/2 -translate-x-1/2 w-[217px] h-[135px] sm:w-[360px] sm:h-[220px] md:w-[480px] md:h-[295px] lg:w-[600px] lg:h-[385px] rounded-[7px] overflow-hidden shadow-lg"
+      className="absolute top-2.5 sm:top-5 left-1/2 -translate-x-1/2 w-[217px] h-[135px] sm:w-[360px] sm:h-[220px] md:w-[480px] md:h-[295px] lg:w-[600px] lg:h-[385px] rounded-[0px] overflow-hidden shadow-lg"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

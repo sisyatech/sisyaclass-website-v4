@@ -102,81 +102,95 @@ const Teachers = () => {
 
         {/* Teachers Carousel */}
         <div className={`relative transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[160px]"}`}>
-          
-          {/* Navigation Arrows */}
-          <button 
-            onClick={handlePrevSlide}
-            className="hidden md:flex absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-2 w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
-          >
-            <svg 
-              className="w-5 h-5 text-gray-600" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
+          {/* Desktop/Tablet: 4 cards with side arrows */}
+          <div className="hidden md:block relative">
+            {/* Left Arrow */}
+            <button 
+              onClick={handlePrevSlide}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-2 w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
 
-          {/* Teacher Cards */}
-          <div className="flex flex-wrap md:flex-nowrap justify-center gap-4 sm:gap-6 px-2 sm:px-6 md:px-8">
-            {visibleTeachers.map((teacher, index) => (
-              <div 
-                key={index}
-                className={`overflow-hidden w-[210px] sm:w-[230px] md:w-[251.6px] h-[380px] sm:h-[400px] md:h-[406.7px] rounded-[22px] sm:rounded-[24px] md:rounded-[26.04px] bg-[#2C3E50] p-4 sm:p-5 transition-all duration-[1500ms] ease-out ${cardsEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-                style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : '0ms' }}
-              >
-                {/* Teacher Image */}
-                <div className="flex justify-center mb-3 sm:mb-4">
-                  <div 
-                    className="rounded-[16px] sm:rounded-[18px] md:rounded-[20px] overflow-hidden w-[175px] h-[200px] sm:w-[186px] sm:h-[214px] md:w-[196.56px] md:h-[226.04px] bg-[#D9E3F0]"
-                  >
-                    <Image 
-                      src={teacher.image}   
-                      alt={teacher.name}
-                      width={196.56}
-                      height={226.04}
-                      className="w-full h-full object-cover"
-                    />
+            {/* Cards */}
+            <div className="flex justify-center gap-6 px-8">
+              {visibleTeachers.map((teacher, index) => (
+                <div 
+                  key={index}
+                  className={`overflow-hidden w-[251.6px] h-[406.7px] rounded-[26.04px] bg-[#2C3E50] p-5 transition-all duration-[1500ms] ease-out ${cardsEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                  style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : '0ms' }}
+                >
+                  {/* Teacher Image */}
+                  <div className="flex justify-center mb-4">
+                    <div className="rounded-[20px] overflow-hidden w-[196.56px] h-[226.04px] bg-[#D9E3F0]">
+                      <Image src={teacher.image} alt={teacher.name} width={196.56} height={226.04} className="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                  {/* Experience Badge */}
+                  <div className="flex justify-center mb-3">
+                    <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm text-[#1A2439]">{teacher.experience}</div>
+                  </div>
+                  {/* Info */}
+                  <div className="text-white text-center">
+                    <h3 className="font-montserrat font-black text-lg leading-none mb-3 tracking-[0.02em]">{teacher.name}</h3>
+                    <p className="font-montserrat font-semibold leading-none mb-3 text-[12.4px] tracking-[0.02em]">{teacher.title}</p>
+                    <p className="font-montserrat font-semibold leading-none text-[12.4px] tracking-[0.02em]">{teacher.institution}</p>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                {/* Experience Badge */}
-                <div className="flex justify-center mb-2 sm:mb-3">
-                  <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-white font-roboto font-medium text-xs sm:text-sm text-[#1A2439]">
-                    {teacher.experience}
-                  </div>
-                </div>
-
-                {/* Teacher Info */}
-                <div className="text-white text-center">
-                  <h3 className="font-montserrat font-black text-[16px] sm:text-[17px] md:text-lg leading-none text-center mb-2 sm:mb-3 tracking-[0.02em]">
-                    {teacher.name}
-                  </h3>
-                  <p className="font-montserrat font-semibold leading-none text-center mb-2 sm:mb-3 text-[11.5px] sm:text-[12.4px] tracking-[0.02em]">
-                    {teacher.title}
-                  </p>
-                  <p className="font-montserrat font-semibold leading-none text-center text-[11.5px] sm:text-[12.4px] tracking-[0.02em]">
-                    {teacher.institution}
-                  </p>
-                </div>
-              </div>
-            ))}
+            {/* Right Arrow */}
+            <button 
+              onClick={handleNextSlide}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-2 w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
+            >
+              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          <button 
-            onClick={handleNextSlide}
-            className="hidden md:flex absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-2 w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
-          >
-            <svg 
-              className="w-5 h-5 text-gray-600" 
-              fill="none" 
-              stroke="currentColor" 
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
+          {/* Mobile: single card with bottom arrows */}
+          <div className="md:hidden">
+            <div className="flex justify-center px-4">
+              {(() => {
+                const teacher = teachers[currentSlide % teachers.length];
+                return (
+                  <div className={`overflow-hidden w-[230px] h-[400px] rounded-[24px] bg-[#2C3E50] p-4 transition-all duration-[600ms] ease-out ${cardsEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
+                    <div className="flex justify-center mb-3">
+                      <div className="rounded-[18px] overflow-hidden w-[186px] h-[214px] bg-[#D9E3F0]">
+                        <Image src={teacher.image} alt={teacher.name} width={186} height={214} className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                    <div className="flex justify-center mb-2">
+                      <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm text-[#1A2439]">{teacher.experience}</div>
+                    </div>
+                    <div className="text-white text-center">
+                      <h3 className="font-montserrat font-black text-[17px] leading-none mb-2 tracking-[0.02em]">{teacher.name}</h3>
+                      <p className="font-montserrat font-semibold leading-none mb-2 text-[12.4px] tracking-[0.02em]">{teacher.title}</p>
+                      <p className="font-montserrat font-semibold leading-none text-[12.4px] tracking-[0.02em]">{teacher.institution}</p>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+            {/* Bottom arrows */}
+            <div className="mt-4 flex items-center justify-center gap-6">
+              <button onClick={handlePrevSlide} className="w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white flex items-center justify-center hover:bg-gray-100">
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <button onClick={handleNextSlide} className="w-10 h-10 border-2 border-gray-300 rounded-2xl bg-white flex items-center justify-center hover:bg-gray-100">
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ const ClassSelection = () => {
   const [activeClass, setActiveClass] = useState("Class 1-3");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsEntered, setCardsEntered] = useState(false);
+  const [mobileCardIndex, setMobileCardIndex] = useState(0);
 
   const classOptions = ["Class 1-3", "Class 4-5", "Class 6-7", "Class 8-10"];
 
@@ -67,6 +68,7 @@ const ClassSelection = () => {
 
   useEffect(() => {
     setCurrentSlide(0);
+    setMobileCardIndex(0);
   }, [activeClass]);
 
   // Fade out/in cards when class range changes
@@ -82,6 +84,18 @@ const ClassSelection = () => {
   };
 
   const currentSlideClasses = getCurrentSlideClasses();
+  const handleMobilePrev = () => {
+    if (currentSlideClasses.length === 0) return;
+    setCardsEntered(false);
+    requestAnimationFrame(() => setCardsEntered(true));
+    setMobileCardIndex((prev) => (prev === 0 ? currentSlideClasses.length - 1 : prev - 1));
+  };
+  const handleMobileNext = () => {
+    if (currentSlideClasses.length === 0) return;
+    setCardsEntered(false);
+    requestAnimationFrame(() => setCardsEntered(true));
+    setMobileCardIndex((prev) => (prev >= currentSlideClasses.length - 1 ? 0 : prev + 1));
+  };
 
   return (
     <div className="pt-0 pb-10 bg-white">
@@ -139,12 +153,12 @@ const ClassSelection = () => {
               </svg>
             </button>
 
-            {/* Cards */}
-            <div className="flex flex-wrap md:flex-nowrap justify-center gap-4 sm:gap-6 px-2 sm:px-6 md:px-8">
+            {/* Cards - Desktop/Tablet */}
+            <div className="hidden md:flex justify-center gap-6 px-8">
               {currentSlideClasses.map((card, index) => (
                 <div
                   key={index}
-                  className={`shadow-lg hover:shadow-xl transition-all duration-[1500ms] ease-out relative w-[210px] h-[338px] sm:w-[230px] md:w-[250px] rounded-[20px] ${
+                  className={`shadow-lg hover:shadow-xl transition-all duration-[1500ms] ease-out relative w-[250px] h-[338px] rounded-[20px] ${
                     cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-95"
                   }`}
                   style={{
@@ -153,33 +167,21 @@ const ClassSelection = () => {
                   }}
                 >
                   {/* Teacher Image */}
-                  <div className="relative -top-[28px] sm:-top-[32px] md:-top-[35px] left-[6px] sm:left-[7px]">
-                    <Image src="/teacher.svg" alt="Teacher" width={247} height={246} className="object-cover w-[200px] h-[200px] sm:w-[220px] sm:h-[220px] md:w-[246.56px] md:h-[246.04px]" />
+                  <div className="relative -top-[35px] left-[7px]">
+                    <Image src="/teacher.svg" alt="Teacher" width={247} height={246} className="object-cover w-[246.56px] h-[246.04px]" />
                   </div>
 
                   {/* Class Number */}
-                  <div className="absolute top-[42px] sm:top-[46px] md:top-[48px] right-3 md:left-[172px]">
-                    <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[16px] sm:text-[17px] md:text-[18px] leading-none text-center text-[#1A2439]">
-                      {card.class}
-                    </h3>
+                  <div className="absolute top-[48px] left-[172px]">
+                    <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[18px] leading-none text-center text-[#1A2439]">{card.class}</h3>
                   </div>
 
                   {/* Bottom Half - Course Features */}
-                  <div className="absolute w-[192px] h-[172px] sm:w-[212px] md:w-[232px] top-[150px] sm:top-[156px] md:top-[160px] left-[9px] rounded-[14px] bg-[#1A2439]">
+                  <div className="absolute w-[232px] h-[172px] top-[160px] left-[9px] rounded-[14px] bg-[#1A2439]">
                     <div className="p-4 h-full flex flex-col">
                       <div className="grid grid-cols-2 gap-2 mb-2 flex-1">
                         {courseFeatures.map((feature, featureIndex) => (
-                          <button
-                            key={featureIndex}
-                            className={`transition-colors duration-300 font-montserrat font-semibold text-[7px] sm:text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${
-                              feature === "Olympiad Preparation" ? "col-span-2" : ""
-                            }`}
-                            style={{
-                              width: feature === "Olympiad Preparation" ? "auto" : "86px",
-                              height: "22.73px",
-                              color: card.textColor,
-                            }}
-                          >
+                          <button key={featureIndex} className={`transition-colors duration-300 font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${feature === "Olympiad Preparation" ? "col-span-2" : ""}`} style={{ width: feature === "Olympiad Preparation" ? "auto" : "91.71px", height: "22.73px", color: card.textColor }}>
                             {feature}
                           </button>
                         ))}
@@ -187,9 +189,7 @@ const ClassSelection = () => {
 
                       {/* Book Demo Button */}
                       <div className="flex justify-center">
-                        <button className="transition-colors duration-300 w-[112px] sm:w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
-                          Book a Demo at ₹19
-                        </button>
+                        <button className="transition-colors duration-300 w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">Book a Demo at ₹19</button>
                       </div>
                     </div>
                   </div>
@@ -197,20 +197,77 @@ const ClassSelection = () => {
               ))}
             </div>
 
+            {/* Cards - Mobile single card with arrows */}
+            <div className="md:hidden">
+              <div className="flex justify-center px-2">
+                {currentSlideClasses.length > 0 && (
+                  <div
+                    className={`shadow-lg hover:shadow-xl transition-all duration-[600ms] ease-out relative w-[230px] h-[338px] rounded-[20px] ${
+                      cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    }`}
+                    style={{ backgroundColor: currentSlideClasses[mobileCardIndex].containerColor }}
+                  >
+                    <div className="relative -top-[32px] left-[6px]">
+                      <Image src="/teacher.svg" alt="Teacher" width={220} height={220} className="object-cover w-[220px] h-[220px]" />
+                    </div>
+                    <div className="absolute top-[44px] right-3">
+                      <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[16px] leading-none text-center text-[#1A2439]">{currentSlideClasses[mobileCardIndex].class}</h3>
+                    </div>
+                    <div className="absolute w-[208px] h-[168px] top-[150px] left-[9px] rounded-[14px] bg-[#1A2439]">
+                      <div className="p-4 h-full flex flex-col">
+                        <div className="grid grid-cols-2 gap-2 mb-2 flex-1">
+                          {courseFeatures.map((feature, featureIndex) => (
+                            <button
+                              key={featureIndex}
+                              className={`transition-colors duration-300 font-montserrat font-semibold text-[7px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${
+                                feature === "Olympiad Preparation" ? "col-span-2" : ""
+                              }`}
+                              style={{
+                                width: feature === "Olympiad Preparation" ? "auto" : "86px",
+                                height: "22.73px",
+                                color: currentSlideClasses[mobileCardIndex].textColor,
+                              }}
+                            >
+                              {feature}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="flex justify-center">
+                          <button className="transition-colors duration-300 w-[112px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">Book a Demo at ₹19</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="mt-4 flex items-center justify-center gap-6">
+                <button onClick={handleMobilePrev} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                </button>
+                <button onClick={handleMobileNext} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100">
+                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                </button>
+              </div>
+            </div>
+
             {/* Pagination Dots */}
             <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
-              {classOptions.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setActiveClass(classOptions[index]);
-                    setCurrentSlide(0);
-                  }}
-                  className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-                    activeClass === classOptions[index] ? "bg-blue-600" : "bg-blue-200"
-                  }`}
-                />
-              ))}
+              {classOptions.map((_, index) => {
+                const isActive = activeClass === classOptions[index];
+                const dotClasses = "w-3 h-3 rounded-full transition-colors duration-300 " + (isActive ? "bg-blue-600" : "bg-blue-200");
+                return (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setActiveClass(classOptions[index]);
+                      setCurrentSlide(0);
+                      setMobileCardIndex(0);
+                    }}
+                    className={dotClasses}
+                    aria-label={`Go to ${classOptions[index]}`}
+                  />
+                );
+              })}
             </div>
           </div>
         </RevealOnView>
