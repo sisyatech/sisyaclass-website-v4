@@ -7,7 +7,7 @@ interface HoveredLinkProps extends LinkProps {
 
 export const HoveredLink = ({ children, ...rest }: HoveredLinkProps) => {
   return (
-    <Link {...rest} className="text-neutral-700 hover:text-black dark:text-neutral-200">
+    <Link {...rest} className="text-neutral-700 hover:text-[#02bdfe] dark:text-neutral-200">
       {children}
     </Link>
   );

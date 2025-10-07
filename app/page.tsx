@@ -1,6 +1,6 @@
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
-import Navbar from "@/components/Navbar";
+import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import ClassSelection from "@/components/ClassSelection";
 import Impact from "@/components/Impact";
 import AIEcosystem from "@/components/AIEcosystem";
@@ -16,7 +16,8 @@ import Footer from "@/components/Footer";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
-export default function Home() {
+
+function HomeContent() {
   return (
     <Container>
       <Navbar />
@@ -36,6 +37,15 @@ export default function Home() {
       <StudyMaterial />
       <Moto />
       <FooterBottom />
+      <MobileMenu />
     </Container>
+  );
+}
+
+export default function Home() {
+  return (
+    <MobileMenuProvider>
+      <HomeContent />
+    </MobileMenuProvider>
   );
 }

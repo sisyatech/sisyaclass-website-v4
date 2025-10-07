@@ -1,5 +1,5 @@
   "use client";
-
+import { MaskContainer } from "./ui/svg-mask-effect";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 const Hero = () => {
@@ -14,10 +14,11 @@ const Hero = () => {
     <>
       {/* Animations via Tailwind arbitrary utilities */}
 
-      <div className="min-screen bg-white px-4 pb-6 mb-20 sm:pb-8 md:pb-10 lg:pb-2 xl:pb-8 2xl:pb-12 pt-10 sm:pt-30 overflow-hidden">
+      <div className="min-screen bg-white px-4 pb-6 mb-12 sm:pb-8 md:pb-10 lg:pb-2 xl:pb-8 2xl:pb-12 pt-10 sm:pt-30 overflow-hidden">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 items-center gap-10 lg:gap-12 lg:grid-cols-2">
             {/* Left Content */}
+            
             <div className={`space-y-8 flex flex-col items-center lg:items-start transition-all duration-[1500ms] ease-out ${entered ? "opacity-100" : "opacity-0"}`}>
               {/* Main Headline */}
               <h1
@@ -94,9 +95,10 @@ const Hero = () => {
                 </div>
               </div>
             </div>
+            
 
             {/* Right Visual Content */}
-            <div className={`relative flex justify-center mt-10 lg:mt-0 transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[160px]"}`}>
+            <div className={`relative flex justify-center mt-10 mb-8 sm:mb-12 lg:mt-0 lg:mb-0 transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[160px]"}`}>
               {/* Main Student Image Container */}
               <div className="relative left-0 h-[260px] w-[260px] sm:h-[320px] sm:w-[320px] md:h-[360px] md:w-[360px] lg:h-96 lg:w-96">
                 {/* Outer Border for Student Container */}

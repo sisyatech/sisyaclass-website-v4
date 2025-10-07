@@ -133,7 +133,7 @@ const ClassSelection = () => {
   };
 
   return (
-    <div className="pt-0 pb-6 sm:pb-8 md:pb-10 bg-white">
+    <div className="pt-10 pb-6 sm:pb-8 md:pb-10 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
         <RevealOnView from="left" durationMs={1500}>
