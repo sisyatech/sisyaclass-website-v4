@@ -29,7 +29,9 @@ const FooterBottom = () => {
           <div className="flex items-center gap-3 sm:gap-4">
             {/* Facebook */}
             <a 
-              href="#" 
+              href="https://www.facebook.com/people/SISYA-CLASS/61569281738662/" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity"
               style={{
                 background: '#1A2439'
@@ -49,7 +51,9 @@ const FooterBottom = () => {
 
             {/* Instagram */}
             <a 
-              href="#" 
+              href="https://www.instagram.com/sisyaclass/" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity"
               style={{
                 background: '#1A2439'
@@ -62,7 +66,9 @@ const FooterBottom = () => {
 
             {/* YouTube */}
             <a 
-              href="#" 
+              href="https://www.youtube.com/@SISYACLASS" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity"
               style={{
                 background: '#1A2439'
@@ -75,7 +81,9 @@ const FooterBottom = () => {
 
             {/* LinkedIn */}
             <a 
-              href="#" 
+              href="https://www.linkedin.com/company/sisyaclass/?viewAsMember=true" 
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-8 h-8 rounded-full flex items-center justify-center hover:opacity-70 transition-opacity"
               style={{
                 background: '#1A2439'

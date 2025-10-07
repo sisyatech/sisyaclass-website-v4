@@ -38,7 +38,7 @@ export default function RevealOnView({
           obs.disconnect();
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.2 }
     );
     obs.observe(ref.current);
     return () => obs.disconnect();

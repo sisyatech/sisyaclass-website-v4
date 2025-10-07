@@ -25,8 +25,8 @@ const FAQ = () => {
     }
   ];
 
-  // First question will open once the section enters view
-  const [openItems, setOpenItems] = useState<number[]>([]);
+  // Only one question can be open at a time
+  const [openItem, setOpenItem] = useState<number | null>(null);
   const [entered, setEntered] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,7 +39,7 @@ const FAQ = () => {
           obs.disconnect();
         }
       },
-      { threshold: 0.4 }
+      { threshold: 0.2 }
     );
     obs.observe(sectionRef.current);
     return () => obs.disconnect();
@@ -48,20 +48,16 @@ const FAQ = () => {
   // Open the first FAQ AFTER the entrance animation finishes
   useEffect(() => {
     if (!entered) return;
-    const t = setTimeout(() => setOpenItems([faqs[0].id]), 1800);
+    const t = setTimeout(() => setOpenItem(faqs[0].id), 1800);
     return () => clearTimeout(t);
   }, [entered]);
 
   const toggleItem = (id: number) => {
-    setOpenItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
+    setOpenItem(prev => prev === id ? null : id);
   };
 
   return (
-    <div ref={sectionRef} className="py-20 bg-white">
+    <div ref={sectionRef} className="py-6 bg-white">
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 
@@ -71,12 +67,12 @@ const FAQ = () => {
         </h2>
 
         {/* FAQ Items */}
-        <div className={`space-y-5 mb-50 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+        <div className={`space-y-5 mb-16 sm:mb-28 md:mb-36 lg:mb-40 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
           {faqs.map((faq, index) => (
             <div
               key={faq.id}
               className={`rounded-xl bg-white transition-all shadow-md hover:shadow-lg ${
-                openItems.includes(faq.id)
+                openItem === faq.id
                   ? 'ring-2 ring-[#4A9FD8]'
                   : 'ring-1 ring-gray-200'
               }`}
@@ -95,7 +91,7 @@ const FAQ = () => {
                 
                 {/* Plus/Minus Icon */}
                 <div 
-                  className={`flex-shrink-0 ml-4 w-7 h-7 rounded-full bg-[#4A9FD8] shadow-sm flex items-center justify-center transition-transform duration-300 ${openItems.includes(faq.id) ? 'rotate-45' : 'rotate-0'}`}
+                  className={`flex-shrink-0 ml-4 w-7 h-7 rounded-full bg-[#4A9FD8] shadow-sm flex items-center justify-center transition-transform duration-300 ${openItem === faq.id ? 'rotate-45' : 'rotate-0'}`}
                 >
                   <svg
                     width="18"
@@ -117,7 +113,7 @@ const FAQ = () => {
 
               {/* Answer */}
               <div
-                className={`overflow-hidden transition-all duration-[1300ms] ease-in-out ${openItems.includes(faq.id) ? 'max-h-[320px]' : 'max-h-0'}`}
+                className={`overflow-hidden transition-all duration-[1300ms] ease-in-out ${openItem === faq.id ? 'max-h-[320px]' : 'max-h-0'}`}
               >
                 <div 
                   className="px-6 pb-5 pt-0 border-t border-gray-100 font-roboto font-normal text-[15px] leading-[1.7] text-[#556A8E]"

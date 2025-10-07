@@ -14,14 +14,14 @@ const Hero = () => {
     <>
       {/* Animations via Tailwind arbitrary utilities */}
 
-      <div className="min-h-screen bg-white px-4 pb-20 pt-30 overflow-hidden">
+      <div className="min-screen bg-white px-4 pb-6 mb-20 sm:pb-8 md:pb-10 lg:pb-2 xl:pb-8 2xl:pb-12 pt-10 sm:pt-30 overflow-hidden">
         <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 items-center gap-10 lg:gap-12 lg:grid-cols-2">
             {/* Left Content */}
-            <div className={`space-y-8 transition-all duration-[1500ms] ease-out ${entered ? "opacity-100" : "opacity-0"}`}>
+            <div className={`space-y-8 flex flex-col items-center lg:items-start transition-all duration-[1500ms] ease-out ${entered ? "opacity-100" : "opacity-0"}`}>
               {/* Main Headline */}
               <h1
-                className={`font-roboto font-bold text-[#161A38] text-[26px] leading-[34px] sm:text-[32px] sm:leading-[42px] lg:text-[40px] lg:leading-[53px] tracking-[0.03em] transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
+                className={`font-roboto font-bold text-[#161A38] text-[26px] leading-[34px] sm:text-[32px] sm:leading-[42px] lg:text-[40px] lg:leading-[53px] tracking-[0.03em] text-center lg:text-left transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
                 style={{ transitionDelay: entered ? '0ms' : '0ms' }}
               >
                 Start Your Child's Journey to Excellence Today!
@@ -29,7 +29,7 @@ const Hero = () => {
 
               {/* Description */}
               <p
-                className={`font-roboto font-medium text-[#556A8E] text-[14px] leading-[24px] sm:text-[16px] sm:leading-[28px] lg:text-[18px] lg:leading-[31px] tracking-[0.03em] transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
+                className={`font-roboto font-medium text-[#556A8E] text-[14px] leading-[24px] sm:text-[16px] sm:leading-[28px] lg:text-[18px] lg:leading-[31px] tracking-[0.03em] text-center lg:text-left transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
                 style={{ transitionDelay: entered ? '150ms' : '0ms' }}
               >
                 At SISYA Class, we make learning an exciting journey. Our interactive lessons help your child build confidence and succeed across all subjects.
@@ -44,7 +44,7 @@ const Hero = () => {
               </p>
 
               {/* Ratings Section */}
-              <div className={`flex flex-col space-y-4 transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}
+              <div className={`flex flex-col space-y-4 w-full items-center lg:items-start transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}
                    style={{ transitionDelay: entered ? '450ms' : '0ms' }}>
                 <div
                   className="relative p-4 bg-white w-full max-w-[460px] min-h-[118px] shadow-[0_0_4px_0_rgba(0,0,0,0.25)] rounded-[16px] sm:rounded-[20px] lg:rounded-[22px]"
@@ -96,7 +96,7 @@ const Hero = () => {
             </div>
 
             {/* Right Visual Content */}
-            <div className={`relative flex justify-center transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[160px]"}`}>
+            <div className={`relative flex justify-center mt-10 lg:mt-0 transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[160px]"}`}>
               {/* Main Student Image Container */}
               <div className="relative left-0 h-[260px] w-[260px] sm:h-[320px] sm:w-[320px] md:h-[360px] md:w-[360px] lg:h-96 lg:w-96">
                 {/* Outer Border for Student Container */}
@@ -107,7 +107,7 @@ const Hero = () => {
                 {/* Educational Icons positioned on the dotted circle */}
                 <div className="absolute inset-0 z-10 animate-[spin_20s_linear_infinite] scale-[0.7] sm:scale-[0.8] md:scale-[0.9] lg:scale-100 origin-center">
                   {/* Math (π) - Top (0 degrees) */}
-                  <div className="absolute flex h-[48px] w-[48px] sm:h-[56px] sm:w-[56px] md:h-[60px] md:w-[60px] items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-[180px] sm:-mt-[205px] md:-mt-[220px] lg:-mt-[230px]">
+                  <div className="absolute flex h-[60px] w-[60px] sm:h-[56px] sm:w-[56px] md:h-[60px] md:w-[60px] items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-[210px] sm:-mt-[205px] md:-mt-[220px] lg:-mt-[230px]">
                     <Image src="/1.svg" alt="Math" width={60} height={60} className="h-full w-full" />
                   </div>
 
