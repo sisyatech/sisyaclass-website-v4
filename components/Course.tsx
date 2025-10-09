@@ -3,6 +3,8 @@
 import React from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import QuickLinks from "./QuickLinks";
+import NewSection from "./NewSection";
 
 interface CourseProps {
   gradeNumber: number;
@@ -15,7 +17,7 @@ const Course = ({ gradeNumber }: CourseProps) => {
   const subjects = ["Maths", "Physics", "Chemistry", "English"];
 
   return (
-    <div className="min-h-screen mb-10 pt-2 sm:pt-4 md:pt-6 lg:pt-8 relative">
+    <div className="min-screen mb-10 pt-2 sm:pt-4 md:pt-6 lg:pt-8 relative">
         
       {/* Background Container */}
       <div 
@@ -145,6 +147,9 @@ const Course = ({ gradeNumber }: CourseProps) => {
           </div>
         </div>
       </div>
+
+      <QuickLinks />
+      <NewSection />
     </div>
   );
 };
