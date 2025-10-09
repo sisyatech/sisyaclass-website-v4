@@ -12,18 +12,21 @@ import { cn } from "@/lib/utils";
 import { gradeLinks } from "@/lib/gradeLinks";
 import { resourcesLinks } from "@/lib/resourcesLinks";
 
-// Create context for mobile menu
+// Create context for mobile menu and selected grade
 const MobileMenuContext = createContext<{
   isMobileMenuOpen: boolean;
   expandedSection: string | null;
+  selectedGrade: number | null;
   toggleMobileMenu: () => void;
   toggleSection: (section: string) => void;
   setIsMobileMenuOpen: (open: boolean) => void;
+  setSelectedGrade: (grade: number | null) => void;
 } | null>(null);
 
 export const MobileMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -41,9 +44,11 @@ export const MobileMenuProvider = ({ children }: { children: React.ReactNode }) 
     <MobileMenuContext.Provider value={{
       isMobileMenuOpen,
       expandedSection,
+      selectedGrade,
       toggleMobileMenu,
       toggleSection,
-      setIsMobileMenuOpen
+      setIsMobileMenuOpen,
+      setSelectedGrade
     }}>
       {children}
     </MobileMenuContext.Provider>
@@ -59,7 +64,13 @@ export const useMobileMenu = () => {
 };
 
 export const MobileMenu = () => {
-  const { isMobileMenuOpen, expandedSection, toggleSection, setIsMobileMenuOpen } = useMobileMenu();
+  const { isMobileMenuOpen, expandedSection, toggleSection, setIsMobileMenuOpen, setSelectedGrade } = useMobileMenu();
+  
+  const handleGradeClick = (gradeLabel: string) => {
+    const gradeNumber = parseInt(gradeLabel.replace('Grade ', ''));
+    setSelectedGrade(gradeNumber);
+    setIsMobileMenuOpen(false);
+  };
   return (
     <>
       {/* Backdrop */}
@@ -110,14 +121,13 @@ export const MobileMenu = () => {
                 {expandedSection === 'courses' && (
                   <div className="mt-2 pl-0 space-y-1">
                     {gradeLinks.map((link) => (
-                      <Link
+                      <button
                         key={link.href}
-                        href={link.href}
-                        className="block py-2 px-4 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block w-full text-left py-2 px-4 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded transition-colors"
+                        onClick={() => handleGradeClick(link.label)}
                       >
                         {link.label}
-                      </Link>
+                      </button>
                     ))}
                   </div>
                 )}

@@ -1,7 +1,10 @@
-  "use client";
+"use client";
 import { MaskContainer } from "./ui/svg-mask-effect";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import BlurText from "./BlurText";
+
 const Hero = () => {
   const [entered, setEntered] = useState(false);
 
@@ -14,41 +17,33 @@ const Hero = () => {
     <>
       {/* Animations via Tailwind arbitrary utilities */}
 
-      <div className="min-screen bg-white px-4 pb-6 mb-12 sm:pb-8 md:pb-10 lg:pb-2 xl:pb-8 2xl:pb-12 pt-10 sm:pt-30 overflow-hidden">
-        <div className="mx-auto max-w-7xl">
+      <div className="min-screen relative bg-white px-4 pb-6 mb-12 sm:pb-8 md:pb-10 lg:pb-2 xl:pb-8 2xl:pb-12 pt-10 sm:pt-30 overflow-hidden">
+        <BackgroundRippleEffect rows={12} cols={27} cellSize={56} />
+        <div className="mx-auto max-w-7xl relative z-10">
           <div className="grid grid-cols-1 items-center gap-10 lg:gap-12 lg:grid-cols-2">
             {/* Left Content */}
-            
-            <div className={`space-y-8 flex flex-col items-center lg:items-start transition-all duration-[1500ms] ease-out ${entered ? "opacity-100" : "opacity-0"}`}>
+
+
+            <div className="space-y-8 flex flex-col items-center lg:items-start">
               {/* Main Headline */}
-              <h1
-                className={`font-roboto font-bold text-[#161A38] text-[26px] leading-[34px] sm:text-[32px] sm:leading-[42px] lg:text-[40px] lg:leading-[53px] tracking-[0.03em] text-center lg:text-left transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
-                style={{ transitionDelay: entered ? '0ms' : '0ms' }}
-              >
-                Start Your Child's Journey to Excellence Today!
-              </h1>
+              <BlurText text="Start Your Child's Journey to Excellence Today!" delay={150}
+                animateBy="words"
+                direction="top"
+                className="font-roboto font-bold text-[#161A38] text-[26px] leading-[34px] sm:text-[32px] sm:leading-[42px] lg:text-[40px] lg:leading-[53px] tracking-[0.03em] text-center lg:text-left"
+              />
 
               {/* Description */}
-              <p
-                className={`font-roboto font-medium text-[#556A8E] text-[14px] leading-[24px] sm:text-[16px] sm:leading-[28px] lg:text-[18px] lg:leading-[31px] tracking-[0.03em] text-center lg:text-left transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
-                style={{ transitionDelay: entered ? '150ms' : '0ms' }}
-              >
-                At SISYA Class, we make learning an exciting journey. Our interactive lessons help your child build confidence and succeed across all subjects.
-              </p>
+              <BlurText text="At SISYA Class, we make learning an exciting journey. Our interactive lessons help your child build confidence and succeed across all subjects." delay={50}
+                animateBy="words"
+                direction="top"
+                className="font-roboto font-medium text-[#556A8E] text-[14px] leading-[24px] sm:text-[16px] sm:leading-[28px] lg:text-[18px] lg:leading-[31px] tracking-[0.03em] text-center lg:text-left"
+              />
 
-              {/* Target Audience */}
-              <p
-                className={`font-roboto font-bold text-[#161A38] text-[14px] leading-[22px] sm:text-[16px] sm:leading-[26px] lg:text-[18px] lg:leading-[31px] tracking-[0.03em] inline-block transition-all duration-[1500ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}
-                style={{ transitionDelay: entered ? '300ms' : '0ms' }}
-              >
-                From Class 1 to 10
-              </p>
-
+              <BlurText text="From Class 1 to 10" delay={300}   />
               {/* Ratings Section */}
-              <div className={`flex flex-col space-y-4 w-full items-center lg:items-start transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}
-                   style={{ transitionDelay: entered ? '450ms' : '0ms' }}>
+              <div className="flex flex-col space-y-4 w-full items-center lg:items-start">
                 <div
-                  className="relative p-4 bg-white w-full max-w-[460px] min-h-[118px] shadow-[0_0_4px_0_rgba(0,0,0,0.25)] rounded-[16px] sm:rounded-[20px] lg:rounded-[22px]"
+                  className={`relative p-4 bg-white w-full max-w-[460px] min-h-[118px] shadow-[0_0_4px_0_rgba(0,0,0,0.25)] rounded-[16px] sm:rounded-[20px] lg:rounded-[22px] transition-all duration-1000 ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                 >
                   {/* 4.5/5 Rating */}
                   <div className="text-center mb-2">
@@ -95,7 +90,7 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-            
+
 
             {/* Right Visual Content */}
             <div className={`relative flex justify-center mt-10 mb-8 sm:mb-12 lg:mt-0 lg:mb-0 transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[160px]"}`}>
@@ -150,7 +145,7 @@ const Hero = () => {
                     width={392}
                     height={392}
                     className="h-full w-full object-cover object-center"
-                  />  
+                  />
                 </div>
 
 

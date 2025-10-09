@@ -1,6 +1,9 @@
+"use client";
+
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
-import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
+import Course from "@/components/Course";
+import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
 import ClassSelection from "@/components/ClassSelection";
 import Impact from "@/components/Impact";
 import AIEcosystem from "@/components/AIEcosystem";
@@ -18,10 +21,12 @@ import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 
 function HomeContent() {
+  const { selectedGrade } = useMobileMenu();
+  
   return (
     <Container>
       <Navbar />
-      <Hero />
+      {selectedGrade ? <Course gradeNumber={selectedGrade} /> : <Hero />}
       <ClassSelection />
       <Impact />
       <AIEcosystem />

@@ -37,7 +37,7 @@ const AppDownload = () => {
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-16">
             {/* Spacer for phone on desktop */}
             <div className="hidden lg:block flex-shrink-0 w-[280px] lg:w-[320px] xl:w-[420px]" />
-
+    
             {/* Right Side - Content */}
             <div className="flex-1 text-center lg:text-left lg:ml-26 xl:ml-40">
               <h2 className="font-montserrat font-bold text-[20px] leading-[26px] min-[375px]:text-[22px] min-[375px]:leading-[28px] sm:text-[26px] sm:leading-[30px] md:text-[28px] md:leading-[32px] lg:text-[26px] lg:leading-[30px] xl:text-3xl xl:leading-none tracking-normal mb-3 sm:mb-4 md:mb-5 lg:mb-4 xl:mb-6 text-[#1A2439]">

@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+
 const ClassSelection = () => {
   const [activeClass, setActiveClass] = useState("Class 1-3");
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -134,6 +136,7 @@ const ClassSelection = () => {
 
   return (
     <div className="pt-10 pb-6 sm:pb-8 md:pb-10 bg-white">
+      
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
         <RevealOnView from="left" durationMs={1500}>
