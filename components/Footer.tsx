@@ -1,7 +1,17 @@
+"use client";
 
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { routes } from "@/lib/navigation";
+
 const Footer = () => {
+  const router = useRouter();
+
+  const handleAboutClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(routes.about);
+  };
   return (
     <div className="relative py-8 sm:py-12 md:py-14 lg:py-16 px-3 sm:px-6 md:px-8 w-full bg-[#DADADA66]">
       <div className="max-w-7xl mx-auto">
@@ -95,7 +105,7 @@ const Footer = () => {
               </h3>
               <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity">
+                  <a href="#" onClick={handleAboutClick} className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity cursor-pointer">
                     About us
                   </a>
                 </li>
@@ -134,7 +144,7 @@ const Footer = () => {
               </h3>
               <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity">
+                  <a href="#" onClick={handleAboutClick} className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity cursor-pointer">
                     About us
                   </a>
                 </li>
@@ -173,7 +183,7 @@ const Footer = () => {
               </h3>
               <ul className="space-y-2 sm:space-y-2.5 md:space-y-3">
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity">
+                  <a href="#" onClick={handleAboutClick} className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity cursor-pointer">
                     About us
                   </a>
                 </li>

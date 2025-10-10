@@ -11,22 +11,27 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { gradeLinks } from "@/lib/gradeLinks";
 import { resourcesLinks } from "@/lib/resourcesLinks";
+import { useRouter } from "next/navigation";
+import { extractGradeFromLabel, getGradeUrl, routes } from "@/lib/navigation";
 
-// Create context for mobile menu and selected grade
+// Create context for mobile menu, selected grade, and page view
 const MobileMenuContext = createContext<{
   isMobileMenuOpen: boolean;
   expandedSection: string | null;
   selectedGrade: number | null;
+  currentPage: string;
   toggleMobileMenu: () => void;
   toggleSection: (section: string) => void;
   setIsMobileMenuOpen: (open: boolean) => void;
   setSelectedGrade: (grade: number | null) => void;
+  setCurrentPage: (page: string) => void;
 } | null>(null);
 
 export const MobileMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<string>("home");
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -45,10 +50,12 @@ export const MobileMenuProvider = ({ children }: { children: React.ReactNode }) 
       isMobileMenuOpen,
       expandedSection,
       selectedGrade,
+      currentPage,
       toggleMobileMenu,
       toggleSection,
       setIsMobileMenuOpen,
-      setSelectedGrade
+      setSelectedGrade,
+      setCurrentPage
     }}>
       {children}
     </MobileMenuContext.Provider>
@@ -65,11 +72,15 @@ export const useMobileMenu = () => {
 
 export const MobileMenu = () => {
   const { isMobileMenuOpen, expandedSection, toggleSection, setIsMobileMenuOpen, setSelectedGrade } = useMobileMenu();
+  const router = useRouter();
   
   const handleGradeClick = (gradeLabel: string) => {
-    const gradeNumber = parseInt(gradeLabel.replace('Grade ', ''));
-    setSelectedGrade(gradeNumber);
-    setIsMobileMenuOpen(false);
+    const gradeNumber = extractGradeFromLabel(gradeLabel);
+    if (gradeNumber) {
+      setSelectedGrade(gradeNumber);
+      setIsMobileMenuOpen(false);
+      router.push(getGradeUrl(gradeNumber));
+    }
   };
   return (
     <>
@@ -193,15 +204,22 @@ export const MobileMenu = () => {
 };
 
 const Navbar = () => {
-  const { isMobileMenuOpen, toggleMobileMenu } = useMobileMenu();
+  const { isMobileMenuOpen, toggleMobileMenu, setSelectedGrade, setCurrentPage } = useMobileMenu();
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    setSelectedGrade(null); // Reset to home page
+    setCurrentPage("home"); // Reset to home page
+    router.push(routes.home);
+  };
 
   return (
     <ScrollEffect>
       <nav className="relative flex h-16 sm:h-18 items-center px-4 sm:px-6">
         <div className="flex items-center space-x-3 sm:space-x-4">
-          <Link href="/">
+          <button onClick={handleLogoClick} className="cursor-pointer">
             <Image src={Logo} alt="Logo" className="object-cover w-[110px] sm:w-auto h-auto" />
-          </Link>
+          </button>
           <div className="hidden lg:block">
             <NavLinks />
           </div>
