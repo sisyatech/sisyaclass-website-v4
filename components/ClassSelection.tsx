@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
@@ -11,6 +11,8 @@ const ClassSelection = () => {
   const [cardsEntered, setCardsEntered] = useState(false);
   const [mobileCardIndex, setMobileCardIndex] = useState(0);
   const [mobileGlobalIndex, setMobileGlobalIndex] = useState(0); // For cycling through all 10 classes
+  const [entered, setEntered] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const classOptions = ["Class 1-3", "Class 4-5", "Class 6-7", "Class 8-10"];
 
@@ -71,18 +73,41 @@ const ClassSelection = () => {
     }
   };
 
+  // Intersection Observer for initial animation
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
+    obs.observe(sectionRef.current);
+    return () => obs.disconnect();
+  }, []);
+
   const handlePrevSlide = () => {
+    setCardsEntered(false);
     const currentIndex = classOptions.indexOf(activeClass);
     const prevIndex = currentIndex > 0 ? currentIndex - 1 : classOptions.length - 1;
     setActiveClass(classOptions[prevIndex]);
     setCurrentSlide(0);
+    // Re-trigger card animation
+    setTimeout(() => setCardsEntered(true), 300);
   };
 
   const handleNextSlide = () => {
+    setCardsEntered(false);
     const currentIndex = classOptions.indexOf(activeClass);
     const nextIndex = currentIndex < classOptions.length - 1 ? currentIndex + 1 : 0;
     setActiveClass(classOptions[nextIndex]);
     setCurrentSlide(0);
+    // Re-trigger card animation
+    setTimeout(() => setCardsEntered(true), 300);
   };
 
   useEffect(() => {
@@ -90,13 +115,9 @@ const ClassSelection = () => {
     setMobileCardIndex(0);
     // Ensure mobile single-card starts at the first class of the selected range
     setMobileGlobalIndex(getRangeStartIndex(activeClass));
-  }, [activeClass]);
-
-  // Fade out/in cards when class range changes
-  useEffect(() => {
+    // Re-trigger card animation when class changes
     setCardsEntered(false);
-    const id = requestAnimationFrame(() => setCardsEntered(true));
-    return () => cancelAnimationFrame(id);
+    setTimeout(() => setCardsEntered(true), 300);
   }, [activeClass]);
 
   const getCurrentSlideClasses = () => {
@@ -135,13 +156,13 @@ const ClassSelection = () => {
   };
 
   return (
-    <div className="pt-10 pb-6 sm:pb-8 md:pb-10 bg-white">
+    <div ref={sectionRef} className="pt-10 pb-6 sm:pb-8 md:pb-10 bg-white">
       
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
         <RevealOnView from="left" durationMs={1500}>
           <div className="text-center mb-8 sm:mb-10 md:mb-12">
-            <h2 className="mb-5 sm:mb-6 md:mb-8 font-montserrat font-bold text-[26px] leading-[32px] sm:text-[36px] sm:leading-[40px] md:text-[44px] md:leading-[44px] lg:text-[50px] lg:leading-[45px] capitalize text-[#1A2439]">
+            <h2 className="mb-5 sm:mb-6 md:mb-8 font-montserrat font-bold text-[18px] leading-[24px] sm:text-[36px] sm:leading-[40px] md:text-[44px] md:leading-[44px] lg:text-[50px] lg:leading-[45px] capitalize text-[#1A2439]">
               <span className="block mb-2 font-montserrat font-normal text-[17px] leading-[26px] sm:text-[20px] sm:leading-[30px] md:text-[23px] md:leading-[36px] lg:text-[25px] lg:leading-[45px] text-[#1A2439]">
                 Explore What You Can Learn
               </span>
@@ -177,22 +198,22 @@ const ClassSelection = () => {
 
         {/* Carousel */}
         <RevealOnView from="bottom" durationMs={1500}>
-          <div className="relative">
+          <div className={`relative transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[160px]"}`}>
             {/* Navigation Arrows */}
             <button
               onClick={handlePrevSlide}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
+              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
             >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
             <button
               onClick={handleNextSlide}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white"
+              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
             >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
@@ -201,9 +222,9 @@ const ClassSelection = () => {
             <div className="hidden md:flex justify-center gap-4 md:gap-5 lg:gap-6 px-6 md:px-8">
               {currentSlideClasses.map((card, index) => (
                 <div
-                  key={index}
-                  className={`shadow-lg hover:shadow-xl transition-all duration-[1500ms] ease-out relative w-[220px] h-[320px] md:w-[240px] md:h-[330px] lg:w-[250px] lg:h-[338px] rounded-[18px] md:rounded-[20px] ${
-                    cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                  key={`${activeClass}-${index}`}
+                  className={`shadow-lg hover:shadow-xl transition-all duration-[800ms] ease-out relative w-[220px] h-[320px] md:w-[240px] md:h-[330px] lg:w-[250px] lg:h-[338px] rounded-[18px] md:rounded-[20px] ${
+                    cardsEntered ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
                   }`}
                   style={{
                     transitionDelay: cardsEntered ? `${index * 120}ms` : "0ms",
@@ -247,8 +268,8 @@ const ClassSelection = () => {
                 {allClasses.length > 0 && (
                   <div
                     key={mobileGlobalIndex}
-                    className={`shadow-lg hover:shadow-xl transition-all duration-[600ms] ease-out relative w-[240px] h-[340px] sm:w-[250px] sm:h-[345px] rounded-[20px] ${
-                      cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    className={`shadow-lg hover:shadow-xl transition-all duration-[600ms] ease-in-out relative w-[240px] h-[340px] sm:w-[250px] sm:h-[345px] rounded-[20px] ${
+                      cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-90"
                     }`}
                     style={{ backgroundColor: allClasses[mobileGlobalIndex].containerColor }}
                   >
@@ -286,11 +307,11 @@ const ClassSelection = () => {
                 )}
               </div>
               <div className="mt-4 flex items-center justify-center gap-6">
-                <button onClick={handleMobilePrev} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95">
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                <button onClick={handleMobilePrev} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
+                  <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 </button>
-                <button onClick={handleMobileNext} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95">
-                  <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                <button onClick={handleMobileNext} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
+                  <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                 </button>
               </div>
             </div>

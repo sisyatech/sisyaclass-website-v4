@@ -73,14 +73,25 @@ export const useMobileMenu = () => {
 export const MobileMenu = () => {
   const { isMobileMenuOpen, expandedSection, toggleSection, setIsMobileMenuOpen, setSelectedGrade } = useMobileMenu();
   const router = useRouter();
+  const [currentView, setCurrentView] = useState<'main' | 'courses' | 'resources'>('main');
   
   const handleGradeClick = (gradeLabel: string) => {
     const gradeNumber = extractGradeFromLabel(gradeLabel);
     if (gradeNumber) {
       setSelectedGrade(gradeNumber);
       setIsMobileMenuOpen(false);
+      setCurrentView('main'); // Reset to main view
       router.push(getGradeUrl(gradeNumber));
     }
+  };
+
+  const handleBackToMain = () => {
+    setCurrentView('main');
+  };
+
+  const handleCloseMenu = () => {
+    setIsMobileMenuOpen(false);
+    setCurrentView('main'); // Reset to main view
   };
   return (
     <>
@@ -90,113 +101,186 @@ export const MobileMenu = () => {
           "fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300",
           isMobileMenuOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
-        onClick={() => setIsMobileMenuOpen(false)}
+        onClick={handleCloseMenu}
       />
       
       {/* Slide-in Menu */}
       <div className={cn(
-        "fixed top-0 right-0 h-full w-72 max-w-[80vw] bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out",
-        isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+        "fixed top-0 right-0 h-full w-full bg-white shadow-xl z-50 transform transition-all duration-500 ease-out",
+        isMobileMenuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
       )}>
         <div className="flex flex-col h-full">
-          {/* Header with Close Button */}
-          <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Menu</h2>
+          {/* Header with Back/Close Button */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-200 animate-in slide-in-from-top-4 fade-in duration-300">
+            {currentView !== 'main' && (
+              <button
+                onClick={handleBackToMain}
+                className="p-2 rounded-md hover:bg-gray-100 transition-all duration-300 hover:scale-110 hover:shadow-md group"
+                aria-label="Back to main menu"
+              >
+                <svg className="h-5 w-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+            )}
+            <h2 className="text-lg font-semibold text-gray-900 flex-1 text-center transition-all duration-300">
+              <span className={cn(
+                "inline-block transition-all duration-300",
+                currentView === 'main' ? "animate-in slide-in-from-left-4 fade-in" : 
+                currentView === 'courses' ? "animate-in slide-in-from-right-4 fade-in" : 
+                "animate-in slide-in-from-right-4 fade-in"
+              )}>
+                {currentView === 'main' ? 'Menu' : currentView === 'courses' ? 'Courses' : 'Resources'}
+              </span>
+            </h2>
             <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="p-2 rounded-md hover:bg-gray-100 transition-colors"
+              onClick={handleCloseMenu}
+              className="p-2 rounded-md hover:bg-gray-100 transition-all duration-300 hover:scale-110 hover:shadow-md group"
               aria-label="Close menu"
             >
-              <X className="h-5 w-5 text-gray-600" />
+              <X className="h-5 w-5 text-gray-600 group-hover:text-red-500 group-hover:rotate-90 transition-all duration-300" />
             </button>
           </div>
 
           {/* Menu Content */}
           <div className="flex-1 overflow-y-auto px-4 py-4">
-            {/* Navigation Links - Mobile Version */}
-            <div className="space-y-3">
-              {/* Courses Section */}
-              <div className="border-b border-gray-100 pb-3">
+            {/* Main Menu View */}
+            {currentView === 'main' && (
+              <div className={cn(
+                "space-y-4 transition-all duration-400 ease-out",
+                currentView === 'main' ? "animate-in slide-in-from-left-4 fade-in" : "animate-out slide-out-to-left-4 fade-out"
+              )}>
+                {/* Courses Button */}
                 <button
-                  onClick={() => toggleSection('courses')}
-                  className="flex items-center justify-between w-full text-left py-3 text-base font-medium text-gray-900 hover:text-gray-700 transition-colors"
+                  onClick={() => setCurrentView('courses')}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
                 >
-                  <span>Courses</span>
-                  <ChevronDown 
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-200 text-gray-500",
-                      expandedSection === 'courses' ? "rotate-180" : ""
-                    )}
-                  />
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Courses</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
-                {expandedSection === 'courses' && (
-                  <div className="mt-2 pl-0 space-y-1">
-                    {gradeLinks.map((link) => (
-                      <button
-                        key={link.href}
-                        className="block w-full text-left py-2 px-4 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded transition-colors"
-                        onClick={() => handleGradeClick(link.label)}
-                      >
-                        {link.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
 
-              {/* Resources Section */}
-              <div className="border-b border-gray-100 pb-3">
+                {/* Resources Button */}
                 <button
-                  onClick={() => toggleSection('resources')}
-                  className="flex items-center justify-between w-full text-left py-3 text-base font-medium text-gray-900 hover:text-gray-700 transition-colors"
+                  onClick={() => setCurrentView('resources')}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
                 >
-                  <span>Resources</span>
-                  <ChevronDown 
-                    className={cn(
-                      "h-4 w-4 transition-transform duration-200 text-gray-500",
-                      expandedSection === 'resources' ? "rotate-180" : ""
-                    )}
-                  />
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Resources</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
                 </button>
-                {expandedSection === 'resources' && (
-                  <div className="mt-2 pl-0 space-y-1">
-                    {resourcesLinks.map((link) => (
-                      <Link
-                        key={link.href}
-                        href={link.href}
-                        className="block py-2 px-4 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded transition-colors"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {link.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+
+                {/* About Us Button */}
+                <Link
+                  href="/about"
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">About Us</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+
+                {/* Terms Button */}
+                <Link
+                  href="/terms"
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Terms</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+
+                {/* Policy Button */}
+                <Link
+                  href="/policy"
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Policy</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
               </div>
-            </div>
+            )}
+
+            {/* Courses View */}
+            {currentView === 'courses' && (
+              <div className={cn(
+                "space-y-3 transition-all duration-400 ease-out",
+                currentView === 'courses' ? "animate-in slide-in-from-right-4 fade-in" : "animate-out slide-out-to-right-4 fade-out"
+              )}>
+                <div className="grid grid-cols-2 gap-3">
+                  {gradeLinks.map((link, index) => (
+                    <button
+                      key={link.href}
+                      className={cn(
+                        "block w-full text-left py-4 px-4 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 hover:border-blue-200 border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-white group",
+                        `animate-in slide-in-from-bottom-2 fade-in delay-${index * 50}`
+                      )}
+                      onClick={() => handleGradeClick(link.label)}
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Resources View */}
+            {currentView === 'resources' && (
+              <div className={cn(
+                "space-y-3 transition-all duration-400 ease-out",
+                currentView === 'resources' ? "animate-in slide-in-from-right-4 fade-in" : "animate-out slide-out-to-right-4 fade-out"
+              )}>
+                {resourcesLinks.map((link, index) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={cn(
+                      "block py-4 px-4 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 hover:border-blue-200 border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-white group",
+                      `animate-in slide-in-from-bottom-2 fade-in delay-${index * 100}`
+                    )}
+                    onClick={handleCloseMenu}
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
             
-            {/* Mobile-specific buttons */}
-            <div className="pt-6 space-y-3">
+          {/* Mobile-specific buttons - Only show on main view */}
+          {currentView === 'main' && (
+            <div className="pt-6 space-y-3 px-4 pb-4 animate-in slide-in-from-bottom-4 fade-in delay-300">
               {/* Contact Us Button */}
               <a
                 href="tel:+917330897291"
-                className="flex items-center space-x-3 rounded-lg bg-orange-100 px-4 py-3 text-sm font-medium text-orange-600 transition hover:bg-orange-200"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center space-x-3 rounded-lg bg-orange-100 px-4 py-3 text-sm font-medium text-orange-600 transition-all duration-300 hover:bg-orange-200 hover:scale-[1.02] hover:shadow-md group"
+                onClick={handleCloseMenu}
               >
-                <Phone className="h-4 w-4 flex-shrink-0" />
-                <span>Contact Us: +91 7330897291</span>
+                <Phone className="h-4 w-4 flex-shrink-0 group-hover:rotate-12 transition-transform duration-300" />
+                <span className="group-hover:translate-x-1 transition-transform duration-300">Contact Us: +91 7330897291</span>
               </a>
 
               {/* Download App Button */}
               <Button
                 type="button"
-                className="w-full bg-[#02bdfe] hover:bg-[#02bdfe]/90 text-white py-3 px-6 rounded-lg font-medium transition-colors"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full bg-[#02bdfe] hover:bg-[#02bdfe]/90 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 hover:scale-[1.02] hover:shadow-lg"
+                onClick={handleCloseMenu}
               >
                 Get the App
               </Button>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

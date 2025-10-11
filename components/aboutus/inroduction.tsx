@@ -25,11 +25,11 @@ const NewSection = () => {
 
         {/* Right Side - Content with animation from right */}
         <RevealOnView from="right" durationMs={1200} delayMs={200}>
-          <div className="flex-1 w-full lg:w-auto lg:ml-5 sm:lg:ml-6 md:lg:ml-8 lg:mr-16 xl:mr-20 flex flex-col justify-center ml-5 sm:ml-6 md:ml-18">
+          <div className="flex-1 w-full lg:w-auto lg:ml-5 sm:lg:ml-6 md:lg:ml-8 lg:mr-16 xl:mr-20 flex flex-col justify-center ml-1.5 sm:ml-2 md:ml-0 md:lg:ml-8">
           {/* Description */}
           <div className="w-full max-w-[500px] sm:max-w-[550px] md:max-w-[584px] h-auto relative">
             {/* Opening Quote */}
-            <div className="absolute -top-2 -left-7">
+            <div className="absolute -top-2 -left-4 sm:-left-7">
               <Image 
                 src="/about/openingquote.svg" 
                 alt="Opening Quote" 
@@ -41,7 +41,7 @@ const NewSection = () => {
             </div>
             
             {/* Closing Quote */}
-            <div className="absolute -bottom-2 -right-2">
+            <div className="absolute -bottom-2 -right-1">
               <Image 
                 src="/about/closingquote.svg" 
                 alt="Closing Quote" 

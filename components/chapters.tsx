@@ -3,21 +3,20 @@
 import React from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import RevealOnView from "../Reveal/RevealOnView";
+import RevealOnView from "./Reveal/RevealOnView";
 import { useRouter } from "next/navigation";
 
-const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
+const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
   
   const subjects = [
     {
       id: 1,
-      title: "Mathematics",
+      title: "Chapter 1",
       subtitle: "Numbers and comparision",
       iconBg: "bg-[#DDDEFE]",
       titleColor: "text-[#575CFB]",
-      buttonBg: "bg-[#575CFB]",
-      buttonText: "Explore Maths Champ Course",
+
       topics: [
         "Ascending and Descending Order",
         "Number system",
@@ -30,12 +29,10 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
     },
     {
       id: 2,
-      title: "Science",
+      title: "Chapter 2",
       subtitle: "Numbers and comparision",
-      iconBg: "bg-[#41AC7D4D]",
-      titleColor: "text-[#41AC7D]",
-      buttonBg: "bg-[#41AC7D]",
-      buttonText: "Explore Science Champ Course",
+      iconBg: "bg-[#DDDEFE]",
+      titleColor: "text-[#575CFB]",
       topics: [
         "Ascending and Descending Order",
         "Number system",
@@ -48,12 +45,11 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
     },
     {
       id: 3,
-      title: "English",
+      title: "Chapter 3",
       subtitle: "Numbers and comparision",
-      iconBg: "bg-[#FAE9E8]",
-      titleColor: "text-[#E78F8E]",
-      buttonBg: "bg-[#E78F8E]",
-      buttonText: "Explore English Champ Course",
+      iconBg: "bg-[#DDDEFE]",
+      titleColor: "text-[#575CFB]",
+
       topics: [
         "Ascending and Descending Order",
         "Number system",
@@ -121,7 +117,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                 {/* Subject Icon and Title */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                    {subject.title === "Mathematics" && (
+                    {subject.title === "Chapter 1" && (
                       <Image 
                         src="/grades/math.svg" 
                         alt="Math" 
@@ -129,18 +125,18 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                         height={29}
                       />
                     )}
-                   {subject.title === "Science" && (
+                   {subject.title === "Chapter 2" && (
                       <Image 
-                        src="/grades/sciens.svg" 
-                        alt="Science" 
+                      src="/grades/math.svg" 
+                      alt="Math" 
                         width={29} 
                         height={29}
                       />
                     )}
-                    {subject.title === "English" && (
+                    {subject.title === "Chapter 3" && (
                       <Image 
-                        src="/grades/eng.svg" 
-                        alt="English" 
+                      src="/grades/math.svg" 
+                      alt="Math" 
                         width={29} 
                         height={29}
                       />
@@ -182,13 +178,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                 </div>
               </div>
 
-              {/* Explore Button - Outside the card */}
-              <button 
-                onClick={() => handleExploreClick(subject.title)}
-                className={`w-[250.42px] h-[39.22px] ${subject.buttonBg} text-white rounded-[10px] font-montserrat font-semibold text-[14px] leading-[10px] tracking-[0%] text-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-opacity`}
-              >
-                {subject.buttonText}
-              </button>
+         
             </div>
             </RevealOnView>
           ))}
@@ -208,4 +198,4 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   );
 };
 
-export default SyllabusSection;
+export default Chapters;

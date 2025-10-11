@@ -34,10 +34,10 @@ const Course = ({ gradeNumber }: CourseProps) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-20 items-center">
             
             {/* Left Content */}
-            <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:pr-8">
+            <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:pr-8 flex flex-col items-center lg:items-start">
               {/* Class Badge */}
               <RevealOnView from="top" durationMs={800} delayMs={0}>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
+                <div className="flex flex-row items-center gap-2 sm:gap-3">
                   <div className="relative w-[160px] sm:w-[180px] md:w-[202px] h-[28px] sm:h-[32px] md:h-[36px]">
                     <Image 
                       src="/grades/coursebaner.svg" 
@@ -45,12 +45,13 @@ const Course = ({ gradeNumber }: CourseProps) => {
                       width={202} 
                       height={36}
                       className="w-full h-full"
+                      priority
                     />
                     <span className="absolute inset-0 flex items-center justify-center text-white text-xs sm:text-sm font-semibold">
                       Booster Course
                     </span>
                   </div>
-                  <div className="font-montserrat font-semibold text-[#1BA8EF] text-xl sm:text-2xl">
+                  <div className="font-montserrat font-semibold text-[#1BA8EF] text-xl sm:text-2xl whitespace-nowrap">
                     {classTitle}
                   </div>
                 </div>
@@ -58,16 +59,16 @@ const Course = ({ gradeNumber }: CourseProps) => {
 
               {/* Main Headline */}
               <RevealOnView from="left" durationMs={1000} delayMs={200}>
-                <h1 className="font-roboto font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight text-[#161A38]">
+                <h1 className="font-roboto font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight text-[#161A38] text-center lg:text-left">
                   Master Core Concepts With <br className="hidden sm:block" /> Star Teachers in 2 Days
                 </h1>
               </RevealOnView>
 
               {/* Subjects */}
               <RevealOnView from="left" durationMs={1000} delayMs={400}>
-                <div className="space-y-2 sm:space-y-3">
+                <div className="space-y-2 sm:space-y-3 text-center lg:text-left w-full">
                   <h3 className="font-roboto font-medium text-base sm:text-lg text-[#556A8E]">Subjects Covered:</h3>
-                  <div className="flex flex-wrap gap-2 sm:gap-3">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center lg:justify-start">
                     {subjects.map((subject, index) => (
                       <span
                         key={index}
@@ -104,17 +105,17 @@ const Course = ({ gradeNumber }: CourseProps) => {
 
               {/* CTA Button */}
               <RevealOnView from="bottom" durationMs={1000} delayMs={800}>
-                <button className="w-full max-w-[340px] sm:max-w-[400px] md:max-w-[447px] h-[46px] sm:h-[50px] md:h-[53px] rounded-xl bg-[#0595CE] text-white font-montserrat font-semibold text-lg sm:text-xl md:text-[23px]">
+                <button className="w-full sm:w-full md:w-full lg:max-w-[447px] h-[46px] sm:h-[50px] md:h-[53px] rounded-xl bg-[#0595CE] text-white font-montserrat font-semibold text-base sm:text-lg md:text-xl lg:text-[23px] px-4">
                   Register for demo at just ₹29
                 </button>
               </RevealOnView>
             </div>
 
             {/* Right Content - Video */}
-            <div className="relative mt-8 lg:mt-0 lg:pl-8">
+            <div className="relative mt-8 lg:mt-0 ">
               {/* Guarantee Badge - Right Above Video */}
               <RevealOnView from="top" durationMs={800} delayMs={300}>
-                <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[371px] h-[28px] rounded-md bg-[#28A745] text-white flex items-center justify-center mb-6 sm:mb-8 shadow-lg mx-auto lg:mx-0">
+                <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[371px] h-[40px] sm:h-[32px] md:h-[28px] rounded-md bg-[#28A745] text-white flex items-center justify-center mb-6 sm:mb-8 shadow-lg mx-auto lg:ml-8 xl:ml-16">
                   <span className="text-xs sm:text-sm font-medium px-2">
                     The Guaranteed Path to Higher Scores
                   </span>

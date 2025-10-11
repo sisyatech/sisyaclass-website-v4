@@ -9,8 +9,8 @@ const VisionSection = () => {
     <RevealOnView from="right" durationMs={2000} delayMs={0}>
       <div className="w-full min-h-[200px] sm:min-h-[240px] md:min-h-[284px] bg-[#1A2439] flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 py-8 sm:py-12 md:py-16 relative">
       {/* Left Images - Hidden on mobile and tablet, visible on lg+ */}
-      <div className="hidden lg:block absolute left-[50px] top-[32px]">
-        <div className="w-[130px] h-[130px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
+      <div className="hidden lg:block absolute left-[30px] lg:left-[60px] xl:left-[50px] top-[42px]">
+        <div className="w-[100px] h-[100px] lg:w-[110px] lg:h-[110px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
           <Image 
             src="/about/left1.svg" 
             alt="Left Image 1" 
@@ -22,8 +22,8 @@ const VisionSection = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block absolute left-[180px] top-[120px]">
-        <div className="w-[130px] h-[130px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
+      <div className="hidden lg:block absolute left-[120px] lg:left-[140px] xl:left-[180px] top-[120px]">
+        <div className="w-[100px] h-[100px] lg:w-[110px] lg:h-[110px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
           <Image 
             src="/about/left2.svg" 
             alt="Left Image 2" 
@@ -36,8 +36,8 @@ const VisionSection = () => {
       </div>
 
       {/* Right Images - Hidden on mobile and tablet, visible on lg+ */}
-      <div className="hidden lg:block absolute right-8 xl:right-[20px] top-[32px]">
-        <div className="w-[130px] h-[130px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
+      <div className="hidden lg:block absolute right-[10px] lg:right-[40px] xl:right-[20px] top-[42px]">
+        <div className="w-[100px] h-[100px] lg:w-[110px] lg:h-[110px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
           <Image 
             src="/about/right1.svg" 
             alt="Right Image 1" 
@@ -49,8 +49,8 @@ const VisionSection = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block absolute right-[143px] top-[120px]">
-        <div className="w-[130px] h-[130px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
+      <div className="hidden lg:block absolute right-[103px] lg:right-[123px] xl:right-[143px] top-[120px]">
+        <div className="w-[100px] h-[100px] lg:w-[110px] lg:h-[110px] xl:w-[154px] xl:h-[154px] rounded-[19px] overflow-hidden">
           <Image 
             src="/about/right2.svg" 
             alt="Right Image 2" 

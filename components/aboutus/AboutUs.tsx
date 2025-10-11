@@ -59,37 +59,43 @@ const AboutUs = () => {
           </div>
 
           {/* Main Headlines with Typing Animation */}
-          <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-32">
-            <TypingAnimation 
-              as="h1"
-              duration={50}
-              delay={0}
-              showCursor={false}
-              startOnView={false}
-              className="mb-2 sm:mb-3 md:mb-4 font-rubik font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px] xl:text-[43.71px] leading-[20px] sm:leading-[24px] md:leading-[28px] lg:leading-[40px] xl:leading-[43.71px] tracking-[1%] text-center text-white"
-            >
-              Affordable Education
-            </TypingAnimation>
-            <TypingAnimation 
-              as="h1"
-              duration={50}
-              delay={700}
-              showCursor={false}
-              startOnView={false}
-              className="mb-2 sm:mb-3 md:mb-4 font-rubik font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px] xl:text-[43.71px] leading-[20px] sm:leading-[24px] md:leading-[28px] lg:leading-[40px] xl:leading-[43.71px] tracking-[1%] text-center text-white"
-            >
-              Accessible Anywhere
-            </TypingAnimation>
-            <TypingAnimation 
-              as="h1"
-              duration={50}
-              delay={1400}
-              showCursor={false}
-              startOnView={false}
-              className="font-rubik font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px] xl:text-[43.71px] leading-[20px] sm:leading-[24px] md:leading-[28px] lg:leading-[40px] xl:leading-[43.71px] tracking-[1%] text-center text-white"
-            >
-              Available 24/7
-            </TypingAnimation>
+          <div className="text-center mb-12 sm:mb-16 md:mb-20 lg:mb-24 xl:mb-32 h-[140px] sm:h-[160px] md:h-[180px] lg:h-[240px] xl:h-[260px] flex flex-col justify-center">
+            <div className="h-[45px] sm:h-[50px] md:h-[58px] lg:h-[78px] xl:h-[85px] flex items-center justify-center">
+              <TypingAnimation 
+                as="h1"
+                duration={50}
+                delay={0}
+                showCursor={false}
+                startOnView={false}
+                className="font-rubik font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px] xl:text-[43.71px] leading-[20px] sm:leading-[24px] md:leading-[28px] lg:leading-[40px] xl:leading-[43.71px] tracking-[1%] text-center text-white"
+              >
+                Affordable Education
+              </TypingAnimation>
+            </div>
+            <div className="h-[45px] sm:h-[50px] md:h-[58px] lg:h-[78px] xl:h-[85px] flex items-center justify-center">
+              <TypingAnimation 
+                as="h1"
+                duration={50}
+                delay={700}
+                showCursor={false}
+                startOnView={false}
+                className="font-rubik font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px] xl:text-[43.71px] leading-[20px] sm:leading-[24px] md:leading-[28px] lg:leading-[40px] xl:leading-[43.71px] tracking-[1%] text-center text-white"
+              >
+                Accessible Anywhere
+              </TypingAnimation>
+            </div>
+            <div className="h-[45px] sm:h-[50px] md:h-[58px] lg:h-[78px] xl:h-[85px] flex items-center justify-center">
+              <TypingAnimation 
+                as="h1"
+                duration={50}
+                delay={1400}
+                showCursor={false}
+                startOnView={false}
+                className="font-rubik font-medium text-[24px] sm:text-[30px] md:text-[36px] lg:text-[40px] xl:text-[43.71px] leading-[20px] sm:leading-[24px] md:leading-[28px] lg:leading-[40px] xl:leading-[43.71px] tracking-[1%] text-center text-white"
+              >
+                Available 24/7
+              </TypingAnimation>
+            </div>
           </div>
 
           {/* Description Text */}

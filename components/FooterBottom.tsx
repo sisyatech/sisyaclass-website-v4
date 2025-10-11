@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const FooterBottom = () => {
   return (
@@ -14,24 +15,24 @@ const FooterBottom = () => {
 
           {/* Policy Links */}
           <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5 lg:gap-8 w-full lg:w-auto order-3 lg:order-2">
-            <a 
-              href="#" 
+            <Link 
+              href="/privacy-policy" 
               className="hover:opacity-70 transition-opacity font-roboto font-normal text-[13px] sm:text-[13px] md:text-[13px] lg:text-[14px] text-[#1A2439] no-underline whitespace-nowrap"
             >
               Privacy Policy
-            </a>
-            <a 
-              href="#" 
+            </Link>
+            <Link 
+              href="/terms-and-conditions" 
               className="hover:opacity-70 transition-opacity font-roboto font-normal text-[13px] sm:text-[13px] md:text-[13px] lg:text-[14px] text-[#1A2439] no-underline whitespace-nowrap"
             >
               Terms & Conditions
-            </a>
-            <a 
-              href="#" 
+            </Link>
+            <Link 
+              href="/refund-policy" 
               className="hover:opacity-70 transition-opacity font-roboto font-normal text-[13px] sm:text-[13px] md:text-[13px] lg:text-[14px] text-[#1A2439] no-underline whitespace-nowrap"
             >
               Refund Policy
-            </a>
+            </Link>
           </div>
 
           {/* Social Media Icons */}

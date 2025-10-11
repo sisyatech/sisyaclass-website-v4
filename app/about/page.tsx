@@ -14,6 +14,7 @@ import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import { useEffect } from "react";
+import { AboutBreadcrumb } from "@/components/AboutBreadcrumb";
 
 function AboutContent() {
     const { setCurrentPage, setSelectedGrade } = useMobileMenu();
@@ -24,40 +25,46 @@ function AboutContent() {
     }, [setCurrentPage, setSelectedGrade]);
 
     return (
-        <div className="max-w-xl mx-auto">
-            <Navbar />
-            <AboutUs />
-            {/* Mission Section */}
-            <MissionSection />
+        <>
+            <div className="sticky top-0 z-50 shadow-sm">
+                <Container>
+                    <Navbar />
+                    <AboutBreadcrumb />
+                    <AboutUs />
+                    <MissionSection />
 
-            {/* Vision Section */}
-            <VisionSection />
+                    {/* Vision Section */}
+                    <VisionSection />
 
-            {/* New Section */}
-            <NewSection />
+                    {/* New Section */}
+                    <NewSection />
 
-            {/* Another Section */}
-            <AnotherSection />
+                    {/* Another Section */}
+                    <AnotherSection />
 
-            {/* FAQ Section */}
-            <FAQ />
+                    {/* FAQ Section */}
+                    <FAQ />
 
-            {/* App Download Section */}
-            <AppDownload />
+                    {/* App Download Section */}
+                    <AppDownload />
 
-            {/* Footer */}
-            <Footer />
+                    {/* Footer */}
+                    <Footer />
 
-            {/* Study Material */}
-            <StudyMaterial />
+                    {/* Study Material */}
+                    <StudyMaterial />
 
-            {/* Moto */}
-            <Moto />
+                    {/* Moto */}
+                    <Moto />
 
-            {/* Footer Bottom */}
-            <FooterBottom />
+                    {/* Footer Bottom */}
+                    <FooterBottom />
+                </Container>
+            </div>
+
+
             <MobileMenu />
-        </div>
+        </>
     );
 }
 
