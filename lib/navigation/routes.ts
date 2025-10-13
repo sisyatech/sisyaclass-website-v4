@@ -6,6 +6,7 @@
 export const routes = {
   home: '/',
   about: '/about',
+  blogs: '/blogs',
   
   // Dynamic grade routes
   grade: (gradeNumber: number) => `/grade${gradeNumber}`,
@@ -52,6 +53,10 @@ export const navigationLinks = {
     home: {
       label: 'Home',
       href: routes.home,
+    },
+    blogs: {
+      label: 'Blogs',
+      href: routes.blogs,
     },
   },
 } as const;

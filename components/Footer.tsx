@@ -12,6 +12,12 @@ const Footer = () => {
     e.preventDefault();
     router.push(routes.about);
   };
+
+  const handleBlogsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(routes.blogs);
+  };
+
   return (
     <div className="relative py-8 sm:py-12 md:py-14 lg:py-16 px-3 sm:px-6 md:px-8 w-full bg-[#DADADA66]">
       <div className="max-w-7xl mx-auto">
@@ -115,8 +121,8 @@ const Footer = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity">
-                    Blogs
+                <a href="#" onClick={handleBlogsClick} className="font-roboto font-normal text-[11px] min-[375px]:text-[12px] sm:text-[13px] md:text-[14px] lg:text-[16px] leading-[16px] sm:leading-[18px] md:leading-[20px] tracking-[0.03em] text-[#161A38] hover:opacity-70 transition-opacity cursor-pointer">
+                Blogs
                   </a>
                 </li>
                 <li>

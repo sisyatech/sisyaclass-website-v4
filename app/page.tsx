@@ -18,6 +18,7 @@ import Footer from "@/components/Footer";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
+import BlogsContent from "@/components/blogs/BlogsContent";
 
 function HomeContent() {
   return (
@@ -33,6 +34,7 @@ function HomeContent() {
       <Testimonials />
       <CTA />
       <Reviews />
+      <BlogsContent />
       <FAQ />
       <AppDownload />
       <Footer />

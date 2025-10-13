@@ -2,7 +2,11 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+
 const Impact = () => {
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
   const numberColorClass = (hex: string) => {
     switch (hex) {
       case '#575CFB':
@@ -79,64 +83,65 @@ const Impact = () => {
   return (
     <div ref={sectionRef} className="py-16 sm:py-18 lg:py-20 bg-white">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
-          
-          {/* Left Section - Statistics */}
-          <div
-            className={`space-y-6 sm:space-y-7 lg:space-y-8 ml-0 lg:ml-18 flex flex-col items-center lg:items-start transition-all duration-[1500ms] ease-out ${
-              hasEntered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
-            }`}
-          >
-            <div className="space-y-1.5 sm:space-y-2 text-center lg:text-left">
-              <h2 className="font-montserrat font-extrabold text-2xl sm:text-3xl leading-none text-gray-900">
-                SISYA's Impact:
-              </h2>
-              <p className="font-montserrat font-normal text-xl sm:text-2xl leading-tight text-gray-900">
-                Explore What You Can Learn
-              </p>
-            </div>
+        {isHomePage ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">
+            
+            {/* Left Section - Statistics */}
+            <div
+              className={`space-y-6 sm:space-y-7 lg:space-y-8 ml-0 lg:ml-18 flex flex-col items-center lg:items-start transition-all duration-[1500ms] ease-out ${
+                hasEntered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+              }`}
+            >
+              <div className="space-y-1.5 sm:space-y-2 text-center lg:text-left">
+                <h2 className="font-montserrat font-extrabold text-2xl sm:text-3xl leading-none text-gray-900">
+                  SISYA's Impact:
+                </h2>
+                <p className="font-montserrat font-normal text-xl sm:text-2xl leading-tight text-gray-900">
+                  Explore What You Can Learn
+                </p>
+              </div>
 
-            {/* Statistics Grid */}
-            <div className="grid grid-cols-2 gap-4 sm:gap-6">
-              {statistics.map((stat, index) => (
-                <div key={index} className="space-y-1 text-center lg:text-left">
-                  <div className="space-y-0">
-                    <div 
-                      className="font-montserrat font-bold text-2xl sm:text-3xl leading-none"
-                      style={{
-                        color: stat.numberColor
-                      }}
-                    >
-                      {stat.number}
+              {/* Statistics Grid */}
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                {statistics.map((stat, index) => (
+                  <div key={index} className="space-y-1 text-center lg:text-left">
+                    <div className="space-y-0">
+                      <div 
+                        className="font-montserrat font-bold text-2xl sm:text-3xl leading-none"
+                        style={{
+                          color: stat.numberColor
+                        }}
+                      >
+                        {stat.number}
+                      </div>
+                      <div 
+                        className="font-montserrat font-bold text-2xl sm:text-3xl leading-none"
+                        style={{
+                          color: stat.numberColor
+                        }}
+                      >
+                        {stat.unit}
+                      </div>
                     </div>
                     <div 
-                      className="font-montserrat font-bold text-2xl sm:text-3xl leading-none"
+                      className="font-roboto font-medium text-base sm:text-lg leading-7 sm:leading-8 tracking-wide"
                       style={{
-                        color: stat.numberColor
+                        color: stat.descriptionColor
                       }}
                     >
-                      {stat.unit}
+                      {stat.description}
                     </div>
                   </div>
-                  <div 
-                    className="font-roboto font-medium text-base sm:text-lg leading-7 sm:leading-8 tracking-wide"
-                    style={{
-                      color: stat.descriptionColor
-                    }}
-                  >
-                    {stat.description}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Right Section - Map */}
-          <div 
-            className={`relative flex justify-center items-center mt-8 lg:mt-0 w-[280px] h-[308px] sm:w-[360px] sm:h-[396px] md:w-[440px] md:h-[484px] lg:w-[500px] lg:h-[550px] mx-auto transition-all duration-[1200ms] ease-out ${
-              hasEntered ? "opacity-100 translate-y-0 lg:translate-x-0" : "opacity-0 translate-y-10 lg:translate-x-10"
-            }`}
-          >
+            {/* Right Section - Map (Only on Home Page) */}
+            <div 
+              className={`relative flex justify-center items-center mt-8 lg:mt-0 w-[280px] h-[308px] sm:w-[360px] sm:h-[396px] md:w-[440px] md:h-[484px] lg:w-[500px] lg:h-[550px] mx-auto transition-all duration-[1200ms] ease-out ${
+                hasEntered ? "opacity-100 translate-y-0 lg:translate-x-0" : "opacity-0 translate-y-10 lg:translate-x-10"
+              }`}
+            >
             {/* Map */}
             <Image 
               src="/map.svg" 
@@ -278,8 +283,66 @@ const Impact = () => {
                 </span>
               </div>
             </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          // Other Pages - Centered Statistics with Border Box
+          <div className="flex justify-center items-center px-2 sm:px-4">
+            <div className="w-full max-w-[300px] sm:max-w-[500px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1228px] h-auto min-h-[200px] sm:min-h-[250px] md:min-h-[280px] lg:h-[297px] rounded-[20px] sm:rounded-[24px] md:rounded-[30px] lg:rounded-[36px] border-[#DDDEFE] flex items-center justify-center p-4 sm:p-6 md:p-8" style={{
+              borderWidth: '2px 2px 4px 2px',
+              borderStyle: 'solid'
+            }}>
+              <div
+                className={`space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-7 xl:space-y-8 flex flex-col items-center transition-all duration-[1500ms] ease-out ${
+                  hasEntered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"
+                }`}
+              >
+                <div className="space-y-1 sm:space-y-1.5 md:space-y-2 text-center">
+                  <h2 className="font-montserrat font-extrabold text-lg sm:text-xl md:text-2xl lg:text-3xl leading-none text-gray-900">
+                    SISYA's Impact:
+                  </h2>
+                  <p className="font-montserrat font-normal text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl leading-tight text-gray-900">
+                    Explore What You Can Learn
+                  </p>
+                </div>
+
+                {/* Statistics Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+                  {statistics.map((stat, index) => (
+                    <div key={index} className="space-y-0.5 sm:space-y-1 text-center">
+                      <div className="space-y-0">
+                        <div 
+                          className="font-montserrat font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl leading-none"
+                          style={{
+                            color: stat.numberColor
+                          }}
+                        >
+                          {stat.number}
+                        </div>
+                        <div 
+                          className="font-montserrat font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl leading-none"
+                          style={{
+                            color: stat.numberColor
+                          }}
+                        >
+                          {stat.unit}
+                        </div>
+                      </div>
+                      <div 
+                        className="font-roboto font-medium text-xs sm:text-sm md:text-base lg:text-lg leading-tight sm:leading-6 md:leading-7 lg:leading-8 tracking-wide"
+                        style={{
+                          color: stat.descriptionColor
+                        }}
+                      >
+                        {stat.description}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
