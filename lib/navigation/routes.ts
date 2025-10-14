@@ -7,7 +7,8 @@ export const routes = {
   home: '/',
   about: '/about',
   blogs: '/blogs',
-  
+  news: '/news',
+  contact: '/contact',
   // Dynamic grade routes
   grade: (gradeNumber: number) => `/grade${gradeNumber}`,
   
@@ -57,6 +58,14 @@ export const navigationLinks = {
     blogs: {
       label: 'Blogs',
       href: routes.blogs,
+    },
+    news: {
+      label: 'News',
+      href: routes.news,
+    },
+    contact: {
+      label: 'Contact us',
+      href: routes.contact,
     },
   },
 } as const;

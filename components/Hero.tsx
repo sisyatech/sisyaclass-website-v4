@@ -62,7 +62,7 @@ const Hero = () => {
                         <Image key={i} src="/fullstar.svg" alt="Full Star" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
                       ))}
                       {/* 1 half star */}
-                      <Image src="/halfstar.svg" alt="Half Star" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5" />
+                      <Image src="/halfstar.svg" alt="Half Star" width={20} height={20} className="h-4 w-4 sm:h-5 sm:w-5"  />
                     </div>
 
                     {/* Curved line under stars */}
@@ -145,6 +145,7 @@ const Hero = () => {
                     width={392}
                     height={392}
                     className="h-full w-full object-cover object-center"
+                    
                   />
                 </div>
 

@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-interface BlogBreadcrumbProps {
-  blogTitle?: string;
+interface NewsBreadcrumbProps {
+  newsTitle?: string;
 }
 
-export function BlogBreadcrumb({ blogTitle }: BlogBreadcrumbProps = {}) {
+export function NewsBreadcrumb({ newsTitle }: NewsBreadcrumbProps = {}) {
   const pathname = usePathname();
-  const isBlogDetailPage = pathname?.startsWith("/blogs/") && pathname !== "/blogs";
+  const isNewsDetailPage = pathname?.startsWith("/news/") && pathname !== "/news";
 
   return (
     <nav className="w-full py-3 px-4 sm:px-6 md:px-8 bg-white border-b border-gray-200" aria-label="Breadcrumb">
@@ -35,18 +35,18 @@ export function BlogBreadcrumb({ blogTitle }: BlogBreadcrumbProps = {}) {
                 clipRule="evenodd" 
               />
             </svg>
-            {isBlogDetailPage ? (
+            {isNewsDetailPage ? (
               <Link 
-                href="/blogs" 
+                href="/news" 
                 className="text-gray-500 hover:text-[#0595CE] transition-colors duration-200 font-medium"
               >
-                Blogs
+                News
               </Link>
             ) : (
-              <span className="text-[#0595CE] font-medium">Blogs</span>
+              <span className="text-[#0595CE] font-medium">News</span>
             )}
           </li>
-          {isBlogDetailPage && blogTitle && (
+          {isNewsDetailPage && newsTitle && (
             <li className="flex items-center">
               <svg 
                 className="w-4 h-4 text-gray-400 mx-2" 
@@ -59,7 +59,7 @@ export function BlogBreadcrumb({ blogTitle }: BlogBreadcrumbProps = {}) {
                   clipRule="evenodd" 
                 />
               </svg>
-              <span className="text-[#0595CE] font-medium line-clamp-1">{blogTitle}</span>
+              <span className="text-[#0595CE] font-medium line-clamp-1">{newsTitle}</span>
             </li>
           )}
         </ol>

@@ -19,6 +19,7 @@ import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import BlogsContent from "@/components/blogs/BlogsContent";
+import NewsContent from "@/components/news/NewsContent";
 
 function HomeContent() {
   return (
@@ -35,6 +36,7 @@ function HomeContent() {
       <CTA />
       <Reviews />
       <BlogsContent />
+      <NewsContent />
       <FAQ />
       <AppDownload />
       <Footer />

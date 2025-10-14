@@ -8,32 +8,26 @@ import Footer from "@/components/Footer";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
-import { BlogBreadcrumb } from "@/components/blogs/BlogBreadcrumb";
-import BlogDetailContent from "@/components/blogs/blogsdetailspage/BlogDetailContent";
-import BlogAuthorComments from "@/components/blogs/blogsdetailspage/BlogAuthorComments";
+import { NewsBreadcrumb } from "@/components/news/NewsBreadcrumb";
+import NewsDetailContent from "@/components/news/newsdetailspage/NewsDetailContent";
 
-interface BlogDetailPageProps {
+interface NewsDetailPageProps {
   params: Promise<{
     id: string;
   }>;
 }
 
-function BlogDetailPageContent({ id }: { id: string }) {
-  // You can fetch the blog title here based on the id
+function NewsDetailPageContent({ id }: { id: string }) {
+  // You can fetch the news title here based on the id
   // For now, using a placeholder
-  const blogTitle = "Blog Post Title";
+  const newsTitle = "News Article Title";
 
   return (
     <Container>
       <Navbar />
-      <BlogBreadcrumb blogTitle={blogTitle} />
+      <NewsBreadcrumb newsTitle={newsTitle} />
       <div className="w-full">
-        <BlogDetailContent blogId={id} />
-      </div>
-      
-      {/* Author & Comments Section - Separate from BlogDetailContent */}
-      <div className="w-full py-6 sm:py-8 md:py-10">
-        <BlogAuthorComments />
+        <NewsDetailContent newsId={id} />
       </div>
       
       <AppDownload />
@@ -46,13 +40,12 @@ function BlogDetailPageContent({ id }: { id: string }) {
   );
 }
 
-export default function BlogDetailPage({ params }: BlogDetailPageProps) {
+export default function NewsDetailPage({ params }: NewsDetailPageProps) {
   const unwrappedParams = use(params);
   
   return (
     <MobileMenuProvider>
-      <BlogDetailPageContent id={unwrappedParams.id} />
+      <NewsDetailPageContent id={unwrappedParams.id} />
     </MobileMenuProvider>
   );
 }
-
