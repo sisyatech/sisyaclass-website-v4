@@ -17,7 +17,7 @@ const Hero = () => {
     <>
       {/* Animations via Tailwind arbitrary utilities */}
 
-      <div className="min-screen relative bg-white px-4 pb-6 mb-12 sm:pb-8 md:pb-10 lg:pb-2 xl:pb-8 2xl:pb-12 pt-10 sm:pt-30 overflow-hidden">
+      <div className="min-screen relative bg-white px-4 pb-3 mb-6 sm:pb-4 md:pb-5 lg:pb-2 xl:pb-4 2xl:pb-6 pt-5 sm:pt-15 overflow-hidden">
         <BackgroundRippleEffect rows={12} cols={27} cellSize={56} />
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="grid grid-cols-1 items-center gap-10 lg:gap-12 lg:grid-cols-2">

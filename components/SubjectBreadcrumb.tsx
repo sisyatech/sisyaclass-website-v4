@@ -22,7 +22,7 @@ export function SubjectBreadcrumb({ gradeNumber, subject }: SubjectBreadcrumbPro
   };
 
   return (
-    <nav className="w-full  py-1 px-4 sm:px-6 md:px-8" aria-label="Breadcrumb">
+    <nav className="w-full py-3 px-4 sm:px-6 md:px-8" aria-label="Breadcrumb">
       <div className="max-w-7xl mx-auto">
         <ol className="flex items-center space-x-2 text-sm">
           <li>

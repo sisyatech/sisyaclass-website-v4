@@ -15,7 +15,7 @@ const Course = ({ gradeNumber }: CourseProps) => {
   const subjects = ["Maths", "Physics", "Chemistry", "English"];
 
   return (
-    <div className="min-screen mb-10 pt-2 sm:pt-4 md:pt-6 lg:pt-8 relative">
+    <div className="min-screen mb-10 pt-1 sm:pt-2 md:pt-3 lg:pt-4 relative">
         
       {/* Background Container */}
       <div 
@@ -124,13 +124,14 @@ const Course = ({ gradeNumber }: CourseProps) => {
 
               {/* YouTube Video */}
               <RevealOnView from="right" durationMs={1200} delayMs={500}>
-                <div className="relative w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[606px] h-[240px] sm:h-[300px] md:h-[360px] lg:h-[400px] rounded-[20px] overflow-hidden shadow-xl mx-auto lg:mx-0">
+                <div className="relative w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[606px] aspect-video overflow-hidden shadow-xl mx-auto lg:mx-0">
                   <iframe
-                    className="w-full h-full rounded-[20px]"
+                    className="w-full h-full object-cover"
                     src="https://www.youtube.com/embed/sRCYjcVijew?autoplay=1&mute=1&loop=1&playlist=sRCYjcVijew&controls=1&modestbranding=1&rel=0"
                     title="Course Video"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
+                    style={{ aspectRatio: '16/9' }}
                   />
                 </div>
               </RevealOnView>

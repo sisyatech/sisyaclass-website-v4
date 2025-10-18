@@ -4,14 +4,14 @@ import Image from "next/image";
 
 const AIEcosystem = () => {
     return (
-        <div className="py-16 sm:py-20 bg-white">
+        <div className="py-8 sm:py-10 bg-white">
             <div className="mx-auto max-w-7xl px-4">
                 <RevealOnView from="left" durationMs={1200}>
                     <div
                         className="relative mx-auto rounded-[24px] sm:rounded-[36px] md:rounded-[44px] lg:rounded-[50px] p-5 sm:p-8 md:p-10 lg:p-12 w-full max-w-[1176px] min-h-[480px] md:min-h-[600px] lg:min-h-[746px] bg-[#1A2439] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)]"
                     >
                         {/* Top Headlines */}
-                        <div className="text-center mb-8 sm:mb-12 md:mb-16 lg:mb-20">
+                        <div className="text-center mb-4 sm:mb-6 md:mb-8 lg:mb-10">
                             <h1 className="text-white text-lg sm:text-xl md:text-2xl mb-2">Revolutionizing Learning</h1>
                             <h2 className="text-yellow-400 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold">With SISYA's AI Ecosystem</h2>
                         </div>
@@ -32,7 +32,7 @@ const AIEcosystem = () => {
                                 </div>
 
                                 {/* Features List */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left">
+                                <div className="grid grid-cols-1 gap-4 sm:gap-5 text-left">
                                     <div>
                                         <h4 className="text-white font-bold text-base sm:text-lg mb-2">Interactive Learning</h4>
                                         <p className="text-white text-sm sm:text-base leading-relaxed">

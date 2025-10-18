@@ -58,32 +58,30 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
   }, [gradeNumber, setSelectedGrade]);
 
   return (
-    <>
+    <Container>
       <Navbar />
-      <Container>
-        <SubjectBreadcrumb gradeNumber={gradeNumber} subject={subject} />
-        <Course gradeNumber={gradeNumber} />
-        <QuickLinks />
-        <Payment />
-        <Chapters gradeNumber={gradeNumber} />
-        <BoosterCourseSection />
-        <Impact />
-        <AIEcosystem />
-        <InnovativeLearningTools />
-        <Teachers />
-        <Banner />
-        <Testimonials />
-        <CTA />
-        <Reviews />
-        <FAQ />
-        <AppDownload />
-        <Footer />
-        <StudyMaterial />
-        <Moto />
-        <FooterBottom />
-        <MobileMenu />
-      </Container>
-    </>
+      <SubjectBreadcrumb gradeNumber={gradeNumber} subject={subject} />
+      <Course gradeNumber={gradeNumber} />
+      <QuickLinks />
+      <Payment />
+      <Chapters gradeNumber={gradeNumber} />
+      <BoosterCourseSection />
+      <Impact />
+      <AIEcosystem />
+      <InnovativeLearningTools />
+      <Teachers />
+      <Banner />
+      <Testimonials />
+      <CTA />
+      <Reviews />
+      <FAQ />
+      <AppDownload />
+      <Footer />
+      <StudyMaterial />
+      <Moto />
+      <FooterBottom />
+      <MobileMenu />
+    </Container>
   );
 }
 

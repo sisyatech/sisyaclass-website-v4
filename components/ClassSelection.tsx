@@ -5,6 +5,15 @@ import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 
+interface ClassData {
+  id: number;
+  class: number;
+  educatorImage: string;
+  demoPrice: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const ClassSelection = () => {
   const [activeClass, setActiveClass] = useState("Class 1-3");
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -12,6 +21,8 @@ const ClassSelection = () => {
   const [mobileCardIndex, setMobileCardIndex] = useState(0);
   const [mobileGlobalIndex, setMobileGlobalIndex] = useState(0); // For cycling through all 10 classes
   const [entered, setEntered] = useState(false);
+  const [classData, setClassData] = useState<ClassData[]>([]);
+  const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const classOptions = ["Class 1-3", "Class 4-5", "Class 6-7", "Class 8-10"];
@@ -40,6 +51,103 @@ const ClassSelection = () => {
     { class: "Class 10", containerColor: "#F0FDF4", textColor: "#16A34A" },
   ];
 
+  // Fetch class data from API
+  useEffect(() => {
+    const fetchClassData = async () => {
+      try {
+        console.log('🚀 Fetching class data from API...');
+        console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
+        
+        const response = await fetch('https://sisyaclass.xyz/student/get_class_card', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors', // Explicitly request CORS
+        });
+        
+        console.log('📊 API Response status:', response.status);
+        console.log('📋 API Response headers:', {
+          'Content-Type': response.headers.get('Content-Type'),
+          'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ API Data received successfully!');
+          console.log('📦 Number of classes:', data.length);
+          console.log('📝 Sample data:', data[0]);
+          setClassData(data);
+        } else {
+          console.error('❌ Failed to fetch class data, status:', response.status);
+          const responseText = await response.text();
+          console.error('📄 Response text:', responseText);
+          
+          // Try alternative endpoints
+          console.log('🔄 Trying alternative API endpoints...');
+          await tryAlternativeEndpoints();
+        }
+      } catch (error) {
+        console.error('❌ Error fetching class data:', error);
+        console.log('🔄 Network error - trying alternative endpoints...');
+        await tryAlternativeEndpoints();
+      } finally {
+        setLoading(false);
+        console.log('✅ Loading completed');
+      }
+    };
+
+    const tryAlternativeEndpoints = async () => {
+      // const alternativeUrls = [
+      //   'https://sisyaclass.xyz/api/student/get_class_card',
+      //   'https://sisyaclass.xyz/student/class_cards',
+      //   'https://api.sisyaclass.xyz/student/get_class_card',
+      // ];
+
+      // for (const url of alternativeUrls) {
+      //   try {
+      //     console.log(`🔍 Trying alternative URL: ${url}`);
+      //     const response = await fetch(url, {
+      //       method: 'GET',
+      //       headers: { 'Content-Type': 'application/json' },
+      //       mode: 'cors',
+      //     });
+      //     if (response.ok) {
+      //       const data = await response.json();
+      //       console.log('✅ Alternative API Data received successfully!');
+      //       console.log('📦 Data:', data);
+      //       setClassData(data);
+      //       return;
+      //     } else {
+      //       console.log(`❌ ${url} returned status: ${response.status}`);
+      //     }
+      //   } catch (error) {
+      //     console.log(`❌ Alternative URL ${url} failed:`, error);
+      //   }
+      // }
+      
+      console.error('❌ ALL API ENDPOINTS FAILED!');
+      console.error('');
+      console.error('🚨 BACKEND SETUP REQUIRED:');
+      console.error('1. Make sure your backend server is running');
+      console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_class_card');
+      console.error('3. Enable CORS headers in your backend:');
+      console.error('   - Access-Control-Allow-Origin: *');
+      console.error('   - Access-Control-Allow-Methods: GET, POST');
+      console.error('   - Access-Control-Allow-Headers: Content-Type');
+      console.error('');
+      console.error('📝 Expected API Response Format:');
+      console.error('[');
+      console.error('  { id: 1, class: 1, educatorImage: "url", demoPrice: 19 },');
+      console.error('  { id: 2, class: 2, educatorImage: "url", demoPrice: 19 },');
+      console.error('  ... (all 10 classes)');
+      console.error(']');
+      console.error('');
+    };
+
+    fetchClassData();
+  }, []);
+
   const getFilteredClasses = () => {
     switch (activeClass) {
       case "Class 1-3":
@@ -56,6 +164,29 @@ const ClassSelection = () => {
   };
 
   const filteredClasses = getFilteredClasses();
+
+  // Helper function to get API data for a specific class
+  const getClassApiData = (classNumber: number) => {
+    const data = classData.find(data => data.class === classNumber);
+    console.log(`Getting API data for Class ${classNumber}:`, data);
+    return data;
+  };
+
+  // Helper function to get demo price for a class
+  const getDemoPrice = (classNumber: number) => {
+    const apiData = getClassApiData(classNumber);
+    const price = apiData?.demoPrice || 19;
+    console.log(`Demo price for Class ${classNumber}: ₹${price}`);
+    return price; // Default to 19 if no data
+  };
+
+  // Helper function to get educator image for a class
+  const getEducatorImage = (classNumber: number) => {
+    const apiData = getClassApiData(classNumber);
+    const imageUrl = apiData?.educatorImage || "/teacher.svg";
+    console.log(`Educator image for Class ${classNumber}:`, imageUrl);
+    return imageUrl; // Default to local image if no data
+  };
 
   // Helper: get starting global index for a given range
   const getRangeStartIndex = (range: string) => {
@@ -155,8 +286,22 @@ const ClassSelection = () => {
     requestAnimationFrame(() => setCardsEntered(true));
   };
 
+  // Show loading state while fetching data
+  if (loading) {
+    return (
+      <div ref={sectionRef} className="pt-5 pb-3 sm:pb-4 md:pb-5 bg-white">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading class information...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div ref={sectionRef} className="pt-10 pb-6 sm:pb-8 md:pb-10 bg-white">
+    <div ref={sectionRef} className="pt-5 pb-3 sm:pb-4 md:pb-5 bg-white">
       
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
@@ -182,7 +327,7 @@ const ClassSelection = () => {
                       // jump the mobile global index to the first class in that range
                       setMobileGlobalIndex(getRangeStartIndex(option));
                     }}
-                    className={`font-montserrat font-semibold text-[13px] sm:text-[14px] md:text-[15px] transition-all duration-300 w-[130px] h-[40px] sm:w-[135px] sm:h-[44px] md:w-[139px] md:h-[46px] rounded-[15px] px-[16px] sm:px-[20px] md:px-[23.66px] py-[10px] sm:py-[11px] md:py-[12.52px] shadow-[0px_5.57px_5.57px_0px_rgba(0,0,0,0.25)] ${
+                    className={`cursor-pointer font-montserrat font-semibold text-[13px] sm:text-[14px] md:text-[15px] transition-all duration-300 w-[130px] h-[40px] sm:w-[135px] sm:h-[44px] md:w-[139px] md:h-[46px] rounded-[15px] px-[16px] sm:px-[20px] md:px-[23.66px] py-[10px] sm:py-[11px] md:py-[12.52px] shadow-[0px_5.57px_5.57px_0px_rgba(0,0,0,0.25)] ${
                       activeClass === option
                         ? "bg-[#0595CE] text-white border border-transparent"
                         : "bg-white text-[#1A2439] border border-[#1A2439]"
@@ -202,7 +347,7 @@ const ClassSelection = () => {
             {/* Navigation Arrows */}
             <button
               onClick={handlePrevSlide}
-              className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
+              className="cursor-pointer hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
             >
               <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -211,7 +356,7 @@ const ClassSelection = () => {
 
             <button
               onClick={handleNextSlide}
-              className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
+              className="cursor-pointer hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
             >
               <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -233,7 +378,14 @@ const ClassSelection = () => {
                 >
                   {/* Teacher Image */}
                   <div className="relative -top-[32px] md:-top-[34px] lg:-top-[35px] left-[6px] md:left-[7px]">
-                    <Image src="/teacher.svg" alt="Teacher" width={247} height={246} className="object-cover w-[215px] h-[215px] md:w-[230px] md:h-[230px] lg:w-[246.56px] lg:h-[246.04px]" />
+                    <Image 
+                      src={getEducatorImage(parseInt(card.class.match(/\d+/)?.[0] || "1"))} 
+                      alt={`${card.class} Teacher`} 
+                      width={247} 
+                      height={246} 
+                      className="object-cover w-[215px] h-[215px] md:w-[230px] md:h-[230px] lg:w-[246.56px] lg:h-[246.04px] rounded-full"
+                      unoptimized
+                    />
                   </div>
 
                   {/* Class Number */}
@@ -254,7 +406,9 @@ const ClassSelection = () => {
 
                       {/* Book Demo Button */}
                       <div className="flex justify-center">
-                        <button className="transition-colors duration-300 w-[118px] md:w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">Book a Demo at ₹19</button>
+                        <button className="cursor-pointer transition-colors duration-300 w-[118px] md:w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
+                          Book a Demo at ₹{getDemoPrice(parseInt(card.class.match(/\d+/)?.[0] || "1"))}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -274,7 +428,14 @@ const ClassSelection = () => {
                     style={{ backgroundColor: allClasses[mobileGlobalIndex].containerColor }}
                   >
                     <div className="relative -top-[33px] left-[7px]">
-                      <Image src="/teacher.svg" alt="Teacher" width={230} height={230} className="object-cover w-[230px] h-[230px]" />
+                      <Image 
+                        src={getEducatorImage(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] ? parseInt(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] || "1") : 1)} 
+                        alt={`Class ${allClasses[mobileGlobalIndex].class} Teacher`} 
+                        width={230} 
+                        height={230} 
+                        className="object-cover w-[230px] h-[230px] rounded-full"
+                        unoptimized
+                      />
                     </div>
                     <div className="absolute top-[45px] right-3">
                       <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[17px] leading-none text-center text-[#1A2439]">{allClasses[mobileGlobalIndex].class}</h3>
@@ -299,7 +460,9 @@ const ClassSelection = () => {
                           ))}
                         </div>
                         <div className="flex justify-center">
-                          <button className="transition-colors duration-300 w-[116px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">Book a Demo at ₹19</button>
+                          <button className="cursor-pointer transition-colors duration-300 w-[116px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
+                            Book a Demo at ₹{getDemoPrice(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] ? parseInt(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] || "1") : 1)}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -307,10 +470,10 @@ const ClassSelection = () => {
                 )}
               </div>
               <div className="mt-4 flex items-center justify-center gap-6">
-                <button onClick={handleMobilePrev} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
+                <button onClick={handleMobilePrev} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
                   <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 </button>
-                <button onClick={handleMobileNext} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
+                <button onClick={handleMobileNext} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
                   <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                 </button>
               </div>
@@ -329,7 +492,7 @@ const ClassSelection = () => {
                       setCurrentSlide(0);
                       setMobileCardIndex(0);
                     }}
-                    className={dotClasses}
+                    className={`cursor-pointer ${dotClasses}`}
                     aria-label={`Go to ${classOptions[index]}`}
                   />
                 );

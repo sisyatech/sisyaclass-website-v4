@@ -74,24 +74,74 @@ export const MobileMenu = () => {
   const { isMobileMenuOpen, expandedSection, toggleSection, setIsMobileMenuOpen, setSelectedGrade } = useMobileMenu();
   const router = useRouter();
   const [currentView, setCurrentView] = useState<'main' | 'courses' | 'resources'>('main');
+  const [expandedGrade, setExpandedGrade] = useState<string | null>(null);
+  const [expandedResource, setExpandedResource] = useState<string | null>(null);
   
   const handleGradeClick = (gradeLabel: string) => {
+    // Toggle dropdown instead of navigating
+    setExpandedGrade(expandedGrade === gradeLabel ? null : gradeLabel);
+  };
+
+  const handleResourceClick = (resourceLabel: string) => {
+    // Toggle dropdown instead of navigating
+    setExpandedResource(expandedResource === resourceLabel ? null : resourceLabel);
+  };
+
+  const handleCourseClick = (gradeLabel: string, courseType: string) => {
     const gradeNumber = extractGradeFromLabel(gradeLabel);
     if (gradeNumber) {
       setSelectedGrade(gradeNumber);
       setIsMobileMenuOpen(false);
-      setCurrentView('main'); // Reset to main view
-      router.push(getGradeUrl(gradeNumber));
+      setCurrentView('main');
+      setExpandedGrade(null);
+      
+      if (courseType === "booster") {
+        router.push(`/grade${gradeNumber}`);
+      } else if (courseType === "math-longterm") {
+        router.push(`/grade${gradeNumber}/mathematics`);
+      } else if (courseType === "master") {
+        router.push(`/grade${gradeNumber}`);
+      }
     }
   };
 
+  const handleResourceSubClick = (resourceLabel: string, subject: string) => {
+    setIsMobileMenuOpen(false);
+    setCurrentView('main');
+    setExpandedResource(null);
+    
+    if (resourceLabel === "NCERT Solutions") {
+      router.push(`/ncert-solutions/${subject}`);
+    } else {
+      router.push(`/resources/${resourceLabel.toLowerCase().replace(/\s+/g, '-')}/${subject}`);
+    }
+  };
+
+  const courses = [
+    { label: "Booster Course", type: "booster" },
+    { label: "Math Long Term Course", type: "math-longterm" },
+    { label: "Long Term Master Course", type: "master" }
+  ];
+
+  const resourceSubjects = [
+    { label: "Maths", value: "maths" },
+    { label: "Physics", value: "physics" },
+    { label: "Science", value: "science" },
+    { label: "English", value: "english" },
+    { label: "Hindi", value: "hindi" }
+  ];
+
   const handleBackToMain = () => {
     setCurrentView('main');
+    setExpandedGrade(null);
+    setExpandedResource(null);
   };
 
   const handleCloseMenu = () => {
     setIsMobileMenuOpen(false);
-    setCurrentView('main'); // Reset to main view
+    setCurrentView('main');
+    setExpandedGrade(null);
+    setExpandedResource(null);
   };
   return (
     <>
@@ -184,25 +234,49 @@ export const MobileMenu = () => {
                   </svg>
                 </Link>
 
-                {/* Terms Button */}
+                {/* Contact Us Button */}
                 <Link
-                  href="/terms"
+                  href="/contact"
                   onClick={handleCloseMenu}
                   className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">Terms</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Contact Us</span>
                   <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
                 </Link>
 
-                {/* Policy Button */}
+                {/* Privacy Policy Button */}
                 <Link
-                  href="/policy"
+                  href="/privacy-policy"
                   onClick={handleCloseMenu}
                   className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
                 >
-                  <span className="group-hover:translate-x-1 transition-transform duration-300">Policy</span>
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Privacy Policy</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+
+                {/* Terms & Conditions Button */}
+                <Link
+                  href="/terms-and-conditions"
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Terms & Conditions</span>
+                  <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+
+                {/* Refund Policy Button */}
+                <Link
+                  href="/refund-policy"
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Refund Policy</span>
                   <svg className="h-5 w-5 text-gray-500 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -212,47 +286,112 @@ export const MobileMenu = () => {
 
             {/* Courses View */}
             {currentView === 'courses' && (
-              <div className={cn(
-                "space-y-3 transition-all duration-400 ease-out",
-                currentView === 'courses' ? "animate-in slide-in-from-right-4 fade-in" : "animate-out slide-out-to-right-4 fade-out"
-              )}>
-                <div className="grid grid-cols-2 gap-3">
-                  {gradeLinks.map((link, index) => (
+              <div className="space-y-2">
+                {/* Vertical grades list */}
+                {gradeLinks.map((link, index) => (
+                  <div 
+                    key={link.href}
+                    className="animate-in slide-in-from-right-4 fade-in"
+                    style={{ animationDelay: `${index * 100}ms`, animationDuration: '400ms' }}
+                  >
+                    {/* Grade Button */}
                     <button
-                      key={link.href}
                       className={cn(
-                        "block w-full text-left py-4 px-4 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 hover:border-blue-200 border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-white group",
-                        `animate-in slide-in-from-bottom-2 fade-in delay-${index * 50}`
+                        "w-full flex items-center justify-between py-3 px-4 text-sm font-semibold rounded-lg border-2 transition-all duration-300",
+                        expandedGrade === link.label
+                          ? "bg-[#02bdfe] text-white border-[#02bdfe] shadow-lg"
+                          : "bg-white text-gray-700 border-gray-300 hover:border-[#02bdfe] hover:text-[#02bdfe] hover:shadow-md"
                       )}
                       onClick={() => handleGradeClick(link.label)}
-                      style={{ animationDelay: `${index * 50}ms` }}
                     >
-                      <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
+                      <span>{link.label}</span>
+                      <svg 
+                        className={cn(
+                          "w-4 h-4 transition-transform duration-300",
+                          expandedGrade === link.label ? "rotate-180" : ""
+                        )}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
                     </button>
-                  ))}
-                </div>
+
+                    {/* Dropdown course options */}
+                    {expandedGrade === link.label && (
+                      <div className="mt-2 ml-4 space-y-2">
+                        {courses.map((course, courseIndex) => (
+                          <button
+                            key={course.type}
+                            className="w-full text-left py-2.5 px-4 text-sm font-medium text-gray-600 hover:text-white hover:bg-[#02bdfe] border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] bg-gray-50 group animate-in slide-in-from-right-4 fade-in"
+                            onClick={() => handleCourseClick(link.label, course.type)}
+                            style={{ animationDelay: `${courseIndex * 100}ms`, animationDuration: '400ms' }}
+                          >
+                            <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                              {course.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             )}
 
             {/* Resources View */}
             {currentView === 'resources' && (
-              <div className={cn(
-                "space-y-3 transition-all duration-400 ease-out",
-                currentView === 'resources' ? "animate-in slide-in-from-right-4 fade-in" : "animate-out slide-out-to-right-4 fade-out"
-              )}>
+              <div className="space-y-2">
+                {/* Vertical resources list */}
                 {resourcesLinks.map((link, index) => (
-                  <Link
+                  <div 
                     key={link.href}
-                    href={link.href}
-                    className={cn(
-                      "block py-4 px-4 text-sm font-medium text-gray-700 hover:text-gray-900 hover:bg-blue-50 hover:border-blue-200 border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-white group",
-                      `animate-in slide-in-from-bottom-2 fade-in delay-${index * 100}`
-                    )}
-                    onClick={handleCloseMenu}
-                    style={{ animationDelay: `${index * 100}ms` }}
+                    className="animate-in slide-in-from-right-4 fade-in"
+                    style={{ animationDelay: `${index * 100}ms`, animationDuration: '400ms' }}
                   >
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">{link.label}</span>
-                  </Link>
+                    {/* Resource Button */}
+                    <button
+                      className={cn(
+                        "w-full flex items-center justify-between py-3 px-4 text-sm font-semibold rounded-lg border-2 transition-all duration-300",
+                        expandedResource === link.label
+                          ? "bg-[#02bdfe] text-white border-[#02bdfe] shadow-lg"
+                          : "bg-white text-gray-700 border-gray-300 hover:border-[#02bdfe] hover:text-[#02bdfe] hover:shadow-md"
+                      )}
+                      onClick={() => handleResourceClick(link.label)}
+                    >
+                      <span>{link.label}</span>
+                      <svg 
+                        className={cn(
+                          "w-4 h-4 transition-transform duration-300",
+                          expandedResource === link.label ? "rotate-180" : ""
+                        )}
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown subjects */}
+                    {expandedResource === link.label && (
+                      <div className="mt-2 ml-4 space-y-2">
+                        {resourceSubjects.map((subject, subIndex) => (
+                          <button
+                            key={subject.value}
+                            className="w-full text-left py-2.5 px-4 text-sm font-medium text-gray-600 hover:text-white hover:bg-[#02bdfe] border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] bg-gray-50 group animate-in slide-in-from-right-4 fade-in"
+                            onClick={() => handleResourceSubClick(link.label, subject.value)}
+                            style={{ animationDelay: `${subIndex * 100}ms`, animationDuration: '400ms' }}
+                          >
+                            <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                              {subject.label}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             )}

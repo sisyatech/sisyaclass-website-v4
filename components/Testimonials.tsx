@@ -87,7 +87,7 @@ const Testimonials = () => {
   };
 
   return (
-    <div id="testimonials" ref={sectionRef} className="py-1 sm:py-12 md:py-1 bg-white mb-10 sm:mb-12 md:mb-15">
+    <div id="testimonials" ref={sectionRef} className="py-1 sm:py-6 md:py-1 bg-white mb-5 sm:mb-6 md:mb-8">
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
         <div className={`text-center mb-6 sm:mb-8 md:mb-10 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 -translate-x-0' : 'opacity-0 -translate-x-[160px]'}`}>
@@ -108,8 +108,8 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div
               key={testimonial.id}
-              className={`relative group px-2 mb-4 w-[200px] h-[340px] lg:w-[220px] lg:h-[360px] xl:w-[240px] xl:h-[380px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-              style={{ transitionDelay: entered ? `${index * 120}ms` : '0ms' }}
+              className={`relative group px-2 mb-4 w-[200px] lg:w-[220px] xl:w-[240px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+              style={{ transitionDelay: entered ? `${index * 120}ms` : '0ms', aspectRatio: '9/16' }}
               onMouseEnter={() => setActiveVideo(index)}
               onMouseLeave={() => setActiveVideo(null)}
             >
@@ -125,7 +125,7 @@ const Testimonials = () => {
                     className="w-full h-full"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
-                    style={{ border: 'none' }}
+                    style={{ border: 'none', aspectRatio: '9/16' }}
                   />
                     ) : (
                       <div className="w-full h-full relative">
@@ -153,7 +153,8 @@ const Testimonials = () => {
               <div className="flex justify-center px-3 sm:px-4">
                 <div 
                   key={currentIndex}
-                  className={`relative group w-[240px] h-[370px] min-[375px]:w-[260px] min-[375px]:h-[400px] sm:w-[280px] sm:h-[430px] md:w-[300px] md:h-[460px] transition-all duration-[400ms] ease-in-out ${cardEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                  className={`relative group w-[240px] min-[375px]:w-[260px] sm:w-[280px] md:w-[300px] transition-all duration-[400ms] ease-in-out ${cardEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                  style={{ aspectRatio: '9/16' }}
                 >
                   <div 
                     className={`relative w-full h-full rounded-2xl sm:rounded-3xl overflow-hidden bg-black transition-all duration-300 ${activeVideo === currentIndex ? 'border-[3px] border-[#4A9FD8] shadow-[0_8px_16px_rgba(0,0,0,0.2)]' : 'border-[3px] border-transparent shadow-[0_4px_8px_rgba(0,0,0,0.1)]'}`}
@@ -172,7 +173,7 @@ const Testimonials = () => {
                         className="w-full h-full"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
-                        style={{ border: 'none' }}
+                        style={{ border: 'none', aspectRatio: '9/16' }}
                       />
                     ) : (
                       <div className="w-full h-full relative cursor-pointer">
@@ -193,10 +194,10 @@ const Testimonials = () => {
             );
           })()}
           <div className="mt-4 sm:mt-5 flex items-center justify-center gap-5 sm:gap-6">
-            <button onClick={handlePrev} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
+            <button onClick={handlePrev} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
             </button>
-            <button onClick={handleNext} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
+            <button onClick={handleNext} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
             </button>
           </div>

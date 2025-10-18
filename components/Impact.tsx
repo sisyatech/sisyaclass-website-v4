@@ -81,7 +81,7 @@ const Impact = () => {
   }, []);
 
   return (
-    <div ref={sectionRef} className="py-16 sm:py-18 lg:py-20 bg-white">
+    <div ref={sectionRef} className="py-8 sm:py-9 lg:py-10 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         {isHomePage ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-12 items-center">

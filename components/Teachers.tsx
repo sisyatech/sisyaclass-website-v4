@@ -97,7 +97,7 @@ const Teachers = () => {
   const visibleTeachers = teachers.slice(currentSlide, Math.min(currentSlide + 4, teachers.length));
 
   return (
-    <div ref={sectionRef} className="py-10 sm:py-0 bg-white">
+    <div ref={sectionRef} className="py-5 sm:py-0 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         
         {/* Top Headlines */}
@@ -195,12 +195,12 @@ const Teachers = () => {
             </div>
             {/* Bottom arrows */}
             <div className="mt-4 md:mt-5 flex items-center justify-center gap-5 sm:gap-6">
-              <button onClick={handlePrevSlide} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
+              <button onClick={handlePrevSlide} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
                 <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <button onClick={handleNextSlide} className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
+              <button onClick={handleNextSlide} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
                 <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

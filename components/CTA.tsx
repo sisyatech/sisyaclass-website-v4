@@ -1,5 +1,4 @@
 import React from "react";
-import StickyCTA from "./CTA/StickyCTA";
 
 const CTA = () => {
   return (
@@ -15,14 +14,13 @@ const CTA = () => {
               Ready to find the right program for your child?🚀
             </h2>
           </div>
-          <button className="transition-all hover:shadow-lg w-full sm:w-[200px] md:w-[220px] lg:w-[238px] h-[36px] sm:h-[40px] md:h-[48px] lg:h-[53px] rounded-[8px] sm:rounded-[10px] md:rounded-[12px] bg-[#0595CE] font-montserrat font-semibold text-[13px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[20px] 2xl:text-[23px] leading-none text-center text-white hover:bg-[#047aa8] active:scale-95">
+          <button className="cursor-pointer transition-all hover:shadow-lg w-full sm:w-[200px] md:w-[220px] lg:w-[238px] h-[36px] sm:h-[40px] md:h-[48px] lg:h-[53px] rounded-[8px] sm:rounded-[10px] md:rounded-[12px] bg-[#0595CE] font-montserrat font-semibold text-[13px] sm:text-[14px] md:text-[16px] lg:text-[18px] xl:text-[20px] 2xl:text-[23px] leading-none text-center text-white hover:bg-[#047aa8] active:scale-95">
             Book a Demo
           </button>
         </div>
       </div>
 
       {/* Sticky bar (client component) */}
-      <StickyCTA sentinelId="cta-sentinel" testimonialsId="testimonials" />
     </div>
   );
 };

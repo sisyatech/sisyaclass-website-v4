@@ -22,7 +22,7 @@ const InnovativeLearningTools = () => {
   }, []);
 
   return (
-    <div ref={sectionRef} className="py-16 sm:py-20 bg-white">
+    <div ref={sectionRef} className="py-8 sm:py-10 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         <div 
           className={`relative mx-auto rounded-[20px] sm:rounded-[32px] md:rounded-[40px] lg:rounded-[50px] p-5 sm:p-8 md:p-10 lg:p-12 w-full max-w-[1176px] bg-[#B9D9EB4D] border border-[#EBEBEB] shadow-[4px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-[160px]'}`}
@@ -177,7 +177,7 @@ const HoverPlayVideo: React.FC = () => {
 
   return (
     <div
-      className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[189px] h-[120px] min-[375px]:top-[8px] min-[375px]:w-[220px] min-[375px]:h-[140px] min-[425px]:w-[250px] min-[425px]:h-[160px] sm:top-3 sm:w-[280px] sm:h-[180px] md:top-4 md:w-[455px] md:h-[280px] lg:w-[600px] lg:h-[385px] rounded-[0px] overflow-hidden shadow-lg"
+      className="absolute top-[6px] left-1/2 -translate-x-1/2 w-[189px] h-[125px] min-[375px]:top-[8px] min-[375px]:w-[233px] min-[375px]:h-[150px] min-[425px]:w-[270px] min-[425px]:h-[180px] sm:top-3 sm:w-[380px] sm:h-[240px] md:top-4 md:w-[520px] md:h-[330px] lg:w-[600px] lg:h-[385px] rounded-[0px] overflow-hidden shadow-lg"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
