@@ -2,8 +2,16 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+
+interface WebLinksData {
+  id: string;
+  laptopVideoLink: string;
+  webBannerImageLink: string;
+}
+
 const InnovativeLearningTools = () => {
   const [entered, setEntered] = useState(false);
+  const [videoLink, setVideoLink] = useState<string | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -19,6 +27,34 @@ const InnovativeLearningTools = () => {
     );
     obs.observe(sectionRef.current);
     return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const fetchWebLinks = async () => {
+      try {
+        const response = await fetch('https://sisyaclass.xyz/student/get_web_links', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        });
+        
+        if (response.ok) {
+          const rawData = await response.json();
+          const data: WebLinksData = Array.isArray(rawData) ? rawData[0] : rawData;
+          
+          if (data?.laptopVideoLink) {
+            setVideoLink(data.laptopVideoLink);
+            console.log('✅ Video link loaded from API:', data.laptopVideoLink);
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error fetching video link:', error);
+      }
+    };
+
+    fetchWebLinks();
   }, []);
 
   return (
@@ -55,7 +91,7 @@ const InnovativeLearningTools = () => {
               />
               
               {/* Video Content Overlay */}
-              <HoverPlayVideo />
+              {videoLink && <HoverPlayVideo videoLink={videoLink} />}
             </div>
 
             {/* Features - Two Column Layout Below PC */}
@@ -169,11 +205,15 @@ const InnovativeLearningTools = () => {
 export default InnovativeLearningTools;
 
 // Inline client-only subcomponent to handle hover-to-play YouTube video
-const HoverPlayVideo: React.FC = () => {
+interface HoverPlayVideoProps {
+  videoLink: string;
+}
+
+const HoverPlayVideo: React.FC<HoverPlayVideoProps> = ({ videoLink }) => {
   const [hovered, setHovered] = useState(false);
   const embedSrc = hovered
-    ? "https://www.youtube.com/embed/v_VJ-BizfOY?autoplay=1&mute=0&controls=1&rel=0"
-    : "https://www.youtube.com/embed/v_VJ-BizfOY?autoplay=0&mute=1&controls=0&rel=0";
+    ? `${videoLink}?autoplay=1&mute=0&controls=1&rel=0`
+    : `${videoLink}?autoplay=0&mute=1&controls=0&rel=0`;
 
   return (
     <div
