@@ -1,27 +1,75 @@
-"use client";
-
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
+
+interface TeacherData {
+  id: string;
+  name: string;
+  designation: string;
+  qualification: string;
+  experienceText: string;
+  experienceYears: number;
+  imageUrl: string;
+  order: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 const Teachers = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [entered, setEntered] = useState(false);
   const [cardsEntered, setCardsEntered] = useState(false);
+  const [teachers, setTeachers] = useState<TeacherData[]>([]);
+  const [loading, setLoading] = useState(true);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
+    // Trigger animations immediately on mount
+    const timer = setTimeout(() => {
+      setEntered(true);
+    }, 100);
 
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setEntered(true);
-          obs.disconnect();
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Fetch teachers from API
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        console.log('==============================================');
+        console.log('🚀 [TEACHERS] STARTING API FETCH');
+        
+        const response = await fetch('https://sisyaclass.xyz/student/get_all_faculty_member_card', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        });
+
+        console.log('📊 [TEACHERS] Response status:', response.status);
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('✅ [TEACHERS] DATA RECEIVED:', data);
+          
+          if (Array.isArray(data) && data.length > 0) {
+            // Sort by order field
+            const sortedData = data.sort((a: TeacherData, b: TeacherData) => a.order - b.order);
+            console.log('✅ [TEACHERS] Setting teachers:', sortedData);
+            setTeachers(sortedData);
+          } else {
+            console.warn('⚠️ [TEACHERS] No data or invalid format received');
+          }
+        } else {
+          console.error('❌ [TEACHERS] API request failed');
         }
-      },
-      { threshold: 0.2 }
-    );
-    obs.observe(sectionRef.current);
-    return () => obs.disconnect();
+      } catch (error) {
+        console.error('❌ [TEACHERS] FETCH ERROR:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeachers();
   }, []);
 
   // Re-trigger card fade/scale on slide change
@@ -31,77 +79,82 @@ const Teachers = () => {
     return () => clearTimeout(timer);
   }, [currentSlide]);
 
-  const teachers = [
-    {
-      name: "Snehal Raj",
-      title: "Maths Master Teacher",
-      institution: "BIT",
-      experience: "10+ Years of Experience",
-      image: "/teacher.svg"
-    },
-    {
-      name: "Snehal Raj",
-      title: "Maths Master Teacher",
-      institution: "BIT",
-      experience: "10+ Years of Experience",
-      image: "/teacher.svg"
-    },
-    {
-      name: "Snehal Raj",
-      title: "Maths Master Teacher",
-      institution: "BIT",
-      experience: "10+ Years of Experience",
-      image: "/teacher.svg"
-    },
-    {
-      name: "Snehal Raj",
-      title: "Maths Master Teacher 1",
-      institution: "BIT",
-      experience: "10+ Years of Experience",
-      image: "/teacher.svg"
-    },
-    {
-      name: "Snehal Raj",
-      title: "Maths Master Teacher 3",
-      institution: "BIT",
-      experience: "10+ Years of Experience",
-      image: "/teacher.svg"
-    },
-    {
-      name: "Snehal Raj",
-      title: "Maths Master Teacher 4",
-      institution: "BIT",
-      experience: "10+ Years of Experience",
-      image: "/teacher.svg"
+  // Trigger card animation after loading completes
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => setCardsEntered(true), 100);
+      return () => clearTimeout(timer);
     }
-  ];
+  }, [loading]);
 
   const handlePrevSlide = () => {
-    setCurrentSlide((prev) => {
-      if (prev === 0) {
-        return teachers.length - 1;
-      }
-      return prev - 1;
-    });
+    setCurrentSlide((prev) => (prev === 0 ? displayTeachers.length - 1 : prev - 1));
   };
 
   const handleNextSlide = () => {
-    setCurrentSlide((prev) => {
-      if (prev >= teachers.length - 1) {
-        return 0;
-      }
-      return prev + 1;
-    });
+    setCurrentSlide((prev) => (prev >= displayTeachers.length - 1 ? 0 : prev + 1));
   };
 
-  const visibleTeachers = teachers.slice(currentSlide, Math.min(currentSlide + 4, teachers.length));
+  // Default teachers if API fails
+  const defaultTeachers: TeacherData[] = [
+    {
+      id: "default-1",
+      name: "Snehal Raj",
+      designation: "Maths Master Teacher",
+      qualification: "BIT Bangalore",
+      experienceText: "10+ Years of Experience",
+      experienceYears: 10,
+      imageUrl: "/teacher.svg",
+      order: 1,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }
+  ];
+
+  const displayTeachers = teachers.length > 0 ? teachers : defaultTeachers;
+  
+  console.log('🎨 [TEACHERS] Rendering component');
+  console.log('🎨 [TEACHERS] Loading:', loading);
+  console.log('🎨 [TEACHERS] Teachers from API:', teachers);
+  console.log('🎨 [TEACHERS] Display teachers:', displayTeachers);
+  console.log('🎨 [TEACHERS] Entered:', entered);
+  console.log('🎨 [TEACHERS] Cards entered:', cardsEntered);
+  
+  // Get visible teachers for desktop (4 cards)
+  const getVisibleTeachers = () => {
+    const result = [];
+    for (let i = 0; i < 4; i++) {
+      const index = (currentSlide + i) % displayTeachers.length;
+      result.push(displayTeachers[index]);
+    }
+    return result;
+  };
+
+  const visibleTeachers = getVisibleTeachers();
+
+  // Show loading state
+  if (loading) {
+    console.log('⏳ [TEACHERS] Showing loading state');
+    return (
+      <div className="py-5 sm:py-0 bg-white">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading teachers...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  console.log('✅ [TEACHERS] Rendering main content');
 
   return (
     <div ref={sectionRef} className="py-5 sm:py-0 bg-white">
       <div className="mx-auto max-w-7xl px-4">
         
         {/* Top Headlines */}
-        <div className={`text-center mb-8 sm:mb-10 md:mb-12 transition-all duration-[1200ms] ease-out ${entered ? "opacity-100 -translate-x-0" : "opacity-0 -translate-x-[160px]"}`}>
+        <div className={`text-center mb-8 sm:mb-10 md:mb-12 transition-all duration-[1200ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-[160px]"}`}>
           <h3 className="font-montserrat font-normal text-[16px] leading-[24px] sm:text-[19px] sm:leading-[28px] md:text-[22px] md:leading-[32px] text-center text-[#1A2439]">
             Meet the Minds
           </h3>
@@ -120,7 +173,7 @@ const Teachers = () => {
             {/* Left Arrow */}
             <button 
               onClick={handlePrevSlide}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-2 w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-2 w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 cursor-pointer"
             >
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -131,25 +184,41 @@ const Teachers = () => {
             <div className="flex justify-center gap-6 px-8">
               {visibleTeachers.map((teacher, index) => (
                 <div 
-                  key={`${currentSlide}-${index}`}
+                  key={`${teacher.id}-${index}`}
                   className={`overflow-hidden w-[251.6px] h-[406.7px] rounded-[26.04px] bg-[#2C3E50] p-5 transition-all duration-[800ms] ease-out ${cardsEntered ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}
                   style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : '0ms' }}
                 >
                   {/* Teacher Image */}
                   <div className="flex justify-center mb-4">
                     <div className="rounded-[20px] overflow-hidden w-[196.56px] h-[226.04px] bg-[#D9E3F0]">
-                      <Image src={teacher.image} alt={teacher.name} width={196.56} height={226.04} className="w-full h-full object-cover" />
+                      <img 
+                        src={teacher.imageUrl || '/teacher.svg'} 
+                        alt={teacher.name} 
+                        className="w-full h-full object-cover" 
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/teacher.svg';
+                        }}
+                      />
                     </div>
                   </div>
                   {/* Experience Badge */}
                   <div className="flex justify-center mb-3">
-                    <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm text-[#1A2439]">{teacher.experience}</div>
+                    <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm text-[#1A2439]">
+                      {teacher.experienceText}
+                    </div>
                   </div>
                   {/* Info */}
                   <div className="text-white text-center">
-                    <h3 className="font-montserrat font-black text-lg leading-none mb-3 tracking-[0.02em]">{teacher.name}</h3>
-                    <p className="font-montserrat font-semibold leading-none mb-3 text-[12.4px] tracking-[0.02em]">{teacher.title}</p>
-                    <p className="font-montserrat font-semibold leading-none text-[12.4px] tracking-[0.02em]">{teacher.institution}</p>
+                    <h3 className="font-montserrat font-black text-lg leading-none mb-3 tracking-[0.02em]">
+                      {teacher.name}
+                    </h3>
+                    <p className="font-montserrat font-semibold leading-none mb-3 text-[12.4px] tracking-[0.02em]">
+                      {teacher.designation}
+                    </p>
+                    <p className="font-montserrat font-semibold leading-none text-[12.4px] tracking-[0.02em]">
+                      {teacher.qualification}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -158,7 +227,7 @@ const Teachers = () => {
             {/* Right Arrow */}
             <button 
               onClick={handleNextSlide}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-2 w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-2 w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 cursor-pointer"
             >
               <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -170,24 +239,40 @@ const Teachers = () => {
           <div className="lg:hidden">
             <div className="flex justify-center px-3 sm:px-4 md:px-6">
               {(() => {
-                const teacher = teachers[currentSlide];
+                const teacher = displayTeachers[currentSlide];
                 return (
                   <div 
-                    key={currentSlide}
+                    key={teacher.id}
                     className={`overflow-hidden w-[210px] h-[370px] min-[375px]:w-[230px] min-[375px]:h-[390px] sm:w-[250px] sm:h-[410px] md:w-[270px] md:h-[420px] rounded-[22px] min-[375px]:rounded-[24px] md:rounded-[26px] bg-[#2C3E50] p-3.5 min-[375px]:p-4 md:p-5 transition-all duration-[400ms] ease-in-out ${cardsEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
                   >
                     <div className="flex justify-center mb-2.5 min-[375px]:mb-3 md:mb-4">
                       <div className="rounded-[16px] min-[375px]:rounded-[18px] md:rounded-[20px] overflow-hidden w-[170px] h-[200px] min-[375px]:w-[186px] min-[375px]:h-[214px] sm:w-[200px] sm:h-[230px] md:w-[210px] md:h-[240px] bg-[#D9E3F0]">
-                        <Image src={teacher.image} alt={teacher.name} width={210} height={240} className="w-full h-full object-cover" />
+                        <img 
+                          src={teacher.imageUrl || '/teacher.svg'} 
+                          alt={teacher.name} 
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/teacher.svg';
+                          }}
+                        />
                       </div>
                     </div>
                     <div className="flex justify-center mb-2 md:mb-3">
-                      <div className="inline-block px-3 py-1.5 min-[375px]:px-4 min-[375px]:py-2 rounded-full bg-white font-roboto font-medium text-xs min-[375px]:text-sm text-[#1A2439]">{teacher.experience}</div>
+                      <div className="inline-block px-3 py-1.5 min-[375px]:px-4 min-[375px]:py-2 rounded-full bg-white font-roboto font-medium text-xs min-[375px]:text-sm text-[#1A2439]">
+                        {teacher.experienceText}
+                      </div>
                     </div>
                     <div className="text-white text-center">
-                      <h3 className="font-montserrat font-black text-[16px] min-[375px]:text-[17px] md:text-[18px] leading-none mb-2 md:mb-3 tracking-[0.02em]">{teacher.name}</h3>
-                      <p className="font-montserrat font-semibold leading-none mb-2 md:mb-3 text-[11.5px] min-[375px]:text-[12.4px] tracking-[0.02em]">{teacher.title}</p>
-                      <p className="font-montserrat font-semibold leading-none text-[11.5px] min-[375px]:text-[12.4px] tracking-[0.02em]">{teacher.institution}</p>
+                      <h3 className="font-montserrat font-black text-[16px] min-[375px]:text-[17px] md:text-[18px] leading-none mb-2 md:mb-3 tracking-[0.02em]">
+                        {teacher.name}
+                      </h3>
+                      <p className="font-montserrat font-semibold leading-none mb-2 md:mb-3 text-[11.5px] min-[375px]:text-[12.4px] tracking-[0.02em]">
+                        {teacher.designation}
+                      </p>
+                      <p className="font-montserrat font-semibold leading-none text-[11.5px] min-[375px]:text-[12.4px] tracking-[0.02em]">
+                        {teacher.qualification}
+                      </p>
                     </div>
                   </div>
                 );

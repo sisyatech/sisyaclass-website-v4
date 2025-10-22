@@ -1,7 +1,27 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";     
+import Image from "next/image";
+
+interface TestimonialData {
+  id: string;
+  url: string;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface ProcessedTestimonial {
+  id: string;
+  videoId: string;
+  videoUrl: string;
+  embedUrl: string;
+  thumbnail: string;
+  title: string;
+  name: string;
+  grade: string;
+}
+
 const Testimonials = () => {
   const videoRefs = useRef<(HTMLIFrameElement | null)[]>([]);
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
@@ -10,20 +30,67 @@ const Testimonials = () => {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0); // mobile index
   const [cardEntered, setCardEntered] = useState(false);
+  const [testimonials, setTestimonials] = useState<ProcessedTestimonial[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  // Trigger animations on mount
   useEffect(() => {
-    if (!sectionRef.current) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setEntered(true); 
-          obs.disconnect();
+    const timer = setTimeout(() => {
+      setEntered(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Fetch testimonials from API
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        console.log('🚀 [TESTIMONIALS] Fetching data from API...');
+        
+        const response = await fetch('https://sisyaclass.xyz/student/get_testimonial_reel', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        });
+
+        if (response.ok) {
+          const data: TestimonialData[] = await response.json();
+          console.log('✅ [TESTIMONIALS] Data received:', data);
+          
+          // Process the data to extract video IDs and create embed URLs
+          const processed: ProcessedTestimonial[] = data
+            .sort((a, b) => a.order - b.order)
+            .map((item) => {
+              // Extract video ID from YouTube URL
+              const videoId = item.url.match(/shorts\/([^?]+)/)?.[1] || '';
+              
+              return {
+                id: item.id,
+                videoId,
+                videoUrl: item.url,
+                embedUrl: `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`,
+                thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+                title: "Student Testimonial",
+                name: "SISYA Student",
+                grade: "SISYA CLASS",
+              };
+            });
+          
+          console.log('✅ [TESTIMONIALS] Processed testimonials:', processed);
+          setTestimonials(processed);
+        } else {
+          console.error('❌ [TESTIMONIALS] API request failed');
         }
-      },
-      { threshold: 0.2 }
-    );
-    obs.observe(sectionRef.current);
-    return () => obs.disconnect();
+      } catch (error) {
+        console.error('❌ [TESTIMONIALS] Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
   }, []);
 
   // Re-trigger card animation on slide change
@@ -32,49 +99,6 @@ const Testimonials = () => {
     const timer = setTimeout(() => setCardEntered(true), 300);
     return () => clearTimeout(timer);
   }, [currentIndex]);
-
-  const testimonials = [
-    {
-      id: 1,
-      videoId: "nDBid7vfx00",
-      videoUrl: "https://youtube.com/shorts/nDBid7vfx00?feature=share",
-      embedUrl: "https://www.youtube.com/embed/nDBid7vfx00?autoplay=1&mute=0&controls=1&loop=1&playlist=nDBid7vfx00",
-      thumbnail: "https://img.youtube.com/vi/nDBid7vfx00/maxresdefault.jpg",
-      title: "Student Success Story - Twish Saxena Grade 4",
-      name: "Twish Saxena",
-      grade: "GRADE - 4",
-    },
-    {
-      id: 2,
-      videoId: "dYjbiOenSMA",
-      videoUrl: "https://youtube.com/shorts/dYjbiOenSMA?feature=share",
-      embedUrl: "https://www.youtube.com/embed/dYjbiOenSMA?autoplay=1&mute=0&controls=1&loop=1&playlist=dYjbiOenSMA",
-      thumbnail: "https://img.youtube.com/vi/dYjbiOenSMA/maxresdefault.jpg",
-      title: "SISYA Class Student Testimonial",
-      name: "Twish Saxena",
-      grade: "GRADE - 4",
-    },
-    {
-      id: 3,
-      videoId: "MuJzWIjBqVs",
-      videoUrl: "https://youtube.com/shorts/MuJzWIjBqVs?feature=share",
-      embedUrl: "https://www.youtube.com/embed/MuJzWIjBqVs?autoplay=1&mute=0&controls=1&loop=1&playlist=MuJzWIjBqVs",
-      thumbnail: "https://img.youtube.com/vi/MuJzWIjBqVs/maxresdefault.jpg",
-      title: "Amazing Learning Experience at SISYA",
-      name: "Twish Saxena",
-      grade: "GRADE - 4",
-    },
-    {
-      id: 4,
-      videoId: "Ze6c4_kSAVs",
-      videoUrl: "https://youtube.com/shorts/Ze6c4_kSAVs?feature=share",
-      embedUrl: "https://www.youtube.com/embed/Ze6c4_kSAVs?autoplay=1&mute=0&controls=1&loop=1&playlist=Ze6c4_kSAVs",
-      thumbnail: "https://img.youtube.com/vi/Ze6c4_kSAVs/maxresdefault.jpg",
-      title: "How SISYA Helped Me Improve",
-      name: "Twish Saxena",
-      grade: "GRADE - 4",
-    },
-  ];
 
   const handlePrev = () => {
     setActiveVideo(null);
@@ -85,6 +109,25 @@ const Testimonials = () => {
     setActiveVideo(null);
     setCurrentIndex((prev) => (prev >= testimonials.length - 1 ? 0 : prev + 1));
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div id="testimonials" className="py-1 sm:py-6 md:py-1 bg-white mb-5 sm:mb-6 md:mb-8">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading testimonials...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no testimonials
+  if (testimonials.length === 0) {
+    return null;
+  }
 
   return (
     <div id="testimonials" ref={sectionRef} className="py-1 sm:py-6 md:py-1 bg-white mb-5 sm:mb-6 md:mb-8">

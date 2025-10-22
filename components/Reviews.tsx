@@ -1,53 +1,74 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NextImage from "next/image";
+
+interface ReviewData {
+  id: string;
+  name: string;
+  class?: string;
+  grade?: string;
+  role: string;
+  review?: string;
+  content?: string;
+  imageUrl?: string;
+  profileImage?: string;
+  order: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 const Reviews = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsEntered, setCardsEntered] = useState(false);
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const reviews = [
-    {
-      id: 1,
-      name: "Shivaji Kamble",
-      grade: "Grade 7",
-      role: "Student",
-      image: "/girl.svg",
-      review: "We enrolled our daughter Riddhima in Sisya E-Learning Classes for Standard 1, and we are truly happy with the experience! The teachers are very kind, patient, and engaging, which makes learning enjoyable for young children. The class content is well-structured and age-appropriate, blending fun with education perfectly."
-    },
-    {
-      id: 2,
-      name: "Shivaji Kamble",
-      grade: "Grade 7",
-      role: "Student",
-      image: "/girl.svg",
-      review: "We enrolled our daughter Riddhima in Sisya E-Learning Classes for Standard 1, and we are truly happy with the experience! The teachers are very kind, patient, and engaging, which makes learning enjoyable for young children. The class content is well-structured and age-appropriate, blending fun with education perfectly."
-    },
-    {
-      id: 3,
-      name: "Shivaji Kamble",
-      grade: "Grade 7",
-      role: "Student",
-      image: "/girl.svg",
-      review: "We enrolled our daughter Riddhima in Sisya E-Learning Classes for Standard 1, and we are truly happy with the experience! The teachers are very kind, patient, and engaging, which makes learning enjoyable for young children. The class content is well-structured and age-appropriate, blending fun with education perfectly."
-    },
-    {
-      id: 4,
-      name: "Shivaji Kamble",
-      grade: "Grade 7",
-      role: "Student",
-      image: "/girl.svg",
-      review: "We enrolled our daughter Riddhima in Sisya E-Learning Classes for Standard 1, and we are truly happy with the experience! The teachers are very kind, patient, and engaging, which makes learning enjoyable for young children. The class content is well-structured and age-appropriate, blending fun with education perfectly."
-    },
-    {
-      id: 5,
-      name: "Shivaji Kamble",
-      grade: "Grade 7",
-      role: "Student",
-      image: "/girl.svg",
-      review: "We enrolled our daughter Riddhima in Sisya E-Learning Classes for Standard 1, and we are truly happy with the experience! The teachers are very kind, patient, and engaging, which makes learning enjoyable for young children. The class content is well-structured and age-appropriate, blending fun with education perfectly."
-    }
-  ];
+  // Fetch reviews from API
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        console.log('🚀 [REVIEWS] Fetching data from API...');
+        
+        const response = await fetch('https://sisyaclass.xyz/student/get_testimonial_card', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'cors',
+        });
+
+        if (response.ok) {
+          const data: ReviewData[] = await response.json();
+          console.log('✅ [REVIEWS] Data received:', data);
+          
+          // Sort by order field and normalize field names
+          const sortedData = data
+            .sort((a, b) => a.order - b.order)
+            .map(review => ({
+              ...review,
+              // Map profileImage to imageUrl
+              imageUrl: review.profileImage || review.imageUrl || '/girl.svg',
+              // Map grade to class if class is not present
+              class: review.class || review.grade || 'Student',
+              // Map content to review if review is not present
+              review: review.content || review.review || 'Great experience!',
+            }));
+          
+          console.log('✅ [REVIEWS] Processed reviews:', sortedData);
+          setReviews(sortedData);
+        } else {
+          console.error('❌ [REVIEWS] API request failed');
+        }
+      } catch (error) {
+        console.error('❌ [REVIEWS] Fetch error:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReviews();
+  }, []);
 
   const handlePrevSlide = () => {
     setCardsEntered(false);
@@ -72,6 +93,37 @@ const Reviews = () => {
     setCardsEntered(true);
   }, []);
 
+  console.log('🎨 [REVIEWS] Rendering component');
+  console.log('🎨 [REVIEWS] Loading:', loading);
+  console.log('🎨 [REVIEWS] Reviews:', reviews);
+  console.log('🎨 [REVIEWS] Reviews length:', reviews.length);
+  console.log('🎨 [REVIEWS] Current slide:', currentSlide);
+  console.log('🎨 [REVIEWS] Cards entered:', cardsEntered);
+  console.log('🎨 [REVIEWS] Current review:', reviews[currentSlide]);
+  
+  // Show loading state
+  if (loading) {
+    console.log('⏳ [REVIEWS] Showing loading state');
+    return (
+      <div className="py-20 bg-white overflow-x-hidden">
+        <div className="mx-auto max-w-7xl px-4">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading reviews...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no reviews
+  if (reviews.length === 0) {
+    console.log('⚠️ [REVIEWS] No reviews to display');
+    return null;
+  }
+
+  console.log('✅ [REVIEWS] Rendering reviews content');
+
   return (
     <div className="py-20 bg-white overflow-x-hidden">
       <div className="mx-auto max-w-7xl px-4">
@@ -80,24 +132,27 @@ const Reviews = () => {
           {/* Mobile: Single card with dots */}
           <div className="md:hidden">
             <div className="flex justify-center px-4">
-              <div 
-                key={currentSlide}
-                className={`bg-white p-4 w-[280px] h-[220px] rounded-[20px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] transition-all duration-[600ms] ease-in-out ${
-                  cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-90"
-                }`}
-              >
+              {reviews[currentSlide] && (
+                <div 
+                  key={currentSlide}
+                  className="bg-white p-4 w-[280px] h-[220px] rounded-[20px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]"
+                >
                 {/* Header with Profile */}
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">
                     {/* Profile Image */}
-                    <div className="rounded-full overflow-hidden flex-shrink-0 w-[44px] h-[44px]">
-                      <NextImage 
-                        src={reviews[currentSlide].image}
-                        alt={reviews[currentSlide].name}
-                        width={44}
-                        height={44}
-                        className="w-full h-full object-cover"
-                      />
+                    <div className="rounded-full overflow-hidden flex-shrink-0 w-[44px] h-[44px] bg-gray-200">
+                      {reviews[currentSlide].imageUrl && (
+                        <img 
+                          src={reviews[currentSlide].imageUrl}
+                          alt={reviews[currentSlide].name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/girl.svg';
+                          }}
+                        />
+                      )}
                     </div>
 
                     {/* Name and Grade */}
@@ -106,7 +161,7 @@ const Reviews = () => {
                         {reviews[currentSlide].name}
                       </h3>
                       <p className="font-roboto font-normal text-[12px] leading-[16px] tracking-[0.03em] text-[#161A38]">
-                        {reviews[currentSlide].grade}
+                        {reviews[currentSlide].class}
                       </p>
                     </div>
                   </div>
@@ -122,6 +177,7 @@ const Reviews = () => {
                   {reviews[currentSlide].review}
                 </p>
               </div>
+              )}
             </div>
 
             {/* Pagination Dots */}
@@ -165,51 +221,55 @@ const Reviews = () => {
           <div className="hidden md:block">
             <div className="overflow-x-auto px-4 pb-2">
               <div className="flex py-3 gap-5 w-max snap-x snap-mandatory">
-                {reviews.map((review) => (
-                  <div
-                    key={review.id}
-                    className="flex-shrink-0 snap-center"
-                  >
-                    {/* Review Card */}
+            {reviews.map((review) => (
+              <div
+                key={review.id}
+                className="flex-shrink-0 snap-center"
+              >
+                {/* Review Card */}
                     <div className="bg-white p-5 w-[300px] h-[230px] rounded-[20px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]">
-                      {/* Header with Profile */}
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          {/* Profile Image */}
-                          <div className="rounded-full overflow-hidden flex-shrink-0 w-[50px] h-[50px]">
-                            <NextImage 
-                              src={review.image}
-                              alt={review.name}
-                              width={50}
-                              height={50}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-
-                          {/* Name and Grade */}
-                          <div>
-                            <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-0.5 truncate max-w-[200px]">
-                              {review.name}
-                            </h3>
-                            <p className="font-roboto font-normal text-[14px] leading-[20px] tracking-[0.03em] text-[#161A38]">
-                              {review.grade}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Role Badge */}
-                        <div className="flex items-center justify-center w-[73px] h-[20px] rounded-[4.61px] bg-[#0595CE] font-rubik font-normal text-[10.38px] leading-none text-center text-white">
-                          {review.role}
-                        </div>
+                  {/* Header with Profile */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      {/* Profile Image */}
+                          <div className="rounded-full overflow-hidden flex-shrink-0 w-[50px] h-[50px] bg-gray-200">
+                            {review.imageUrl && (
+                              <img 
+                                src={review.imageUrl}
+                          alt={review.name}
+                          className="w-full h-full object-cover"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.src = '/girl.svg';
+                                }}
+                        />
+                            )}
                       </div>
 
-                      {/* Review Text */}
-                      <p className="font-roboto font-normal text-[14px] leading-[20px] tracking-[0.03em] text-[#161A38] overflow-hidden" style={{ display: '-webkit-box', WebkitLineClamp: 6, WebkitBoxOrient: 'vertical' as any }}>
-                        {review.review}
-                      </p>
+                      {/* Name and Grade */}
+                      <div>
+                            <h3 className="font-roboto font-medium text-[16px] leading-[20px] tracking-[0.03em] text-[#161A38] mb-0.5 truncate max-w-[200px]">
+                          {review.name}
+                        </h3>
+                            <p className="font-roboto font-normal text-[14px] leading-[20px] tracking-[0.03em] text-[#161A38]">
+                              {review.class}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Role Badge */}
+                        <div className="flex items-center justify-center w-[73px] h-[20px] rounded-[4.61px] bg-[#0595CE] font-rubik font-normal text-[10.38px] leading-none text-center text-white">
+                      {review.role}
                     </div>
                   </div>
-                ))}
+
+                  {/* Review Text */}
+                      <p className="font-roboto font-normal text-[14px] leading-[20px] tracking-[0.03em] text-[#161A38] overflow-hidden" style={{ display: '-webkit-box', WebkitLineClamp: 6, WebkitBoxOrient: 'vertical' as any }}>
+                    {review.review}
+                  </p>
+                </div>
+              </div>
+            ))}
               </div>
             </div>
           </div>
