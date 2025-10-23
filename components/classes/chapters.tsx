@@ -1,71 +1,124 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import RevealOnView from "./Reveal/RevealOnView";
+import RevealOnView from "../Reveal/RevealOnView";
 import { useRouter } from "next/navigation";
+
+interface Chapter {
+  id: number;
+  subjectWebId: number;
+  title: string;
+  chapterNumber: number;
+  syllabusPoints: string[];
+}
+
+interface SubjectData {
+  id: number;
+  bigCourseWebId: number;
+  name: string;
+  subtitle: string;
+  taglinePoints: string[];
+  chapters: Chapter[];
+}
+
+interface BigCourseData {
+  id: number;
+  courseDemoPrice: number;
+  webLabel: string;
+  courseVideoLink: string;
+  bigCourse: {
+    name: string;
+    startDate: string;
+    endDate: string;
+  };
+  subjects: SubjectData[];
+}
 
 const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
-  
-  const subjects = [
-    {
-      id: 1,
-      title: "Chapter 1",
-      subtitle: "Numbers and comparision",
-      iconBg: "bg-[#DDDEFE]",
-      titleColor: "text-[#575CFB]",
+  const [courseData, setCourseData] = useState<BigCourseData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-      topics: [
-        "Ascending and Descending Order",
-        "Number system",
-        "Number Line",
-        "Place Value",
-        "Missing Numbers",
-        "Comparing Numbers",
-        "History of Maths"
-      ]
-    },
-    {
-      id: 2,
-      title: "Chapter 2",
-      subtitle: "Numbers and comparision",
-      iconBg: "bg-[#DDDEFE]",
-      titleColor: "text-[#575CFB]",
-      topics: [
-        "Ascending and Descending Order",
-        "Number system",
-        "Number Line",
-        "Place Value",
-        "Missing Numbers",
-        "Comparing Numbers",
-        "History of Maths"
-      ]
-    },
-    {
-      id: 3,
-      title: "Chapter 3",
-      subtitle: "Numbers and comparision",
-      iconBg: "bg-[#DDDEFE]",
-      titleColor: "text-[#575CFB]",
+  // Fetch course data from API
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      if (!gradeNumber) {
+        setLoading(false);
+        return;
+      }
 
-      topics: [
-        "Ascending and Descending Order",
-        "Number system",
-        "Number Line",
-        "Place Value",
-        "Missing Numbers",
-        "Comparing Numbers",
-        "History of Maths"
-      ]
-    }
-  ];
+      try {
+        setLoading(true);
+        const response = await fetch(
+          'https://sisyaclass.xyz/student/get_big_course_web_by_grade',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              grade: gradeNumber.toString()
+            })
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setCourseData(data[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching chapters data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseData();
+  }, [gradeNumber]);
+
+  // Get all chapters from all subjects
+  const allChapters = courseData?.subjects.flatMap(subject => 
+    subject.chapters.map(chapter => ({
+      ...chapter,
+      subjectName: subject.name,
+      iconBg: "bg-[#DDDEFE]",
+      titleColor: "text-[#575CFB]"
+    }))
+  ) || [];
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
 
   const handleExploreClick = (subject: string) => {
     const subjectSlug = subject.toLowerCase().replace(/\s+/g, '-');
     router.push(`/grade${gradeNumber || 8}/${subjectSlug}`);
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="w-full bg-white py-12 sm:py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading chapters...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no data
+  if (!courseData || allChapters.length === 0) {
+    return null;
+  }
 
   return (
     <RevealOnView from="bottom" durationMs={600} delayMs={200}>
@@ -80,7 +133,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
             
             <div className="flex flex-col sm:flex-row gap-2">
               <button className="w-[250.42px] h-[39.22px] rounded-[10px] border-[0.25px] border-[#575CFB] bg-[#1F1F39] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] font-montserrat font-semibold text-[14px] leading-[10px] tracking-normal text-center text-white">
-                Latest Batch : 20 Sept 2025
+                Latest Batch: {formatDate(courseData.bigCourse.startDate)}
               </button>
               <button className="w-[221.62px] h-[39.22px] rounded-[10px] border-[0.25px] border-[#D1D1D6] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] font-montserrat font-semibold text-[14px] leading-[10px] tracking-normal text-center text-black">
                 Next Batch (Coming Soon)
@@ -92,62 +145,43 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
         {/* Main Heading */}
         <RevealOnView from="left" durationMs={500} delayMs={400}>
           <div className="text-left mb-12">
-            <h2 className="w-[348px] h-[39px] font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
-              Syllabus for class 8
+            <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
+              Chapters for class {gradeNumber}
             </h2>
             <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
-              (20 Sessions) includes 3 modules
+              {allChapters.length} Chapter{allChapters.length > 1 ? 's' : ''} - {courseData.webLabel}
             </p>
           </div>
         </RevealOnView>
 
-        {/* Subject Cards */}
-     {/* Subject Cards */}
+        {/* Chapter Cards */}
      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-8">
-          {subjects.map((subject, index) => (
+          {allChapters.map((chapter, index) => (
             <RevealOnView 
-              key={subject.id}
-              from={index === 0 ? "left" : index === 1 ? "bottom" : "right"} 
+              key={chapter.id}
+              from={index % 3 === 0 ? "left" : index % 3 === 1 ? "bottom" : "right"} 
               durationMs={600} 
               delayMs={500 + (index * 150)}
             >
               <div className="flex flex-col items-center">
-              {/* Subject Card */}
+              {/* Chapter Card */}
               <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
-                {/* Subject Icon and Title */}
+                {/* Chapter Icon and Title */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                    {subject.title === "Chapter 1" && (
-                      <Image 
-                        src="/grades/math.svg" 
-                        alt="Math" 
-                        width={29} 
-                        height={29}
-                      />
-                    )}
-                   {subject.title === "Chapter 2" && (
-                      <Image 
+                  <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
+                    <Image 
                       src="/grades/math.svg" 
-                      alt="Math" 
-                        width={29} 
-                        height={29}
-                      />
-                    )}
-                    {subject.title === "Chapter 3" && (
-                      <Image 
-                      src="/grades/math.svg" 
-                      alt="Math" 
-                        width={29} 
-                        height={29}
-                      />
-                    )}
+                      alt={chapter.subjectName} 
+                      width={29} 
+                      height={29}
+                    />
                   </div>
                   <div className="flex flex-col">
-                    <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${subject.titleColor}`}>
-                      {subject.title}
+                    <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>
+                      Chapter {chapter.chapterNumber}
                     </h3>
                     <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
-                      {subject.subtitle}
+                      {chapter.title}
                     </p>
                   </div>
                 </div>
@@ -161,8 +195,8 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                     You will Learn
                   </h4>
                   <ul className="space-y-3">
-                    {subject.topics.map((topic, index) => (
-                      <li key={index} className="flex items-start gap-3">
+                    {chapter.syllabusPoints.map((topic, topicIndex) => (
+                      <li key={topicIndex} className="flex items-start gap-3">
                         <div className="flex-shrink-0 mt-1">
                           <Image 
                             src="/grades/correct.svg" 
@@ -177,21 +211,10 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                   </ul>
                 </div>
               </div>
-
-         
             </div>
             </RevealOnView>
           ))}
         </div>
-
-        {/* Pagination Indicators */}
-        <RevealOnView from="bottom" durationMs={400} delayMs={1000}>
-          <div className="flex justify-center space-x-2">
-            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-800 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-          </div>
-        </RevealOnView>
       </div>
     </div>
     </RevealOnView>

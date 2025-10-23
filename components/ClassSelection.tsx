@@ -55,8 +55,8 @@ const ClassSelection = () => {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        console.log('🚀 Fetching class data from API...');
-        console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
+        // console.log('🚀 Fetching class data from API...');
+        // console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
         
         const response = await fetch('https://sisyaclass.xyz/student/get_class_card', {
           method: 'POST',
@@ -66,34 +66,34 @@ const ClassSelection = () => {
           mode: 'cors', // Explicitly request CORS
         });
         
-        console.log('📊 API Response status:', response.status);
-        console.log('📋 API Response headers:', {
-          'Content-Type': response.headers.get('Content-Type'),
-          'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
-        });
+        // console.log('📊 API Response status:', response.status);
+        // console.log('📋 API Response headers:', {
+        //   'Content-Type': response.headers.get('Content-Type'),
+        //   'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+        // });
         
         if (response.ok) {
           const data = await response.json();
-          console.log('✅ API Data received successfully!');
-          console.log('📦 Number of classes:', data.length);
-          console.log('📝 Sample data:', data[0]);
+          // console.log('✅ API Data received successfully!');
+          // console.log('📦 Number of classes:', data.length);
+          // console.log('📝 Sample data:', data[0]);
           setClassData(data);
         } else {
-          console.error('❌ Failed to fetch class data, status:', response.status);
+          // console.error('❌ Failed to fetch class data, status:', response.status);
           const responseText = await response.text();
-          console.error('📄 Response text:', responseText);
+          // console.error('📄 Response text:', responseText);
           
           // Try alternative endpoints
-          console.log('🔄 Trying alternative API endpoints...');
+          // console.log('🔄 Trying alternative API endpoints...');
           await tryAlternativeEndpoints();
         }
       } catch (error) {
-        console.error('❌ Error fetching class data:', error);
-        console.log('🔄 Network error - trying alternative endpoints...');
+        // console.error('❌ Error fetching class data:', error);
+        // console.log('🔄 Network error - trying alternative endpoints...');
         await tryAlternativeEndpoints();
       } finally {
         setLoading(false);
-        console.log('✅ Loading completed');
+        // console.log('✅ Loading completed');
       }
     };
 
@@ -126,23 +126,23 @@ const ClassSelection = () => {
       //   }
       // }
       
-      console.error('❌ ALL API ENDPOINTS FAILED!');
-      console.error('');
-      console.error('🚨 BACKEND SETUP REQUIRED:');
-      console.error('1. Make sure your backend server is running');
-      console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_class_card');
-      console.error('3. Enable CORS headers in your backend:');
-      console.error('   - Access-Control-Allow-Origin: *');
-      console.error('   - Access-Control-Allow-Methods: GET, POST');
-      console.error('   - Access-Control-Allow-Headers: Content-Type');
-      console.error('');
-      console.error('📝 Expected API Response Format:');
-      console.error('[');
-      console.error('  { id: 1, class: 1, educatorImage: "url", demoPrice: 19 },');
-      console.error('  { id: 2, class: 2, educatorImage: "url", demoPrice: 19 },');
-      console.error('  ... (all 10 classes)');
-      console.error(']');
-      console.error('');
+      // console.error('❌ ALL API ENDPOINTS FAILED!');
+      // console.error('');
+      // console.error('🚨 BACKEND SETUP REQUIRED:');
+      // console.error('1. Make sure your backend server is running');
+      // console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_class_card');
+      // console.error('3. Enable CORS headers in your backend:');
+      // console.error('   - Access-Control-Allow-Origin: *');
+      // console.error('   - Access-Control-Allow-Methods: GET, POST');
+      // console.error('   - Access-Control-Allow-Headers: Content-Type');
+      // console.error('');
+      // console.error('📝 Expected API Response Format:');
+      // console.error('[');
+      // console.error('  { id: 1, class: 1, educatorImage: "url", demoPrice: 19 },');
+      // console.error('  { id: 2, class: 2, educatorImage: "url", demoPrice: 19 },');
+      // console.error('  ... (all 10 classes)');
+      // console.error(']');
+      // console.error('');
     };
 
     fetchClassData();
@@ -168,7 +168,7 @@ const ClassSelection = () => {
   // Helper function to get API data for a specific class
   const getClassApiData = (classNumber: number) => {
     const data = classData.find(data => data.class === classNumber);
-    console.log(`Getting API data for Class ${classNumber}:`, data);
+    // console.log(`Getting API data for Class ${classNumber}:`, data);
     return data;
   };
 
@@ -176,7 +176,7 @@ const ClassSelection = () => {
   const getDemoPrice = (classNumber: number) => {
     const apiData = getClassApiData(classNumber);
     const price = apiData?.demoPrice || 19;
-    console.log(`Demo price for Class ${classNumber}: ₹${price}`);
+    // console.log(`Demo price for Class ${classNumber}: ₹${price}`);
     return price; // Default to 19 if no data
   };
 
@@ -184,7 +184,7 @@ const ClassSelection = () => {
   const getEducatorImage = (classNumber: number) => {
     const apiData = getClassApiData(classNumber);
     const imageUrl = apiData?.educatorImage || "/teacher.svg";
-    console.log(`Educator image for Class ${classNumber}:`, imageUrl);
+    // console.log(`Educator image for Class ${classNumber}:`, imageUrl);
     return imageUrl; // Default to local image if no data
   };
 

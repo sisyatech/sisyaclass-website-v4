@@ -1,75 +1,158 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
 import { useRouter } from "next/navigation";
 
+interface Chapter {
+  id: number;
+  subjectWebId: number;
+  title: string;
+  chapterNumber: number;
+  syllabusPoints: string[];
+}
+
+interface SubjectData {
+  id: number;
+  bigCourseWebId: number;
+  name: string;
+  subtitle: string;
+  taglinePoints: string[];
+  chapters: Chapter[];
+}
+
+interface BigCourseData {
+  id: number;
+  courseDemoPrice: number;
+  webLabel: string;
+  courseVideoLink: string;
+  bigCourse: {
+    name: string;
+    startDate: string;
+    endDate: string;
+  };
+  subjects: SubjectData[];
+}
+
 const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
-  
-  const subjects = [
-    {
-      id: 1,
-      title: "Mathematics",
-      subtitle: "Numbers and comparision",
+  const [courseData, setCourseData] = useState<BigCourseData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Subject styling configuration
+  const subjectStyles: { [key: string]: { iconBg: string; titleColor: string; buttonBg: string } } = {
+    Mathematics: {
       iconBg: "bg-[#DDDEFE]",
       titleColor: "text-[#575CFB]",
-      buttonBg: "bg-[#575CFB]",
-      buttonText: "Explore Maths Champ Course",
-      topics: [
-        "Ascending and Descending Order",
-        "Number system",
-        "Number Line",
-        "Place Value",
-        "Missing Numbers",
-        "Comparing Numbers",
-        "History of Maths"
-      ]
+      buttonBg: "bg-[#575CFB]"
     },
-    {
-      id: 2,
-      title: "Science",
-      subtitle: "Numbers and comparision",
+    Science: {
       iconBg: "bg-[#41AC7D4D]",
       titleColor: "text-[#41AC7D]",
-      buttonBg: "bg-[#41AC7D]",
-      buttonText: "Explore Science Champ Course",
-      topics: [
-        "Ascending and Descending Order",
-        "Number system",
-        "Number Line",
-        "Place Value",
-        "Missing Numbers",
-        "Comparing Numbers",
-        "History of Maths"
-      ]
+      buttonBg: "bg-[#41AC7D]"
     },
-    {
-      id: 3,
-      title: "English",
-      subtitle: "Numbers and comparision",
+    Physics: {
+      iconBg: "bg-[#41AC7D4D]",
+      titleColor: "text-[#41AC7D]",
+      buttonBg: "bg-[#41AC7D]"
+    },
+    Chemistry: {
+      iconBg: "bg-[#41AC7D4D]",
+      titleColor: "text-[#41AC7D]",
+      buttonBg: "bg-[#41AC7D]"
+    },
+    English: {
       iconBg: "bg-[#FAE9E8]",
       titleColor: "text-[#E78F8E]",
-      buttonBg: "bg-[#E78F8E]",
-      buttonText: "Explore English Champ Course",
-      topics: [
-        "Ascending and Descending Order",
-        "Number system",
-        "Number Line",
-        "Place Value",
-        "Missing Numbers",
-        "Comparing Numbers",
-        "History of Maths"
-      ]
+      buttonBg: "bg-[#E78F8E]"
     }
-  ];
+  };
+
+  // Fetch course data from API
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      if (!gradeNumber) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(
+          'https://sisyaclass.xyz/student/get_big_course_web_by_grade',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              grade: gradeNumber.toString()
+            })
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setCourseData(data[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching syllabus data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseData();
+  }, [gradeNumber]);
+
+  // Map API subjects to component format
+  const subjects = courseData?.subjects.map((subject) => {
+    const style = subjectStyles[subject.name] || subjectStyles.Mathematics;
+    return {
+      id: subject.id,
+      title: subject.name,
+      subtitle: subject.subtitle,
+      iconBg: style.iconBg,
+      titleColor: style.titleColor,
+      buttonBg: style.buttonBg,
+      buttonText: `Explore ${subject.name} Champ Course`,
+      topics: subject.taglinePoints
+    };
+  }) || [];
 
   const handleExploreClick = (subject: string) => {
     const subjectSlug = subject.toLowerCase().replace(/\s+/g, '-');
     router.push(`/grade${gradeNumber || 8}/${subjectSlug}`);
   };
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="w-full bg-white py-12 sm:py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="text-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+            <p className="mt-4 text-gray-600">Loading syllabus...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no data
+  if (!courseData || subjects.length === 0) {
+    return null;
+  }
 
   return (
     <RevealOnView from="bottom" durationMs={600} delayMs={200}>
@@ -84,7 +167,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
             
             <div className="flex flex-col sm:flex-row gap-2">
               <button className="w-[250.42px] h-[39.22px] rounded-[10px] border-[0.25px] border-[#575CFB] bg-[#1F1F39] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] font-montserrat font-semibold text-[14px] leading-[10px] tracking-normal text-center text-white">
-                Latest Batch : 20 Sept 2025
+                Latest Batch: {formatDate(courseData.bigCourse.startDate)}
               </button>
               <button className="w-[221.62px] h-[39.22px] rounded-[10px] border-[0.25px] border-[#D1D1D6] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] font-montserrat font-semibold text-[14px] leading-[10px] tracking-normal text-center text-black">
                 Next Batch (Coming Soon)
@@ -96,11 +179,11 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
         {/* Main Heading */}
         <RevealOnView from="left" durationMs={500} delayMs={400}>
           <div className="text-left mb-12">
-            <h2 className="w-[348px] h-[39px] font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
-              Syllabus for class 8
+            <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
+              Syllabus for class {gradeNumber}
             </h2>
             <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
-              (20 Sessions) includes 3 modules
+              ({subjects.length} Subject{subjects.length > 1 ? 's' : ''}) - {courseData.webLabel}
             </p>
           </div>
         </RevealOnView>
@@ -121,7 +204,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                 {/* Subject Icon and Title */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                    {subject.title === "Mathematics" && (
+                    {(subject.title === "Mathematics" || subject.title === "Maths") && (
                       <Image 
                         src="/grades/math.svg" 
                         alt="Math" 
@@ -129,7 +212,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                         height={29}
                       />
                     )}
-                   {subject.title === "Science" && (
+                   {(subject.title === "Science" || subject.title === "Physics" || subject.title === "Chemistry") && (
                       <Image 
                         src="/grades/sciens.svg" 
                         alt="Science" 
@@ -193,15 +276,6 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
             </RevealOnView>
           ))}
         </div>
-
-        {/* Pagination Indicators */}
-        <RevealOnView from="bottom" durationMs={400} delayMs={1000}>
-          <div className="flex justify-center space-x-2">
-            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-800 rounded-full"></div>
-            <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-          </div>
-        </RevealOnView>
       </div>
     </div>
     </RevealOnView>

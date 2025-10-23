@@ -34,8 +34,8 @@ const Teachers = () => {
   useEffect(() => {
     const fetchTeachers = async () => {
       try {
-        console.log('==============================================');
-        console.log('🚀 [TEACHERS] STARTING API FETCH');
+        // console.log('==============================================');
+        // console.log('🚀 [TEACHERS] STARTING API FETCH');
         
         const response = await fetch('https://sisyaclass.xyz/student/get_all_faculty_member_card', {
           method: 'POST',
@@ -45,25 +45,25 @@ const Teachers = () => {
           mode: 'cors',
         });
 
-        console.log('📊 [TEACHERS] Response status:', response.status);
+        // console.log('📊 [TEACHERS] Response status:', response.status);
 
         if (response.ok) {
           const data = await response.json();
-          console.log('✅ [TEACHERS] DATA RECEIVED:', data);
+          // console.log('✅ [TEACHERS] DATA RECEIVED:', data);
           
           if (Array.isArray(data) && data.length > 0) {
             // Sort by order field
             const sortedData = data.sort((a: TeacherData, b: TeacherData) => a.order - b.order);
-            console.log('✅ [TEACHERS] Setting teachers:', sortedData);
+            // console.log('✅ [TEACHERS] Setting teachers:', sortedData);
             setTeachers(sortedData);
           } else {
-            console.warn('⚠️ [TEACHERS] No data or invalid format received');
+            // console.warn('⚠️ [TEACHERS] No data or invalid format received');
           }
         } else {
-          console.error('❌ [TEACHERS] API request failed');
+          // console.error('❌ [TEACHERS] API request failed');
         }
       } catch (error) {
-        console.error('❌ [TEACHERS] FETCH ERROR:', error);
+        // console.error('❌ [TEACHERS] FETCH ERROR:', error);
       } finally {
         setLoading(false);
       }
@@ -113,12 +113,12 @@ const Teachers = () => {
 
   const displayTeachers = teachers.length > 0 ? teachers : defaultTeachers;
   
-  console.log('🎨 [TEACHERS] Rendering component');
-  console.log('🎨 [TEACHERS] Loading:', loading);
-  console.log('🎨 [TEACHERS] Teachers from API:', teachers);
-  console.log('🎨 [TEACHERS] Display teachers:', displayTeachers);
-  console.log('🎨 [TEACHERS] Entered:', entered);
-  console.log('🎨 [TEACHERS] Cards entered:', cardsEntered);
+  // console.log('🎨 [TEACHERS] Rendering component');
+  // console.log('🎨 [TEACHERS] Loading:', loading);
+  // console.log('🎨 [TEACHERS] Teachers from API:', teachers);
+  // console.log('🎨 [TEACHERS] Display teachers:', displayTeachers);
+  // console.log('🎨 [TEACHERS] Entered:', entered);
+  // console.log('🎨 [TEACHERS] Cards entered:', cardsEntered);
   
   // Get visible teachers for desktop (4 cards)
   const getVisibleTeachers = () => {
@@ -134,7 +134,7 @@ const Teachers = () => {
 
   // Show loading state
   if (loading) {
-    console.log('⏳ [TEACHERS] Showing loading state');
+    // console.log('⏳ [TEACHERS] Showing loading state');
     return (
       <div className="py-5 sm:py-0 bg-white">
         <div className="mx-auto max-w-7xl px-4">
@@ -147,7 +147,7 @@ const Teachers = () => {
     );
   }
 
-  console.log('✅ [TEACHERS] Rendering main content');
+  // console.log('✅ [TEACHERS] Rendering main content');
 
   return (
     <div ref={sectionRef} className="py-5 sm:py-0 bg-white">

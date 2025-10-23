@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import BoosterCourseCard from "./BoosterCourseCard";
-import RevealOnView from "./Reveal/RevealOnView";
+import RevealOnView from "../Reveal/RevealOnView";
 
 const BoosterCourseSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);

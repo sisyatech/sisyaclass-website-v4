@@ -1,9 +1,100 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 
-const NewSection = () => {
+interface BigCourseData {
+  id: number;
+  courseDemoPrice: number;
+  webLabel: string;
+  bigCourse: {
+    name: string;
+    startDate: string;
+    price: number;
+    currentPrice: number;
+    partialPrice: number;
+  };
+}
+
+interface NewSectionProps {
+  gradeNumber?: number;
+}
+
+const NewSection = ({ gradeNumber }: NewSectionProps) => {
+  const [courseData, setCourseData] = useState<BigCourseData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [paymentMethod, setPaymentMethod] = useState<'full' | 'part'>('full');
+
+  useEffect(() => {
+    const fetchCourseData = async () => {
+      if (!gradeNumber) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(
+          'https://sisyaclass.xyz/student/get_big_course_web_by_grade',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              grade: gradeNumber.toString()
+            })
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            setCourseData(data[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching payment data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseData();
+  }, [gradeNumber]);
+
+  // Format date for display
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="w-full h-auto min-h-[600px] bg-[#DDDEFE80] flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading course details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render if no course data
+  if (!courseData) {
+    return null;
+  }
+
+  // Calculate payment details based on selected payment method
+  const fullPrice = courseData.bigCourse.currentPrice;
+  const partPrice = courseData.bigCourse.partialPrice;
+  const selectedPrice = paymentMethod === 'full' ? fullPrice : partPrice;
+  
+  const gstRate = 0.18;
+  const priceWithoutGST = (selectedPrice / (1 + gstRate)).toFixed(2);
+  const gstAmount = (selectedPrice - parseFloat(priceWithoutGST)).toFixed(2);
+
   return (
     <div className="w-full h-auto min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-[700px] xl:min-h-[809px] -mt-8 sm:-mt-12 md:-mt-16 lg:-mt-19 opacity-100 bg-[#DDDEFE80] flex flex-col items-center justify-center px-2 sm:px-4 md:px-6 lg:px-8 py-8 sm:py-12 md:py-16 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-1000">
       {/* Course Details Title - Outside container on mobile/tablet, inside on desktop */}
@@ -23,7 +114,9 @@ const NewSection = () => {
           <div className="space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 animate-in fade-in slide-in-from-left-6 duration-700 delay-1400">
             {/* Batch Start Date */}
             <div className="w-full h-auto min-h-[35px] sm:min-h-[40px] md:min-h-[44px] px-3 sm:px-4 py-2 rounded-[8px] sm:rounded-[10px] border-[1.5px] sm:border-[1.7px] border-dashed border-[#0595CE] bg-[#EAF4F9] opacity-100">
-              <span className="text-[#0595CE] font-medium text-xs sm:text-sm md:text-base">Batch Start date: 20 Sept 2025</span>
+              <span className="text-[#0595CE] font-medium text-xs sm:text-sm md:text-base">
+                Batch Start date: {formatDate(courseData.bigCourse.startDate)}
+              </span>
             </div>
             
             {/* Features Section */}
@@ -122,18 +215,25 @@ const NewSection = () => {
                 Choose payment method
               </h3>
               <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-[1.34px] border-[#ABABAB] bg-[#0595CE] flex-shrink-0">
-                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>
+                <button 
+                  onClick={() => setPaymentMethod('full')}
+                  className="flex items-center space-x-2 sm:space-x-3 w-full text-left"
+                >
+                  <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-[1.34px] border-[#ABABAB] flex-shrink-0 ${paymentMethod === 'full' ? 'bg-[#0595CE]' : ''}`}>
+                    {paymentMethod === 'full' && <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>}
                   </div>
-                  <span className="text-gray-700 text-sm sm:text-base">Full payment</span>
+                  <span className="text-gray-700 text-sm sm:text-base">Full payment (₹{fullPrice})</span>
                   <span className="px-1.5 py-0.5 sm:px-2 sm:py-1 bg-red-100 border border-red-300 text-red-600 text-xs rounded flex-shrink-0">Recommended</span>
-                </div>
-                <div className="flex items-center space-x-2 sm:space-x-3">
-                  <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-[1.34px] border-[#ABABAB] flex-shrink-0">
+                </button>
+                <button 
+                  onClick={() => setPaymentMethod('part')}
+                  className="flex items-center space-x-2 sm:space-x-3 w-full text-left"
+                >
+                  <div className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-[1.34px] border-[#ABABAB] flex-shrink-0 ${paymentMethod === 'part' ? 'bg-[#0595CE]' : ''}`}>
+                    {paymentMethod === 'part' && <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full"></div>}
                   </div>
-                  <span className="text-gray-700 text-sm sm:text-base">Part payment</span>
-                </div>
+                  <span className="text-gray-700 text-sm sm:text-base">Part payment (₹{partPrice})</span>
+                </button>
               </div>
             </div>
             
@@ -148,7 +248,7 @@ const NewSection = () => {
                     Course price (excluding GST)
                   </span>
                   <span className="font-montserrat font-semibold text-xs sm:text-sm md:text-[16.1px] leading-none tracking-[0.01em] text-right text-[#1F1F39] flex-shrink-0">
-                    ₹ 24.58
+                    ₹ {priceWithoutGST}
                   </span>
                 </div>
                 <div className="flex justify-between items-start">
@@ -166,7 +266,7 @@ const NewSection = () => {
                     Final amount
                   </span>
                   <span className="font-montserrat font-semibold text-xs sm:text-sm md:text-[16.1px] leading-none tracking-[0.01em] text-right text-[#1F1F39] flex-shrink-0">
-                    ₹ 29
+                    ₹ {priceWithoutGST}
                   </span>
                 </div>
                 <div className="flex justify-between items-start">
@@ -174,7 +274,7 @@ const NewSection = () => {
                     GST (18%)
                   </span>
                   <span className="font-montserrat font-semibold text-xs sm:text-sm md:text-[16.1px] leading-none tracking-[0.01em] text-right text-[#1F1F39] flex-shrink-0">
-                    ₹4.42
+                    ₹{gstAmount}
                   </span>
                 </div>
               </div>
@@ -184,7 +284,7 @@ const NewSection = () => {
             <div className="border-t pt-3 sm:pt-4">
               <div className="flex justify-between items-center">
                 <span className="text-lg sm:text-xl font-bold text-[#0595CE]">Total Amount</span>
-                <span className="text-lg sm:text-xl font-bold text-[#0595CE]">₹29</span>
+                <span className="text-lg sm:text-xl font-bold text-[#0595CE]">₹{selectedPrice}</span>
               </div>
             </div>
             

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import Container from "@/components/Container";
 import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
 import { parseGradeFromParam } from "@/lib/navigation";
-import { SubjectBreadcrumb } from "@/components/SubjectBreadcrumb";
+import { SubjectBreadcrumb } from "@/components/classes/SubjectBreadcrumb";
 import Course from "@/components/classes/Course";
 import QuickLinks from "@/components/classes/QuickLinks";
 import Payment from "@/components/classes/payment";
@@ -24,8 +24,8 @@ import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import SyllabusSection from "@/components/classes/SyllabusSection";
-import Chapters from "@/components/chapters";
-import BoosterCourseSection from "@/components/BoosterCourseSection";
+import Chapters from "@/components/classes/chapters";
+import BoosterCourseSection from "@/components/classes/BoosterCourseSection";
 
 interface SubjectPageProps {
   params: Promise<{
@@ -63,7 +63,7 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
       <SubjectBreadcrumb gradeNumber={gradeNumber} subject={subject} />
       <Course gradeNumber={gradeNumber} />
       <QuickLinks />
-      <Payment />
+      <Payment gradeNumber={gradeNumber} />
       <Chapters gradeNumber={gradeNumber} />
       <BoosterCourseSection />
       <Impact />

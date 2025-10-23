@@ -23,7 +23,7 @@ import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Reviews from "@/components/Reviews";
 import SyllabusSection from "@/components/classes/SyllabusSection";
-import { GradeBreadcrumb } from "@/components/GradeBreadcrumb";
+import { GradeBreadcrumb } from "@/components/classes/GradeBreadcrumb";
 
 interface GradePageProps {
   params: Promise<{
@@ -52,7 +52,7 @@ function GradeContent({ grade }: { grade: string }) {
       <GradeBreadcrumb gradeNumber={gradeNumber} />
       <Course gradeNumber={gradeNumber} />
       <QuickLinks />
-      <Payment />
+      <Payment gradeNumber={gradeNumber} />
       <SyllabusSection gradeNumber={gradeNumber} />
       <Impact />
       <AIEcosystem />

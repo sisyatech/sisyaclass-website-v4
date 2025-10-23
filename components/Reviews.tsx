@@ -28,7 +28,7 @@ const Reviews = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        console.log('🚀 [REVIEWS] Fetching data from API...');
+        // console.log('🚀 [REVIEWS] Fetching data from API...');
         
         const response = await fetch('https://sisyaclass.xyz/student/get_testimonial_card', {
           method: 'POST',
@@ -40,7 +40,7 @@ const Reviews = () => {
 
         if (response.ok) {
           const data: ReviewData[] = await response.json();
-          console.log('✅ [REVIEWS] Data received:', data);
+          // console.log('✅ [REVIEWS] Data received:', data);
           
           // Sort by order field and normalize field names
           const sortedData = data
@@ -55,13 +55,13 @@ const Reviews = () => {
               review: review.content || review.review || 'Great experience!',
             }));
           
-          console.log('✅ [REVIEWS] Processed reviews:', sortedData);
+          // console.log('✅ [REVIEWS] Processed reviews:', sortedData);
           setReviews(sortedData);
         } else {
-          console.error('❌ [REVIEWS] API request failed');
+          // console.error('❌ [REVIEWS] API request failed');
         }
       } catch (error) {
-        console.error('❌ [REVIEWS] Fetch error:', error);
+        // console.error('❌ [REVIEWS] Fetch error:', error);
       } finally {
         setLoading(false);
       }
@@ -93,17 +93,17 @@ const Reviews = () => {
     setCardsEntered(true);
   }, []);
 
-  console.log('🎨 [REVIEWS] Rendering component');
-  console.log('🎨 [REVIEWS] Loading:', loading);
-  console.log('🎨 [REVIEWS] Reviews:', reviews);
-  console.log('🎨 [REVIEWS] Reviews length:', reviews.length);
-  console.log('🎨 [REVIEWS] Current slide:', currentSlide);
-  console.log('🎨 [REVIEWS] Cards entered:', cardsEntered);
-  console.log('🎨 [REVIEWS] Current review:', reviews[currentSlide]);
+  // console.log('🎨 [REVIEWS] Rendering component');
+  // console.log('🎨 [REVIEWS] Loading:', loading);
+  // console.log('🎨 [REVIEWS] Reviews:', reviews);
+  // console.log('🎨 [REVIEWS] Reviews length:', reviews.length);
+  // console.log('🎨 [REVIEWS] Current slide:', currentSlide);
+  // console.log('🎨 [REVIEWS] Cards entered:', cardsEntered);
+  // console.log('🎨 [REVIEWS] Current review:', reviews[currentSlide]);
   
   // Show loading state
   if (loading) {
-    console.log('⏳ [REVIEWS] Showing loading state');
+    // console.log('⏳ [REVIEWS] Showing loading state');
     return (
       <div className="py-20 bg-white overflow-x-hidden">
         <div className="mx-auto max-w-7xl px-4">
@@ -118,11 +118,11 @@ const Reviews = () => {
 
   // Don't render if no reviews
   if (reviews.length === 0) {
-    console.log('⚠️ [REVIEWS] No reviews to display');
+    // console.log('⚠️ [REVIEWS] No reviews to display');
     return null;
   }
 
-  console.log('✅ [REVIEWS] Rendering reviews content');
+  // console.log('✅ [REVIEWS] Rendering reviews content');
 
   return (
     <div className="py-20 bg-white overflow-x-hidden">
