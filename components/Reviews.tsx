@@ -28,7 +28,7 @@ const Reviews = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        // console.log('🚀 [REVIEWS] Fetching data from API...');
+        console.log('🚀 [REVIEWS] Fetching data from API...');
         
         const response = await fetch('https://sisyaclass.xyz/student/get_testimonial_card', {
           method: 'POST',
@@ -40,8 +40,7 @@ const Reviews = () => {
 
         if (response.ok) {
           const data: ReviewData[] = await response.json();
-          // console.log('✅ [REVIEWS] Data received:', data);
-          
+        
           // Sort by order field and normalize field names
           const sortedData = data
             .sort((a, b) => a.order - b.order)
@@ -55,7 +54,7 @@ const Reviews = () => {
               review: review.content || review.review || 'Great experience!',
             }));
           
-          // console.log('✅ [REVIEWS] Processed reviews:', sortedData);
+          console.log('✅ [REVIEWS] Processed reviews:', sortedData);
           setReviews(sortedData);
         } else {
           // console.error('❌ [REVIEWS] API request failed');

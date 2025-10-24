@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import LoginModal from "../LoginModal";
+import { useUser } from "../UserContext";
 
 interface BigCourseData {
   id: number;
@@ -21,9 +23,11 @@ interface NewSectionProps {
 }
 
 const NewSection = ({ gradeNumber }: NewSectionProps) => {
+  const { user, isLoggedIn } = useUser();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [paymentMethod, setPaymentMethod] = useState<'full' | 'part'>('full');
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -62,6 +66,53 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
 
     fetchCourseData();
   }, [gradeNumber]);
+
+  const handleMakePayment = () => {
+    console.log('Make Payment clicked for grade:', gradeNumber, 'Payment method:', paymentMethod);
+    
+    if (isLoggedIn && user) {
+      // User is logged in, proceed with actual payment
+      console.log('User is logged in, proceeding with payment:', user.name);
+      processPayment();
+    } else {
+      // User is not logged in, show login modal
+      console.log('User not logged in, showing login modal');
+      setShowLoginModal(true);
+    }
+  };
+
+  const processPayment = () => {
+    // Add your actual payment processing logic here
+    console.log('Processing payment for user:', user?.name, 'Grade:', gradeNumber, 'Amount:', selectedPrice);
+    
+    // Here you would integrate with payment gateway (Razorpay, Stripe, etc.)
+    alert(`Processing payment for Class ${gradeNumber} - ₹${selectedPrice} (${paymentMethod === 'full' ? 'Full Payment' : 'Part Payment'}) for ${user?.name || 'User'}`);
+    
+    // Example payment gateway integration:
+    // const options = {
+    //   key: 'your_razorpay_key',
+    //   amount: selectedPrice * 100, // Amount in paise
+    //   currency: 'INR',
+    //   name: 'Sisya Class',
+    //   description: `Class ${gradeNumber} Course Payment`,
+    //   // ... other options
+    // };
+    // const razorpay = new window.Razorpay(options);
+    // razorpay.open();
+  };
+
+  const handleLoginSuccess = (userData: any) => {
+    console.log('Payment: Login successful, user data:', userData);
+    setShowLoginModal(false);
+    // Proceed with payment after successful login
+    setTimeout(() => {
+      processPayment();
+    }, 500);
+  };
+
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
+  };
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -290,13 +341,24 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
             
             {/* Make Payment Button */}
             <div className="flex justify-center lg:justify-start pt-2 sm:pt-4">
-              <button className="w-full max-w-[200px] sm:max-w-[220px] md:max-w-[233px] h-[40px] sm:h-[45px] md:h-[52px] lg:h-[59px] rounded-[25px] sm:rounded-[30px] bg-[#0595CE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.08)] font-roboto font-medium text-sm sm:text-base leading-none tracking-normal text-center text-white hover:bg-[#047aa8] transition-colors lg:ml-34 xl:ml-40">
+              <button 
+                onClick={handleMakePayment}
+                className="w-full max-w-[200px] sm:max-w-[220px] md:max-w-[233px] h-[40px] sm:h-[45px] md:h-[52px] lg:h-[59px] rounded-[25px] sm:rounded-[30px] bg-[#0595CE] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.08)] font-roboto font-medium text-sm sm:text-base leading-none tracking-normal text-center text-white hover:bg-[#047aa8] transition-colors lg:ml-34 xl:ml-40 cursor-pointer"
+              >
                 Make Payment
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={handleLoginModalClose}
+        onLoginSuccess={handleLoginSuccess}
+        selectedClass={gradeNumber}
+      />
     </div>
   );
 };

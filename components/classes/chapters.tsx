@@ -40,6 +40,8 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [cardsPerPage] = useState(3);
 
   // Fetch course data from API
   useEffect(() => {
@@ -90,6 +92,12 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     }))
   ) || [];
 
+  // Calculate pagination
+  const totalPages = Math.ceil(allChapters.length / cardsPerPage);
+  const startIndex = currentPage * cardsPerPage;
+  const endIndex = startIndex + cardsPerPage;
+  const currentChapters = allChapters.slice(startIndex, endIndex);
+
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -99,6 +107,10 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const handleExploreClick = (subject: string) => {
     const subjectSlug = subject.toLowerCase().replace(/\s+/g, '-');
     router.push(`/grade${gradeNumber || 8}/${subjectSlug}`);
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
   };
 
   // Show loading state
@@ -154,67 +166,119 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
           </div>
         </RevealOnView>
 
-        {/* Chapter Cards */}
-     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 mb-8">
-          {allChapters.map((chapter, index) => (
-            <RevealOnView 
-              key={chapter.id}
-              from={index % 3 === 0 ? "left" : index % 3 === 1 ? "bottom" : "right"} 
-              durationMs={600} 
-              delayMs={500 + (index * 150)}
-            >
-              <div className="flex flex-col items-center">
-              {/* Chapter Card */}
-              <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
-                {/* Chapter Icon and Title */}
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
-                    <Image 
-                      src="/grades/math.svg" 
-                      alt={chapter.subjectName} 
-                      width={29} 
-                      height={29}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>
-                      Chapter {chapter.chapterNumber}
-                    </h3>
-                    <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
-                      {chapter.title}
-                    </p>
-                  </div>
-                </div>
+        {/* Chapter Cards - Horizontal Scroll */}
+        <RevealOnView from="bottom" durationMs={600} delayMs={500}>
+          <div className="relative">
+            {/* Cards Container */}
+            <div className="overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentPage * 100}%)` }}
+              >
+                {Array.from({ length: totalPages }, (_, pageIndex) => (
+                  <div key={pageIndex} className="w-full flex-shrink-0">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                      {allChapters.slice(pageIndex * cardsPerPage, (pageIndex + 1) * cardsPerPage).map((chapter, index) => (
+                        <div key={chapter.id} className="flex flex-col items-center">
+                          {/* Chapter Card */}
+                          <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
+                            {/* Chapter Icon and Title */}
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
+                                <Image 
+                                  src="/grades/math.svg" 
+                                  alt={chapter.subjectName} 
+                                  width={29} 
+                                  height={29}
+                                />
+                              </div>
+                              <div className="flex flex-col">
+                                <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>
+                                  Chapter {chapter.chapterNumber}
+                                </h3>
+                                <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
+                                  {chapter.title}
+                                </p>
+                              </div>
+                            </div>
 
-                {/* Divider Line */}
-                <div className="w-full h-0 border-t border-[#E8E8E8] mb-6"></div>
+                            {/* Divider Line */}
+                            <div className="w-full h-0 border-t border-[#E8E8E8] mb-6"></div>
 
-                {/* You will Learn Section */}
-                <div>
-                  <h4 className="font-montserrat font-semibold text-[16px] leading-[20px] text-[#1A2439] mb-4">
-                    You will Learn
-                  </h4>
-                  <ul className="space-y-3">
-                    {chapter.syllabusPoints.map((topic, topicIndex) => (
-                      <li key={topicIndex} className="flex items-start gap-3">
-                        <div className="flex-shrink-0 mt-1">
-                          <Image 
-                            src="/grades/correct.svg" 
-                            alt="Check" 
-                            width={13} 
-                            height={13}
-                          />
+                            {/* You will Learn Section */}
+                            <div>
+                              <h4 className="font-montserrat font-semibold text-[16px] leading-[20px] text-[#1A2439] mb-4">
+                                You will Learn
+                              </h4>
+                              <ul className="space-y-3">
+                                {chapter.syllabusPoints.map((topic, topicIndex) => (
+                                  <li key={topicIndex} className="flex items-start gap-3">
+                                    <div className="flex-shrink-0 mt-1">
+                                      <Image 
+                                        src="/grades/correct.svg" 
+                                        alt="Check" 
+                                        width={13} 
+                                        height={13}
+                                      />
+                                    </div>
+                                    <span className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E]">{topic}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
                         </div>
-                        <span className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E]">{topic}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-            </RevealOnView>
-          ))}
-        </div>
+
+            {/* Pagination with Arrows */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center mt-8 space-x-4">
+                {/* Previous Arrow */}
+                <button
+                  onClick={() => goToPage(currentPage === 0 ? totalPages - 1 : currentPage - 1)}
+                  className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
+                  aria-label="Previous page"
+                >
+                  <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                {/* Pagination Dots */}
+                <div className="flex space-x-2">
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => goToPage(index)}
+                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                        currentPage === index 
+                          ? 'bg-[#0595CE] scale-125' 
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                      aria-label={`Go to page ${index + 1}`}
+                    />
+                  ))}
+                </div>
+
+                {/* Next Arrow */}
+                <button
+                  onClick={() => goToPage(currentPage === totalPages - 1 ? 0 : currentPage + 1)}
+                  className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
+                  aria-label="Next page"
+                >
+                  <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            )}
+          </div>
+        </RevealOnView>
       </div>
     </div>
     </RevealOnView>

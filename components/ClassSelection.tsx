@@ -4,6 +4,8 @@ import React, { useEffect, useState, useRef } from "react";
 import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import LoginModal from "./LoginModal";
+import { useUser } from "./UserContext";
 
 interface ClassData {
   id: number;
@@ -15,6 +17,7 @@ interface ClassData {
 }
 
 const ClassSelection = () => {
+  const { user, isLoggedIn } = useUser();
   const [activeClass, setActiveClass] = useState("Class 1-3");
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsEntered, setCardsEntered] = useState(false);
@@ -23,6 +26,8 @@ const ClassSelection = () => {
   const [entered, setEntered] = useState(false);
   const [classData, setClassData] = useState<ClassData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedClassForPayment, setSelectedClassForPayment] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const classOptions = ["Class 1-3", "Class 4-5", "Class 6-7", "Class 8-10"];
@@ -186,6 +191,51 @@ const ClassSelection = () => {
     const imageUrl = apiData?.educatorImage || "/teacher.svg";
     // console.log(`Educator image for Class ${classNumber}:`, imageUrl);
     return imageUrl; // Default to local image if no data
+  };
+
+  // Handle payment button click
+  const handlePaymentClick = (classNumber: number) => {
+    if (isLoggedIn && user) {
+      // User is already logged in, proceed to payment directly
+      console.log(`User ${user.name} is already logged in, proceeding directly to payment for Class ${classNumber}`);
+      handlePayment(classNumber);
+    } else {
+      // User not logged in, show login modal
+      console.log('User not logged in, showing login modal for Class', classNumber);
+      setSelectedClassForPayment(classNumber);
+      setShowLoginModal(true);
+    }
+  };
+
+  // Handle payment after login
+  const handlePayment = (classNumber: number) => {
+    const price = getDemoPrice(classNumber);
+    // console.log(`Processing payment for Class ${classNumber} at ₹${price}`);
+    // Here you would integrate with your payment gateway
+    // For now, just show an alert
+    alert(`Redirecting to payment for Class ${classNumber} - ₹${price}`);
+  };
+
+  // Handle successful login
+  const handleLoginSuccess = (userData: any) => {
+    console.log('ClassSelection: Login successful, user data:', userData);
+    console.log('ClassSelection: User is now logged in:', isLoggedIn);
+    
+    // User is now logged in via context, proceed with payment if there was a selected class
+    // Note: We use userData directly since context state might not be updated immediately
+    if (selectedClassForPayment && userData) {
+      console.log('ClassSelection: Proceeding with payment for class:', selectedClassForPayment);
+      setTimeout(() => {
+        handlePayment(selectedClassForPayment);
+        setSelectedClassForPayment(null);
+      }, 500);
+    }
+  };
+
+  // Handle login modal close
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
+    setSelectedClassForPayment(null);
   };
 
   // Helper: get starting global index for a given range
@@ -406,7 +456,10 @@ const ClassSelection = () => {
 
                       {/* Book Demo Button */}
                       <div className="flex justify-center">
-                        <button className="cursor-pointer transition-colors duration-300 w-[118px] md:w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
+                        <button 
+                          onClick={() => handlePaymentClick(parseInt(card.class.match(/\d+/)?.[0] || "1"))}
+                          className="cursor-pointer transition-colors duration-300 w-[118px] md:w-[124px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em] hover:bg-[#F5C842]"
+                        >
                           Book a Demo at ₹{getDemoPrice(parseInt(card.class.match(/\d+/)?.[0] || "1"))}
                         </button>
                       </div>
@@ -460,7 +513,10 @@ const ClassSelection = () => {
                           ))}
                         </div>
                         <div className="flex justify-center">
-                          <button className="cursor-pointer transition-colors duration-300 w-[116px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em]">
+                          <button 
+                            onClick={() => handlePaymentClick(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] ? parseInt(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] || "1") : 1)}
+                            className="cursor-pointer transition-colors duration-300 w-[116px] h-[22px] rounded-[8px] bg-[#FED700] text-[#1A2439] font-montserrat font-semibold text-[8px] leading-none tracking-[0.02em] hover:bg-[#F5C842]"
+                          >
                             Book a Demo at ₹{getDemoPrice(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] ? parseInt(allClasses[mobileGlobalIndex].class.match(/\d+/)?.[0] || "1") : 1)}
                           </button>
                         </div>
@@ -479,28 +535,76 @@ const ClassSelection = () => {
               </div>
             </div>
 
-            {/* Pagination Dots */}
-            <div className="flex justify-center mt-6 sm:mt-8 space-x-2">
-              {classOptions.map((_, index) => {
-                const isActive = activeClass === classOptions[index];
-                const dotClasses = "w-3 h-3 rounded-full transition-colors duration-300 " + (isActive ? "bg-blue-600" : "bg-blue-200");
-                return (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      setActiveClass(classOptions[index]);
-                      setCurrentSlide(0);
-                      setMobileCardIndex(0);
-                    }}
-                    className={`cursor-pointer ${dotClasses}`}
-                    aria-label={`Go to ${classOptions[index]}`}
-                  />
-                );
-              })}
+            {/* Pagination with Arrows */}
+            <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-4">
+              {/* Previous Arrow */}
+              <button
+                onClick={() => {
+                  const currentIndex = classOptions.indexOf(activeClass);
+                  const prevIndex = currentIndex === 0 ? classOptions.length - 1 : currentIndex - 1;
+                  setActiveClass(classOptions[prevIndex]);
+                  setCurrentSlide(0);
+                  setMobileCardIndex(0);
+                  setMobileGlobalIndex(getRangeStartIndex(classOptions[prevIndex]));
+                }}
+                className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
+                aria-label="Previous class range"
+              >
+                <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              {/* Pagination Dots */}
+              <div className="flex space-x-2">
+                {classOptions.map((_, index) => {
+                  const isActive = activeClass === classOptions[index];
+                  const dotClasses = "w-3 h-3 rounded-full transition-all duration-300 " + (isActive ? "bg-[#0595CE] scale-125" : "bg-gray-300 hover:bg-gray-400");
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setActiveClass(classOptions[index]);
+                        setCurrentSlide(0);
+                        setMobileCardIndex(0);
+                        setMobileGlobalIndex(getRangeStartIndex(classOptions[index]));
+                      }}
+                      className={`cursor-pointer ${dotClasses}`}
+                      aria-label={`Go to ${classOptions[index]}`}
+                    />
+                  );
+                })}
+              </div>
+
+              {/* Next Arrow */}
+              <button
+                onClick={() => {
+                  const currentIndex = classOptions.indexOf(activeClass);
+                  const nextIndex = currentIndex === classOptions.length - 1 ? 0 : currentIndex + 1;
+                  setActiveClass(classOptions[nextIndex]);
+                  setCurrentSlide(0);
+                  setMobileCardIndex(0);
+                  setMobileGlobalIndex(getRangeStartIndex(classOptions[nextIndex]));
+                }}
+                className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
+                aria-label="Next class range"
+              >
+                <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
           </div>
         </RevealOnView>
       </div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={handleLoginModalClose}
+        onLoginSuccess={handleLoginSuccess}
+        selectedClass={selectedClassForPayment || undefined}
+      />
     </div>
   );
 };

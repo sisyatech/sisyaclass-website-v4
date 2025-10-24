@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-
+import LoginModal from "../LoginModal";
+import { useUser } from "../UserContext";
 import RevealOnView from "../Reveal/RevealOnView";
 
 interface CourseProps {
@@ -36,10 +37,12 @@ interface BigCourseData {
 }
 
 const Course = ({ gradeNumber }: CourseProps) => {
+  const { user, isLoggedIn } = useUser();
   const classTitle = `Class ${gradeNumber}`;
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   console.log('Course component rendered with gradeNumber:', gradeNumber, 'type:', typeof gradeNumber);
 
@@ -94,6 +97,39 @@ const Course = ({ gradeNumber }: CourseProps) => {
 
     fetchCourseData();
   }, [gradeNumber]);
+
+  const handleRegisterDemo = () => {
+    console.log('Register for demo clicked for grade:', gradeNumber);
+    
+    if (isLoggedIn && user) {
+      // User is logged in, proceed with payment/demo registration
+      console.log('User is logged in, proceeding with demo registration:', user.name);
+      handlePayment();
+    } else {
+      // User is not logged in, show login modal
+      console.log('User not logged in, showing login modal');
+      setShowLoginModal(true);
+    }
+  };
+
+  const handlePayment = () => {
+    // Add your payment/demo registration logic here
+    console.log('Proceeding with payment/demo registration for user:', user?.name, 'Grade:', gradeNumber);
+    alert(`Redirecting to demo registration for Class ${gradeNumber} - ₹${courseData?.courseDemoPrice || 'N/A'} for ${user?.name || 'User'}`);
+  };
+
+  const handleLoginSuccess = (userData: any) => {
+    console.log('Course: Login successful, user data:', userData);
+    setShowLoginModal(false);
+    // Proceed with payment after successful login
+    setTimeout(() => {
+      handlePayment();
+    }, 500);
+  };
+
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
+  };
 
   // Extract YouTube video ID from the courseVideoLink
   const getYouTubeEmbedUrl = (url: string) => {
@@ -279,23 +315,27 @@ const Course = ({ gradeNumber }: CourseProps) => {
                   </div>
                   <div className="flex justify-center items-center gap-1 mb-3">
                     {[...Array(Math.floor(parseFloat(rating)))].map((_, i) => (
-                      <Image key={i} src="/fullstar.svg" alt="Star" width={18} height={18} className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" />
+                      <Image key={i} src="/heropics/fullstar.svg" alt="Star" width={18} height={18} className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" />
                     ))}
                     {parseFloat(rating) % 1 !== 0 && (
-                      <Image src="/halfstar.svg" alt="Half Star" width={18} height={18} className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" />
+                      <Image src="/heropics/halfstar.svg" alt="Half Star" width={18} height={18} className="w-[18px] h-[18px] sm:w-[20px] sm:h-[20px]" />
                     )}
                   </div>
                   <div className="flex justify-center items-center gap-2 sm:gap-4">
-                    <Image src="/trust.svg" alt="Trustpilot" width={90} height={22} className="w-[80px] h-[20px] sm:w-[90px] sm:h-[22px] md:w-[110px] md:h-[27px]" />
-                    <Image src="/google play.svg" alt="Google Play" width={90} height={22} className="w-[80px] h-[20px] sm:w-[90px] sm:h-[22px] md:w-[110px] md:h-[27px]" />
-                    <Image src="/google.svg" alt="Google My Business" width={90} height={22} className="w-[80px] h-[20px] sm:w-[90px] sm:h-[22px] md:w-[110px] md:h-[27px]" />
+                    <Image src="/heropics/trust.svg" alt="Trustpilot" width={90} height={22} className="w-[80px] h-[20px] sm:w-[90px] sm:h-[22px] md:w-[110px] md:h-[27px]" />
+                    <Image src="/heropics/google play.svg" alt="Google Play" width={90} height={22} className="w-[80px] h-[20px] sm:w-[90px] sm:h-[22px] md:w-[110px] md:h-[27px]" />
+                    <Image src="/heropics/google.svg" alt="Google My Business" width={90} height={22} className="w-[80px] h-[20px] sm:w-[90px] sm:h-[22px] md:w-[110px] md:h-[27px]" />
                   </div>
                 </div>
               </RevealOnView>
 
               {/* CTA Button */}
               {/* <RevealOnView from="bottom" durationMs={1000} delayMs={800}> */}
-                <button className="w-full sm:w-full md:w-full lg:max-w-[447px] h-[46px] sm:h-[50px] md:h-[53px] rounded-xl bg-[#0595CE] text-white font-montserrat font-semibold text-base sm:text-lg md:text-xl lg:text-[23px] px-4">
+                <button 
+                  onClick={handleRegisterDemo}
+                  className="w-full sm:w-full md:w-full lg:max-w-[447px] h-[46px] sm:h-[50px] md:h-[53px] rounded-xl bg-[#0595CE] text-white font-montserrat font-semibold text-base sm:text-lg md:text-xl lg:text-[23px] px-4 hover:bg-[#047aa8] transition-colors cursor-pointer"
+                  style={{ cursor: 'pointer' }}
+                >
                   Register for demo at just ₹{courseData.courseDemoPrice}
                 </button>
               {/* </RevealOnView> */}
@@ -330,7 +370,13 @@ const Course = ({ gradeNumber }: CourseProps) => {
         </div>
       </div>
 
-
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={handleLoginModalClose}
+        onLoginSuccess={handleLoginSuccess}
+        selectedClass={gradeNumber}
+      />
     </div>
   );
 };

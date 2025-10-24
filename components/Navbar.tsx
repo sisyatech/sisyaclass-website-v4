@@ -1,18 +1,19 @@
 "use client";
 
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, useEffect, useRef } from "react";
 import Image from "next/image";
 import Logo from "@/public/nav/logo.svg";
 import ScrollEffect from "@/components/navbar/ScrollEffect";
 import NavLinks from "@/components/navbar/NavLinks";
 import Link from "next/link";
-import { Phone, Menu, X, ChevronDown } from "lucide-react";
+import { Phone, Menu, X, ChevronDown, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { gradeLinks } from "@/lib/gradeLinks";
 import { resourcesLinks } from "@/lib/resourcesLinks";
 import { useRouter } from "next/navigation";
 import { extractGradeFromLabel, getGradeUrl, routes } from "@/lib/navigation";
+import { useUser } from "@/components/UserContext";
 
 // Create context for mobile menu, selected grade, and page view
 const MobileMenuContext = createContext<{
@@ -428,13 +429,33 @@ export const MobileMenu = () => {
 
 const Navbar = () => {
   const { isMobileMenuOpen, toggleMobileMenu, setSelectedGrade, setCurrentPage } = useMobileMenu();
+  const { user, isLoggedIn, logout } = useUser();
   const router = useRouter();
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   const handleLogoClick = () => {
     setSelectedGrade(null); // Reset to home page
     setCurrentPage("home"); // Reset to home page
     router.push(routes.home);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setIsUserDropdownOpen(false);
+      }
+    };
+
+    if (isUserDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isUserDropdownOpen]);
 
   return (
     <ScrollEffect>
@@ -451,13 +472,52 @@ const Navbar = () => {
         <div className="flex-grow" />
 
         <div className="flex items-center space-x-2 sm:space-x-4">
+          {/* User Icon - Show when logged in */}
+          {isLoggedIn && (
+            <div ref={userDropdownRef} className="flex items-center space-x-2 relative">
+              <div 
+                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors"
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+              >
+                <div className="w-8 h-8 bg-[#02bdfe] rounded-full flex items-center justify-center hover:bg-[#02bdfe]/80 transition-colors">
+                  <User className="h-5 w-5 text-white" />
+                </div>
+                <span className="hidden lg:block text-sm font-medium text-gray-700 whitespace-nowrap">
+                  {user?.name || 'User'}
+                </span>
+              </div>
+              
+              {/* Dropdown menu */}
+              <div className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 transition-all duration-200 z-50 ${
+                isUserDropdownOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+              }`}>
+                <div className="py-2">
+                  <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                    <div className="font-medium">{user?.name}</div>
+                    <div className="text-xs text-gray-500">{user?.email}</div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsUserDropdownOpen(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Contact Us Button - Hidden on mobile and tablet */}
           <a
             href="tel:+917330897291"
-            className="hidden lg:flex items-center space-x-2 rounded-full bg-orange-100 px-4 py-2 text-sm font-medium text-orange-500 transition hover:bg-orange-300 hover:text-orange-700"
+            className="hidden lg:flex items-center space-x-2 rounded-full bg-orange-100 px-3 py-2 text-xs font-medium text-orange-500 transition hover:bg-orange-300 hover:text-orange-700 whitespace-nowrap"
           >
-            <Phone className="h-4 w-4" />
-            <span>Contact Us : +91 7330897291</span>
+            <Phone className="h-4 w-4 flex-shrink-0" />
+            <span className="hidden xl:inline">Contact Us : +91 7330897291</span>
+            <span className="xl:hidden">Contact</span>
           </a>
 
           {/* Download App Button - Hidden on mobile and tablet */}

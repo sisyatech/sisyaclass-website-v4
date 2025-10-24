@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
+import LoginModal from "./LoginModal";
+import { useUser } from "./UserContext";
 
 const CTA = () => {
+  const { user, isLoggedIn } = useUser();
   const [showSticky, setShowSticky] = useState(false);
   const [hasReachedCTA, setHasReachedCTA] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const ctaRef = useRef(null);
 
   useEffect(() => {
@@ -52,8 +56,36 @@ const CTA = () => {
   }, [hasReachedCTA]);
 
   const handleBookDemo = () => {
-    // Add your booking logic here
     console.log('Book a Demo clicked');
+    
+    if (isLoggedIn && user) {
+      // User is logged in, proceed with payment/demo booking
+      console.log('User is logged in, proceeding with demo booking:', user.name);
+      handlePayment();
+    } else {
+      // User is not logged in, show login modal
+      console.log('User not logged in, showing login modal');
+      setShowLoginModal(true);
+    }
+  };
+
+  const handlePayment = () => {
+    // Add your payment/demo booking logic here
+    console.log('Proceeding with payment/demo booking for user:', user?.name);
+    alert(`Redirecting to demo booking for ${user?.name || 'User'}`);
+  };
+
+  const handleLoginSuccess = (userData: any) => {
+    console.log('CTA: Login successful, user data:', userData);
+    setShowLoginModal(false);
+    // Proceed with payment after successful login
+    setTimeout(() => {
+      handlePayment();
+    }, 500);
+  };
+
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
   };
 
   return (
@@ -106,6 +138,13 @@ const CTA = () => {
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={handleLoginModalClose}
+        onLoginSuccess={handleLoginSuccess}
+      />
     </>
   );
 };
