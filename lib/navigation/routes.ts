@@ -45,6 +45,13 @@ export const navigationLinks = {
     href: routes.grade(grade),
     grade: grade,
   })),
+
+  newsContent: {
+    news: {
+      label: 'News',
+      href: routes.news,
+    }
+  },
   
   footer: {
     about: {
@@ -71,4 +78,3 @@ export const navigationLinks = {
 } as const;
 
 export default routes;
-
