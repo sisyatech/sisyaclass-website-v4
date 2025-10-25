@@ -1,39 +1,77 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Facebook,
   Twitter,
   Linkedin,
   Link as LinkIcon,
-  Mail
+  MessageCircle
 } from "lucide-react";
+import { getBlogById, type Blog } from "../../../lib/blogApi";
 
 interface BlogSocialShareProps {
-  title: string;
+  blogId: string;
+  blogData?: any;
 }
 
-const BlogSocialShare = ({ title }: BlogSocialShareProps) => {
+const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialShareProps) => {
+  const [blogData, setBlogData] = useState<Blog | null>(serverBlogData || null);
+  const [loading, setLoading] = useState(!serverBlogData);
+
+  useEffect(() => {
+    // Only fetch if we don't have server-side data
+    if (!serverBlogData) {
+      const fetchBlogData = async () => {
+        try {
+          setLoading(true);
+          const blog = await getBlogById(blogId);
+          setBlogData(blog);
+          console.log('Blog data loaded for sharing:', blog);
+        } catch (error) {
+          console.error('Error fetching blog for sharing:', error);
+          setBlogData(null);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchBlogData();
+    }
+  }, [blogId, serverBlogData]);
+
   const handleShare = (platform: string) => {
-    const url = typeof window !== 'undefined' ? window.location.href : '';
-    const text = title;
+    // Use the current page URL for LinkedIn and Facebook (for meta tag fetching)
+    // Use a custom URL with title slug for Twitter, Copy, and WhatsApp
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const title = blogData?.title || 'Sisya Class Blog';
+    const description = blogData?.des || 'Check out this amazing blog post on Sisya Class';
     
+    // Create a formatted share text similar to the example
+    const shareText = `Read ${title} - ${description}`;
+    const fullShareText = `${shareText} ${currentUrl}`;
+
+    console.log('Sharing with data:', { title, description, currentUrl, shareText });
+
     switch(platform) {
       case 'facebook':
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+        // Facebook needs the actual URL to fetch meta tags
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${encodeURIComponent(shareText)}`, '_blank');
         break;
       case 'twitter':
-        window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(fullShareText)}`, '_blank');
         break;
       case 'linkedin':
-        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
+        // LinkedIn needs the actual URL to fetch meta tags
+        window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`, '_blank');
         break;
       case 'copy':
-        navigator.clipboard.writeText(url);
-        alert('Link copied to clipboard!');
+        navigator.clipboard.writeText(fullShareText);
+        alert('Blog link copied to clipboard!');
         break;
-      case 'email':
-        window.location.href = `mailto:?subject=${encodeURIComponent(text)}&body=${encodeURIComponent(url)}`;
+      case 'whatsapp':
+        const whatsappText = `${shareText} ${currentUrl}`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(whatsappText)}`, '_blank');
         break;
     }
   };
@@ -46,38 +84,63 @@ const BlogSocialShare = ({ title }: BlogSocialShareProps) => {
       <div className="flex items-center gap-2 sm:gap-2 md:gap-1 lg:gap-3">
         <button
           onClick={() => handleShare('facebook')}
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#1877F2] text-white rounded-lg hover:bg-[#166FE5] transition-all hover:scale-110 flex-shrink-0"
+          disabled={loading || !blogData}
+          className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#1877F2] text-white rounded-lg transition-all hover:scale-110 flex-shrink-0 ${
+            loading || !blogData 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-[#166FE5]'
+          }`}
           aria-label="Share on Facebook"
         >
           <Facebook className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
         </button>
         <button
           onClick={() => handleShare('twitter')}
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#1DA1F2] text-white rounded-lg hover:bg-[#1A91DA] transition-all hover:scale-110 flex-shrink-0"
+          disabled={loading || !blogData}
+          className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#1DA1F2] text-white rounded-lg transition-all hover:scale-110 flex-shrink-0 ${
+            loading || !blogData 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-[#1A91DA]'
+          }`}
           aria-label="Share on Twitter"
         >
           <Twitter className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
         </button>
         <button
           onClick={() => handleShare('linkedin')}
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#0A66C2] text-white rounded-lg hover:bg-[#095196] transition-all hover:scale-110 flex-shrink-0"
+          disabled={loading || !blogData}
+          className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#0A66C2] text-white rounded-lg transition-all hover:scale-110 flex-shrink-0 ${
+            loading || !blogData 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-[#095196]'
+          }`}
           aria-label="Share on LinkedIn"
         >
           <Linkedin className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
         </button>
         <button
           onClick={() => handleShare('copy')}
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all hover:scale-110 flex-shrink-0"
+          disabled={loading || !blogData}
+          className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-gray-600 text-white rounded-lg transition-all hover:scale-110 flex-shrink-0 ${
+            loading || !blogData 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-gray-700'
+          }`}
           aria-label="Copy Link"
         >
           <LinkIcon className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
         </button>
         <button
-          onClick={() => handleShare('email')}
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#EA4335] text-white rounded-lg hover:bg-[#D93025] transition-all hover:scale-110 flex-shrink-0"
-          aria-label="Share via Email"
+          onClick={() => handleShare('whatsapp')}
+          disabled={loading || !blogData}
+          className={`flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 lg:w-12 lg:h-12 bg-[#25D366] text-white rounded-lg transition-all hover:scale-110 flex-shrink-0 ${
+            loading || !blogData 
+              ? 'opacity-50 cursor-not-allowed' 
+              : 'hover:bg-[#20BA5A]'
+          }`}
+          aria-label="Share on WhatsApp"
         >
-          <Mail className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
+          <MessageCircle className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 lg:w-6 lg:h-6" />
         </button>
       </div>
     </div>

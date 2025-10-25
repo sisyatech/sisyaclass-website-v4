@@ -1,106 +1,60 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import RevealOnView from "../Reveal/RevealOnView";
+import { getAllBlogs, getAllTags, calculateReadTime, type Blog, type Tag } from "../../lib/blogApi";
+import { Heart, MessageCircle, Eye, Calendar, Clock } from "lucide-react";
 
 const SimilarVideos = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 9;
-  const totalPages = 100;
 
-  const filterButtons = [
-    "All",
-    "School Syllabus CBSE", 
-    "Mathematics",
-    "Science",
-    "English"
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [blogsResponse, tagsResponse] = await Promise.all([
+          getAllBlogs(currentPage, itemsPerPage),
+          getAllTags()
+        ]);
+        
+        setBlogs(blogsResponse.blogs || []);
+        setTotalPages(Math.ceil((blogsResponse.total || 0) / itemsPerPage));
+        setTags(tagsResponse || []);
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+        setBlogs([]);
+        setTags([]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const similarVideos = [
-    {
-      id: 1,
-      title: "SISYA CLASS • English",
-      subtitle: "Complete Grammar Guide for Class 8",
-      description: "Master all essential English grammar concepts with our comprehensive guide designed specifically for Class 8 students.",
-      author: "Dr. Priya Sharma",
-      date: "Dec 15, 2024",
-      readTime: "5 Min Read",
-      reads: "700 Reads",
-      category: "English",
-      thumbnail: "/blogs/blogimage.svg"
-    },
-    {
-      id: 2,
-      title: "SISYA CLASS • Mathematics",
-      subtitle: "Algebra Fundamentals Explained",
-      description: "Learn algebra from basics to advanced concepts with step-by-step explanations and practice problems.",
-      author: "Prof. Rajesh Kumar",
-      date: "Dec 12, 2024",
-      readTime: "7 Min Read",
-      reads: "890 Reads",
-      category: "Mathematics",
-        thumbnail: "/blogs/blogimage.svg"
-    },
-    {
-      id: 3,
-      title: "SISYA CLASS • Science",
-      subtitle: "Physics Laws and Applications",
-      description: "Understand fundamental physics laws through real-world examples and practical applications.",
-      author: "Dr. Anjali Patel",
-      date: "Dec 10, 2024",
-      readTime: "6 Min Read",
-      reads: "650 Reads",
-      category: "Science",
-      thumbnail: "/blogs/blogimage.svg"
-    },
-    {
-      id: 4,
-      title: "SISYA CLASS • English",
-      subtitle: "Creative Writing Techniques",
-      description: "Develop your creative writing skills with proven techniques and exercises for better expression.",
-      author: "Ms. Sneha Gupta",
-      date: "Dec 8, 2024",
-      readTime: "8 Min Read",
-      reads: "920 Reads",
-      category: "English",
-      thumbnail: "/blogs/blogimage.svg"
-    },
-    {
-      id: 5,
-      title: "SISYA CLASS • Mathematics",
-      subtitle: "Geometry Made Simple",
-      description: "Master geometric concepts with visual aids and interactive examples for better understanding.",
-      author: "Dr. Vikram Singh",
-      date: "Dec 5, 2024",
-      readTime: "9 Min Read",
-      reads: "780 Reads",
-      category: "Mathematics",
-      thumbnail: "/blogs/blogimage.svg"
-    },
-    {
-      id: 6,
-      title: "SISYA CLASS • Science",
-      subtitle: "Chemistry Basics for Beginners",
-      description: "Start your chemistry journey with fundamental concepts explained in simple, easy-to-understand language.",
-      author: "Dr. Meera Joshi",
-      date: "Dec 3, 2024",
-      readTime: "6 Min Read",
-      reads: "1.2K Reads",
-      category: "Science",
-      thumbnail: "/blogs/blogimage.svg"
-    },
-   
-  ];
+    fetchData();
+  }, [currentPage]);
+
+  const filterButtons = ["All", ...tags.map(tag => tag.name)];
 
   const filteredVideos = activeFilter === "All" 
-    ? similarVideos 
-    : similarVideos.filter(video => 
-        video.category === activeFilter || 
-        (activeFilter === "School Syllabus CBSE" && ["Mathematics", "Science", "English"].includes(video.category))
+    ? blogs 
+    : blogs.filter(blog => 
+        blog.tags.some(tagItem => tagItem.tag.name === activeFilter)
       );
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
 
   // Pagination handlers
   const handlePageChange = (page: number) => {
@@ -150,81 +104,93 @@ const SimilarVideos = () => {
 
         {/* Blog Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-6 xl:gap-8 justify-items-center">
-          {filteredVideos.map((blog, index) => (
-            <RevealOnView
-              key={blog.id}
-              from="bottom"
-              durationMs={800}
-              delayMs={index * 100}
-            >
-              <Link href={`/blogs/${blog.id}`}>
-                <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[480px] sm:h-[550px] md:h-[580px] lg:h-[560px] xl:h-[612px] relative hover:shadow-xl">
-                {/* SISYA CLASS Text */}
-                <div className="absolute top-0 left-[1px] font-montserrat font-bold text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#0595CE]">
-                  SISYA CLASS . English
-                </div>
-                
-                {/* Blog Image */}
-                <div className="absolute top-[24px] sm:top-[28px] md:top-[30px] lg:top-[28px] xl:top-[32px] left-0 w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] overflow-hidden">
-                  <Image
-                    src={blog.thumbnail}
-                    alt={blog.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                
-                {/* Title */}
-                <div className="absolute top-[220px] sm:top-[240px] md:top-[260px] lg:top-[250px] xl:top-[285px] left-[2px] w-[calc(100%-4px)] h-[90px] sm:h-[100px] md:h-[110px] lg:h-[110px] xl:h-[123px] flex items-center">
-                  <h3 className="font-montserrat font-bold text-[18px] sm:text-[20px] md:text-[22px] lg:text-[21px] xl:text-[24px] leading-[1.5] text-[#1A2439]">
-                    Ready to Master 20 New<br />
-                    English Words Every Week?<br />
-                    The SISYA CLASS Challenge<br />
-                    is ON!
-                  </h3>
-                </div>
-                
-                {/* Description */}
-                <div className="absolute top-[320px] sm:top-[350px] md:top-[380px] lg:top-[370px] xl:top-[432px] left-[2px] w-[calc(100%-4px)] h-[70px] sm:h-[80px] md:h-[90px] lg:h-[85px] xl:h-[101px] flex items-start">
-                  <p className="font-open-sans font-normal text-[14px] sm:text-[15px] md:text-[16px] lg:text-[15px] xl:text-[16px] leading-[1.5] text-[#556A8E]">
-                    In today's competitive and globally connected world, a strong command of the English language is not just an advantage — it is essential.
-                  </p>
-                </div>
+          {loading ? (
+            // Loading skeleton
+            Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[480px] sm:h-[550px] md:h-[580px] lg:h-[560px] xl:h-[612px] bg-gray-200 rounded-lg animate-pulse" />
+            ))
+          ) : (
+            filteredVideos.map((blog, index) => (
+              <RevealOnView
+                key={blog.id}
+                from="bottom"
+                durationMs={800}
+                delayMs={index * 100}
+              >
+                <Link href={`/blogs/${blog.id}`}>
+                  <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[480px] sm:h-[550px] md:h-[580px] lg:h-[560px] xl:h-[612px] relative hover:shadow-xl bg-white rounded-lg">
+                    {/* Blog Image */}
+                    <div className="absolute top-0 left-0 w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] overflow-hidden">
+                      {blog.banner ? (
+                        <Image
+                          src={blog.banner}
+                          alt={blog.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                          <span className="text-gray-400 text-sm">No Image</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Title */}
+                    <div className="absolute top-[200px] sm:top-[220px] md:top-[240px] lg:top-[230px] xl:top-[265px] left-2 right-2 h-[80px] sm:h-[90px] md:h-[100px] lg:h-[95px] xl:h-[108px] flex items-start">
+                      <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[20px] lg:text-[19px] xl:text-[22px] leading-[1.4] text-[#1A2439] line-clamp-3">
+                        {blog.title}
+                      </h3>
+                    </div>
+                    
+                    {/* Description */}
+                    <div className="absolute top-[290px] sm:top-[320px] md:top-[350px] lg:top-[340px] xl:top-[385px] left-2 right-2 h-[60px] sm:h-[70px] md:h-[80px] lg:h-[75px] xl:h-[85px] flex items-start">
+                      <p className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[1.4] text-[#556A8E] line-clamp-3">
+                        {blog.des}
+                      </p>
+                    </div>
 
-                {/* Read Time Badge */}
-                <div className="absolute top-[400px] sm:top-[440px] md:top-[480px] lg:top-[465px] xl:top-[533px] left-[2px] w-[100px] sm:w-[110px] md:w-[115px] lg:w-[110px] xl:w-[118px] h-[26px] sm:h-[28px] md:h-[29px] lg:h-[28px] xl:h-[30px] bg-[#F5F7F9] border-2 border-[#D9DBDF] rounded-[40px] flex items-center justify-center gap-1">
-                  <svg className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-[#556A8E]" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-open-sans font-normal text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] xl:text-[12px] leading-[1] text-[#556A8E] capitalize">
-                    5 Min Read
-                  </span>
-                </div>
-                
-                {/* Reads Badge */}
-                <div className="absolute top-[400px] sm:top-[440px] md:top-[480px] lg:top-[465px] xl:top-[533px] left-[110px] sm:left-[120px] md:left-[125px] lg:left-[120px] xl:left-[130px] w-[100px] sm:w-[110px] md:w-[115px] lg:w-[110px] xl:w-[118px] h-[26px] sm:h-[28px] md:h-[29px] lg:h-[28px] xl:h-[30px] bg-[#F5F7F9] border-2 border-[#D9DBDF] rounded-[40px] flex items-center justify-center gap-1">
-                  <svg className="w-2.5 sm:w-3 h-2.5 sm:h-3 text-[#556A8E]" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                  <span className="font-open-sans font-normal text-[10px] sm:text-[11px] md:text-[12px] lg:text-[11px] xl:text-[12px] leading-[1] text-[#556A8E] capitalize">
-                    700 Reads
-                  </span>
-                </div>
-                
-                {/* Author and Date */}
-                <div className="absolute top-[440px] sm:top-[480px] md:top-[520px] lg:top-[505px] xl:top-[575px] left-[2px] flex items-center gap-2">
-                  <span className="font-montserrat font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#1A2439]">
-                    By Author
-                  </span>
-                  <span className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#556A8E]">
-                    • May 22, 2025
-                  </span>
-                </div>
-                </div>
-              </Link>
-            </RevealOnView>
-          ))}
+                    {/* Stats */}
+                    <div className="absolute top-[360px] sm:top-[400px] md:top-[440px] lg:top-[425px] xl:top-[480px] left-2 right-2 flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
+                          <Clock className="w-3 h-3 text-[#556A8E]" />
+                          <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
+                            {calculateReadTime(blog.content)}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
+                          <Eye className="w-3 h-3 text-[#556A8E]" />
+                          <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
+                            {blog.activityReads}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
+                        <MessageCircle className="w-3 h-3 text-[#556A8E]" />
+                        <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
+                          {blog.activityComments}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Author and Date */}
+                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-montserrat font-normal text-[11px] sm:text-[12px] text-[#1A2439]">
+                          {blog.authorName}
+                        </span>
+                      </div>
+                      <span className="font-open-sans font-normal text-[11px] sm:text-[12px] text-[#556A8E]">
+                        {formatDate(blog.publishedAt)}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              </RevealOnView>
+            ))
+          )}
         </div>
 
         {/* Pagination */}
@@ -299,8 +265,8 @@ const SimilarVideos = () => {
               </button>
             )}
 
-            {/* Ellipsis before 100 */}
-            {currentPage < totalPages - 2 && (
+            {/* Ellipsis before last page */}
+            {currentPage < totalPages - 2 && totalPages > 3 && (
               <div className="w-[28px] sm:w-[30px] md:w-[32px] lg:w-[33px] h-[28px] sm:h-[30px] md:h-[32px] lg:h-[33px] flex items-center justify-center flex-shrink-0">
                 <span className="font-montserrat font-semibold text-[14px] sm:text-[15px] md:text-[16px] lg:text-[16.1px] leading-[100%] tracking-[1%] text-[#0595CE]">
                   ...
@@ -308,21 +274,23 @@ const SimilarVideos = () => {
               </div>
             )}
 
-            {/* Page 100 */}
-            <button
-              onClick={() => handlePageChange(100)}
-              className={`w-[28px] sm:w-[30px] md:w-[32px] lg:w-[33px] h-[28px] sm:h-[30px] md:h-[32px] lg:h-[33px] rounded-[4px] flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-105 ${
-                currentPage === 100
-                  ? "bg-[#1A2439]"
-                  : "bg-transparent"
-              }`}
-            >
-              <span className={`font-montserrat font-semibold text-[14px] sm:text-[15px] md:text-[16px] lg:text-[16.1px] leading-[100%] tracking-[1%] ${
-                currentPage === 100 ? "text-white" : "text-[#0595CE]"
-              }`}>
-                100
-              </span>
-            </button>
+            {/* Last Page */}
+            {totalPages > 3 && (
+              <button
+                onClick={() => handlePageChange(totalPages)}
+                className={`w-[28px] sm:w-[30px] md:w-[32px] lg:w-[33px] h-[28px] sm:h-[30px] md:h-[32px] lg:h-[33px] rounded-[4px] flex items-center justify-center flex-shrink-0 transition-all duration-300 hover:scale-105 ${
+                  currentPage === totalPages
+                    ? "bg-[#1A2439]"
+                    : "bg-transparent"
+                }`}
+              >
+                <span className={`font-montserrat font-semibold text-[14px] sm:text-[15px] md:text-[16px] lg:text-[16.1px] leading-[100%] tracking-[1%] ${
+                  currentPage === totalPages ? "text-white" : "text-[#0595CE]"
+                }`}>
+                  {totalPages}
+                </span>
+              </button>
+            )}
 
             {/* Next Button */}
             <button

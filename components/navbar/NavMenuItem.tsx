@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 const transition = {
   type: "spring" as const,
@@ -23,12 +24,20 @@ export const NavMenuItem = ({
 }) => {
   return (
     <div onMouseEnter={() => setActive(item)} className="relative">
-      <motion.p
+      <motion.div
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
+        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white flex items-center gap-1"
       >
-        {item}
-      </motion.p>
+        <span>{item}</span>
+        <motion.div
+          animate={{ 
+            rotate: active === item ? 180 : 0 
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          <ChevronDown className="w-4 h-4" />
+        </motion.div>
+      </motion.div>
       {active !== null && (
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 10 }}

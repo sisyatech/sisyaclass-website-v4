@@ -1,59 +1,175 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getTrendingBlogs, calculateReadTime, type Blog } from "../../../lib/blogApi";
+import { Clock, Eye, MessageCircle, RefreshCw } from "lucide-react";
 
 const BlogRelatedBlogs = () => {
-  const relatedBlogs = [
-    {
-      id: 2,
-      title: "Understanding Mathematics: Fun Ways to Learn Algebra",
-      thumbnail: "/blogs/blogimage.svg",
-      readTime: "7 Min Read"
-    },
-    {
-      id: 3,
-      title: "Science Experiments You Can Do at Home",
-      thumbnail: "/blogs/blogimage.svg",
-      readTime: "6 Min Read"
-    },
-    {
-      id: 4,
-      title: "Building Strong Foundation in English Grammar",
-      thumbnail: "/blogs/blogimage.svg",
-      readTime: "8 Min Read"
-    }
-  ];
+  const [trendingBlogs, setTrendingBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [retryCount, setRetryCount] = useState(0);
+
+  useEffect(() => {
+    const fetchTrendingBlogs = async (retryAttempt = 0) => {
+      try {
+        setLoading(true);
+        console.log(`🔄 Fetching trending blogs (attempt ${retryAttempt + 1})`);
+        
+        const response = await getTrendingBlogs();
+        console.log('📊 Trending blogs response:', response);
+        
+        // Check if response has trending property and it's an array
+        if (response && response.trending && Array.isArray(response.trending)) {
+          console.log(`✅ Found ${response.trending.length} trending blogs`);
+          setTrendingBlogs(response.trending.slice(0, 3)); // Show only top 3
+          setRetryCount(0); // Reset retry count on success
+        } else {
+          console.warn('⚠️ No trending blogs data received:', response);
+          setTrendingBlogs([]);
+          
+          // Retry if we haven't exceeded max retries
+          if (retryAttempt < 2) {
+            console.log(`🔄 Retrying in 1 second... (attempt ${retryAttempt + 2})`);
+            setTimeout(() => {
+              setRetryCount(retryAttempt + 1);
+              fetchTrendingBlogs(retryAttempt + 1);
+            }, 1000);
+            return;
+          }
+        }
+      } catch (error) {
+        console.error('❌ Error fetching trending blogs:', error);
+        setTrendingBlogs([]);
+        
+        // Retry on error if we haven't exceeded max retries
+        if (retryAttempt < 2) {
+          console.log(`🔄 Retrying after error in 2 seconds... (attempt ${retryAttempt + 2})`);
+          setTimeout(() => {
+            setRetryCount(retryAttempt + 1);
+            fetchTrendingBlogs(retryAttempt + 1);
+          }, 2000);
+          return;
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrendingBlogs();
+  }, []);
+
+  const handleRefresh = () => {
+    setRetryCount(0);
+    setLoading(true);
+    // Trigger a new fetch
+    const fetchTrendingBlogs = async (retryAttempt = 0) => {
+      try {
+        console.log(`🔄 Manual refresh - fetching trending blogs (attempt ${retryAttempt + 1})`);
+        
+        const response = await getTrendingBlogs();
+        console.log('📊 Manual refresh - trending blogs response:', response);
+        
+        if (response && response.trending && Array.isArray(response.trending)) {
+          console.log(`✅ Manual refresh - found ${response.trending.length} trending blogs`);
+          setTrendingBlogs(response.trending.slice(0, 3));
+          setRetryCount(0);
+        } else {
+          console.warn('⚠️ Manual refresh - no trending blogs data received:', response);
+          setTrendingBlogs([]);
+        }
+      } catch (error) {
+        console.error('❌ Manual refresh - error fetching trending blogs:', error);
+        setTrendingBlogs([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTrendingBlogs();
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-5 lg:p-6">
-      <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[18px] lg:text-[20px] text-[#1A2439] mb-3 sm:mb-4">
-        On this Page
-      </h3>
-      <div className="space-y-3 sm:space-y-4">
-        {relatedBlogs.map((blog) => (
-          <Link
-            key={blog.id}
-            href={`/blogs/${blog.id}`}
-            className="flex gap-2 sm:gap-3 group hover:bg-gray-50 p-2 rounded-lg transition-all"
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
+        <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[18px] lg:text-[20px] text-[#1A2439]">
+          Trending Blogs
+        </h3>
+        {!loading && (
+          <button
+            onClick={handleRefresh}
+            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+            title="Refresh trending blogs"
           >
-            <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
-              <Image
-                src={blog.thumbnail}
-                alt={blog.title}
-                fill
-                className="object-cover group-hover:scale-110 transition-transform duration-300"
-              />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h4 className="font-semibold text-[#1A2439] text-xs sm:text-sm line-clamp-2 group-hover:text-[#0595CE] transition-colors mb-1">
-                {blog.title}
-              </h4>
-              <p className="text-xs text-gray-500">{blog.readTime}</p>
-            </div>
-          </Link>
-        ))}
+            <RefreshCw className="w-4 h-4 text-gray-500" />
+          </button>
+        )}
+      </div>
+      <div className="space-y-3 sm:space-y-4">
+        {loading ? (
+          // Loading skeleton
+          <div className="space-y-3">
+            {Array.from({ length: 3 }).map((_, index) => (
+              <div key={index} className="flex gap-2 sm:gap-3 p-2 rounded-lg">
+                <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 bg-gray-200 rounded-lg animate-pulse" />
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 rounded mb-2 animate-pulse" />
+                  <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
+                </div>
+              </div>
+            ))}
+            {retryCount > 0 && (
+              <div className="text-center text-gray-500 text-xs">
+                Retrying... (attempt {retryCount + 1})
+              </div>
+            )}
+          </div>
+        ) : trendingBlogs.length === 0 ? (
+          <div className="text-center text-gray-500 text-sm">
+            No trending blogs available
+            {retryCount > 0 && (
+              <div className="text-xs mt-1">
+                Failed after {retryCount + 1} attempts
+              </div>
+            )}
+          </div>
+        ) : (
+          trendingBlogs.map((blog) => (
+            <Link
+              key={blog.id}
+              href={`/blogs/${blog.id}`}
+              className="flex gap-2 sm:gap-3 group hover:bg-gray-50 p-2 rounded-lg transition-all"
+            >
+              <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
+                {blog.banner ? (
+                  <Image
+                    src={blog.banner}
+                    alt={blog.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <span className="text-gray-400 text-xs">No Image</span>
+                  </div>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="font-semibold text-[#1A2439] text-xs sm:text-sm line-clamp-2 group-hover:text-[#0595CE] transition-colors mb-1">
+                  {blog.title}
+                </h4>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Clock className="w-3 h-3" />
+                  <span>{calculateReadTime(blog.content)}</span>
+                  <span>•</span>
+                  <Eye className="w-3 h-3" />
+                  <span>{blog.activityReads}</span>
+                </div>
+              </div>
+            </Link>
+          ))
+        )}
       </div>
       <div className="flex justify-center mt-3 sm:mt-4">
         <Link
