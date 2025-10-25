@@ -57,7 +57,7 @@ const FAQ = () => {
   };
 
   return (
-    <div ref={sectionRef} className="py-6 bg-white">
+    <div id="faqs" ref={sectionRef} className="py-6 bg-white">
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 

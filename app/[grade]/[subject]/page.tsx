@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import Container from "@/components/Container";
 import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
@@ -36,6 +36,7 @@ interface SubjectPageProps {
 
 function SubjectContent({ grade, subject }: { grade: string; subject: string }) {
   const { setSelectedGrade } = useMobileMenu();
+  const [mentorIds, setMentorIds] = useState<number[]>([]);
   
   // Parse and validate grade number using navigation utilities
   const gradeNumber = parseGradeFromParam(grade);
@@ -57,12 +58,25 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
     setSelectedGrade(gradeNumber);
   }, [gradeNumber, setSelectedGrade]);
 
+  useEffect(() => {
+    console.log('SubjectContent: mentorIds state changed to:', mentorIds);
+  }, [mentorIds]);
+
+  const handleMentorIdsChange = (ids: number[]) => {
+    console.log('SubjectContent: Received mentor IDs:', ids);
+    console.log('SubjectContent: Setting mentorIds state to:', ids);
+    setMentorIds(ids);
+    console.log('SubjectContent: mentorIds state updated');
+  };
+
+  console.log('SubjectContent: handleMentorIdsChange function:', handleMentorIdsChange);
+
   return (
     <Container>
       <Navbar />
       <SubjectBreadcrumb gradeNumber={gradeNumber} subject={subject} />
-      <Course gradeNumber={gradeNumber} />
-      <QuickLinks />
+      <Course gradeNumber={gradeNumber} onMentorIdsChange={handleMentorIdsChange} />
+      <QuickLinks mentorIds={mentorIds} />
       <Payment gradeNumber={gradeNumber} />
       <Chapters gradeNumber={gradeNumber} />
       <BoosterCourseSection />

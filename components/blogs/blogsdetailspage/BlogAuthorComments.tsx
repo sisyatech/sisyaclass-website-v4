@@ -57,12 +57,48 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
       setSubmitting(true);
       const newComment = await addComment(blogId, comment.trim(), user.id, replyingTo || undefined);
       
-      // Refresh comments
-      const commentsResponse = await getNestedComments(blogId);
-      setComments(commentsResponse.comments);
+      // Create a temporary comment object for immediate display
+      const tempComment: Comment = {
+        id: newComment.id || `temp-${Date.now()}`,
+        comment: comment.trim(),
+        commentedAt: new Date().toISOString(),
+        isReply: !!replyingTo,
+        parentId: replyingTo || undefined,
+        commentedBy: {
+          id: user.id,
+          name: user.name || 'User',
+          profile: (user as any).profile || null
+        },
+        children: []
+      };
+
+      if (replyingTo) {
+        // If it's a reply, add it to the parent comment's children
+        setComments(prevComments => 
+          prevComments.map(comment => 
+            comment.id === replyingTo 
+              ? { ...comment, children: [...(comment.children || []), tempComment] }
+              : comment
+          )
+        );
+      } else {
+        // If it's a new comment, add it to the top of the list
+        setComments(prevComments => [tempComment, ...prevComments]);
+      }
       
       setComment("");
       setReplyingTo(null);
+      
+      // Optionally refresh comments in the background to get the real data
+      setTimeout(async () => {
+        try {
+          const commentsResponse = await getNestedComments(blogId);
+          setComments(commentsResponse.comments);
+        } catch (error) {
+          console.error('Error refreshing comments:', error);
+        }
+      }, 1000);
+      
     } catch (error) {
       console.error('Error submitting comment:', error);
       alert('Failed to submit comment. Please try again.');

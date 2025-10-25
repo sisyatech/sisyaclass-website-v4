@@ -134,7 +134,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
 
   return (
     <RevealOnView from="bottom" durationMs={600} delayMs={200}>
-      <div className="w-full bg-white py-12 sm:py-16 md:py-20">
+      <div id="chapters" className="w-full bg-white py-12 sm:py-16 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
         {/* Top Buttons */}
         <RevealOnView from="top" durationMs={500} delayMs={300}>

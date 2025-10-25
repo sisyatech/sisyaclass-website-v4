@@ -1,75 +1,97 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock, Eye, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import RevealOnView from "../Reveal/RevealOnView";
+import { getAllNews, calculateReadTime, fixProfileImageUrl, type News } from "../../lib/newsApi";
 
 const NewsContent = () => {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const [news, setNews] = useState<News[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const news = [
-    {
-      id: 1,
-      title: "New AI Technology Revolutionizes Online Learning Platforms",
-      description: "Educational institutions worldwide are adopting cutting-edge AI technology to enhance student learning experiences and improve academic outcomes.",
-      author: "Tech Reporter",
-      authorImage: "/girl.svg",
-      date: "Dec 15, 2024",
-      reads: "2.5K",
-      readTime: "5 Min",
-      category: "Technology",
-      thumbnail: "/NewAppBanner3.png",
-      trending: true,
-      featured: true
-    },
-    {
-      id: 2,
-      title: "Global Climate Summit Reaches Historic Agreement on Education Funding",
-      description: "World leaders commit to unprecedented investment in climate education and green technology training programs.",
-      author: "World News",
-      authorImage: "/girl.svg",
-      date: "Dec 14, 2024",
-      reads: "1.8K",
-      readTime: "7 Min",
-      category: "World",
-      thumbnail: "/blogs/blogimage.svg",
-      trending: false,
-      featured: false
-    },
-    {
-      id: 3,
-      title: "Breakthrough in Quantum Computing Opens New Possibilities",
-      description: "Scientists achieve major milestone in quantum computing that could revolutionize data processing.",
-      author: "Science Daily",
-      authorImage: "/girl.svg",
-      date: "Dec 13, 2024",
-      reads: "3.2K",
-      readTime: "6 Min",
-      category: "Science",
-      thumbnail: "/blogs/blogimage.svg",
-      trending: true,
-      featured: false
-    },
-    {
-      id: 4,
-      title: "Digital Learning Platforms See 300% Growth",
-      description: "Educational technology companies report unprecedented growth as schools embrace digital solutions.",
-      author: "EdTech News",
-      authorImage: "/girl.svg",
-      date: "Dec 12, 2024",
-      reads: "2.1K",
-      readTime: "4 Min",
-      category: "Education",
-      thumbnail: "/blogs/blogimage.svg",
-      trending: false,
-      featured: false
-    },
-    
-  ];
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        setLoading(true);
+        console.log('📰 NewsContent: Starting to fetch news...');
+        const response = await getAllNews(1, 6); // Get first 6 news items
+        console.log('📰 NewsContent: Received response:', response);
+        console.log('📰 NewsContent: Setting news:', response.news?.length || 0, 'news items');
+        setNews(response.news || []);
+      } catch (error) {
+        console.error('❌ NewsContent: Error fetching news:', error);
+        setNews([]);
+      } finally {
+        setLoading(false);
+        console.log('✅ NewsContent: Finished fetching news');
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    });
+  };
+
+  if (loading) {
+    return (
+      <div className="min-screen py-2 sm:py-3 md:py-4 lg:py-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+          {isHomePage && (
+            <div className="mb-4 sm:mb-6 md:mb-4">
+              <h1 className="font-montserrat font-bold text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] leading-[120%] text-[#1A2439]">
+                News
+              </h1>
+            </div>
+          )}
+          <div className="animate-pulse">
+            <div className="h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px] bg-gray-200 rounded-lg mb-4 sm:mb-6"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-lg overflow-hidden shadow-sm">
+                  <div className="h-32 sm:h-36 bg-gray-200"></div>
+                  <div className="p-2.5 sm:p-3">
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-3 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (news.length === 0) {
+    return (
+      <div className="min-screen py-2 sm:py-3 md:py-4 lg:py-6">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
+          {isHomePage && (
+            <div className="mb-4 sm:mb-6 md:mb-4">
+              <h1 className="font-montserrat font-bold text-[28px] sm:text-[32px] md:text-[36px] lg:text-[40px] leading-[120%] text-[#1A2439]">
+                News
+              </h1>
+            </div>
+          )}
+          <div className="text-center py-12">
+            <p className="text-gray-600 text-lg">No news available at the moment.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const featuredNews = news.find(item => item.featured) || news[0];
   const regularNews = news.filter(item => item.id !== featuredNews.id);
@@ -94,10 +116,10 @@ const NewsContent = () => {
               {/* Featured Image */}
               <div className="relative h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px]">
                 <Image
-                  src={featuredNews.thumbnail}
+                  src={featuredNews.banner || "/NewAppBanner3.png"}
                   alt={featuredNews.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="object-contain group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                 
@@ -111,7 +133,7 @@ const NewsContent = () => {
 
                 {/* Category Badge */}
                 <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#0595CE] text-white px-2 py-0.5 sm:py-1 rounded-full text-xs font-bold">
-                  {featuredNews.category}
+                  {featuredNews.category || "News"}
                 </div>
 
                 {/* Content Overlay */}
@@ -120,30 +142,22 @@ const NewsContent = () => {
                     {featuredNews.title}
                   </h1>
                   <p className="text-xs sm:text-sm text-gray-200 mb-2 line-clamp-1 sm:line-clamp-2">
-                    {featuredNews.description}
+                    {featuredNews.des}
                   </p>
                   
                   {/* Meta Info */}
                   <div className="flex flex-wrap items-center gap-2 text-xs text-gray-300">
                     <div className="flex items-center gap-1">
                       <Image
-                        src={featuredNews.authorImage}
-                        alt={featuredNews.author}
+                        src={fixProfileImageUrl(featuredNews.authorProfile)}
+                        alt={featuredNews.authorName}
                         width={20}
                         height={20}
                         className="w-4 h-4 sm:w-5 sm:h-5 rounded-full border border-white"
                       />
-                      <span className="font-semibold text-white">{featuredNews.author}</span>
+                      <span className="font-semibold text-white">{featuredNews.authorName}</span>
                     </div>
-                    <div className="flex items-center gap-0.5">
-                      <Clock className="w-3 h-3" />
-                      <span>{featuredNews.readTime}</span>
-                    </div>
-                    <div className="flex items-center gap-0.5">
-                      <Eye className="w-3 h-3" />
-                      <span>{featuredNews.reads}</span>
-                    </div>
-                    <span>{featuredNews.date}</span>
+                    <span>{formatDate(featuredNews.publishedAt)}</span>
                   </div>
                 </div>
               </div>
@@ -165,16 +179,16 @@ const NewsContent = () => {
                   {/* Card Image */}
                   <div className="relative h-32 sm:h-36 overflow-hidden">
                     <Image
-                      src={newsItem.thumbnail}
+                      src={newsItem.banner || "/blogs/blogimage.svg"}
                       alt={newsItem.title}
                       fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-contain group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     
                     {/* Category Badge */}
                     <div className="absolute top-1.5 left-1.5 bg-[#0595CE] text-white px-1.5 py-0.5 rounded-full text-[10px] font-bold">
-                      {newsItem.category}
+                      {newsItem.category || "News"}
                     </div>
 
                     {/* Trending Badge */}
@@ -191,25 +205,22 @@ const NewsContent = () => {
                       {newsItem.title}
                     </h3>
                     <p className="text-[10px] sm:text-xs text-gray-600 mb-2 line-clamp-2 flex-1">
-                      {newsItem.description}
+                      {newsItem.des}
                     </p>
 
-                    {/* Author & Meta */}
+                    {/* Author & Date */}
                     <div className="flex items-center justify-between pt-1.5 border-t border-gray-100">
                       <div className="flex items-center gap-1">
                         <Image
-                          src={newsItem.authorImage}
-                          alt={newsItem.author}
+                          src={fixProfileImageUrl(newsItem.authorProfile)}
+                          alt={newsItem.authorName}
                           width={16}
                           height={16}
                           className="w-4 h-4 rounded-full"
                         />
-                        <span className="text-[10px] font-semibold text-[#1A2439] truncate">{newsItem.author}</span>
+                        <span className="text-[10px] font-semibold text-[#1A2439] truncate">{newsItem.authorName}</span>
                       </div>
-                      <div className="flex items-center gap-0.5 text-[10px] text-gray-500">
-                        <Clock className="w-2.5 h-2.5" />
-                        <span>{newsItem.readTime}</span>
-                      </div>
+                      <span className="text-[9px] text-gray-500">{formatDate(newsItem.publishedAt)}</span>
                     </div>
                   </div>
                 </div>
@@ -218,14 +229,20 @@ const NewsContent = () => {
           ))}
         </div>
 
-        {/* Load More Button */}
-        <RevealOnView from="bottom" durationMs={600} delayMs={800}>
-          <div className="text-center mt-8 sm:mt-12">
-            <button className="bg-gradient-to-r from-[#0595CE] to-[#0475A8] text-white px-8 sm:px-12 py-3 sm:py-4 rounded-full hover:shadow-xl transition-all duration-300 transform hover:scale-105 font-bold text-sm sm:text-base">
-              Load More News
-            </button>
-          </div>
-        </RevealOnView>
+        {/* Load More Button - Only on Home Page */}
+        {isHomePage && (
+            <div className="flex justify-center mt-6 sm:mt-8 md:mt-10">
+              <Link
+                href="/news"
+                className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-[#0595CE] text-white rounded-lg hover:bg-[#047aa8] transition-colors font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+              >
+                <span>Show More News</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          )}
       </div>
     </div>
   );

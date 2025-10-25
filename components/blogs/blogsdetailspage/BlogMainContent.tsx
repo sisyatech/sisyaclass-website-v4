@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { getBlogById, updateBlogReadCount, toggleLikeBlog, calculateReadTime, fixProfileImageUrl, type Blog } from "../../../lib/blogApi";
 import { useUser } from "../../UserContext";
+import LoginModal from "../../LoginModal";
 import { Heart, MessageCircle, Eye, Calendar, Clock, User } from "lucide-react";
 
 interface BlogMainContentProps {
@@ -15,6 +16,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { user } = useUser();
 
   useEffect(() => {
@@ -25,13 +27,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
         setBlogData(blog);
         setLikeCount(blog.activityLikes);
         
-        // Check if current user has liked this blog
-        if (user && blog.likedBy) {
-          const userLiked = blog.likedBy.some(like => like.userId === user.id);
-          setLiked(userLiked);
-        }
-
-        // Update read count
+        // Update read count only once when component mounts
         await updateBlogReadCount(blogId);
       } catch (error) {
         console.error('Error fetching blog:', error);
@@ -42,11 +38,19 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
     };
 
     fetchBlogData();
-  }, [blogId, user]);
+  }, [blogId]);
+
+  // Separate effect to handle user-related like status
+  useEffect(() => {
+    if (user && blogData && blogData.likedBy) {
+      const userLiked = blogData.likedBy.some(like => like.userId === user.id);
+      setLiked(userLiked);
+    }
+  }, [user, blogData]);
 
   const handleLike = async () => {
     if (!user) {
-      alert('Please login to like this blog');
+      setShowLoginModal(true);
       return;
     }
 
@@ -93,14 +97,19 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
       return <div dangerouslySetInnerHTML={{ __html: content }} />;
     }
 
-    // If content is an object with blocks (TipTap format)
+    // If content is an object with content property (TipTap format)
     if (content && typeof content === 'object' && content.content) {
       return renderTipTapContent(content.content);
     }
 
-    // If content is an object with blocks array
+    // If content is an object with blocks array (direct array)
     if (content && typeof content === 'object' && Array.isArray(content)) {
       return renderTipTapContent(content);
+    }
+
+    // If content is an object with blocks property
+    if (content && typeof content === 'object' && content.blocks && Array.isArray(content.blocks)) {
+      return renderTipTapContent(content.blocks);
     }
 
     // Fallback
@@ -162,7 +171,16 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
             <ul key={index} className="list-disc list-inside mb-4">
               {block.content ? block.content.map((item: any, itemIndex: number) => (
                 <li key={itemIndex} className="mb-2">
-                  {item.content ? renderInlineContent(item.content) : ''}
+                  {item.content ? item.content.map((paragraph: any, pIndex: number) => {
+                    if (paragraph.type === 'paragraph') {
+                      return (
+                        <span key={pIndex}>
+                          {paragraph.content ? renderInlineContent(paragraph.content) : ''}
+                        </span>
+                      );
+                    }
+                    return renderTipTapContent([paragraph]);
+                  }) : ''}
                 </li>
               )) : ''}
             </ul>
@@ -173,10 +191,47 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
             <ol key={index} className="list-decimal list-inside mb-4">
               {block.content ? block.content.map((item: any, itemIndex: number) => (
                 <li key={itemIndex} className="mb-2">
-                  {item.content ? renderInlineContent(item.content) : ''}
+                  {item.content ? item.content.map((paragraph: any, pIndex: number) => {
+                    if (paragraph.type === 'paragraph') {
+                      return (
+                        <span key={pIndex}>
+                          {paragraph.content ? renderInlineContent(paragraph.content) : ''}
+                        </span>
+                      );
+                    }
+                    return renderTipTapContent([paragraph]);
+                  }) : ''}
                 </li>
               )) : ''}
             </ol>
+          );
+
+        case 'taskList':
+          return (
+            <ul key={index} className="list-none mb-4">
+              {block.content ? block.content.map((item: any, itemIndex: number) => (
+                <li key={itemIndex} className="flex items-start mb-2">
+                  <input 
+                    type="checkbox" 
+                    checked={item.attrs?.checked || false} 
+                    readOnly 
+                    className="mt-1 mr-2"
+                  />
+                  <span className="flex-1">
+                    {item.content ? item.content.map((paragraph: any, pIndex: number) => {
+                      if (paragraph.type === 'paragraph') {
+                        return (
+                          <span key={pIndex}>
+                            {paragraph.content ? renderInlineContent(paragraph.content) : ''}
+                          </span>
+                        );
+                      }
+                      return renderTipTapContent([paragraph]);
+                    }) : ''}
+                  </span>
+                </li>
+              )) : ''}
+            </ul>
           );
 
         case 'blockquote':
@@ -199,7 +254,70 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
               <img 
                 src={block.attrs?.src} 
                 alt={block.attrs?.alt || ''} 
+                title={block.attrs?.title || ''}
                 className="max-w-full h-auto rounded-lg"
+              />
+            </div>
+          );
+
+        case 'table':
+          return (
+            <div key={index} className="overflow-x-auto mb-4">
+              <table className="min-w-full border-collapse border border-gray-300">
+                <tbody>
+                  {block.content ? block.content.map((row: any, rowIndex: number) => {
+                    return (
+                      <tr key={rowIndex}>
+                        {row.content ? row.content.map((cell: any, cellIndex: number) => {
+                          console.log(`Cell ${rowIndex}-${cellIndex}:`, cell);
+                          // Check if this is a table header cell
+                          const isHeaderCell = cell.type === 'tableHeader';
+                          const CellTag = isHeaderCell ? 'th' : 'td';
+                          const cellClass = isHeaderCell 
+                            ? 'border border-gray-300 px-4 py-2 bg-gray-100 font-semibold text-left'
+                            : 'border border-gray-300 px-4 py-2';
+                          
+                          return (
+                            <CellTag key={cellIndex} className={cellClass}>
+                              {cell.content ? (
+                                cell.content.map((paragraph: any, pIndex: number) => {
+                                  if (paragraph.type === 'paragraph') {
+                                    return (
+                                      <span key={pIndex}>
+                                        {paragraph.content ? renderInlineContent(paragraph.content) : ''}
+                                      </span>
+                                    );
+                                  }
+                                  return renderInlineContent(paragraph);
+                                })
+                              ) : ''}
+                            </CellTag>
+                          );
+                        }) : ''}
+                      </tr>
+                    );
+                  }) : ''}
+                </tbody>
+              </table>
+            </div>
+          );
+
+        case 'horizontalRule':
+          return (
+            <hr key={index} className="my-6 border-gray-300" />
+          );
+
+        case 'iframe':
+          return (
+            <div key={index} className="my-6">
+              <iframe
+                src={block.attrs?.src}
+                width={block.attrs?.width || '100%'}
+                height={block.attrs?.height || '400'}
+                frameBorder={block.attrs?.frameborder || '0'}
+                allowFullScreen={block.attrs?.allowfullscreen === 'true'}
+                allow={block.attrs?.allow}
+                className="rounded-lg"
               />
             </div>
           );
@@ -223,6 +341,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
       switch (item.type) {
         case 'text':
           let text = item.text || '';
+          let style: React.CSSProperties = {};
           
           // Apply marks (bold, italic, etc.)
           if (item.marks) {
@@ -243,6 +362,27 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
                 case 'code':
                   text = <code key={`${index}-code`} className="bg-gray-100 px-1 rounded">{text}</code>;
                   break;
+                case 'subscript':
+                  text = <sub key={`${index}-subscript`}>{text}</sub>;
+                  break;
+                case 'superscript':
+                  text = <sup key={`${index}-superscript`}>{text}</sup>;
+                  break;
+                case 'highlight':
+                  const highlightColor = mark.attrs?.color || '#ffff00';
+                  text = <mark key={`${index}-highlight`} style={{ backgroundColor: highlightColor }}>{text}</mark>;
+                  break;
+                case 'textStyle':
+                  if (mark.attrs?.color) {
+                    style.color = mark.attrs.color;
+                  }
+                  if (mark.attrs?.fontFamily) {
+                    style.fontFamily = mark.attrs.fontFamily;
+                  }
+                  if (mark.attrs?.fontSize) {
+                    style.fontSize = mark.attrs.fontSize;
+                  }
+                  break;
                 case 'link':
                   text = (
                     <a 
@@ -258,6 +398,11 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
                   break;
               }
             });
+          }
+          
+          // Apply text style if any
+          if (Object.keys(style).length > 0) {
+            text = <span style={style}>{text}</span>;
           }
           
           return <span key={index}>{text}</span>;
@@ -297,6 +442,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
   }
 
   return (
+    <>
     <article className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden">
       {/* Blog Header - Above Image */}
       <div className="p-4 sm:p-6 md:p-8 lg:p-10 pb-4 sm:pb-6">
@@ -391,7 +537,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
             src={blogData.banner}
           alt={blogData.title}
           fill
-          className="object-cover"
+          className="object-contain"
           priority
         />
       </div>
@@ -422,6 +568,17 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
         </div>
       </div>
     </article>
+    
+    {/* Login Modal */}
+    <LoginModal 
+      isOpen={showLoginModal}
+      onClose={() => setShowLoginModal(false)}
+      onLoginSuccess={() => {
+        setShowLoginModal(false);
+        // Optionally refresh the blog data to update like status
+      }}
+    />
+  </>
   );
 };
 

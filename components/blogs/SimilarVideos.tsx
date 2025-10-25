@@ -79,7 +79,7 @@ const SimilarVideos = () => {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
         {/* Filter Buttons */}
         <RevealOnView from="top" durationMs={600} delayMs={0}>
-          <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 mb-4 sm:mb-6 md:mb-8 justify-center sm:justify-start">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 md:gap-2.5 mb-4 sm:mb-6 md:mb-8 justify-center sm:justify-start">
             {filterButtons.map((filter) => (
               <button
                 key={filter}
@@ -87,13 +87,13 @@ const SimilarVideos = () => {
                   setActiveFilter(filter);
                   setCurrentPage(1);
                 }}
-                className={`px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 rounded-[10px] text-xs sm:text-sm md:text-base font-semibold transition-all duration-300 hover:scale-105 ${
+                className={`px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-[8px] text-[10px] sm:text-[11px] md:text-[12px] font-medium transition-all duration-300 hover:scale-105 ${
                   activeFilter === filter
                     ? "bg-[#575CFB] text-white border-[0.25px] border-[#575CFB]"
                     : "bg-white text-[#1F1F39] border-[0.25px] border-[#D1D1D6]"
                 }`}
                 style={{
-                  boxShadow: '0px 4px 4px 0px rgba(0, 0, 0, 0.25)'
+                  boxShadow: '0px 2px 2px 0px rgba(0, 0, 0, 0.15)'
                 }}
               >
                 {filter}
@@ -107,7 +107,15 @@ const SimilarVideos = () => {
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[480px] sm:h-[550px] md:h-[580px] lg:h-[560px] xl:h-[612px] bg-gray-200 rounded-lg animate-pulse" />
+              <div key={index} className="w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] bg-white rounded-lg animate-pulse overflow-hidden">
+                <div className="h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] bg-gray-200"></div>
+                <div className="p-3 sm:p-4">
+                  <div className="h-[60px] sm:h-[70px] md:h-[80px] lg:h-[75px] xl:h-[85px] bg-gray-200 rounded mb-3 sm:mb-4"></div>
+                  <div className="h-[45px] sm:h-[50px] md:h-[55px] lg:h-[52px] xl:h-[60px] bg-gray-200 rounded mb-4 sm:mb-5"></div>
+                  <div className="h-[30px] bg-gray-200 rounded mb-4 sm:mb-5"></div>
+                  <div className="h-[20px] bg-gray-200 rounded"></div>
+                </div>
+              </div>
             ))
           ) : (
             filteredVideos.map((blog, index) => (
@@ -118,9 +126,9 @@ const SimilarVideos = () => {
                 delayMs={index * 100}
               >
                 <Link href={`/blogs/${blog.id}`}>
-                  <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[480px] sm:h-[550px] md:h-[580px] lg:h-[560px] xl:h-[612px] relative hover:shadow-xl bg-white rounded-lg">
+                  <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] bg-white rounded-lg hover:shadow-xl">
                     {/* Blog Image */}
-                    <div className="absolute top-0 left-0 w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] overflow-hidden">
+                    <div className="relative w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] overflow-hidden">
                       {blog.banner ? (
                         <Image
                           src={blog.banner}
@@ -135,56 +143,59 @@ const SimilarVideos = () => {
                       )}
                     </div>
                     
-                    {/* Title */}
-                    <div className="absolute top-[200px] sm:top-[220px] md:top-[240px] lg:top-[230px] xl:top-[265px] left-2 right-2 h-[80px] sm:h-[90px] md:h-[100px] lg:h-[95px] xl:h-[108px] flex items-start">
-                      <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[20px] lg:text-[19px] xl:text-[22px] leading-[1.4] text-[#1A2439] line-clamp-3">
-                        {blog.title}
-                      </h3>
-                    </div>
-                    
-                    {/* Description */}
-                    <div className="absolute top-[290px] sm:top-[320px] md:top-[350px] lg:top-[340px] xl:top-[385px] left-2 right-2 h-[60px] sm:h-[70px] md:h-[80px] lg:h-[75px] xl:h-[85px] flex items-start">
-                      <p className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[1.4] text-[#556A8E] line-clamp-3">
-                        {blog.des}
-                      </p>
-                    </div>
+                    {/* Content Container */}
+                    <div className="p-3 sm:p-4">
+                      {/* Title */}
+                      <div className="mb-3 sm:mb-4">
+                        <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[20px] lg:text-[19px] xl:text-[22px] leading-[1.4] text-[#1A2439] line-clamp-3 min-h-[60px] sm:min-h-[70px] md:min-h-[80px] lg:min-h-[75px] xl:min-h-[85px] flex items-start">
+                          {blog.title}
+                        </h3>
+                      </div>
+                      
+                      {/* Description */}
+                      <div className="mb-4 sm:mb-5">
+                        <p className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[1.4] text-[#556A8E] line-clamp-3 min-h-[45px] sm:min-h-[50px] md:min-h-[55px] lg:min-h-[52px] xl:min-h-[60px] flex items-start">
+                          {blog.des}
+                        </p>
+                      </div>
 
-                    {/* Stats */}
-                    <div className="absolute top-[360px] sm:top-[400px] md:top-[440px] lg:top-[425px] xl:top-[480px] left-2 right-2 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
-                          <Clock className="w-3 h-3 text-[#556A8E]" />
-                          <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
-                            {calculateReadTime(blog.content)}
-                          </span>
+                      {/* Stats */}
+                      <div className="mb-4 sm:mb-5 flex items-center justify-between">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
+                            <Clock className="w-3 h-3 text-[#556A8E]" />
+                            <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
+                              {calculateReadTime(blog.content)}
+                            </span>
+                          </div>
+                          
+                          <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
+                            <Eye className="w-3 h-3 text-[#556A8E]" />
+                            <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
+                              {blog.activityReads}
+                            </span>
+                          </div>
                         </div>
                         
                         <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
-                          <Eye className="w-3 h-3 text-[#556A8E]" />
+                          <MessageCircle className="w-3 h-3 text-[#556A8E]" />
                           <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
-                            {blog.activityReads}
+                            {blog.activityComments}
                           </span>
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-1 bg-[#F5F7F9] border border-[#D9DBDF] rounded-full px-2 py-1">
-                        <MessageCircle className="w-3 h-3 text-[#556A8E]" />
-                        <span className="font-open-sans font-normal text-[10px] sm:text-[11px] text-[#556A8E]">
-                          {blog.activityComments}
+                      {/* Author and Date */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="font-montserrat font-normal text-[11px] sm:text-[12px] text-[#1A2439]">
+                            {blog.authorName}
+                          </span>
+                        </div>
+                        <span className="font-open-sans font-normal text-[11px] sm:text-[12px] text-[#556A8E]">
+                          {formatDate(blog.publishedAt)}
                         </span>
                       </div>
-                    </div>
-                    
-                    {/* Author and Date */}
-                    <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="font-montserrat font-normal text-[11px] sm:text-[12px] text-[#1A2439]">
-                          {blog.authorName}
-                        </span>
-                      </div>
-                      <span className="font-open-sans font-normal text-[11px] sm:text-[12px] text-[#556A8E]">
-                        {formatDate(blog.publishedAt)}
-                      </span>
                     </div>
                   </div>
                 </Link>

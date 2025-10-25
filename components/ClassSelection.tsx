@@ -535,27 +535,8 @@ const ClassSelection = () => {
               </div>
             </div>
 
-            {/* Pagination with Arrows */}
-            <div className="flex items-center justify-center mt-6 sm:mt-8 space-x-4">
-              {/* Previous Arrow */}
-              <button
-                onClick={() => {
-                  const currentIndex = classOptions.indexOf(activeClass);
-                  const prevIndex = currentIndex === 0 ? classOptions.length - 1 : currentIndex - 1;
-                  setActiveClass(classOptions[prevIndex]);
-                  setCurrentSlide(0);
-                  setMobileCardIndex(0);
-                  setMobileGlobalIndex(getRangeStartIndex(classOptions[prevIndex]));
-                }}
-                className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
-                aria-label="Previous class range"
-              >
-                <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-
-              {/* Pagination Dots */}
+            {/* Pagination Dots Only */}
+            <div className="flex items-center justify-center mt-6 sm:mt-8">
               <div className="flex space-x-2">
                 {classOptions.map((_, index) => {
                   const isActive = activeClass === classOptions[index];
@@ -575,24 +556,6 @@ const ClassSelection = () => {
                   );
                 })}
               </div>
-
-              {/* Next Arrow */}
-              <button
-                onClick={() => {
-                  const currentIndex = classOptions.indexOf(activeClass);
-                  const nextIndex = currentIndex === classOptions.length - 1 ? 0 : currentIndex + 1;
-                  setActiveClass(classOptions[nextIndex]);
-                  setCurrentSlide(0);
-                  setMobileCardIndex(0);
-                  setMobileGlobalIndex(getRangeStartIndex(classOptions[nextIndex]));
-                }}
-                className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
-                aria-label="Next class range"
-              >
-                <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
             </div>
           </div>
         </RevealOnView>

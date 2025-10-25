@@ -59,7 +59,6 @@ const NavLinks = () => {
     { label: "Physics", value: "physics" },
     { label: "Science", value: "science" },
     { label: "English", value: "english" },
-    { label: "Hindi", value: "hindi" }
   ];
 
   const resourceItems = [
@@ -160,7 +159,7 @@ const NavLinks = () => {
           onMouseLeave={() => setHoveredResource(null)}
         >
           {/* Left Column - Resource Categories */}
-          <div className="flex flex-col space-y-4 pr-6 pl-2 min-w-[200px] py-8 min-h-[400px]">
+          <div className="flex flex-col space-y-4 pr-6 pl-2 min-w-[200px] py-8 min-h-[250px]">
             {resourceItems.map((item) => (
               <div 
                 key={item.type}
@@ -191,7 +190,7 @@ const NavLinks = () => {
           
           {/* Right Column - Resource Options */}
           <motion.div 
-            className="pl-6 flex-1 overflow-hidden py-8 min-h-[400px]"
+            className="pl-6 flex-1 overflow-hidden py-8 min-h-[250px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredResource ? 1 : 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}

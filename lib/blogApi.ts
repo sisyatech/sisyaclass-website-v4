@@ -1,5 +1,5 @@
 // Blog API service functions
-const API_BASE_URL = 'https://sisyaclass.xyz/student';
+import { API_BASE_URL, API_ENDPOINTS } from './config';
 
 // Utility function to safely extract text content for read time calculation
 export const extractTextContent = (content: any): string => {
@@ -139,9 +139,9 @@ export interface Comment {
 export const getAllBlogs = async (page: number = 1, limit: number = 10): Promise<BlogListResponse> => {
   try {
     console.log('🔍 Fetching blogs - Page:', page, 'Limit:', limit);
-    console.log('📡 API URL:', `${API_BASE_URL}/get_all_blogs`);
+    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_BLOGS}`);
     
-    const response = await fetch(`${API_BASE_URL}/get_all_blogs`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_BLOGS}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -176,9 +176,9 @@ export const getAllBlogs = async (page: number = 1, limit: number = 10): Promise
 export const getBlogById = async (id: string): Promise<Blog> => {
   try {
     console.log('🔍 Fetching blog by ID:', id);
-    console.log('📡 API URL:', `${API_BASE_URL}/get_blog_by_id`);
+    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`);
     
-    const response = await fetch(`${API_BASE_URL}/get_blog_by_id`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export const getBlogById = async (id: string): Promise<Blog> => {
 // Toggle like on blog
 export const toggleLikeBlog = async (blogId: string, userId: string): Promise<{ success: boolean }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/toggle_like_blog`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.TOGGLE_LIKE_BLOG}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ export const addComment = async (
   parentId?: string
 ): Promise<Comment> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/add_comment`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.ADD_COMMENT}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -266,7 +266,7 @@ export const addComment = async (
 // Update blog read count
 export const updateBlogReadCount = async (blogId: string): Promise<{ success: boolean; updatedReads: number }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/update_blog_read_count`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.UPDATE_BLOG_READ_COUNT}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -289,9 +289,9 @@ export const updateBlogReadCount = async (blogId: string): Promise<{ success: bo
 export const getAllTags = async (): Promise<Tag[]> => {
   try {
     console.log('🔍 Fetching all tags');
-    console.log('📡 API URL:', `${API_BASE_URL}/get_all_tags`);
+    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`);
     
-    const response = await fetch(`${API_BASE_URL}/get_all_tags`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -323,7 +323,7 @@ export const getAllTags = async (): Promise<Tag[]> => {
 // Get nested comments
 export const getNestedComments = async (blogId: string): Promise<{ blogId: string; comments: Comment[]; cached?: boolean }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/get_nested_comments`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_NESTED_COMMENTS}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -346,9 +346,9 @@ export const getNestedComments = async (blogId: string): Promise<{ blogId: strin
 export const getTrendingBlogs = async (): Promise<{ trending: Blog[]; cached?: boolean }> => {
   try {
     console.log('🔍 Fetching trending blogs');
-    console.log('📡 API URL:', `${API_BASE_URL}/get_trending_blogs`);
+    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_TRENDING_BLOGS}`);
     
-    const response = await fetch(`${API_BASE_URL}/get_trending_blogs`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_TRENDING_BLOGS}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -391,7 +391,7 @@ export const getTrendingBlogs = async (): Promise<{ trending: Blog[]; cached?: b
 // Generate blog asset upload URL
 export const generateBlogAssetUploadUrl = async (): Promise<{ uploadUrl: string; filePath: string }> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/gen_blog_asset_upload_url`, {
+    const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GENERATE_BLOG_ASSET_UPLOAD_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

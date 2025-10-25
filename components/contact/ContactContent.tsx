@@ -10,8 +10,13 @@ const ContactContent = () => {
     email: "",
     phone: "",
     message: "",
-    captcha: ""
+    state: "",
+    cf_class: ""
   });
+  
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState<"success" | "error">("success");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -21,10 +26,112 @@ const ContactContent = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
+
+    // Basic validation
+    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.message.trim()) {
+      setPopupMessage("Please fill in all required fields.");
+      setPopupType("error");
+      setShowPopup(true);
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setPopupMessage("Please enter a valid email address.");
+      setPopupType("error");
+      setShowPopup(true);
+      return;
+    }
+
+    // Phone validation (basic)
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
+      setPopupMessage("Please enter a valid 10-digit phone number.");
+      setPopupType("error");
+      setShowPopup(true);
+      return;
+    }
+
+    try {
+      // Clean phone number (remove all non-digits)
+      const cleanPhone = formData.phone.replace(/\D/g, '');
+      
+      // Payload with all required fields for Merritto
+      const payload = {
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        phone: cleanPhone,
+        email: formData.email.trim().toLowerCase(),
+        message: formData.message.trim(),
+        cf_class: "contactus",
+        source: "contactus",
+        medium: "contactus", 
+        campaign: "contactus"
+      };
+
+      console.log('Sending payload:', payload);
+
+      const response = await fetch('https://sisyaclass.xyz/student/create_merrito_lead', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Success response:', responseData);
+        setPopupMessage('Thank you for contacting us! We will get back to you soon.');
+        setPopupType("success");
+        setShowPopup(true);
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          message: "",
+          state: "",
+          cf_class: ""
+        });
+      } else {
+        const errorData = await response.text();
+        console.error('Error response:', errorData);
+        
+        // Check if it's a Merritto-specific error
+        if (errorData.includes('Merritto') || errorData.includes('Failed to send lead')) {
+          // Still show success to user since data was received by backend
+          setPopupMessage('Thank you for contacting us! We have received your message and will get back to you soon.');
+          setPopupType("success");
+          setShowPopup(true);
+          // Reset form anyway
+          setFormData({
+            firstName: "",
+            lastName: "",
+            email: "",
+            phone: "",
+            message: "",
+            state: "",
+            cf_class: ""
+          });
+        } else {
+          setPopupMessage(`Something went wrong. Error: ${response.status} - ${errorData}`);
+          setPopupType("error");
+          setShowPopup(true);
+        }
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setPopupMessage('Something went wrong. Please try again.');
+      setPopupType("error");
+      setShowPopup(true);
+    }
   };
 
   return (
@@ -278,6 +385,39 @@ const ContactContent = () => {
                   </div>
                 </div>
 
+                {/* Third Row - State and Class (Optional) */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* State */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="state"
+                      value={formData.state}
+                      onChange={handleInputChange}
+                      placeholder="Enter State (Optional)"
+                      className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0595CE] focus:border-transparent font-montserrat text-[16px] placeholder-gray-400"
+                    />
+                    <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+
+                  {/* Class */}
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="cf_class"
+                      value={formData.cf_class}
+                      onChange={handleInputChange}
+                      placeholder="Enter Class (Optional)"
+                      className="w-full px-4 py-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0595CE] focus:border-transparent font-montserrat text-[16px] placeholder-gray-400"
+                    />
+                    <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h12a1 1 0 001-1V7l-7-5zM8 15a1 1 0 11-2 0 1 1 0 012 0zm4 0a1 1 0 11-2 0 1 1 0 012 0z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </div>
+
                 {/* Message */}
                 <div>
                   <textarea
@@ -291,23 +431,6 @@ const ContactContent = () => {
                   />
                 </div>
 
-                {/* Captcha */}
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="captcha"
-                    value={formData.captcha}
-                    onChange={handleInputChange}
-                    placeholder="Are you human? 1 + 3 ="
-                    className="w-full px-4 py-3 border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0595CE] focus:border-transparent font-montserrat text-[16px] placeholder-gray-400"
-                    required
-                  />
-                  {formData.captcha && (
-                    <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#575CFB] font-semibold">
-                      = 4
-                    </span>
-                  )}
-                </div>
 
                 {/* Submit Button */}
                 <button
@@ -322,6 +445,52 @@ const ContactContent = () => {
           </RevealOnView>
         </div>
       </div>
+
+      {/* Popup Modal */}
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all">
+            <div className="flex items-center justify-center mb-4">
+              {popupType === "success" ? (
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              ) : (
+                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                  <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </div>
+              )}
+            </div>
+            
+            <h3 className={`text-lg font-semibold text-center mb-3 ${
+              popupType === "success" ? "text-green-800" : "text-red-800"
+            }`}>
+              {popupType === "success" ? "Success!" : "Error"}
+            </h3>
+            
+            <p className="text-gray-700 text-center mb-6">
+              {popupMessage}
+            </p>
+            
+            <div className="flex justify-center">
+              <button
+                onClick={() => setShowPopup(false)}
+                className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
+                  popupType === "success" 
+                    ? "bg-green-600 hover:bg-green-700 text-white" 
+                    : "bg-red-600 hover:bg-red-700 text-white"
+                }`}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

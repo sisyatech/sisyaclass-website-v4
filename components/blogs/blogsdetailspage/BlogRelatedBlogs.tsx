@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { getTrendingBlogs, calculateReadTime, type Blog } from "../../../lib/blogApi";
-import { Clock, Eye, MessageCircle, RefreshCw } from "lucide-react";
+import { Clock, Eye, MessageCircle } from "lucide-react";
 
 const BlogRelatedBlogs = () => {
   const [trendingBlogs, setTrendingBlogs] = useState<Blog[]>([]);
@@ -20,22 +20,23 @@ const BlogRelatedBlogs = () => {
         const response = await getTrendingBlogs();
         console.log('📊 Trending blogs response:', response);
         
-        // Check if response has trending property and it's an array
-        if (response && response.trending && Array.isArray(response.trending)) {
+        // Check if response has trending property and it's an array with content
+        if (response && response.trending && Array.isArray(response.trending) && response.trending.length > 0) {
           console.log(`✅ Found ${response.trending.length} trending blogs`);
           setTrendingBlogs(response.trending.slice(0, 3)); // Show only top 3
           setRetryCount(0); // Reset retry count on success
         } else {
-          console.warn('⚠️ No trending blogs data received:', response);
+          console.warn('⚠️ No trending blogs data received or empty array:', response);
           setTrendingBlogs([]);
           
-          // Retry if we haven't exceeded max retries
-          if (retryAttempt < 2) {
-            console.log(`🔄 Retrying in 1 second... (attempt ${retryAttempt + 2})`);
+          // Retry if we haven't exceeded max retries (increased to 5 attempts)
+          if (retryAttempt < 4) {
+            const delay = retryAttempt < 2 ? 1000 : 2000; // Shorter delay for first few attempts
+            console.log(`🔄 Retrying in ${delay/1000} seconds... (attempt ${retryAttempt + 2})`);
             setTimeout(() => {
               setRetryCount(retryAttempt + 1);
               fetchTrendingBlogs(retryAttempt + 1);
-            }, 1000);
+            }, delay);
             return;
           }
         }
@@ -44,12 +45,13 @@ const BlogRelatedBlogs = () => {
         setTrendingBlogs([]);
         
         // Retry on error if we haven't exceeded max retries
-        if (retryAttempt < 2) {
-          console.log(`🔄 Retrying after error in 2 seconds... (attempt ${retryAttempt + 2})`);
+        if (retryAttempt < 4) {
+          const delay = retryAttempt < 2 ? 2000 : 3000; // Longer delay for errors
+          console.log(`🔄 Retrying after error in ${delay/1000} seconds... (attempt ${retryAttempt + 2})`);
           setTimeout(() => {
             setRetryCount(retryAttempt + 1);
             fetchTrendingBlogs(retryAttempt + 1);
-          }, 2000);
+          }, delay);
           return;
         }
       } finally {
@@ -57,54 +59,21 @@ const BlogRelatedBlogs = () => {
       }
     };
 
-    fetchTrendingBlogs();
+    // Add a small initial delay to ensure the page is fully loaded
+    const timeoutId = setTimeout(() => {
+      fetchTrendingBlogs();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
-  const handleRefresh = () => {
-    setRetryCount(0);
-    setLoading(true);
-    // Trigger a new fetch
-    const fetchTrendingBlogs = async (retryAttempt = 0) => {
-      try {
-        console.log(`🔄 Manual refresh - fetching trending blogs (attempt ${retryAttempt + 1})`);
-        
-        const response = await getTrendingBlogs();
-        console.log('📊 Manual refresh - trending blogs response:', response);
-        
-        if (response && response.trending && Array.isArray(response.trending)) {
-          console.log(`✅ Manual refresh - found ${response.trending.length} trending blogs`);
-          setTrendingBlogs(response.trending.slice(0, 3));
-          setRetryCount(0);
-        } else {
-          console.warn('⚠️ Manual refresh - no trending blogs data received:', response);
-          setTrendingBlogs([]);
-        }
-      } catch (error) {
-        console.error('❌ Manual refresh - error fetching trending blogs:', error);
-        setTrendingBlogs([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTrendingBlogs();
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-5 lg:p-6">
-      <div className="flex items-center justify-between mb-3 sm:mb-4">
+      <div className="mb-3 sm:mb-4">
         <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[18px] lg:text-[20px] text-[#1A2439]">
           Trending Blogs
         </h3>
-        {!loading && (
-          <button
-            onClick={handleRefresh}
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-            title="Refresh trending blogs"
-          >
-            <RefreshCw className="w-4 h-4 text-gray-500" />
-          </button>
-        )}
       </div>
       <div className="space-y-3 sm:space-y-4">
         {loading ? (
@@ -121,7 +90,7 @@ const BlogRelatedBlogs = () => {
             ))}
             {retryCount > 0 && (
               <div className="text-center text-gray-500 text-xs">
-                Retrying... (attempt {retryCount + 1})
+                Loading trending blogs... (attempt {retryCount + 1}/5)
               </div>
             )}
           </div>

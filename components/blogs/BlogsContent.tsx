@@ -211,9 +211,9 @@ const BlogsContent = () => {
             </div>
 
             {/* Sidebar - Related Blogs */}
-            <div className="w-full lg:w-72 xl:w-80">
+            <div className="w-full lg:w-96 xl:w-[28rem]">
               <RevealOnView from="right" durationMs={800} delayMs={400}>
-                <div className="space-y-2 sm:space-y-3 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2 scrollbar-hide">
+                <div className="space-y-1 sm:space-y-2 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2 scrollbar-hide">
                   <h2 className="text-sm sm:text-base md:text-lg font-bold text-[#1A2439] mb-2 sm:mb-3 lg:sticky lg:top-0 lg:bg-white lg:z-10 lg:pb-2">
                     Related Blogs
                   </h2>
@@ -225,7 +225,7 @@ const BlogsContent = () => {
                       className="flex gap-2 p-2 rounded-lg hover:bg-white hover:shadow-md transition-all duration-300 cursor-pointer group flex-shrink-0"
                     >
                       {/* Thumbnail */}
-                      <div className="relative w-20 sm:w-24 md:w-28 lg:w-32 xl:w-36 h-16 sm:h-20 md:h-22 lg:h-24 flex-shrink-0 rounded-md overflow-hidden bg-black">
+                      <div className="relative w-24 sm:w-28 md:w-32 lg:w-36 xl:w-40 h-16 sm:h-20 md:h-22 lg:h-24 flex-shrink-0 rounded-md overflow-hidden bg-black">
                         <Image
                           src={blog.banner || "/blogs/blogimage.svg"}
                           alt={blog.title}
@@ -239,13 +239,18 @@ const BlogsContent = () => {
                         <h3 className="font-semibold text-[#1A2439] text-xs sm:text-sm leading-tight mb-1 line-clamp-2 group-hover:text-[#0595CE] transition-colors duration-300">
                           {blog.title}
                         </h3>
-                        <p className="text-xs text-gray-600 mb-1 truncate">
+                        <p className="text-xs text-gray-600 mb-1">
                           {blog.authorName}
                         </p>
-                        <div className="flex items-center gap-1 text-xs text-gray-500">
-                          <span className="truncate">{blog.activityReads || 0} reads</span>
-                          <span>•</span>
-                          <span className="truncate">{formatDate(blog.publishedAt)}</span>
+                        <div className="flex flex-col gap-1 text-xs text-gray-500">
+                          <div className="flex items-center gap-1">
+                            <Eye className="w-3 h-3" />
+                            <span>{blog.activityReads || 0} reads</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Calendar className="w-3 h-3" />
+                            <span>{formatDate(blog.publishedAt)}</span>
+                          </div>
                         </div>
                       </div>
                     </Link>

@@ -5,9 +5,11 @@ import Image from "next/image";
 import LoginModal from "../LoginModal";
 import { useUser } from "../UserContext";
 import RevealOnView from "../Reveal/RevealOnView";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface CourseProps {
   gradeNumber: number;
+  onMentorIdsChange?: (mentorIds: number[]) => void;
 }
 
 interface Subject {
@@ -36,7 +38,7 @@ interface BigCourseData {
   subjects: Subject[];
 }
 
-const Course = ({ gradeNumber }: CourseProps) => {
+const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   const { user, isLoggedIn } = useUser();
   const classTitle = `Class ${gradeNumber}`;
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
@@ -45,6 +47,7 @@ const Course = ({ gradeNumber }: CourseProps) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
 
   console.log('Course component rendered with gradeNumber:', gradeNumber, 'type:', typeof gradeNumber);
+  console.log('Course component onMentorIdsChange callback:', onMentorIdsChange);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -54,7 +57,7 @@ const Course = ({ gradeNumber }: CourseProps) => {
         
         console.log(`Fetching course data for grade: ${gradeNumber}`);
         const response = await fetch(
-          'https://sisyaclass.xyz/student/get_big_course_web_by_grade',
+          `${API_BASE_URL}${API_ENDPOINTS.GET_BIG_COURSE_BY_GRADE}`,
           {
             method: 'POST',
             headers: {
@@ -82,6 +85,21 @@ const Course = ({ gradeNumber }: CourseProps) => {
         if (Array.isArray(data) && data.length > 0) {
           console.log('Setting course data:', data[0]);
           setCourseData(data[0]);
+          
+          // Extract mentor IDs and pass them to parent component
+          if (data[0].bigCourse?.mentorList && Array.isArray(data[0].bigCourse.mentorList)) {
+            console.log('Found mentor IDs:', data[0].bigCourse.mentorList);
+            console.log('onMentorIdsChange callback exists:', !!onMentorIdsChange);
+            if (onMentorIdsChange) {
+              console.log('Calling onMentorIdsChange callback with:', data[0].bigCourse.mentorList);
+              onMentorIdsChange(data[0].bigCourse.mentorList);
+              console.log('onMentorIdsChange callback called');
+            } else {
+              console.log('onMentorIdsChange callback is not defined');
+            }
+          } else {
+            console.log('No mentorList found in course data');
+          }
         } else {
           console.error(`No course data available for grade ${gradeNumber}`);
           throw new Error(`No course data available for grade ${gradeNumber}. Please contact support or try a different grade.`);

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import RevealOnView from "./Reveal/RevealOnView";
 import { useUser } from "./UserContext";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -104,7 +105,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
 
     try {
       // First try to send OTP for login (existing users)
-      const response = await fetch('https://sisyaclass.xyz/student/login_user', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.LOGIN_USER}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -174,7 +175,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
       
       console.log('Sending user creation request with data:', { ...userData, password: "[REDACTED]" });
       
-      const response = await fetch('https://sisyaclass.xyz/student/user', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_USER}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -214,7 +215,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
     setError(null);
 
     try {
-      const response = await fetch('https://sisyaclass.xyz/student/verify_otp_login_user', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.VERIFY_OTP}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -271,7 +272,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
     setError(null);
 
     try {
-      const response = await fetch('https://sisyaclass.xyz/student/login_user', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.LOGIN_USER}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -306,7 +307,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
     setError(null);
 
     try {
-      const response = await fetch('https://sisyaclass.xyz/student/complete_user_reg', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.COMPLETE_REGISTRATION}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

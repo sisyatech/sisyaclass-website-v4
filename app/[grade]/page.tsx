@@ -10,7 +10,7 @@ import Footer from "@/components/Footer";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
-import { use, useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import { parseGradeFromParam } from "@/lib/navigation";
 import Payment from "@/components/classes/payment";
@@ -33,6 +33,7 @@ interface GradePageProps {
 
 function GradeContent({ grade }: { grade: string }) {
   const { setSelectedGrade } = useMobileMenu();
+  const [mentorIds, setMentorIds] = useState<number[]>([]);
   
   // Parse and validate grade number using navigation utilities
   const gradeNumber = parseGradeFromParam(grade);
@@ -46,12 +47,17 @@ function GradeContent({ grade }: { grade: string }) {
     setSelectedGrade(gradeNumber);
   }, [gradeNumber, setSelectedGrade]);
 
+  const handleMentorIdsChange = (ids: number[]) => {
+    console.log('GradeContent: Received mentor IDs:', ids);
+    setMentorIds(ids);
+  };
+
   return (
     <Container>
       <Navbar />
       <GradeBreadcrumb gradeNumber={gradeNumber} />
-      <Course gradeNumber={gradeNumber} />
-      <QuickLinks />
+      <Course gradeNumber={gradeNumber} onMentorIdsChange={handleMentorIdsChange} />
+      <QuickLinks mentorIds={mentorIds} />
       <Payment gradeNumber={gradeNumber} />
       <SyllabusSection gradeNumber={gradeNumber} />
       <Impact />
