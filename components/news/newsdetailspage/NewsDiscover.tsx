@@ -1,19 +1,20 @@
-
+"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { getAllTags, type Tag } from "../../../lib/newsApi";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 const NewsDiscover = () => {
-    const [tags, setTags] = useState<Tag[]>([]);
+        const [tags, setTags] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchTags = async () => {
             try {
                 setLoading(true);
-                const response = await getAllTags();
-                setTags(response || []);
+                const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`);
+                const data = await response.json();
+                setTags(data.data || []);
             } catch (error) {
                 console.error('Error fetching tags:', error);
                 setTags([]);

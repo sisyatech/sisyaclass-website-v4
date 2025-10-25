@@ -1,7 +1,8 @@
-"use client";
+
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface WebLinksData {
   id: string;
@@ -32,7 +33,7 @@ const InnovativeLearningTools = () => {
   useEffect(() => {
     const fetchWebLinks = async () => {
       try {
-        const response = await fetch('https://sisyaclass.xyz/student/get_web_links', {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

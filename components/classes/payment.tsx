@@ -1,9 +1,10 @@
-"use client";
+
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import LoginModal from "../LoginModal";
-import { useUser } from "../UserContext";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
+import { useUser } from "@/components/UserContext";
 
 interface BigCourseData {
   id: number;
@@ -39,7 +40,7 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
       try {
         setLoading(true);
         const response = await fetch(
-          'https://sisyaclass.xyz/student/get_big_course_web_by_grade',
+          `${API_BASE_URL}${API_ENDPOINTS.GET_BIG_COURSE_BY_GRADE}`,
           {
             method: 'POST',
             headers: {

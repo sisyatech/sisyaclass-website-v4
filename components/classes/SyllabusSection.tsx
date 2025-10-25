@@ -1,10 +1,10 @@
-"use client";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface Chapter {
   id: number;
@@ -83,7 +83,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
       try {
         setLoading(true);
         const response = await fetch(
-          'https://sisyaclass.xyz/student/get_big_course_web_by_grade',
+          `${API_BASE_URL}${API_ENDPOINTS.GET_BIG_COURSE_BY_GRADE}`,
           {
             method: 'POST',
             headers: {

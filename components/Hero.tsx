@@ -1,4 +1,4 @@
-"use client";
+
 import { MaskContainer } from "./ui/svg-mask-effect";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";

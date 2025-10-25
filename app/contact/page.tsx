@@ -1,4 +1,4 @@
-"use client";
+
 
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Container from "@/components/Container";

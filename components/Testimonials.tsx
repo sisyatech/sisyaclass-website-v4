@@ -1,7 +1,7 @@
-"use client";
 
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface TestimonialData {
   id: string;
@@ -18,7 +18,7 @@ interface ProcessedTestimonial {
   embedUrl: string;
   thumbnail: string;
   title: string;
-  name: string;
+  name: string; 
   grade: string;
 }
 
@@ -47,7 +47,7 @@ const Testimonials = () => {
       try {
         // console.log('🚀 [TESTIMONIALS] Fetching data from API...');
         
-        const response = await fetch('https://sisyaclass.xyz/student/get_testimonial_reel', {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_TESTIMONIAL_REEL}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

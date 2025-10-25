@@ -1,7 +1,8 @@
-
+"use client";   
 
 import React, { useState } from "react";
 import RevealOnView from "../Reveal/RevealOnView";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 const ContactContent = () => {
   const [formData, setFormData] = useState({
@@ -73,7 +74,7 @@ const ContactContent = () => {
 
       console.log('Sending payload:', payload);
 
-      const response = await fetch('https://sisyaclass.xyz/student/create_merrito_lead', {
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CREATE_MERRITTO_LEAD}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
-"use client";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface WebLinksData {
   id: string;
@@ -17,9 +17,9 @@ const Banner = () => {
     const fetchWebLinks = async () => {
       try {
         console.log('🚀 [Banner] Fetching banner image from API...');
-        console.log('📡 [Banner] API URL:', 'https://sisyaclass.xyz/student/get_web_links');
+        console.log('📡 [Banner] API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`);
         
-        const response = await fetch('https://sisyaclass.xyz/student/get_web_links', {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

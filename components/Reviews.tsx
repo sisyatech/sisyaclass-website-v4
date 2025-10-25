@@ -1,8 +1,9 @@
-"use client";
+
 
 import React, { useState, useEffect } from "react";
 // Import motion for modal animations
 import { motion, AnimatePresence } from "framer-motion";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface ReviewData {
   id: string;
@@ -36,7 +37,7 @@ const Reviews = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch('https://sisyaclass.xyz/student/get_testimonial_card', {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_TESTIMONIAL_CARD}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

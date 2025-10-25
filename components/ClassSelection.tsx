@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useEffect, useState, useRef } from "react";
 import RevealOnView from "./Reveal/RevealOnView";
@@ -6,6 +5,7 @@ import Image from "next/image";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import LoginModal from "./LoginModal";
 import { useUser } from "./UserContext";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface ClassData {
   id: number;
@@ -61,9 +61,9 @@ const ClassSelection = () => {
     const fetchClassData = async () => {
       try {
         // console.log('🚀 Fetching class data from API...');
-        // console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
+        // console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_CLASS_CARD}`);
         
-        const response = await fetch('https://sisyaclass.xyz/student/get_class_card', {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_CLASS_CARD}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

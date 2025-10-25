@@ -1,4 +1,4 @@
-"use client";
+
 
 import { use } from "react";
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
