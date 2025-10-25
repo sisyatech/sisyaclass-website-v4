@@ -28,6 +28,29 @@ const Footer = () => {
     router.push(routes.contact);
   };
 
+  const handleFAQClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const faqElement = document.getElementById('faqs');
+    if (faqElement) {
+      faqElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handlePrivacyPolicyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push('/privacy-policy');
+  };
+
+  const handleTermsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push('/terms-and-conditions');
+  };
+
+  const handleRefundPolicyClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push('/refund-policy');
+  };
+
 
 
   return (
@@ -253,6 +276,7 @@ const Footer = () => {
                 <li>
                   <a
                     href="#"
+                    onClick={handlePrivacyPolicyClick}
                     className="font-roboto cursor-pointer text-[11px] leading-[16px] font-normal tracking-[0.03em] text-[#161A38] transition-opacity hover:opacity-70 min-[375px]:text-[12px] sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px] lg:text-[16px]"
                   >
                     Privacy Policy
@@ -261,6 +285,7 @@ const Footer = () => {
                 <li>
                   <a
                     href="#"
+                    onClick={handleTermsClick}
                     className="font-roboto cursor-pointer text-[11px] leading-[16px] font-normal tracking-[0.03em] text-[#161A38] transition-opacity hover:opacity-70 min-[375px]:text-[12px] sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px] lg:text-[16px]"
                   >
                     Terms & Conditions
@@ -269,6 +294,7 @@ const Footer = () => {
                 <li>
                   <a
                     href="#"
+                    onClick={handleRefundPolicyClick}
                     className="font-roboto cursor-pointer text-[11px] leading-[16px] font-normal tracking-[0.03em] text-[#161A38] transition-opacity hover:opacity-70 min-[375px]:text-[12px] sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px] lg:text-[16px]"
                   >
                     Refund Policy
@@ -277,6 +303,7 @@ const Footer = () => {
                 <li>
                   <a
                     href="#"
+                    onClick={handleFAQClick}
                     className="font-roboto cursor-pointer text-[11px] leading-[16px] font-normal tracking-[0.03em] text-[#161A38] transition-opacity hover:opacity-70 min-[375px]:text-[12px] sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px] lg:text-[16px]"
                   >
                     FAQ

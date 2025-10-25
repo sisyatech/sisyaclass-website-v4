@@ -89,16 +89,6 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
       setComment("");
       setReplyingTo(null);
       
-      // Optionally refresh comments in the background to get the real data
-      setTimeout(async () => {
-        try {
-          const commentsResponse = await getNestedComments(blogId);
-          setComments(commentsResponse.comments);
-        } catch (error) {
-          console.error('Error refreshing comments:', error);
-        }
-      }, 1000);
-      
     } catch (error) {
       console.error('Error submitting comment:', error);
       alert('Failed to submit comment. Please try again.');

@@ -1,4 +1,4 @@
-"use client";
+
 
 import React, { useState } from "react";
 import RevealOnView from "../Reveal/RevealOnView";

@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
@@ -470,9 +469,20 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
                           }
                         }}
                         onKeyDown={(e) => {
-                          if (e.key === 'Backspace' && !loginData.otp[index] && index > 0) {
-                            const prevInput = document.querySelector(`input[data-index="${index - 1}"]`) as HTMLInputElement;
-                            prevInput?.focus();
+                          if (e.key === 'Backspace') {
+                            if (loginData.otp[index]) {
+                              // If current input has value, clear it
+                              const newOtp = loginData.otp.split('');
+                              newOtp[index] = '';
+                              setLoginData(prev => ({ ...prev, otp: newOtp.join('') }));
+                            } else if (index > 0) {
+                              // If current input is empty, go to previous input and clear it
+                              const newOtp = loginData.otp.split('');
+                              newOtp[index - 1] = '';
+                              setLoginData(prev => ({ ...prev, otp: newOtp.join('') }));
+                              const prevInput = document.querySelector(`input[data-index="${index - 1}"]`) as HTMLInputElement;
+                              prevInput?.focus();
+                            }
                           }
                         }}
                         data-index={index}

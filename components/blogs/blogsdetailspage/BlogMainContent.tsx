@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -452,10 +453,11 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
             {blogData.tags.map((tagItem, index) => (
               <span
                 key={index}
-                className="bg-[#0595CE] text-white px-3 py-1.5 rounded-full text-sm font-semibold"
+                className="bg-[#0595CE] text-white px-3 py-1.5 rounded-full text-sm font-semibold max-w-[120px] truncate"
+                title={tagItem.tag.name}
               >
                 {tagItem.tag.name}
-          </span>
+              </span>
             ))}
           </div>
         </div>
