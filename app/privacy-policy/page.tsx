@@ -20,6 +20,7 @@ function PrivacyPolicyPageContent() {
             {/* Study Material */}
             <StudyMaterial />
 
+
             {/* Moto */}
             <Moto />
 

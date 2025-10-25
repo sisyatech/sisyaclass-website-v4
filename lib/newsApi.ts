@@ -109,6 +109,7 @@ export const getAllNews = async (page: number = 1, limit: number = 10) => {
 export const getNewsById = async (id: string) => {
   try {
     console.log('📰 getNewsById: Fetching news by ID:', id);
+    console.log('📰 getNewsById: API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_NEWS_BY_ID}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_NEWS_BY_ID}`, {
       method: 'POST',
@@ -118,11 +119,25 @@ export const getNewsById = async (id: string) => {
       body: JSON.stringify({ id }),
     });
 
+    console.log('📰 getNewsById: Response status:', response.status);
+    console.log('📰 getNewsById: Response headers:', response.headers.get('content-type'));
+
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('📰 getNewsById: Error response:', errorText);
+      
       if (response.status === 404) {
         throw new Error('News not found');
       }
-      throw new Error('Failed to fetch news');
+      throw new Error(`Failed to fetch news: ${response.status} - ${errorText.substring(0, 100)}`);
+    }
+
+    // Check if response is JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      const responseText = await response.text();
+      console.error('📰 getNewsById: Non-JSON response:', responseText.substring(0, 200));
+      throw new Error('Server returned non-JSON response');
     }
 
     const data = await response.json();

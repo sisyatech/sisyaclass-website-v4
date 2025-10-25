@@ -107,7 +107,7 @@ const SimilarNews = () => {
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[440px] sm:h-[480px] md:h-[510px] lg:h-[490px] xl:h-[540px] bg-gray-200 rounded-lg animate-pulse" />
+              <div key={index} className="w-[260px] sm:w-[300px] md:w-[320px] lg:w-[300px] xl:w-[340px] h-[400px] sm:h-[440px] md:h-[470px] lg:h-[450px] xl:h-[490px] bg-gray-200 rounded-xl animate-pulse" />
             ))
           ) : (
             filteredNews.map((news, index) => (
@@ -118,14 +118,14 @@ const SimilarNews = () => {
               delayMs={index * 100}
             >
               <Link href={`/news/${news.id}`}>
-                <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] h-[440px] sm:h-[480px] md:h-[510px] lg:h-[490px] xl:h-[540px] relative hover:shadow-xl">
+                <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[260px] sm:w-[300px] md:w-[320px] lg:w-[300px] xl:w-[340px] h-[400px] sm:h-[440px] md:h-[470px] lg:h-[450px] xl:h-[490px] relative hover:shadow-xl rounded-xl">
                 {/* SISYA CLASS Text */}
                 <div className="absolute top-0 left-[1px] font-montserrat font-bold text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#0595CE]">
                   {news.title}
                 </div>
                 
                 {/* News Image */}
-                <div className="absolute top-[22px] sm:top-[24px] md:top-[26px] lg:top-[24px] xl:top-[28px] left-0 w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[200px] xl:h-[220px] overflow-hidden">
+                <div className="absolute top-[22px] sm:top-[24px] md:top-[26px] lg:top-[24px] xl:top-[28px] left-0 w-full h-[160px] sm:h-[180px] md:h-[190px] lg:h-[180px] xl:h-[200px] overflow-hidden">
                   <Image
                     src={news.banner || "/blogs/blogimage.svg"}
                     alt={news.title}
@@ -135,14 +135,14 @@ const SimilarNews = () => {
                 </div>
                 
                 {/* Subtitle */}
-                <div className="absolute top-[210px] sm:top-[230px] md:top-[245px] lg:top-[230px] xl:top-[258px] left-[2px] w-[calc(100%-4px)] h-[50px] sm:h-[55px] md:h-[60px] lg:h-[56px] xl:h-[62px] flex items-start">
+                <div className="absolute top-[190px] sm:top-[210px] md:top-[225px] lg:top-[210px] xl:top-[238px] left-[2px] w-[calc(100%-4px)] h-[50px] sm:h-[55px] md:h-[60px] lg:h-[56px] xl:h-[62px] flex items-start">
                   <h3 className="font-montserrat font-bold text-[17px] sm:text-[19px] md:text-[21px] lg:text-[19px] xl:text-[22px] leading-[1.3] text-[#1A2439] line-clamp-2">
                     {news.title}
                   </h3>
                 </div>
                 
                 {/* Description */}
-                <div className="absolute top-[268px] sm:top-[292px] md:top-[312px] lg:top-[292px] xl:top-[328px] left-[2px] w-[calc(100%-4px)] h-[65px] sm:h-[75px] md:h-[85px] lg:h-[80px] xl:h-[90px] flex items-start">
+                <div className="absolute top-[248px] sm:top-[272px] md:top-[292px] lg:top-[272px] xl:top-[308px] left-[2px] w-[calc(100%-4px)] h-[65px] sm:h-[75px] md:h-[85px] lg:h-[80px] xl:h-[90px] flex items-start">
                   <p className="font-open-sans font-normal text-[13px] sm:text-[14px] md:text-[15px] lg:text-[14px] xl:text-[15px] leading-[1.4] text-[#556A8E] line-clamp-3">
                     {news.des}
                   </p>
@@ -150,7 +150,7 @@ const SimilarNews = () => {
 
                 
                 {/* Author and Date */}
-                <div className="absolute top-[340px] sm:top-[373px] md:top-[403px] lg:top-[378px] xl:top-[425px] left-[2px] flex items-center gap-2">
+                <div className="absolute top-[320px] sm:top-[353px] md:top-[383px] lg:top-[358px] xl:top-[405px] left-[2px] flex items-center gap-2">
                   <span className="font-montserrat font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#1A2439]">
                     {news.authorName}
                   </span>

@@ -213,12 +213,12 @@ const BlogsContent = () => {
             {/* Sidebar - Related Blogs */}
             <div className="w-full lg:w-96 xl:w-[28rem]">
               <RevealOnView from="right" durationMs={800} delayMs={400}>
-                <div className="space-y-1 sm:space-y-2 lg:max-h-[600px] lg:overflow-y-auto lg:pr-2 scrollbar-hide">
-                  <h2 className="text-sm sm:text-base md:text-lg font-bold text-[#1A2439] mb-2 sm:mb-3 lg:sticky lg:top-0 lg:bg-white lg:z-10 lg:pb-2">
+                <div className="space-y-1 sm:space-y-2">
+                  <h2 className="text-sm sm:text-base md:text-lg font-bold text-[#1A2439] mb-2 sm:mb-3">
                     Related Blogs
                   </h2>
                   
-                  {blogs.filter((_, index) => index !== selectedBlog).map((blog, index) => (
+                  {blogs.filter((_, index) => index !== selectedBlog).slice(0, 4).map((blog, index) => (
                     <Link
                       key={blog.id}
                       href={`/blogs/${blog.id}`}

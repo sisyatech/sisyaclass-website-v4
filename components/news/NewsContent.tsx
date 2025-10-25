@@ -166,7 +166,7 @@ const NewsContent = () => {
 
         {/* News Grid - Modern Card Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {regularNews.map((newsItem, index) => (
+          {regularNews.slice(0, 3).map((newsItem, index) => (
             <RevealOnView
               key={newsItem.id}
               from="bottom"

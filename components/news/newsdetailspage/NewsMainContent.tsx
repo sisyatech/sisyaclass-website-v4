@@ -17,17 +17,21 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
     const fetchNewsData = async () => {
       try {
         setLoading(true);
+        console.log('📰 NewsMainContent: Fetching news with ID:', newsId);
         const news = await getNewsById(newsId);
+        console.log('📰 NewsMainContent: Received news data:', news);
         setNewsData(news);
       } catch (error) {
-        console.error('Error fetching news:', error);
+        console.error('❌ NewsMainContent: Error fetching news:', error);
         setNewsData(null);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchNewsData();
+    if (newsId) {
+      fetchNewsData();
+    }
   }, [newsId]);
 
   const formatDate = (dateString: string) => {
@@ -362,7 +366,26 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
     return (
       <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden">
         <div className="p-4 sm:p-6 md:p-8 lg:p-10 text-center">
-          <p className="text-gray-500">News not found</p>
+          <div className="text-red-500 mb-4">
+            <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 19.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Unable to Load News</h2>
+          <p className="text-gray-600 mb-4">
+            There was an error loading this news article. This might be due to:
+          </p>
+          <ul className="text-left text-gray-600 mb-6 max-w-md mx-auto">
+            <li className="mb-2">• The news article doesn't exist</li>
+            <li className="mb-2">• Server is temporarily unavailable</li>
+            <li className="mb-2">• Network connection issues</li>
+          </ul>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-[#0595CE] text-white px-6 py-3 rounded-lg hover:bg-[#047aa8] transition-colors"
+          >
+            Try Again
+          </button>
         </div>
       </div>
     );
