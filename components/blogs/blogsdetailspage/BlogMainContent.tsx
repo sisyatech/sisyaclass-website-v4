@@ -457,7 +457,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
                 title={tagItem.tag.name}
               >
                 {tagItem.tag.name}
-              </span>
+          </span>
             ))}
           </div>
         </div>
