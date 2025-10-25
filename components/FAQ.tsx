@@ -81,7 +81,7 @@ const FAQ = () => {
               {/* Question */}
               <button
                 onClick={() => toggleItem(faq.id)}
-                className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors rounded-xl"
+                className="w-full px-6 py-5 text-left flex items-center justify-between gap-4 hover:bg-gray-50 transition-colors rounded-xl cursor-pointer"
               >
                 <span 
                   className="font-roboto font-medium text-[17px] leading-[1.5] text-[#1A2439]"

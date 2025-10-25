@@ -83,21 +83,35 @@ const AppDownload = () => {
 
                     {/* Store Buttons */}
                     <div className="flex gap-2 min-[375px]:gap-2.5 sm:gap-3 md:gap-3 lg:gap-2 xl:gap-4">
-                      <Image
-                        src="/download/googleplay.svg"
-                        alt="Get it on Google Play"
-                        width={200}
-                        height={56}
-                        className="h-[42px] min-[375px]:h-[46px] sm:h-[50px] md:h-[50px] lg:h-[46px] xl:h-14 w-auto cursor-pointer"
-                      />
+                      <a
+                        href="https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&hl=en_IN"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cursor-pointer"
+                      >
+                        <Image
+                          src="/download/googleplay.svg"
+                          alt="Get it on Google Play"
+                          width={200}
+                          height={56}
+                          className="h-[42px] min-[375px]:h-[46px] sm:h-[50px] md:h-[50px] lg:h-[46px] xl:h-14 w-auto"
+                        />
+                      </a>
 
-                      <Image
-                        src="/download/appstore.svg"
-                        alt="Download on the App Store"
-                        width={200}
-                        height={56}
-                        className="h-[42px] min-[375px]:h-[46px] sm:h-[50px] md:h-[50px] lg:h-[46px] xl:h-14 w-auto cursor-pointer"
-                      />
+                      <a
+                        href="https://apps.apple.com/in/app/sisya-class-e-learning-app/id6739211295"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cursor-pointer"
+                      >
+                        <Image
+                          src="/download/appstore.svg"
+                          alt="Download on the App Store"
+                          width={200}
+                          height={56}
+                          className="h-[42px] min-[375px]:h-[46px] sm:h-[50px] md:h-[50px] lg:h-[46px] xl:h-14 w-auto"
+                        />
+                      </a>
                     </div>
                   </div>
                 </div>
