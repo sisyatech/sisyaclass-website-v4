@@ -85,7 +85,7 @@ const Banner = () => {
   const bannerImageLink = webLinks?.webBannerImageLink || "/backendbanner.svg";
 
   return (
-    <div className="py-20 bg-white">
+    <div className="py-6 bg-white">
       <div className="mx-auto max-w-6xl px-3">
         <div className="flex justify-center">
           <Image 

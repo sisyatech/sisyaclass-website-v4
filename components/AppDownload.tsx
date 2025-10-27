@@ -75,7 +75,7 @@ const AppDownload = () => {
                     {/* Download Now Button */}
                     <div className="flex justify-center sm:justify-start w-full">
                       <button
-                        className="font-montserrat font-bold text-[14px] min-[375px]:text-[15px] sm:text-[16px] md:text-[16px] lg:text-[15px] xl:text-lg text-white rounded-[12px] sm:rounded-xl md:rounded-xl lg:rounded-xl xl:rounded-2xl px-3 min-[375px]:px-4 sm:px-5 md:px-5 lg:px-4 xl:px-5 py-2 sm:py-2.5 md:py-2.5 lg:py-2 xl:py-3 bg-[#1A2439] w-[160px] min-[375px]:w-[170px] sm:w-[190px] md:w-[200px] lg:w-[170px] xl:w-[210px] shadow-[0px_5.57px_5.57px_0px_#00000040]"
+                        className="cursor-pointer font-montserrat font-bold text-[14px] min-[375px]:text-[15px] sm:text-[16px] md:text-[16px] lg:text-[15px] xl:text-lg text-white rounded-[12px] sm:rounded-xl md:rounded-xl lg:rounded-xl xl:rounded-2xl px-3 min-[375px]:px-4 sm:px-5 md:px-5 lg:px-4 xl:px-5 py-2 sm:py-2.5 md:py-2.5 lg:py-2 xl:py-3 bg-[#1A2439] w-[160px] min-[375px]:w-[170px] sm:w-[190px] md:w-[200px] lg:w-[170px] xl:w-[210px] shadow-[0px_5.57px_5.57px_0px_#00000040]"
                       >
                         Download Now
                       </button>

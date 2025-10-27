@@ -57,7 +57,7 @@ const FAQ = () => {
   };
 
   return (
-    <div id="faqs" ref={sectionRef} className="py-6 bg-white">
+    <div id="faqs" ref={sectionRef} className="py-3 bg-white">
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 
@@ -91,7 +91,7 @@ const FAQ = () => {
                 
                 {/* Plus/Minus Icon */}
                 <div 
-                  className={`flex-shrink-0 ml-4 w-7 h-7 rounded-full bg-[#4A9FD8] shadow-sm flex items-center justify-center transition-transform duration-300 ${openItem === faq.id ? 'rotate-45' : 'rotate-0'}`}
+                  className={`shrink-0 ml-4 w-7 h-7 rounded-full bg-[#4A9FD8] shadow-sm flex items-center justify-center transition-transform duration-300 ${openItem === faq.id ? 'rotate-45' : 'rotate-0'}`}
                 >
                   <svg
                     width="18"

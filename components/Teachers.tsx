@@ -36,13 +36,13 @@ const Teachers = () => {
       try {
         // console.log('==============================================');
         // console.log('🚀 [TEACHERS] STARTING API FETCH');
-        
-        const response = await fetch('https://sisyaclass.xyz/student/get_all_faculty_member_card', {
-          method: 'POST',
+
+        const response = await fetch("https://sisyaclass.xyz/student/get_all_faculty_member_card", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          mode: 'cors',
+          mode: "cors",
         });
 
         // console.log('📊 [TEACHERS] Response status:', response.status);
@@ -50,7 +50,7 @@ const Teachers = () => {
         if (response.ok) {
           const data = await response.json();
           // console.log('✅ [TEACHERS] DATA RECEIVED:', data);
-          
+
           if (Array.isArray(data) && data.length > 0) {
             // Sort by order field
             const sortedData = data.sort((a: TeacherData, b: TeacherData) => a.order - b.order);
@@ -108,18 +108,18 @@ const Teachers = () => {
       order: 1,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    }
+    },
   ];
 
   const displayTeachers = teachers.length > 0 ? teachers : defaultTeachers;
-  
+
   // console.log('🎨 [TEACHERS] Rendering component');
   // console.log('🎨 [TEACHERS] Loading:', loading);
   // console.log('🎨 [TEACHERS] Teachers from API:', teachers);
   // console.log('🎨 [TEACHERS] Display teachers:', displayTeachers);
   // console.log('🎨 [TEACHERS] Entered:', entered);
   // console.log('🎨 [TEACHERS] Cards entered:', cardsEntered);
-  
+
   // Get visible teachers for desktop (4 cards)
   const getVisibleTeachers = () => {
     const result = [];
@@ -136,10 +136,10 @@ const Teachers = () => {
   if (loading) {
     // console.log('⏳ [TEACHERS] Showing loading state');
     return (
-      <div className="py-5 sm:py-0 bg-white">
+      <div className="bg-white py-5 sm:py-0">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
+          <div className="py-20 text-center">
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-b-2 border-[#0595CE]"></div>
             <p className="mt-4 text-gray-600">Loading teachers...</p>
           </div>
         </div>
@@ -150,73 +150,88 @@ const Teachers = () => {
   // console.log('✅ [TEACHERS] Rendering main content');
 
   return (
-    <div ref={sectionRef} className="py-5 sm:py-0 bg-white">
+    <div ref={sectionRef} className="bg-white py-5 sm:py-0">
       <div className="mx-auto max-w-7xl px-4">
-        
         {/* Top Headlines */}
-        <div className={`text-center mb-8 sm:mb-10 md:mb-12 transition-all duration-[1200ms] ease-out ${entered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-[160px]"}`}>
-          <h3 className="font-montserrat font-normal text-[16px] leading-[24px] sm:text-[19px] sm:leading-[28px] md:text-[22px] md:leading-[32px] text-center text-[#1A2439]">
+        <div
+          className={`mb-8 text-center transition-all duration-[1200ms] ease-out sm:mb-10 md:mb-12 ${entered ? "translate-x-0 opacity-100" : "-translate-x-[160px] opacity-0"}`}
+        >
+          <h3 className="font-montserrat text-center text-[16px] leading-[24px] font-normal text-[#1A2439] sm:text-[19px] sm:leading-[28px] md:text-[22px] md:leading-[32px]">
             Meet the Minds
           </h3>
-          <h2 className="font-montserrat font-bold text-[26px] leading-[32px] sm:text-[36px] sm:leading-[40px] md:text-[44px] md:leading-[42px] lg:text-5xl lg:leading-[45px] text-center capitalize mb-4 sm:mb-6 md:mb-7 text-[#1A2439]">
+          <h2 className="font-montserrat mb-4 text-center text-[26px] leading-[32px] font-bold text-[#1A2439] capitalize sm:mb-6 sm:text-[36px] sm:leading-[40px] md:mb-7 md:text-[44px] md:leading-[42px] lg:text-5xl lg:leading-[45px]">
             Behind Your Child's Success
           </h2>
-          <p className="font-montserrat font-semibold text-[13px] sm:text-[15px] md:text-[16px] lg:text-[18px] leading-tight text-center text-[#556A8E] px-4">
-            Learn from India's top educators — 98% IIT/NIT-qualified, with years of<br className="hidden sm:inline" />experience in nurturing young minds.
+          <p className="font-montserrat px-4 text-center text-[13px] leading-tight font-semibold text-[#556A8E] sm:text-[15px] md:text-[16px] lg:text-[18px]">
+            Learn from India's top educators — 98% IIT/NIT-qualified, with years of
+            <br className="hidden sm:inline" />
+            experience in nurturing young minds.
           </p>
         </div>
 
         {/* Teachers Carousel */}
-        <div className={`relative transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[160px]"}`}>
+        <div
+          className={`relative transition-all duration-[1500ms] ease-out ${entered ? "translate-y-0 opacity-100" : "translate-y-[160px] opacity-0"}`}
+        >
           {/* Desktop: 4 cards with side arrows */}
-          <div className="hidden lg:block relative">
+          <div className="relative hidden lg:block">
             {/* Left Arrow */}
-            <button 
+            <button
               onClick={handlePrevSlide}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 translate-x-2 w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 cursor-pointer"
+              className="absolute top-1/2 left-0 z-10 flex h-10 w-10 -translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
             >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg
+                className="h-5 w-5 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
 
             {/* Cards */}
-            <div className="flex justify-center gap-6 px-8">
+            <div className="flex justify-center gap-5 px-16">
               {visibleTeachers.map((teacher, index) => (
-                <div 
+                <div
                   key={`${teacher.id}-${index}`}
-                  className={`overflow-hidden w-[251.6px] h-[406.7px] rounded-[26.04px] bg-[#2C3E50] p-5 transition-all duration-[800ms] ease-out ${cardsEntered ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'}`}
-                  style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : '0ms' }}
+                  className={`h-[360px] w-[220px] overflow-hidden rounded-[24px] bg-[#2C3E50] p-4 transition-all duration-[800ms] ease-out ${cardsEntered ? "translate-y-0 scale-100 opacity-100" : "translate-y-4 scale-95 opacity-0"}`}
+                  style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : "0ms" }}
                 >
                   {/* Teacher Image */}
-                  <div className="flex justify-center mb-4">
-                    <div className="rounded-[20px] overflow-hidden w-[196.56px] h-[226.04px] bg-[#D9E3F0]">
-                      <img 
-                        src={teacher.imageUrl || '/teacher.svg'} 
-                        alt={teacher.name} 
-                        className="w-full h-full object-cover" 
+                  <div className="mb-3 flex justify-center">
+                    <div className="h-[190px] w-[170px] overflow-hidden rounded-[18px] bg-[#D9E3F0]">
+                      <img
+                        src={teacher.imageUrl || "/teacher.svg"}
+                        alt={teacher.name}
+                        className="h-full w-full object-cover"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = '/teacher.svg';
+                          target.src = "/teacher.svg";
                         }}
                       />
                     </div>
                   </div>
                   {/* Experience Badge */}
-                  <div className="flex justify-center mb-3">
-                    <div className="inline-block px-4 py-2 rounded-full bg-white font-roboto font-medium text-sm text-[#1A2439]">
+                  <div className="mb-2 flex justify-center">
+                    <div className="font-roboto inline-block whitespace-nowrap rounded-full bg-white px-3 py-1 text-xs font-medium text-[#1A2439]">
                       {teacher.experienceText}
                     </div>
                   </div>
                   {/* Info */}
-                  <div className="text-white text-center">
-                    <h3 className="font-montserrat font-black text-lg leading-none mb-3 tracking-[0.02em]">
+                  <div className="text-center text-white">
+                    <h3 className="font-montserrat mb-2 text-base leading-none font-black tracking-[0.02em]">
                       {teacher.name}
                     </h3>
-                    <p className="font-montserrat font-semibold leading-none mb-3 text-[12.4px] tracking-[0.02em]">
+                    <p className="font-montserrat mb-2 text-[11.5px] leading-none font-semibold tracking-[0.02em]">
                       {teacher.designation}
                     </p>
-                    <p className="font-montserrat font-semibold leading-none text-[12.4px] tracking-[0.02em]">
+                    <p className="font-montserrat text-[11.5px] leading-none font-semibold tracking-[0.02em]">
                       {teacher.qualification}
                     </p>
                   </div>
@@ -225,12 +240,22 @@ const Teachers = () => {
             </div>
 
             {/* Right Arrow */}
-            <button 
+            <button
               onClick={handleNextSlide}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 -translate-x-2 w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center transition-colors duration-300 z-10 hover:bg-gray-100 cursor-pointer"
+              className="absolute top-1/2 right-0 z-10 flex h-10 w-10 translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
             >
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="h-5 w-5 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </button>
           </div>
@@ -241,36 +266,36 @@ const Teachers = () => {
               {(() => {
                 const teacher = displayTeachers[currentSlide];
                 return (
-                  <div 
+                  <div
                     key={teacher.id}
-                    className={`overflow-hidden w-[210px] h-[370px] min-[375px]:w-[230px] min-[375px]:h-[390px] sm:w-[250px] sm:h-[410px] md:w-[270px] md:h-[420px] rounded-[22px] min-[375px]:rounded-[24px] md:rounded-[26px] bg-[#2C3E50] p-3.5 min-[375px]:p-4 md:p-5 transition-all duration-[400ms] ease-in-out ${cardsEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                    className={`h-[370px] w-[210px] overflow-hidden rounded-[22px] bg-[#2C3E50] p-3.5 transition-all duration-[400ms] ease-in-out min-[375px]:h-[390px] min-[375px]:w-[230px] min-[375px]:rounded-[24px] min-[375px]:p-4 sm:h-[410px] sm:w-[250px] md:h-[420px] md:w-[270px] md:rounded-[26px] md:p-5 ${cardsEntered ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}
                   >
-                    <div className="flex justify-center mb-2.5 min-[375px]:mb-3 md:mb-4">
-                      <div className="rounded-[16px] min-[375px]:rounded-[18px] md:rounded-[20px] overflow-hidden w-[170px] h-[200px] min-[375px]:w-[186px] min-[375px]:h-[214px] sm:w-[200px] sm:h-[230px] md:w-[210px] md:h-[240px] bg-[#D9E3F0]">
-                        <img 
-                          src={teacher.imageUrl || '/teacher.svg'} 
-                          alt={teacher.name} 
-                          className="w-full h-full object-cover"
+                    <div className="mb-2.5 flex justify-center min-[375px]:mb-3 md:mb-4">
+                      <div className="h-[200px] w-[170px] overflow-hidden rounded-[16px] bg-[#D9E3F0] min-[375px]:h-[214px] min-[375px]:w-[186px] min-[375px]:rounded-[18px] sm:h-[230px] sm:w-[200px] md:h-[240px] md:w-[210px] md:rounded-[20px]">
+                        <img
+                          src={teacher.imageUrl || "/teacher.svg"}
+                          alt={teacher.name}
+                          className="h-full w-full object-cover"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            target.src = '/teacher.svg';
+                            target.src = "/teacher.svg";
                           }}
                         />
                       </div>
                     </div>
-                    <div className="flex justify-center mb-2 md:mb-3">
-                      <div className="inline-block px-3 py-1.5 min-[375px]:px-4 min-[375px]:py-2 rounded-full bg-white font-roboto font-medium text-xs min-[375px]:text-sm text-[#1A2439]">
+                    <div className="mb-2 flex justify-center md:mb-3">
+                      <div className="font-roboto inline-block rounded-full bg-white px-3 py-1.5 text-xs font-medium text-[#1A2439] min-[375px]:px-4 min-[375px]:py-2 min-[375px]:text-sm">
                         {teacher.experienceText}
                       </div>
                     </div>
-                    <div className="text-white text-center">
-                      <h3 className="font-montserrat font-black text-[16px] min-[375px]:text-[17px] md:text-[18px] leading-none mb-2 md:mb-3 tracking-[0.02em]">
+                    <div className="text-center text-white">
+                      <h3 className="font-montserrat mb-2 text-[16px] leading-none font-black tracking-[0.02em] min-[375px]:text-[17px] md:mb-3 md:text-[18px]">
                         {teacher.name}
                       </h3>
-                      <p className="font-montserrat font-semibold leading-none mb-2 md:mb-3 text-[11.5px] min-[375px]:text-[12.4px] tracking-[0.02em]">
+                      <p className="font-montserrat mb-2 text-[11.5px] leading-none font-semibold tracking-[0.02em] min-[375px]:text-[12.4px] md:mb-3">
                         {teacher.designation}
                       </p>
-                      <p className="font-montserrat font-semibold leading-none text-[11.5px] min-[375px]:text-[12.4px] tracking-[0.02em]">
+                      <p className="font-montserrat text-[11.5px] leading-none font-semibold tracking-[0.02em] min-[375px]:text-[12.4px]">
                         {teacher.qualification}
                       </p>
                     </div>
@@ -279,15 +304,45 @@ const Teachers = () => {
               })()}
             </div>
             {/* Bottom arrows */}
-            <div className="mt-4 md:mt-5 flex items-center justify-center gap-5 sm:gap-6">
-              <button onClick={handlePrevSlide} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <div className="mt-4 flex items-center justify-center gap-5 sm:gap-6 md:mt-5">
+              <button
+                onClick={handlePrevSlide}
+                // Reduced size: w-8 h-8 (was w-10 h-10)
+                // Reduced border: border (was border-2)
+                // Reduced radius: rounded-lg (was rounded-[14px])
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9D9D9] bg-white transition-transform hover:bg-gray-100 active:scale-95"
+              >
+                {/* Reduced SVG size: w-4 h-4 (was w-5 h-5) */}
+                <svg
+                  className="h-4 w-4 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </button>
-              <button onClick={handleNextSlide} className="cursor-pointer w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-transform">
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <button
+                onClick={handleNextSlide}
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9D9D9] bg-white transition-transform hover:bg-gray-100 active:scale-95"
+              >
+                <svg
+                  className="h-5 w-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </button>
             </div>

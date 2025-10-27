@@ -94,9 +94,9 @@ const Reviews = () => {
 
   if (loading) {
     return (
-      <div className="py-20 bg-white overflow-x-hidden">
+      <div className="py-6 bg-white overflow-x-hidden">
         <div className="mx-auto max-w-7xl px-4">
-          <div className="text-center py-20">
+          <div className="text-center py-6">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0595CE] mx-auto"></div>
             <p className="mt-4 text-gray-600">Loading reviews...</p>
           </div>
@@ -125,7 +125,7 @@ const Reviews = () => {
         }
       `}</style>
       
-      <div className="py-20 bg-white overflow-x-hidden">
+      <div className="py-6 bg-white overflow-x-hidden">
         <div className="mx-auto max-w-7xl px-4">
           {/* Reviews Carousel Container */}
           <div className="relative mx-auto w-full">
@@ -210,7 +210,7 @@ const Reviews = () => {
               <div className="flex justify-center mt-4 space-x-6">
                 <button 
                   onClick={handlePrevSlide}
-                  className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9D9D9] bg-white transition-transform hover:bg-gray-100 active:scale-95"
                   aria-label="Previous review"
                 >
                   <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@ const Reviews = () => {
                 </button>
                 <button 
                   onClick={handleNextSlide}
-                  className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group"
+                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-[#D9D9D9] bg-white transition-transform hover:bg-gray-100 active:scale-95"
                   aria-label="Next review"
                 >
                   <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -321,7 +321,7 @@ const Reviews = () => {
               <div className="p-6">
                 {/* Modal Header */}
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="rounded-full overflow-hidden flex-shrink-0 w-12 h-12 bg-gray-200">
+                  <div className="rounded-full overflow-hidden shrink-0 w-12 h-12 bg-gray-200">
                     <img 
                       src={selectedReview.imageUrl}
                       alt={selectedReview.name}
