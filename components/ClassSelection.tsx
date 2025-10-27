@@ -1,26 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-// Remove RevealOnView if not used/available
-// import RevealOnView from "./Reveal/RevealOnView";
+import React, { useEffect, useState, useRef } from "react";
+import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
-// Remove BackgroundRippleEffect if not used/available
-// import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
+import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
 import LoginModal from "./LoginModal";
 import { useUser } from "./UserContext";
-import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
-
-// --- Placeholder for RevealOnView ---
-// UPDATED Placeholder to accept the props being passed
-interface RevealOnViewProps {
-  children: React.ReactNode;
-  from?: string; // Add optional props to match usage
-  durationMs?: number;
-  delayMs?: number;
-}
-const RevealOnView: React.FC<RevealOnViewProps> = ({ children }) => <>{children}</>;
-// --- End Placeholder ---
-
 
 interface ClassData {
   id: number;
@@ -43,6 +28,8 @@ const ClassSelection = () => {
   const [loading, setLoading] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [selectedClassForPayment, setSelectedClassForPayment] = useState<number | null>(null);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const classOptions = ["Class 1-3", "Class 4-5", "Class 6-7", "Class 8-10"];
@@ -75,7 +62,10 @@ const ClassSelection = () => {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_CLASS_CARD}`, {
+        // console.log('🚀 Fetching class data from API...');
+        // console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
+        
+        const response = await fetch('https://sisyaclass.xyz/student/get_class_card', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -83,24 +73,83 @@ const ClassSelection = () => {
           mode: 'cors', // Explicitly request CORS
         });
         
+        // console.log('📊 API Response status:', response.status);
+        // console.log('📋 API Response headers:', {
+        //   'Content-Type': response.headers.get('Content-Type'),
+        //   'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+        // });
+        
         if (response.ok) {
           const data = await response.json();
+          // console.log('✅ API Data received successfully!');
+          // console.log('📦 Number of classes:', data.length);
+          // console.log('📝 Sample data:', data[0]);
           setClassData(data);
         } else {
           // console.error('❌ Failed to fetch class data, status:', response.status);
-          // await tryAlternativeEndpoints(); // Keep error handling if needed
+          const responseText = await response.text();
+          // console.error('📄 Response text:', responseText);
+          
+          // Try alternative endpoints
+          // console.log('🔄 Trying alternative API endpoints...');
+          await tryAlternativeEndpoints();
         }
       } catch (error) {
         // console.error('❌ Error fetching class data:', error);
-        // await tryAlternativeEndpoints(); // Keep error handling if needed
+        // console.log('🔄 Network error - trying alternative endpoints...');
+        await tryAlternativeEndpoints();
       } finally {
         setLoading(false);
+        // console.log('✅ Loading completed');
       }
     };
 
-    // Placeholder for alternative endpoint logic
     const tryAlternativeEndpoints = async () => {
-        // console.error('🚨 BACKEND SETUP REQUIRED or API Endpoint is wrong/down.');
+      // const alternativeUrls = [
+      //   'https://sisyaclass.xyz/api/student/get_class_card',
+      //   'https://sisyaclass.xyz/student/class_cards',
+      //   'https://api.sisyaclass.xyz/student/get_class_card',
+      // ];
+
+      // for (const url of alternativeUrls) {
+      //   try {
+      //     console.log(`🔍 Trying alternative URL: ${url}`);
+      //     const response = await fetch(url, {
+      //       method: 'GET',
+      //       headers: { 'Content-Type': 'application/json' },
+      //       mode: 'cors',
+      //     });
+      //     if (response.ok) {
+      //       const data = await response.json();
+      //       console.log('✅ Alternative API Data received successfully!');
+      //       console.log('📦 Data:', data);
+      //       setClassData(data);
+      //       return;
+      //     } else {
+      //       console.log(`❌ ${url} returned status: ${response.status}`);
+      //     }
+      //   } catch (error) {
+      //     console.log(`❌ Alternative URL ${url} failed:`, error);
+      //   }
+      // }
+      
+      // console.error('❌ ALL API ENDPOINTS FAILED!');
+      // console.error('');
+      // console.error('🚨 BACKEND SETUP REQUIRED:');
+      // console.error('1. Make sure your backend server is running');
+      // console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_class_card');
+      // console.error('3. Enable CORS headers in your backend:');
+      // console.error('   - Access-Control-Allow-Origin: *');
+      // console.error('   - Access-Control-Allow-Methods: GET, POST');
+      // console.error('   - Access-Control-Allow-Headers: Content-Type');
+      // console.error('');
+      // console.error('📝 Expected API Response Format:');
+      // console.error('[');
+      // console.error('  { id: 1, class: 1, educatorImage: "url", demoPrice: 19 },');
+      // console.error('  { id: 2, class: 2, educatorImage: "url", demoPrice: 19 },');
+      // console.error('  ... (all 10 classes)');
+      // console.error(']');
+      // console.error('');
     };
 
     fetchClassData();
@@ -125,27 +174,36 @@ const ClassSelection = () => {
 
   // Helper function to get API data for a specific class
   const getClassApiData = (classNumber: number) => {
-    return classData.find(data => data.class === classNumber);
+    const data = classData.find(data => data.class === classNumber);
+    // console.log(`Getting API data for Class ${classNumber}:`, data);
+    return data;
   };
 
   // Helper function to get demo price for a class
   const getDemoPrice = (classNumber: number) => {
     const apiData = getClassApiData(classNumber);
-    return apiData?.demoPrice ?? 19; // Default to 19 if no data
+    const price = apiData?.demoPrice || 19;
+    // console.log(`Demo price for Class ${classNumber}: ₹${price}`);
+    return price; // Default to 19 if no data
   };
 
   // Helper function to get educator image for a class
   const getEducatorImage = (classNumber: number) => {
     const apiData = getClassApiData(classNumber);
-    // Use placeholder if API data or image URL is missing
-    return apiData?.educatorImage || `https://placehold.co/247x246/EBF8FF/3182CE?text=Class+${classNumber}`; 
+    const imageUrl = apiData?.educatorImage || "/teacher.svg";
+    // console.log(`Educator image for Class ${classNumber}:`, imageUrl);
+    return imageUrl; // Default to local image if no data
   };
 
   // Handle payment button click
   const handlePaymentClick = (classNumber: number) => {
     if (isLoggedIn && user) {
+      // User is already logged in, proceed to payment directly
+      console.log(`User ${user.name} is already logged in, proceeding directly to payment for Class ${classNumber}`);
       handlePayment(classNumber);
     } else {
+      // User not logged in, show login modal
+      console.log('User not logged in, showing login modal for Class', classNumber);
       setSelectedClassForPayment(classNumber);
       setShowLoginModal(true);
     }
@@ -154,12 +212,21 @@ const ClassSelection = () => {
   // Handle payment after login
   const handlePayment = (classNumber: number) => {
     const price = getDemoPrice(classNumber);
+    // console.log(`Processing payment for Class ${classNumber} at ₹${price}`);
+    // Here you would integrate with your payment gateway
+    // For now, just show an alert
     alert(`Redirecting to payment for Class ${classNumber} - ₹${price}`);
   };
 
   // Handle successful login
   const handleLoginSuccess = (userData: any) => {
+    console.log('ClassSelection: Login successful, user data:', userData);
+    console.log('ClassSelection: User is now logged in:', isLoggedIn);
+    
+    // User is now logged in via context, proceed with payment if there was a selected class
+    // Note: We use userData directly since context state might not be updated immediately
     if (selectedClassForPayment && userData) {
+      console.log('ClassSelection: Proceeding with payment for class:', selectedClassForPayment);
       setTimeout(() => {
         handlePayment(selectedClassForPayment);
         setSelectedClassForPayment(null);
@@ -176,54 +243,64 @@ const ClassSelection = () => {
   // Helper: get starting global index for a given range
   const getRangeStartIndex = (range: string) => {
     switch (range) {
-      case "Class 1-3": return 0;
-      case "Class 4-5": return 3;
-      case "Class 6-7": return 5;
-      case "Class 8-10": return 7;
-      default: return 0;
+      case "Class 1-3":
+        return 0;
+      case "Class 4-5":
+        return 3;
+      case "Class 6-7":
+        return 5;
+      case "Class 8-10":
+        return 7;
+      default:
+        return 0;
     }
   };
 
   // Intersection Observer for initial animation
   useEffect(() => {
     if (!sectionRef.current) return;
-    const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setEntered(true);
-        obs.disconnect();
-      }
-    }, { threshold: 0.2 });
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEntered(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.2 }
+    );
     obs.observe(sectionRef.current);
     return () => obs.disconnect();
   }, []);
 
-  // Handler for Previous slide button (Desktop)
   const handlePrevSlide = () => {
     setCardsEntered(false);
     const currentIndex = classOptions.indexOf(activeClass);
     const prevIndex = currentIndex > 0 ? currentIndex - 1 : classOptions.length - 1;
     setActiveClass(classOptions[prevIndex]);
     setCurrentSlide(0);
-    setTimeout(() => setCardsEntered(true), 10); // Short delay
+    // Re-trigger card animation
+    setTimeout(() => setCardsEntered(true), 100);
   };
 
-  // Handler for Next slide button (Desktop)
   const handleNextSlide = () => {
     setCardsEntered(false);
     const currentIndex = classOptions.indexOf(activeClass);
     const nextIndex = currentIndex < classOptions.length - 1 ? currentIndex + 1 : 0;
     setActiveClass(classOptions[nextIndex]);
     setCurrentSlide(0);
-    setTimeout(() => setCardsEntered(true), 10); // Short delay
+    // Re-trigger card animation
+    setTimeout(() => setCardsEntered(true), 100);
   };
 
-  // Reset animations when activeClass changes
   useEffect(() => {
     setCurrentSlide(0);
     setMobileCardIndex(0);
+    // Ensure mobile single-card starts at the first class of the selected range
     setMobileGlobalIndex(getRangeStartIndex(activeClass));
+    // Re-trigger card animation when class changes
     setCardsEntered(false);
-    requestAnimationFrame(() => setCardsEntered(true));
+    setTimeout(() => setCardsEntered(true), 100);
   }, [activeClass]);
 
   const getCurrentSlideClasses = () => {
@@ -235,10 +312,15 @@ const ClassSelection = () => {
   
   // Update active class range based on mobile global index
   const updateActiveClassFromIndex = (index: number) => {
-    if (index < 3) setActiveClass("Class 1-3");
-    else if (index < 5) setActiveClass("Class 4-5");
-    else if (index < 7) setActiveClass("Class 6-7");
-    else setActiveClass("Class 8-10");
+    if (index < 3) {
+      setActiveClass("Class 1-3");
+    } else if (index < 5) {
+      setActiveClass("Class 4-5");
+    } else if (index < 7) {
+      setActiveClass("Class 6-7");
+    } else {
+      setActiveClass("Class 8-10");
+    }
   };
 
   const handleMobilePrev = () => {
@@ -246,14 +328,40 @@ const ClassSelection = () => {
     const newGlobalIndex = mobileGlobalIndex === 0 ? allClasses.length - 1 : mobileGlobalIndex - 1;
     setMobileGlobalIndex(newGlobalIndex);
     updateActiveClassFromIndex(newGlobalIndex);
-    requestAnimationFrame(() => setCardsEntered(true));
+    setTimeout(() => setCardsEntered(true), 100);
   };
   const handleMobileNext = () => {
     setCardsEntered(false);
     const newGlobalIndex = mobileGlobalIndex >= allClasses.length - 1 ? 0 : mobileGlobalIndex + 1;
     setMobileGlobalIndex(newGlobalIndex);
     updateActiveClassFromIndex(newGlobalIndex);
-    requestAnimationFrame(() => setCardsEntered(true));
+    setTimeout(() => setCardsEntered(true), 100);
+  };
+
+  // Touch handlers for swipe gestures
+  const minSwipeDistance = 50;
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleMobileNext();
+    } else if (isRightSwipe) {
+      handleMobilePrev();
+    }
   };
 
   // Show loading state while fetching data
@@ -270,15 +378,8 @@ const ClassSelection = () => {
     );
   }
 
-  // Handle case where API fails and classData is empty
-  if (classData.length === 0) {
-      // console.warn("API data missing, using default values.");
-      // Render with default prices/images if needed, or show an error
-  }
-
-
   return (
-    <div ref={sectionRef} className="pt-5 pb-3 sm:pb-4 md:pb-5 bg-white overflow-hidden"> {/* Added overflow-hidden */}
+    <div ref={sectionRef} className="pt-5 pb-3 sm:pb-4 md:pb-5 bg-white">
       
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}
@@ -300,6 +401,8 @@ const ClassSelection = () => {
                     onClick={() => {
                       setActiveClass(option);
                       setCurrentSlide(0);
+                      // When a range is chosen directly (especially on mobile),
+                      // jump the mobile global index to the first class in that range
                       setMobileGlobalIndex(getRangeStartIndex(option));
                     }}
                     className={`cursor-pointer font-montserrat font-semibold text-[13px] sm:text-[14px] md:text-[15px] transition-all duration-300 w-[130px] h-[40px] sm:w-[135px] sm:h-[44px] md:w-[139px] md:h-[46px] rounded-[15px] px-[16px] sm:px-[20px] md:px-[23.66px] py-[10px] sm:py-[11px] md:py-[12.52px] shadow-[0px_5.57px_5.57px_0px_rgba(0,0,0,0.25)] ${
@@ -319,35 +422,31 @@ const ClassSelection = () => {
         {/* Carousel */}
         <RevealOnView from="bottom" durationMs={1500}>
           <div className={`relative transition-all duration-[1500ms] ease-out ${entered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-[160px]"}`}>
-            {/* Navigation Arrows - Desktop - UPDATED SIZE */}
+            {/* Navigation Arrows */}
             <button
               onClick={handlePrevSlide}
-              // Reduced size: w/h-8, rounded-lg, border thickness
-              className="cursor-pointer hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-1 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-8 h-8 border border-[#D9D9D9] rounded-lg bg-white group"
+              className="cursor-pointer hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
             >
-              {/* Reduced SVG size: w/h-4 */}
-              <svg className="w-4 h-4 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
 
             <button
               onClick={handleNextSlide}
-               // Reduced size: w/h-8, rounded-lg, border thickness
-              className="cursor-pointer hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-1 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-8 h-8 border border-[#D9D9D9] rounded-lg bg-white group"
+              className="cursor-pointer hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 items-center justify-center transition-all duration-300 z-10 hover:bg-gray-100 hover:shadow-md w-[40px] h-[40px] border-2 border-[#D9D9D9] rounded-[14px] bg-white group"
             >
-               {/* Reduced SVG size: w/h-4 */}
-              <svg className="w-4 h-4 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
               </svg>
             </button>
 
             {/* Cards - Desktop/Tablet */}
-            <div className="hidden md:flex justify-center gap-4 md:gap-5 lg:gap-6 px-10 md:px-12"> {/* Increased padding */}
+            <div className="hidden md:flex justify-center gap-4 md:gap-5 lg:gap-6 px-6 md:px-8">
               {currentSlideClasses.map((card, index) => (
                 <div
-                  key={`${activeClass}-${card.class}-${index}`} // More specific key
-                  className={`shadow-lg hover:shadow-xl transition-all duration-[800ms] ease-out relative w-[220px] h-[320px] md:w-[240px] md:h-[330px] lg:w-[250px] lg:h-[338px] rounded-[18px] md:rounded-[20px] ${
+                  key={`${activeClass}-${index}`}
+                  className={`shadow-lg hover:shadow-xl transition-all duration-[400ms] ease-out relative w-[220px] h-[320px] md:w-[240px] md:h-[330px] lg:w-[250px] lg:h-[338px] rounded-[18px] md:rounded-[20px] ${
                     cardsEntered ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
                   }`}
                   style={{
@@ -363,17 +462,13 @@ const ClassSelection = () => {
                       width={247} 
                       height={246} 
                       className="object-cover w-[215px] h-[215px] md:w-[230px] md:h-[230px] lg:w-[246.56px] lg:h-[246.04px] rounded-full"
-                      onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                         const target = e.target as HTMLImageElement;
-                         target.src = `https://placehold.co/247x246/EBF8FF/3182CE?text=Img`;
-                      }}
-                      unoptimized // Consider if needed for external URLs
+                      unoptimized
                     />
                   </div>
 
                   {/* Class Number */}
                   <div className="absolute top-[46px] md:top-[47px] lg:top-[48px] left-[152px] md:left-[162px] lg:left-[172px]">
-                    <h3 className="w-auto h-[22px] font-montserrat font-bold text-[17px] md:text-[18px] leading-none text-center text-[#1A2439] px-2">{card.class}</h3> {/* Allow width auto */}
+                    <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[17px] md:text-[18px] leading-none text-center text-[#1A2439]">{card.class}</h3>
                   </div>
 
                   {/* Bottom Half - Course Features */}
@@ -381,7 +476,7 @@ const ClassSelection = () => {
                     <div className="p-3 md:p-4 h-full flex flex-col">
                       <div className="grid grid-cols-2 gap-2 mb-2 flex-1">
                         {courseFeatures.map((feature, featureIndex) => (
-                          <button key={featureIndex} className={`transition-colors duration-300 font-montserrat font-semibold text-[7.5px] md:text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white px-1 flex items-center justify-center text-center ${feature === "Olympiad Preparation" ? "col-span-2" : ""}`} style={{ height: "22.73px", color: card.textColor }}> {/* Removed fixed width */}
+                          <button key={featureIndex} className={`transition-colors duration-300 font-montserrat font-semibold text-[7.5px] md:text-[8px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${feature === "Olympiad Preparation" ? "col-span-2" : ""}`} style={{ width: feature === "Olympiad Preparation" ? "auto" : "88px", height: "22.73px", color: card.textColor }}>
                             {feature}
                           </button>
                         ))}
@@ -402,13 +497,16 @@ const ClassSelection = () => {
               ))}
             </div>
 
-            {/* Cards - Mobile single card with arrows */}
+            {/* Cards - Mobile single card with arrows (cycles through all 10 classes) */}
             <div className="md:hidden">
               <div className="flex justify-center px-2">
                 {allClasses.length > 0 && (
                   <div
                     key={mobileGlobalIndex}
-                    className={`shadow-lg hover:shadow-xl transition-all duration-[600ms] ease-in-out relative w-[240px] h-[340px] sm:w-[250px] sm:h-[345px] rounded-[20px] ${
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                    className={`shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out relative w-[240px] h-[340px] sm:w-[250px] sm:h-[345px] rounded-[20px] touch-none ${
                       cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-90"
                     }`}
                     style={{ backgroundColor: allClasses[mobileGlobalIndex].containerColor }}
@@ -420,15 +518,11 @@ const ClassSelection = () => {
                         width={230} 
                         height={230} 
                         className="object-cover w-[230px] h-[230px] rounded-full"
-                        onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = `https://placehold.co/230x230/EBF8FF/3182CE?text=Img`;
-                        }}
                         unoptimized
                       />
                     </div>
                     <div className="absolute top-[45px] right-3">
-                      <h3 className="w-auto h-[22px] font-montserrat font-bold text-[17px] leading-none text-center text-[#1A2439] px-2">{allClasses[mobileGlobalIndex].class}</h3>
+                      <h3 className="w-[74px] h-[22px] font-montserrat font-bold text-[17px] leading-none text-center text-[#1A2439]">{allClasses[mobileGlobalIndex].class}</h3>
                     </div>
                     <div className="absolute w-[216px] h-[170px] top-[152px] left-[9px] rounded-[14px] bg-[#1A2439]">
                       <div className="p-4 h-full flex flex-col">
@@ -436,10 +530,11 @@ const ClassSelection = () => {
                           {courseFeatures.map((feature, featureIndex) => (
                             <button
                               key={featureIndex}
-                              className={`transition-colors duration-300 font-montserrat font-semibold text-[7.5px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white px-1 flex items-center justify-center text-center ${
+                              className={`transition-colors duration-300 font-montserrat font-semibold text-[7.5px] leading-none tracking-[0.02em] rounded-[9.5px] bg-white ${
                                 feature === "Olympiad Preparation" ? "col-span-2" : ""
                               }`}
                               style={{
+                                width: feature === "Olympiad Preparation" ? "auto" : "90px",
                                 height: "22.73px",
                                 color: allClasses[mobileGlobalIndex].textColor,
                               }}
@@ -461,43 +556,15 @@ const ClassSelection = () => {
                   </div>
                 )}
               </div>
-              {/* Mobile Arrows - UPDATED SIZE */}
               <div className="mt-4 flex items-center justify-center gap-6">
-                 {/* Reduced size: w/h-8, rounded-lg, border thickness */}
                 <button onClick={handleMobilePrev} className="cursor-pointer w-8 h-8 border border-[#D9D9D9] rounded-lg bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
-                  {/* Reduced SVG size: w/h-4 */}
-                  <svg className="w-4 h-4 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                  <svg className="w-4 h-4 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                 </button>
                 <button onClick={handleMobileNext} className="cursor-pointer w-8 h-8 border border-[#D9D9D9] rounded-lg bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group">
-                  {/* Reduced SVG size: w/h-4 */}
-                  <svg className="w-4 h-4 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  <svg className="w-4 h-4 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                 </button>
               </div>
             </div>
-
-            {/* Pagination Dots - REMOVED / HIDDEN */}
-            {/* <div className="flex items-center justify-center mt-6 sm:mt-8">
-              <div className="flex space-x-2">
-                {classOptions.map((_, index) => {
-                  const isActive = activeClass === classOptions[index];
-                  const dotClasses = "w-3 h-3 rounded-full transition-all duration-300 " + (isActive ? "bg-[#0595CE] scale-125" : "bg-gray-300 hover:bg-gray-400");
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        setActiveClass(classOptions[index]);
-                        setCurrentSlide(0);
-                        setMobileCardIndex(0);
-                        setMobileGlobalIndex(getRangeStartIndex(classOptions[index]));
-                      }}
-                      className={`cursor-pointer ${dotClasses}`}
-                      aria-label={`Go to ${classOptions[index]}`}
-                    />
-                  );
-                })}
-              </div>
-            </div> 
-            */}
           </div>
         </RevealOnView>
       </div>
@@ -514,3 +581,5 @@ const ClassSelection = () => {
 };
 
 export default ClassSelection;
+
+

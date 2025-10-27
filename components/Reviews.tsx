@@ -29,6 +29,10 @@ const Reviews = () => {
   const [cardsEntered, setCardsEntered] = useState(false);
   const [reviews, setReviews] = useState<ReviewData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
   
   // State to manage the review modal
   const [selectedReview, setSelectedReview] = useState<ReviewData | null>(null);
@@ -73,24 +77,104 @@ const Reviews = () => {
     setCardsEntered(false);
     setCurrentSlide((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
     setTimeout(() => setCardsEntered(true), 300);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 6000);
   };
 
   const handleNextSlide = () => {
     setCardsEntered(false);
     setCurrentSlide((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
     setTimeout(() => setCardsEntered(true), 300);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 6000);
   };
 
   const handleDotClick = (index: number) => {
     setCardsEntered(false);
     setCurrentSlide(index);
     setTimeout(() => setCardsEntered(true), 300);
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 6000);
   };
 
   // Initialize cards animation
   React.useEffect(() => {
     setCardsEntered(true);
   }, []);
+
+  // Auto-scroll functionality for mobile
+  useEffect(() => {
+    if (!isPaused && reviews.length > 0) {
+      const interval = setInterval(() => {
+        setCardsEntered(false);
+        setCurrentSlide((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
+        setTimeout(() => setCardsEntered(true), 300);
+      }, 2000); // Auto-scroll every 2 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isPaused, reviews.length]);
+
+  // Auto-scroll functionality for desktop/tablet (horizontal scroll)
+  useEffect(() => {
+    if (!isPaused && reviews.length > 0 && scrollContainerRef.current) {
+      let scrollAmount = 0;
+      const cardWidth = 305; // 300px card + 5px gap
+      const maxScroll = cardWidth * (reviews.length - 1);
+
+      const interval = setInterval(() => {
+        const container = scrollContainerRef.current;
+        if (container) {
+          scrollAmount += cardWidth;
+          if (scrollAmount > maxScroll) {
+            scrollAmount = 0; // Reset to start
+          }
+          container.scrollTo({
+            left: scrollAmount,
+            behavior: 'smooth'
+          });
+        }
+      }, 2000); // Auto-scroll every 2 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isPaused, reviews.length]);
+
+  // Touch handlers for swipe gestures
+  const minSwipeDistance = 50;
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNextSlide();
+      setIsPaused(true);
+      setTimeout(() => setIsPaused(false), 6000); // Pause for 6 seconds after manual navigation
+    } else if (isRightSwipe) {
+      handlePrevSlide();
+      setIsPaused(true);
+      setTimeout(() => setIsPaused(false), 6000);
+    }
+  };
+
+  // Handle manual scroll on desktop to pause auto-scroll
+  const handleManualScroll = () => {
+    setIsPaused(true);
+    setTimeout(() => setIsPaused(false), 6000);
+  };
 
   if (loading) {
     return (
@@ -130,19 +214,26 @@ const Reviews = () => {
           {/* Reviews Carousel Container */}
           <div className="relative mx-auto w-full">
             {/* Mobile: Single card with dots */}
-            <div className="md:hidden">
+            <div 
+              className="md:hidden"
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
               <div className="flex justify-center px-4">
                 {currentReview && (
                   <div 
                     key={currentSlide}
-                    className="bg-white p-4 w-[280px] h-[220px] rounded-[20px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] flex flex-col"
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                    className="bg-white p-5 w-[340px] h-[260px] rounded-[20px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] flex flex-col touch-none"
                   >
                     {/* Header with Profile - UPDATED FOR FLEXBOX */}
                     <div className="flex items-start justify-between mb-3 gap-3">
                       {/* Left side: Image + Name/Grade - Added flex-1 and min-w-0 */}
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         {/* Profile Image */}
-                        <div className="rounded-full overflow-hidden flex-shrink-0 w-[44px] h-[44px] bg-gray-200">
+                        <div className="rounded-full overflow-hidden flex-shrink-0 w-[50px] h-[50px] bg-gray-200">
                           {currentReview.imageUrl && (
                             <img 
                               src={currentReview.imageUrl}
@@ -159,23 +250,23 @@ const Reviews = () => {
                         {/* Name and Grade - Added flex-1 and min-w-0 */}
                         <div className="flex-1 min-w-0">
                           {/* Removed max-w-[150px] and let truncate work */}
-                          <h3 className="font-roboto font-medium text-[14px] leading-[18px] tracking-[0.03em] text-[#161A38] mb-0.5 truncate">
+                          <h3 className="font-roboto font-medium text-[15px] leading-[19px] tracking-[0.03em] text-[#161A38] mb-0.5 truncate">
                             {currentReview.name}
                           </h3>
-                          <p className="font-roboto font-normal text-[12px] leading-[16px] tracking-[0.03em] text-[#161A38]">
+                          <p className="font-roboto font-normal text-[13px] leading-[17px] tracking-[0.03em] text-[#161A38]">
                             {currentReview.class}
                           </p>
                         </div>
                       </div>
 
                       {/* Role Badge - Removed fixed width w-[64px] and added px-2 */}
-                      <div className="flex-shrink-0 flex items-center justify-center h-[18px] rounded-[4.61px] bg-[#0595CE] font-rubik font-normal text-[9.5px] leading-none text-center text-white px-2">
+                      <div className="flex-shrink-0 flex items-center justify-center h-[20px] rounded-[4.61px] bg-[#0595CE] font-rubik font-normal text-[10px] leading-none text-center text-white px-2.5">
                         {currentReview.role}
                       </div>
                     </div>
 
                     {/* Review Text */}
-                    <p className="font-roboto font-normal text-[12px] leading-[18px] tracking-[0.03em] text-[#161A38] overflow-hidden flex-1" style={{ display: '-webkit-box', WebkitLineClamp: 5, WebkitBoxOrient: 'vertical' as any }}>
+                    <p className="font-roboto font-normal text-[13px] leading-[19px] tracking-[0.03em] text-[#161A38] overflow-hidden flex-1" style={{ display: '-webkit-box', WebkitLineClamp: 6, WebkitBoxOrient: 'vertical' as any }}>
                       {currentReview.review}
                     </p>
                     
@@ -232,7 +323,16 @@ const Reviews = () => {
             {/* Desktop/Tablet: Horizontal scroll */}
             <div className="hidden md:block">
               {/* Added 'hide-scrollbar' class here */}
-              <div className="overflow-x-auto px-4 pb-2 hide-scrollbar">
+              <div 
+                ref={scrollContainerRef}
+                className="overflow-x-auto px-4 pb-2 hide-scrollbar"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+                onScroll={handleManualScroll}
+                onMouseEnter={() => setIsPaused(true)}
+                onMouseLeave={() => setIsPaused(false)}
+              >
                 <div className="flex py-3 gap-5 w-max snap-x snap-mandatory">
                   {reviews.map((review) => {
                     const isDesktopReviewTruncated = review.review && review.review.length > CHAR_LIMIT_DESKTOP;

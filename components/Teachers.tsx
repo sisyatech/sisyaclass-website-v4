@@ -19,6 +19,8 @@ const Teachers = () => {
   const [cardsEntered, setCardsEntered] = useState(false);
   const [teachers, setTeachers] = useState<TeacherData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ const Teachers = () => {
   // Re-trigger card fade/scale on slide change
   useEffect(() => {
     setCardsEntered(false);
-    const timer = setTimeout(() => setCardsEntered(true), 300);
+    const timer = setTimeout(() => setCardsEntered(true), 100);
     return () => clearTimeout(timer);
   }, [currentSlide]);
 
@@ -112,6 +114,32 @@ const Teachers = () => {
   ];
 
   const displayTeachers = teachers.length > 0 ? teachers : defaultTeachers;
+
+  // Touch handlers for swipe gestures
+  const minSwipeDistance = 50;
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNextSlide();
+    } else if (isRightSwipe) {
+      handlePrevSlide();
+    }
+  };
 
   // console.log('🎨 [TEACHERS] Rendering component');
   // console.log('🎨 [TEACHERS] Loading:', loading);
@@ -200,7 +228,7 @@ const Teachers = () => {
               {visibleTeachers.map((teacher, index) => (
                 <div
                   key={`${teacher.id}-${index}`}
-                  className={`h-[360px] w-[220px] overflow-hidden rounded-[24px] bg-[#2C3E50] p-4 transition-all duration-[800ms] ease-out ${cardsEntered ? "translate-y-0 scale-100 opacity-100" : "translate-y-4 scale-95 opacity-0"}`}
+                  className={`h-[360px] w-[220px] overflow-hidden rounded-[24px] bg-[#2C3E50] p-4 transition-all duration-[400ms] ease-out ${cardsEntered ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
                   style={{ transitionDelay: cardsEntered ? `${index * 120}ms` : "0ms" }}
                 >
                   {/* Teacher Image */}
@@ -268,7 +296,10 @@ const Teachers = () => {
                 return (
                   <div
                     key={teacher.id}
-                    className={`h-[370px] w-[210px] overflow-hidden rounded-[22px] bg-[#2C3E50] p-3.5 transition-all duration-[400ms] ease-in-out min-[375px]:h-[390px] min-[375px]:w-[230px] min-[375px]:rounded-[24px] min-[375px]:p-4 sm:h-[410px] sm:w-[250px] md:h-[420px] md:w-[270px] md:rounded-[26px] md:p-5 ${cardsEntered ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                    className={`h-[370px] w-[210px] overflow-hidden rounded-[22px] bg-[#2C3E50] p-3.5 transition-all duration-300 ease-in-out min-[375px]:h-[390px] min-[375px]:w-[230px] min-[375px]:rounded-[24px] min-[375px]:p-4 sm:h-[410px] sm:w-[250px] md:h-[420px] md:w-[270px] md:rounded-[26px] md:p-5 touch-none ${cardsEntered ? "scale-100 opacity-100" : "scale-90 opacity-0"}`}
                   >
                     <div className="mb-2.5 flex justify-center min-[375px]:mb-3 md:mb-4">
                       <div className="h-[200px] w-[170px] overflow-hidden rounded-[16px] bg-[#D9E3F0] min-[375px]:h-[214px] min-[375px]:w-[186px] min-[375px]:rounded-[18px] sm:h-[230px] sm:w-[200px] md:h-[240px] md:w-[210px] md:rounded-[20px]">

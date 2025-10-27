@@ -32,6 +32,8 @@ const Testimonials = () => {
   const [cardEntered, setCardEntered] = useState(false);
   const [testimonials, setTestimonials] = useState<ProcessedTestimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   // Trigger animations on mount
   useEffect(() => {
@@ -96,9 +98,35 @@ const Testimonials = () => {
   // Re-trigger card animation on slide change
   useEffect(() => {
     setCardEntered(false);
-    const timer = setTimeout(() => setCardEntered(true), 300);
+    const timer = setTimeout(() => setCardEntered(true), 100);
     return () => clearTimeout(timer);
   }, [currentIndex]);
+
+  // Touch handlers for swipe gestures
+  const minSwipeDistance = 50;
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      handleNext();
+    } else if (isRightSwipe) {
+      handlePrev();
+    }
+  };
 
   const handlePrev = () => {
     setActiveVideo(null);
@@ -189,14 +217,19 @@ const Testimonials = () => {
         </div>
 
         {/* Mobile & Tablet single card with bottom arrows */}
-        <div className={`lg:hidden transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+        <div 
+          className={`lg:hidden transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}
+        >
           {(() => {
             const t = testimonials[currentIndex % testimonials.length];
             return (
               <div className="flex justify-center px-3 sm:px-4">
                 <div 
                   key={currentIndex}
-                  className={`relative group w-[240px] min-[375px]:w-[260px] sm:w-[280px] md:w-[300px] transition-all duration-[400ms] ease-in-out ${cardEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
+                  onTouchStart={onTouchStart}
+                  onTouchMove={onTouchMove}
+                  onTouchEnd={onTouchEnd}
+                  className={`relative group w-[240px] min-[375px]:w-[260px] sm:w-[280px] md:w-[300px] transition-all duration-300 ease-in-out touch-none ${cardEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}
                   style={{ aspectRatio: '9/16' }}
                 >
                   <div 

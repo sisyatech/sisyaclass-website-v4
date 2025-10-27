@@ -3,7 +3,7 @@ import React from "react";
 const Moto = () => {
   return (
     <div className="relative py-5 sm:py-6 px-4 sm:px-8 lg:px-12 mt-6 mb-6 w-full bg-[#DADADA66]">
-      <div className="max-w-7xl mx-auto"> 
+      <div className="max-w-7xl mx-auto text-center sm:text-left"> 
         {/* Main Title */}
         <h1 
           className="mb-6 sm:mb-8 font-roboto font-medium text-[20px] leading-[24px] sm:text-[24px] sm:leading-[26px] tracking-[0.03em] text-[#1A2439] break-words"
