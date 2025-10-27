@@ -185,6 +185,11 @@ const BlogsContent = () => {
                           width={28}
                           height={28}
                           className="h-6 w-6 flex-shrink-0 rounded-full sm:h-7 sm:w-7 md:h-8 md:w-8"
+                          unoptimized
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/logo.png';
+                          }}
                         />
                         <div className="min-w-0 flex-1">
                           <h3 className="truncate text-xs font-semibold text-[#1A2439] sm:text-sm">
@@ -267,7 +272,7 @@ const BlogsContent = () => {
                 href="/blogs"
                 // Reduced base padding (px-4 py-2) and text size (text-xs)
                 // Kept sm: variants for larger screens, slightly adjusted for proportion
-                className="inline-flex transform items-center gap-2 rounded-lg bg-[#0595CE] px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all transition-colors duration-300 hover:scale-105 hover:bg-[#047aa8] hover:shadow-xl sm:px-6 sm:py-3 sm:text-sm"
+                className="inline-flex transform items-center gap-2 rounded-lg bg-[#0595CE] px-4 py-2 text-xs font-semibold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-[#047aa8] hover:shadow-xl sm:px-6 sm:py-3 sm:text-sm"
               >
                 <span>Show More Blogs</span>
                 {/* Kept icon size */}
