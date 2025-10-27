@@ -157,7 +157,7 @@ const BlogsContent = () => {
                 <Link href={`/blogs/${currentBlog.id}`}>
                   <div className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300">
                   {/* Blog Image Area */}
-                  <div className="relative aspect-[16/8] sm:aspect-[16/8] bg-black">
+                  <div className="relative h-[240px] sm:h-[280px] md:h-[320px] lg:h-[360px] bg-black">
                     <Image
                       src={currentBlog.banner || "/blogs/blogimage.svg"}
                       alt={currentBlog.title}

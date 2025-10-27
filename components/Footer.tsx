@@ -51,6 +51,11 @@ const Footer = () => {
     router.push('/refund-policy');
   };
 
+  const handleCareersClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push(routes.careers);
+  };
+
 
 
   return (
@@ -209,8 +214,8 @@ const Footer = () => {
                 <li>
                   <a
                     href="#"
-                   
-                    className="font-roboto text-[11px] leading-[16px] font-normal tracking-[0.03em] text-[#161A38] transition-opacity hover:opacity-70 min-[375px]:text-[12px] sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px] lg:text-[16px]"
+                    onClick={handleCareersClick}
+                    className="font-roboto cursor-pointer text-[11px] leading-[16px] font-normal tracking-[0.03em] text-[#161A38] transition-opacity hover:opacity-70 min-[375px]:text-[12px] sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px] lg:text-[16px]"
                   >
                     Careers
                   </a>

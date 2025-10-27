@@ -9,6 +9,7 @@ export const routes = {
   blogs: '/blogs',
   news: '/news',
   contact: '/contact',
+  careers: '/careers',
   // Dynamic grade routes
   grade: (gradeNumber: number) => `/grade${gradeNumber}`,
   
