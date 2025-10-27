@@ -41,20 +41,9 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({ job, onClose
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Automatically trigger CV download (browser will download the file)
-    if (formData.cv) {
-      const url = URL.createObjectURL(formData.cv);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = formData.cv.name;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-    }
-    
     // Create email subject and body with all the details
     const subject = `Job Application: ${job.title}`;
+    const cvInfo = formData.cv ? `\nCV File: ${formData.cv.name} (Please note the file you uploaded)` : '';
     const body = `
 Job Application Details
 
@@ -62,6 +51,7 @@ Position Applied For: ${job.title}
 Full Name: ${formData.fullName}
 Email: ${formData.email}
 Contact Number: ${formData.contactNumber}
+${cvInfo}
 
 Best regards,
 ${formData.fullName}
@@ -70,20 +60,18 @@ ${formData.fullName}
     // Create mailto link
     const mailtoLink = `mailto:Sisyaclass@gmail.com.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
-    // Small delay to let file download start, then open email
+    // Open email directly
+    window.location.href = mailtoLink;
+    
+    // Show instructions after email opens
     setTimeout(() => {
-      window.location.href = mailtoLink;
-      
-      // Show instructions after email opens
-      setTimeout(() => {
-        if (formData.cv) {
-          alert(`✓ Email opened!\n✓ CV downloaded to your computer: "${formData.cv.name}"\n\n👉 Next step: Look for the downloaded CV file and attach it to this email, then click SEND!`);
-        } else {
-          alert('✓ Email opened! You can attach your CV if needed.');
-        }
-        onClose();
-      }, 500);
-    }, 100);
+      if (formData.cv) {
+        alert(`✓ Email opened to nanaji@sisyaclass.com\n\n📎 Please attach your CV file ("${formData.cv.name}") manually and click SEND.`);
+      } else {
+        alert('✓ Email opened to nanaji@sisyaclass.com\n\nYou can attach your CV if needed.');
+      }
+      onClose();
+    }, 300);
   };
 
   return (
