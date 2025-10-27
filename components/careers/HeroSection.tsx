@@ -5,32 +5,30 @@ import React from "react";
 import { TypingAnimation } from "../ui/typing-animation";
 
 export const HeroSection = () => (
-  // Adjusted height for mobile: h-[80vh] min-h-[450px], kept sm+ heights
-  <div className="relative flex h-[80vh] min-h-[450px] items-center justify-center px-4 text-center text-white sm:h-[70vh] sm:min-h-[500px]">
+  <div className="relative flex h-[70vh] min-h-[400px] md:h-[65vh] lg:h-[70vh] items-end justify-center px-4 sm:px-6 lg:px-8 text-center text-white pb-8 sm:pb-12 md:pb-16">
     <div
       className="absolute inset-0 bg-cover bg-center"
-      // Ensure this image path is correct relative to your public folder
       style={{ backgroundImage: "url('/about/grouppic.png')" }}
     ></div>
     <div className="absolute inset-0 bg-black/60"></div>
-    <div className="relative z-10 max-w-4xl">
-      {/* Adjusted heading font sizes for mobile */}
-      <h1 className="text-3xl leading-tight font-bold sm:text-4xl md:text-5xl lg:text-7xl lg:whitespace-nowrap">
+    <div className="relative z-10 max-w-4xl px-2">
+      {/* Responsive heading */}
+      <h1 className="text-2xl leading-tight font-bold sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl">
         <TypingAnimation duration={50} delay={0}>
-          Shape Your Future at SISYA
-        </TypingAnimation>
+          Shape Your Future at
+        </TypingAnimation> <span className="text-blue-400">SISYA</span>
       </h1>
 
-      {/* Adjusted paragraph font size for mobile */}
-      <p className="mx-auto mt-6 max-w-3xl text-base text-gray-200 sm:text-lg md:text-xl">
+      {/* Responsive paragraph */}
+      <p className="mx-auto mt-4 sm:mt-5 md:mt-6 max-w-2xl sm:max-w-3xl text-sm sm:text-base md:text-lg lg:text-xl text-gray-200">
         We're looking for passionate, innovative individuals to join our mission. Help us build the
         most loved and effective learning platform for students everywhere.
       </p>
-      {/* Adjusted button padding/text size for mobile AND reduced top margin */}
+      
+      {/* Responsive button */}
       <a
         href="#open-positions"
-        // Changed mt-10 to mt-8
-        className="mt-8 inline-block transform rounded-full bg-blue-600 px-6 py-2.5 text-base font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-blue-700 sm:px-8 sm:py-3 sm:text-lg"
+        className="mt-5 sm:mt-6 md:mt-8 inline-block transform rounded-full bg-blue-400 px-5 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 text-sm sm:text-base md:text-lg font-semibold text-white transition-all duration-300 hover:scale-105 hover:bg-blue-500"
       >
         View Open Positions
       </a>

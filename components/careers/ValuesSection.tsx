@@ -45,22 +45,22 @@ const values = [
 
 
 export const ValuesSection = () => (
-  <div className="py-16 sm:py-24 bg-gray-50">
+  <div className="py-10 sm:py-12 bg-gray-50">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900">
+      <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900">
         Why You'll Love Working Here
       </h2>
-      <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+      <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
         We're a team of learners and innovators, dedicated to a common goal.
       </p>
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {values.map((value) => (
-          <div key={value.title} className="flex flex-col items-center p-6 bg-white rounded-xl shadow-lg">
-            <div className="inline-flex items-center justify-center p-4 bg-blue-100 rounded-full">
+          <div key={value.title} className="flex flex-col items-center p-5 sm:p-6 bg-white rounded-xl shadow-lg transition-all hover:shadow-xl hover:scale-105">
+            <div className="inline-flex items-center justify-center p-3 sm:p-4 bg-blue-100 rounded-full">
               {value.icon}
             </div>
-            <h3 className="mt-5 text-xl font-semibold text-gray-900">{value.title}</h3>
-            <p className="mt-2 text-base text-gray-600">{value.description}</p>
+            <h3 className="mt-4 sm:mt-5 text-lg sm:text-xl font-semibold text-gray-900">{value.title}</h3>
+            <p className="mt-2 text-sm sm:text-base text-gray-600 leading-relaxed">{value.description}</p>
           </div>
         ))}
       </div>

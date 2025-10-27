@@ -86,7 +86,12 @@ const jobs: Job[] = [
 ];
 
 // --- Updated JobCard Component ---
-export const JobCard = ({ job }: { job: Job }) => (
+interface JobCardProps {
+  job: Job;
+  onApplyClick: () => void;
+}
+
+export const JobCard = ({ job, onApplyClick }: JobCardProps) => (
   <div className="bg-white p-5 rounded-xl shadow-md border border-gray-100 transition-all duration-300 hover:shadow-lg w-full max-w-sm flex flex-col justify-between h-[320px]">
     {/* Top Section: Title, Location, Icon */}
     <div className="flex justify-between items-start mb-3">
@@ -121,7 +126,10 @@ export const JobCard = ({ job }: { job: Job }) => (
     {/* Bottom Section: Posted Time & Apply Button */}
     <div className="flex justify-between items-center mt-auto pt-3 border-t border-gray-100">
       <span className="text-xs text-gray-500">{job.postedTime}</span>
-      <button className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer">
+      <button 
+        onClick={onApplyClick}
+        className="bg-blue-600 text-white px-5 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+      >
         Apply Now
       </button>
     </div>
