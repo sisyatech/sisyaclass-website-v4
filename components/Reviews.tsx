@@ -1,6 +1,7 @@
 
 
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 // Import motion for modal animations
 import { motion, AnimatePresence } from "framer-motion";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
@@ -235,14 +236,13 @@ const Reviews = () => {
                         {/* Profile Image */}
                         <div className="rounded-full overflow-hidden flex-shrink-0 w-[50px] h-[50px] bg-gray-200">
                           {currentReview.imageUrl && (
-                            <img 
+                            <Image 
                               src={currentReview.imageUrl}
                               alt={currentReview.name}
+                              width={50}
+                              height={50}
                               className="w-full h-full object-cover"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = 'https://placehold.co/50x50/EBF8FF/3182CE?text=S'; // Fallback
-                              }}
+                              onError={() => {}}
                             />
                           )}
                         </div>
@@ -350,14 +350,12 @@ const Reviews = () => {
                               {/* Profile Image */}
                               <div className="rounded-full overflow-hidden flex-shrink-0 w-[50px] h-[50px] bg-gray-200">
                                 {review.imageUrl && (
-                                  <img 
+                                  <Image 
                                     src={review.imageUrl}
                                     alt={review.name}
+                                    width={50}
+                                    height={50}
                                     className="w-full h-full object-cover"
-                                    onError={(e) => {
-                                      const target = e.target as HTMLImageElement;
-                                      target.src = 'https://placehold.co/50x50/EBF8FF/3182CE?text=S'; // Fallback
-                                    }}
                                   />
                                 )}
                               </div>
@@ -422,14 +420,12 @@ const Reviews = () => {
                 {/* Modal Header */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="rounded-full overflow-hidden shrink-0 w-12 h-12 bg-gray-200">
-                    <img 
-                      src={selectedReview.imageUrl}
+                    <Image 
+                      src={selectedReview.imageUrl || '/girl.svg'}
                       alt={selectedReview.name}
+                      width={48}
+                      height={48}
                       className="w-full h-full object-cover"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = 'https://placehold.co/50x50/EBF8FF/3182CE?text=S';
-                      }}
                     />
                   </div>
                   <div>

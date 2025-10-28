@@ -158,7 +158,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
     } catch (err) {
       console.error("Error parsing YouTube URL:", err);
     }
-    return "https://www.youtube.com/embed/sRCYjcVijew?autoplay=1&mute=1&loop=1&playlist=sRCYjcVijew&controls=1&modestbranding=1&rel=0";
+    return "";
   };
 
   if (loading) {
@@ -370,18 +370,20 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
               </RevealOnView>
 
               {/* YouTube Video */}
-              <RevealOnView from="right" durationMs={1200} delayMs={500}>
-                <div className="relative w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[606px] aspect-video overflow-hidden shadow-xl mx-auto lg:mx-0">
-                  <iframe
-                    className="w-full h-full object-cover"
-                    src={videoEmbedUrl}
-                    title="Course Video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ aspectRatio: '16/9' }}
-                  />
-                </div>
-              </RevealOnView>
+              {videoEmbedUrl && (
+                <RevealOnView from="right" durationMs={1200} delayMs={500}>
+                  <div className="relative w-full max-w-[350px] sm:max-w-[450px] md:max-w-[550px] lg:max-w-[606px] aspect-video overflow-hidden shadow-xl mx-auto lg:mx-0">
+                    <iframe
+                      className="w-full h-full object-cover"
+                      src={videoEmbedUrl}
+                      title="Course Video"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{ aspectRatio: '16/9' }}
+                    />
+                  </div>
+                </RevealOnView>
+              )}
             </div>
           </div>
         </div>

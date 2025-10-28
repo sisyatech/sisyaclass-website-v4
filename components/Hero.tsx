@@ -152,7 +152,8 @@ const Hero = () => {
 
             {/* Right Visual Content */}
             <div
-              className={`relative mt-10 mb-8 flex justify-center transition-all duration-[1500ms] ease-out sm:mb-12 lg:mt-0 lg:mb-0 ${entered ? "translate-x-0 opacity-100" : "translate-x-[160px] opacity-0"}`}
+              className={`relative mt-10 mb-8 flex justify-center transition-transform duration-700 ease-out sm:mb-12 lg:mt-0 lg:mb-0 ${entered ? "translate-x-0 opacity-100" : "translate-x-[160px] opacity-0"}`}
+              style={{ willChange: 'transform, opacity' }}
             >
               {/* Main Student Image Container */}
               <div className="relative left-0 h-[260px] w-[260px] sm:h-[320px] sm:w-[320px] md:h-[360px] md:w-[360px] lg:h-96 lg:w-96">
@@ -160,7 +161,7 @@ const Hero = () => {
                 <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed border-[#1A2439] sm:h-[360px] sm:w-[360px] md:h-[420px] md:w-[420px] lg:h-[460px] lg:w-[460px]"></div>
 
                 {/* Educational Icons positioned on the dotted circle */}
-                <div className="absolute inset-0 z-10 origin-center scale-[0.7] animate-[spin_20s_linear_infinite] sm:scale-[0.8] md:scale-[0.9] lg:scale-100">
+                <div className="absolute inset-0 z-10 origin-center scale-[0.7] sm:scale-[0.8] md:scale-[0.9] lg:scale-100" style={{ animation: 'spin 20s linear infinite', willChange: 'transform' }}>
                   {/* Math (π) - Top (0 degrees) */}
                   <div className="absolute top-1/2 left-1/2 -mt-[210px] flex h-[60px] w-[60px] -translate-x-1/2 -translate-y-1/2 items-center justify-center sm:-mt-[205px] sm:h-[56px] sm:w-[56px] md:-mt-[220px] md:h-[60px] md:w-[60px] lg:-mt-[230px]">
                     <Image
@@ -267,6 +268,8 @@ const Hero = () => {
                     width={392}
                     height={392}
                     className="h-full w-full object-cover object-center"
+                    priority
+                    sizes="(max-width: 640px) 240px, (max-width: 768px) 300px, (max-width: 1024px) 340px, 392px"
                   />
                 </div>
               </div>
