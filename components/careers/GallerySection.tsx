@@ -4,10 +4,10 @@ import React from 'react'
 const teamPhotos = [
   "/career/event.jpeg",
   "/career/11.jpeg",
-  "https://placehold.co/500x500/EBF8FF/3182CE?text=Office+Fun",
-  "/about/grouppic.png",
-  "https://placehold.co/400x600/EBF8FF/3182CE?text=Volunteering",
-  "https://placehold.co/500x500/EBF8FF/3182CE?text=Work+Space",
+  "/career/fun.JPG",
+  "/career/mid.jpg",
+  "/career/grouppic1.png",
+  "/career/work1.jpeg",
 ];
 
 export const GallerySection = () => (
