@@ -1,22 +1,20 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import AboutUs from "@/components/aboutus/AboutUs";
 import Container from "@/components/Container";
 import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
+import MissionSection from "@/components/aboutus/MissionSection";
+import VisionSection from "@/components/aboutus/VisionSection";
+import NewSection from "@/components/aboutus/inroduction";
+import AnotherSection from "@/components/aboutus/unique";
+import FAQ from "@/components/FAQ";
+import AppDownload from "@/components/AppDownload";
+import Footer from "@/components/Footer";
+import StudyMaterial from "@/components/StudyMaterial";
+import Moto from "@/components/moto";
+import FooterBottom from "@/components/FooterBottom";
 import { useEffect } from "react";
 import { AboutBreadcrumb } from "@/components/AboutBreadcrumb";
-
-const AboutUs = dynamic(() => import("@/components/aboutus/AboutUs"), { ssr: true, loading: () => null });
-const MissionSection = dynamic(() => import("@/components/aboutus/MissionSection"), { ssr: true, loading: () => null });
-const VisionSection = dynamic(() => import("@/components/aboutus/VisionSection"), { ssr: true, loading: () => null });
-const NewSection = dynamic(() => import("@/components/aboutus/inroduction"), { ssr: true, loading: () => null });
-const AnotherSection = dynamic(() => import("@/components/aboutus/unique"), { ssr: true, loading: () => null });
-const FAQ = dynamic(() => import("@/components/FAQ"), { ssr: true, loading: () => null });
-const AppDownload = dynamic(() => import("@/components/AppDownload"), { ssr: true, loading: () => null });
-const Footer = dynamic(() => import("@/components/Footer"), { ssr: true, loading: () => null });
-const StudyMaterial = dynamic(() => import("@/components/StudyMaterial"), { ssr: true, loading: () => null });
-const Moto = dynamic(() => import("@/components/moto"), { ssr: true, loading: () => null });
-const FooterBottom = dynamic(() => import("@/components/FooterBottom"), { ssr: true, loading: () => null });
 
 function AboutContent() {
     const { setCurrentPage, setSelectedGrade } = useMobileMenu();

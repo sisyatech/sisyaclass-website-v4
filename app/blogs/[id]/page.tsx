@@ -1,15 +1,14 @@
 import { Metadata } from "next";
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Container from "@/components/Container";
-import dynamic from "next/dynamic";
+import AppDownload from "@/components/AppDownload";
+import Footer from "@/components/Footer";
+import StudyMaterial from "@/components/StudyMaterial";
+import Moto from "@/components/moto";
+import FooterBottom from "@/components/FooterBottom";
 import { BlogBreadcrumb } from "@/components/blogs/BlogBreadcrumb";
 import BlogDetailContent from "@/components/blogs/blogsdetailspage/BlogDetailContent";
-const AppDownload = dynamic(() => import("@/components/AppDownload"), { ssr: true, loading: () => null });
-const Footer = dynamic(() => import("@/components/Footer"), { ssr: true, loading: () => null });
-const StudyMaterial = dynamic(() => import("@/components/StudyMaterial"), { ssr: true, loading: () => null });
-const Moto = dynamic(() => import("@/components/moto"), { ssr: true, loading: () => null });
-const FooterBottom = dynamic(() => import("@/components/FooterBottom"), { ssr: true, loading: () => null });
-const BlogAuthorComments = dynamic(() => import("@/components/blogs/blogsdetailspage/BlogAuthorComments"), { ssr: true, loading: () => null });
+import BlogAuthorComments from "@/components/blogs/blogsdetailspage/BlogAuthorComments";
 import { getBlogById } from "@/lib/blogApi";
 
 interface BlogDetailPageProps {

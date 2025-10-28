@@ -79,7 +79,7 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
       <QuickLinks mentorIds={mentorIds} />
       <Payment gradeNumber={gradeNumber} />
       <Chapters gradeNumber={gradeNumber} />
-      <BoosterCourseSection />
+      <BoosterCourseSection gradeNumber={gradeNumber} />
       <Impact />
       <AIEcosystem />
       <InnovativeLearningTools />
