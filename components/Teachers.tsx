@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 
 interface TeacherData {
   id: string;
@@ -89,31 +90,21 @@ const Teachers = () => {
     }
   }, [loading]);
 
+  const validTeachers = useMemo(() => (
+    (teachers || []).filter((t) => typeof t.imageUrl === 'string' && t.imageUrl.trim().length > 0)
+  ), [teachers]);
+
   const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? displayTeachers.length - 1 : prev - 1));
+    if (validTeachers.length === 0) return;
+    setCurrentSlide((prev) => (prev === 0 ? validTeachers.length - 1 : prev - 1));
   };
 
   const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev >= displayTeachers.length - 1 ? 0 : prev + 1));
+    if (validTeachers.length === 0) return;
+    setCurrentSlide((prev) => (prev >= validTeachers.length - 1 ? 0 : prev + 1));
   };
 
-  // Default teachers if API fails
-  const defaultTeachers: TeacherData[] = [
-    {
-      id: "default-1",
-      name: "Snehal Raj",
-      designation: "Maths Master Teacher",
-      qualification: "BIT Bangalore",
-      experienceText: "10+ Years of Experience",
-      experienceYears: 10,
-      imageUrl: "/teacher.svg",
-      order: 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    },
-  ];
-
-  const displayTeachers = teachers.length > 0 ? teachers : defaultTeachers;
+  // Render only backend data; no local hardcoded fallback
 
   // Touch handlers for swipe gestures
   const minSwipeDistance = 50;
@@ -149,11 +140,12 @@ const Teachers = () => {
   // console.log('🎨 [TEACHERS] Cards entered:', cardsEntered);
 
   // Get visible teachers for desktop (4 cards)
-  const getVisibleTeachers = () => {
-    const result = [];
+  const getVisibleTeachers = (): TeacherData[] => {
+    const result: TeacherData[] = [];
+    if (validTeachers.length === 0) return result;
     for (let i = 0; i < 4; i++) {
-      const index = (currentSlide + i) % displayTeachers.length;
-      result.push(displayTeachers[index]);
+      const index = (currentSlide + i) % validTeachers.length;
+      result.push(validTeachers[index]);
     }
     return result;
   };
@@ -176,6 +168,11 @@ const Teachers = () => {
   }
 
   // console.log('✅ [TEACHERS] Rendering main content');
+
+  // Don't render if no backend data
+  if (validTeachers.length === 0) {
+    return null;
+  }
 
   return (
     <div ref={sectionRef} className="bg-white py-5 sm:py-0">
@@ -234,14 +231,13 @@ const Teachers = () => {
                   {/* Teacher Image */}
                   <div className="mb-3 flex justify-center">
                     <div className="h-[190px] w-[170px] overflow-hidden rounded-[18px] bg-[#D9E3F0]">
-                      <img
-                        src={teacher.imageUrl || "/teacher.svg"}
+                      <Image
+                        src={teacher.imageUrl}
                         alt={teacher.name}
+                        width={170}
+                        height={190}
                         className="h-full w-full object-cover"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = "/teacher.svg";
-                        }}
+                        sizes="(max-width: 1024px) 170px, 170px"
                       />
                     </div>
                   </div>
@@ -292,7 +288,7 @@ const Teachers = () => {
           <div className="lg:hidden">
             <div className="flex justify-center px-3 sm:px-4 md:px-6">
               {(() => {
-                const teacher = displayTeachers[currentSlide];
+                const teacher = validTeachers[currentSlide];
                 return (
                   <div
                     key={teacher.id}
@@ -303,14 +299,13 @@ const Teachers = () => {
                   >
                     <div className="mb-2.5 flex justify-center min-[375px]:mb-3 md:mb-4">
                       <div className="h-[200px] w-[170px] overflow-hidden rounded-[16px] bg-[#D9E3F0] min-[375px]:h-[214px] min-[375px]:w-[186px] min-[375px]:rounded-[18px] sm:h-[230px] sm:w-[200px] md:h-[240px] md:w-[210px] md:rounded-[20px]">
-                        <img
-                          src={teacher.imageUrl || "/teacher.svg"}
+                        <Image
+                          src={teacher.imageUrl}
                           alt={teacher.name}
+                          width={210}
+                          height={240}
                           className="h-full w-full object-cover"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/teacher.svg";
-                          }}
+                          sizes="(max-width: 768px) 200px, (max-width: 1024px) 210px, 210px"
                         />
                       </div>
                     </div>

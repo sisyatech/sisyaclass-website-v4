@@ -1,16 +1,18 @@
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Container from "@/components/Container";
-import BlogsContent from "@/components/blogs/BlogsContent";
-import BlogBanner from "@/components/blogs/BlogBanner";
-import StudyMaterials from "@/components/blogs/StudyMaterials";
+import dynamic from "next/dynamic";
 import { BlogBreadcrumb } from "@/components/blogs/BlogBreadcrumb";
-import AppDownload from "@/components/AppDownload";
-import Footer from "@/components/Footer";
-import StudyMaterial from "@/components/StudyMaterial";
-import Moto from "@/components/moto";
-import FooterBottom from "@/components/FooterBottom";
-import Impact from "@/components/Impact";
-import SimilarVideos from "@/components/blogs/SimilarVideos";
+
+const BlogsContent = dynamic(() => import("@/components/blogs/BlogsContent"), { ssr: true, loading: () => null });
+const BlogBanner = dynamic(() => import("@/components/blogs/BlogBanner"), { ssr: true, loading: () => null });
+const StudyMaterials = dynamic(() => import("@/components/blogs/StudyMaterials"), { ssr: true, loading: () => null });
+const AppDownload = dynamic(() => import("@/components/AppDownload"), { ssr: true, loading: () => null });
+const Footer = dynamic(() => import("@/components/Footer"), { ssr: true, loading: () => null });
+const StudyMaterial = dynamic(() => import("@/components/StudyMaterial"), { ssr: true, loading: () => null });
+const Moto = dynamic(() => import("@/components/moto"), { ssr: true, loading: () => null });
+const FooterBottom = dynamic(() => import("@/components/FooterBottom"), { ssr: true, loading: () => null });
+const Impact = dynamic(() => import("@/components/Impact"), { ssr: true, loading: () => null });
+const SimilarVideos = dynamic(() => import("@/components/blogs/SimilarVideos"), { ssr: true, loading: () => null });
 
 function BlogsPageContent() {
   return (

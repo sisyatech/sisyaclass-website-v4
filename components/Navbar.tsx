@@ -462,7 +462,19 @@ const Navbar = () => {
       <nav className="relative flex h-16 sm:h-18 items-center px-4 sm:px-6">
         <div className="flex items-center space-x-3 sm:space-x-4">
           <button onClick={handleLogoClick} className="cursor-pointer">
-            <Image src={Logo} alt="Logo" className="object-cover w-[110px] sm:w-auto h-auto" />
+            <Image 
+              src={Logo} 
+              alt="Logo" 
+              width={200}
+              height={53}
+              priority
+              fetchPriority="high"
+              className="object-cover w-[110px] sm:w-auto h-auto" 
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/logo.png';
+              }}
+            />
           </button>
           <div className="hidden lg:block">
             <NavLinks />

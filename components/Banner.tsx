@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
@@ -16,9 +16,6 @@ const Banner = () => {
   useEffect(() => {
     const fetchWebLinks = async () => {
       try {
-        console.log('🚀 [Banner] Fetching banner image from API...');
-        console.log('📡 [Banner] API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`);
-        
         const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`, {
           method: 'POST',
           headers: {
@@ -27,46 +24,38 @@ const Banner = () => {
           mode: 'cors',
         });
         
-        console.log('📊 [Banner] API Response status:', response.status);
-        
         if (response.ok) {
           const rawData = await response.json();
-          console.log('✅ [Banner] Data received successfully!');
-          console.log('📝 [Banner] Full API response:', JSON.stringify(rawData, null, 2));
-          console.log('📝 [Banner] Type of response:', typeof rawData);
-          console.log('📝 [Banner] Is Array?:', Array.isArray(rawData));
           
           // Handle if response is an array, take first item
           const data = Array.isArray(rawData) ? rawData[0] : rawData;
           
-          console.log('📝 [Banner] Processed data:', data);
-          console.log('📝 [Banner] Available keys:', data ? Object.keys(data) : []);
-          console.log('📝 [Banner] webBannerImageLink:', data?.webBannerImageLink);
-          
           if (data?.webBannerImageLink) {
             setWebLinks(data);
-            console.log('✅ [Banner] Banner link set successfully');
-            console.log('✅ [Banner] Image URL:', data.webBannerImageLink);
           } else {
-            console.error('❌ [Banner] Missing webBannerImageLink in API response');
-            console.error('[Banner] Received keys:', data ? Object.keys(data) : []);
-            console.error('[Banner] Received values:', data);
+            // Missing banner link
           }
         } else {
-          console.error('❌ [Banner] Failed to fetch banner data, status:', response.status);
-          const errorText = await response.text();
-          console.error('[Banner] Error response:', errorText);
+          // Failed response
         }
       } catch (error) {
-        console.error('❌ [Banner] Error fetching banner data:', error);
+        // Swallow fetch errors to avoid blocking render
       } finally {
         setLoading(false);
-        console.log('✅ [Banner] Loading completed');
       }
     };
 
     fetchWebLinks();
   }, []);
+
+  // If API fails, use fallback banner image (compute before any early returns)
+  const bannerImageLink = webLinks?.webBannerImageLink || "/backendbanner.svg";
+  // Track current src to allow graceful fallback on error (declare before early returns to keep hooks order stable)
+  const [currentSrc, setCurrentSrc] = useState<string>(bannerImageLink);
+  useEffect(() => {
+    setCurrentSrc(bannerImageLink);
+  }, [bannerImageLink]);
+  const isExternal = useMemo(() => /^https?:\/\//i.test(currentSrc), [currentSrc]);
 
   if (loading) {
     return (
@@ -81,20 +70,20 @@ const Banner = () => {
     );
   }
 
-  // If API fails, use fallback banner image
-  const bannerImageLink = webLinks?.webBannerImageLink || "/backendbanner.svg";
-
   return (
     <div className="py-6 bg-white">
       <div className="mx-auto max-w-6xl px-3">
         <div className="flex justify-center">
           <Image 
-            src={bannerImageLink} 
+            src={currentSrc} 
             alt="Banner" 
             width={1200}
             height={300}
             className="w-full h-auto max-w-full"
-            unoptimized
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+            priority={false}
+            unoptimized={isExternal}
+            onError={() => setCurrentSrc('/backendbanner.svg')}
           />
         </div>
       </div>

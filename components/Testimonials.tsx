@@ -73,7 +73,7 @@ const Testimonials = () => {
                 videoId,
                 videoUrl: item.url,
                 embedUrl: `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`,
-                thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+                thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
                 title: "Student Testimonial",
                 name: "SISYA Student",
                 grade: "SISYA CLASS",
@@ -200,7 +200,7 @@ const Testimonials = () => {
                   />
                     ) : (
                       <div className="w-full h-full relative">
-                        <Image width={260} height={400} src={testimonial.thumbnail} alt={`${testimonial.name} - ${testimonial.grade}`} className="w-full h-full object-cover" unoptimized />
+                        <Image width={260} height={400} src={testimonial.thumbnail} alt={`${testimonial.name} - ${testimonial.grade}`} className="w-full h-full object-cover" sizes="(max-width: 1024px) 220px, 240px" />
                         <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 lg:px-3 lg:py-2" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
                           <div className="text-white text-[11px] lg:text-xs font-semibold font-montserrat leading-[1.2]">{testimonial.title}</div>
                         </div>
@@ -253,7 +253,7 @@ const Testimonials = () => {
                       />
                     ) : (
                       <div className="w-full h-full relative cursor-pointer">
-                        <Image width={300} height={460} src={t.thumbnail} alt={`${t.name} - ${t.grade}`} className="w-full h-full object-cover" unoptimized />
+                        <Image width={300} height={460} src={t.thumbnail} alt={`${t.name} - ${t.grade}`} className="w-full h-full object-cover" sizes="(max-width: 640px) 260px, (max-width: 768px) 280px, 300px" />
                         <div className="absolute bottom-0 left-0 right-0 px-3 py-2 sm:px-4 sm:py-3" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
                           <div className="text-white text-xs sm:text-sm font-semibold font-montserrat leading-[1.3]">{t.title}</div>
                         </div>
