@@ -256,13 +256,13 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   console.log('Subjects length:', subjects.length);
 
   return (
-    <div className="min-screen mb-10 pt-1 sm:pt-2 md:pt-3 lg:pt-4 relative">
+    <div className="min-screen mb-8 pt-0 sm:pt-0 md:pt-1 lg:pt-2 relative">
         
       {/* Background Container */}
       <div 
         className="absolute w-full"
         style={{
-          top: '40px',
+          top: '0px',
           height: '587px',
           opacity: 1,
           background: '#F0F7FA'
@@ -270,12 +270,12 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
       ></div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="py-8 sm:py-12 md:py-16">
+        <div className="pt-2 sm:pt-3 md:pt-4 lg:pt-6 pb-8 sm:pb-12 md:pb-16">
           {/* Hero Section - Cleaner Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-10 lg:gap-16 xl:gap-20 items-center">
             
             {/* Left Content */}
-            <div className="space-y-4 sm:space-y-5 md:space-y-6 lg:pr-8 flex flex-col items-center lg:items-start">
+            <div className="space-y-3 sm:space-y-5 md:space-y-6 lg:pr-8 flex flex-col items-center lg:items-start">
               {/* Class Badge */}
               <RevealOnView from="top" durationMs={800} delayMs={0}>
                 <div className="flex flex-row items-center gap-2 sm:gap-3">
@@ -359,10 +359,10 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
             </div>
 
             {/* Right Content - Video */}
-            <div className="relative mt-8 lg:mt-0 ">
+            <div className="relative mt-2 sm:mt-6 lg:mt-0 ">
               {/* Guarantee Badge - Right Above Video */}
               <RevealOnView from="top" durationMs={800} delayMs={300}>
-                <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[371px] h-[40px] sm:h-[32px] md:h-[28px] rounded-md bg-[#28A745] text-white flex items-center justify-center mb-6 sm:mb-8 shadow-lg mx-auto lg:ml-8 xl:ml-16">
+                <div className="w-full max-w-[280px] sm:max-w-[320px] md:max-w-[371px] h-[40px] sm:h-[32px] md:h-[28px] rounded-md bg-[#28A745] text-white flex items-center justify-center mb-4 sm:mb-6 shadow-lg mx-auto lg:ml-8 xl:ml-16">
                   <span className="text-xs sm:text-sm font-medium px-2">
                     The Guaranteed Path to Higher Scores
                   </span>

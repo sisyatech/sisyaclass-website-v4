@@ -13,7 +13,7 @@ export const HeroSection = () => {
     <div className="relative flex h-[70vh] min-h-[400px] md:h-[65vh] lg:h-[70vh] items-end justify-center px-4 sm:px-6 lg:px-8 text-center text-white pb-8 sm:pb-12 md:pb-16">
       <div
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/about/grouppic.png')" }}
+        style={{ backgroundImage: "url('/career/group.jpg')" }}
       ></div>
       <div className="absolute inset-0 bg-black/60"></div>
       <div className="relative z-10 max-w-4xl px-2">

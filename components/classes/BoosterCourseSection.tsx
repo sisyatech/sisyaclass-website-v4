@@ -1,33 +1,63 @@
+"use client";
 
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BoosterCourseCard from "./BoosterCourseCard";
 import RevealOnView from "../Reveal/RevealOnView";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
-const BoosterCourseSection = () => {
+interface BoosterCourseItem {
+  title: string;
+  startDate: string;
+  originalPrice: string;
+  currentPrice: string;
+}
+
+const BoosterCourseSection = ({ gradeNumber }: { gradeNumber: number }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsEntered, setCardsEntered] = useState(false);
+  const [courses, setCourses] = useState<BoosterCourseItem[]>([]);
 
-  const courses = [
-    {
-      title: "Quick Learning Big Impact in 7 Days with IIT/NIT Experts",
-      startDate: "25 June 2025",
-      originalPrice: "₹ 499",
-      currentPrice: "₹ 29"
-    },
-    {
-      title: "Advanced Problem Solving in Mathematics",
-      startDate: "30 June 2025", 
-      originalPrice: "₹ 599",
-      currentPrice: "₹ 39"
-    },
-    {
-      title: "Science Mastery with Practical Experiments",
-      startDate: "5 July 2025",
-      originalPrice: "₹ 449", 
-      currentPrice: "₹ 29"
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_BIG_COURSE_BY_GRADE}` , {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grade: String(gradeNumber) })
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          const item = data[0];
+          const startDate: string = item?.bigCourse?.startDate || '';
+          const originalPriceNum: number | undefined = item?.bigCourse?.price;
+          const currentPriceNum: number | undefined = item?.bigCourse?.currentPrice;
+          const originalPrice = typeof originalPriceNum === 'number' ? `₹ ${originalPriceNum}` : '';
+          const currentPrice = typeof currentPriceNum === 'number' ? `₹ ${currentPriceNum}` : '';
+
+          const mapped: BoosterCourseItem[] = (item?.subjects || []).map((s: any) => ({
+            title: s?.name ? `${s.name} Booster Course` : 'Booster Course',
+            startDate,
+            originalPrice,
+            currentPrice,
+          }));
+
+          // Fallback to one item if no subjects
+          const finalList = mapped.length > 0 ? mapped : [{
+            title: item?.bigCourse?.name || 'Booster Course',
+            startDate,
+            originalPrice,
+            currentPrice,
+          }];
+          setCourses(finalList);
+          setCurrentSlide(0);
+        }
+      } catch (e) {
+        // silently ignore; no hardcoded fallback
+      }
+    };
+    fetchData();
+  }, [gradeNumber]);
 
   const handlePrevSlide = () => {
     setCardsEntered(false);
@@ -69,6 +99,10 @@ const BoosterCourseSection = () => {
 
         {/* Mobile/Tablet: Single card with dots and arrows */}
         <div className="lg:hidden">
+          {courses.length === 0 ? (
+            <div className="text-center text-sm text-gray-500 py-8">No booster courses found.</div>
+          ) : (
+          <>
           <div className="flex justify-center px-4">
             <div 
               key={currentSlide}
@@ -120,27 +154,33 @@ const BoosterCourseSection = () => {
               </svg>
             </button>
           </div>
+          </>
+          )}
         </div>
 
         {/* Desktop: Grid layout */}
         <div className="hidden lg:block">
-          <div className="grid grid-cols-3 gap-8 justify-items-center">
-            {courses.map((course, index) => (
-              <RevealOnView 
-                key={index}
-                from="bottom" 
-                durationMs={800} 
-                delayMs={index * 200}
-              >
-                <BoosterCourseCard
-                  title={course.title}
-                  startDate={course.startDate}
-                  originalPrice={course.originalPrice}
-                  currentPrice={course.currentPrice}
-                />
-              </RevealOnView>
-            ))}
-          </div>
+          {courses.length === 0 ? (
+            <div className="text-center text-sm text-gray-500 py-8">No booster courses found.</div>
+          ) : (
+            <div className="grid grid-cols-3 gap-8 justify-items-center">
+              {courses.map((course, index) => (
+                <RevealOnView 
+                  key={index}
+                  from="bottom" 
+                  durationMs={800} 
+                  delayMs={index * 200}
+                >
+                  <BoosterCourseCard
+                    title={course.title}
+                    startDate={course.startDate}
+                    originalPrice={course.originalPrice}
+                    currentPrice={course.currentPrice}
+                  />
+                </RevealOnView>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

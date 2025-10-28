@@ -6,7 +6,7 @@ import Container from "@/components/Container";
 import Footer from '@/components/Footer';
 import FooterBottom from '@/components/FooterBottom';
 import HeroSection from '@/components/careers/HeroSection';
-import StatsSection from '@/components/careers/StatsSection';
+import Impact from '@/components/Impact';
 
 import ValuesSection from '@/components/careers/ValuesSection';
 import GallerySection from '@/components/careers/GallerySection';
@@ -56,8 +56,9 @@ function CareersContent() {
           {/* Hero Section */}
           <HeroSection />
 
-          {/* Stats Section */}
-          <StatsSection />
+          <Impact/>
+
+  
 
         
 

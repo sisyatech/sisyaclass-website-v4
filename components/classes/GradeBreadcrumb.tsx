@@ -14,7 +14,7 @@ interface GradeBreadcrumbProps {
 
 export function GradeBreadcrumb({ gradeNumber }: GradeBreadcrumbProps) {
   return (
-    <div className="w-full py-3 px-4 sm:px-6 md:px-8">
+    <div className="w-full py-1 sm:py-2 px-4 sm:px-6 md:px-8">
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>

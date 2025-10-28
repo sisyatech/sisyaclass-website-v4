@@ -1,4 +1,4 @@
-import React from "react";
+  import React from "react";
 import Image from "next/image";
 
 interface BoosterCourseCardProps {
@@ -10,11 +10,11 @@ interface BoosterCourseCardProps {
 }
 
 const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
-  title = "Quick Learning Big Impact in 7 Days with IIT/NIT Experts",
-  subtitle = "Starts on 25 June 2025",
-  startDate = "25 June 2025",
-  originalPrice = "₹ 499",
-  currentPrice = "₹ 29"
+  title,
+  subtitle,
+  startDate,
+  originalPrice,
+  currentPrice
 }) => {
   return (
     <div className="relative w-[320px] sm:w-[360px] md:w-[380px] lg:w-[399px] h-[320px] sm:h-[350px] md:h-[370px] lg:h-[391px] bg-[#1A2439] rounded-[8px] sm:rounded-[9px] md:rounded-[10px] lg:rounded-[10.82px] border-[0.49px] border-[#CED3D3] overflow-hidden mx-auto">
@@ -64,7 +64,7 @@ const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
       {/* Start Date */}
       <div className="absolute w-[120px] sm:w-[125px] md:w-[130px] lg:w-[134.64px] h-[12px] sm:h-[13px] md:h-[14px] lg:h-[11.20px] top-[255px] sm:top-[285px] md:top-[300px] lg:top-[293.7px] left-[8px] sm:left-[8.5px] md:left-[8.8px] lg:left-[8.86px]">
         <p className="text-[7px] sm:text-[7.5px] md:text-[7.8px] lg:text-[7.87px] font-normal text-white font-roboto leading-[12px] sm:leading-[13px] md:leading-[14px] lg:leading-[38.35px] text-left">
-          Starts on {startDate}
+          Starts on {startDate || subtitle}
         </p>
       </div>
 

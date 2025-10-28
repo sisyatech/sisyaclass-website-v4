@@ -90,13 +90,20 @@ const Footer = () => {
 
               {/* Google Play Button */}
               <div className="-mt-1 mb-6 sm:-mt-2 sm:mb-7 md:-mt-4 md:mb-8">
-                <Image
-                  src="/download/googleplay.svg"
-                  alt="Get it on Google Play"
-                  width={200}
-                  height={56}
-                  className="h-[48px] w-auto cursor-pointer transition-opacity hover:opacity-80 min-[375px]:h-[50px] sm:h-[52px] md:h-14"
-                />
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&hl=en_IN"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Get it on Google Play"
+                >
+                  <Image
+                    src="/download/googleplay.svg"
+                    alt="Get it on Google Play"
+                    width={200}
+                    height={56}
+                    className="h-[48px] w-auto cursor-pointer transition-opacity hover:opacity-80 min-[375px]:h-[50px] sm:h-[52px] md:h-14"
+                  />
+                </a>
               </div>
 
               {/* Demo class card */}
