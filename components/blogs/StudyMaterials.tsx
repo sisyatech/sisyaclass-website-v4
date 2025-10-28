@@ -73,6 +73,7 @@ const StudyMaterials = () => {
   ];
 
   return (
+    <>
     <div className="w-full py-8 sm:py-12 md:py-16 lg:py-20 xl:py-25">
       <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
         <RevealOnView from="bottom" durationMs={800} delayMs={0}>
@@ -87,7 +88,7 @@ const StudyMaterials = () => {
             </div>
 
             {/* Class Selection Buttons */}
-            <div className="flex flex-nowrap justify-start gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 overflow-x-auto px-2 sm:px-4 pb-2 scrollbar-hide">
+            <div className="flex flex-nowrap justify-start gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 overflow-x-auto px-2 sm:px-4 pb-2 hide-scrollbar">
               {classes.map((classNum) => (
                 <button
                   key={classNum}
@@ -110,7 +111,7 @@ const StudyMaterials = () => {
             </div>
 
             {/* Materials Horizontal Scroll */}
-            <div className="overflow-x-auto overflow-y-hidden py-2 sm:py-3 md:py-4 px-2 sm:px-4 scrollbar-hide">
+            <div className="overflow-x-auto overflow-y-hidden py-2 sm:py-3 md:py-4 px-2 sm:px-4 hide-scrollbar">
               <div className="flex flex-nowrap gap-4 sm:gap-5 md:gap-6" style={{ width: 'max-content' }}>
                 {materials.map((material, index) => (
                   <RevealOnView 
@@ -161,6 +162,11 @@ const StudyMaterials = () => {
         </RevealOnView>
       </div>
     </div>
+    <style>{`
+      .hide-scrollbar::-webkit-scrollbar { display: none; }
+      .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    `}</style>
+    </>
   );
 };
 
