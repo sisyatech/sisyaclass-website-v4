@@ -38,7 +38,7 @@ const AboutUs = () => {
         <div 
           className="absolute inset-0 w-full h-full"
           style={{
-            backgroundImage: `url('/about/grouppic.png')`,
+            backgroundImage: `url('/career/event.jpeg')`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

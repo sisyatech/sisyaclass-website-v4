@@ -365,7 +365,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         <div className="pt-2 pb-4 px-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <Image src="/nav/logo.svg" alt="Sisya Class" width={100} height={112} className="w-28 h-28" />
+              <Image src="/logo.png" alt="Sisya Class" width={48} height={48} className="w-12 h-12 rounded-[10px] object-contain" />
             </div>
             <button
               onClick={onClose}

@@ -87,9 +87,11 @@ const InnovativeLearningTools = () => {
                 width={1000}
                 height={1000}
                 className="w-full h-auto"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 600px"
+                priority={false}
               />
-              
-              {/* Video Content Overlay */}
+
+              {/* Video Content Overlay - responsive sizing for all devices */}
               {videoLink && <HoverPlayVideo videoLink={videoLink} />}
             </div>
 
@@ -209,16 +211,17 @@ interface HoverPlayVideoProps {
 }
 
 const HoverPlayVideo: React.FC<HoverPlayVideoProps> = ({ videoLink }) => {
-  const [hovered, setHovered] = useState(false);
-  const embedSrc = hovered
+  const [playing, setPlaying] = useState(false);
+  const embedSrc = playing
     ? `${videoLink}?autoplay=1&mute=0&controls=1&rel=0`
     : `${videoLink}?autoplay=0&mute=1&controls=0&rel=0`;
 
   return (
     <div
-      className="absolute top-[4px] left-1/2 -translate-x-1/2 w-[205px] h-[135px] min-[375px]:top-[5px] min-[375px]:w-[245px] min-[375px]:h-[160px] min-[425px]:w-[282px] min-[425px]:h-[190px] sm:top-2 sm:w-[300px] sm:h-[200px] md:top-3 md:w-[445px] md:h-[295px] lg:w-[450px] lg:h-[289px] rounded-[0px] overflow-hidden shadow-lg"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      className="absolute left-1/2 -translate-x-1/2 top-2 sm:top-3 md:top-4 w-[80%] sm:w-[82%] md:w-[82%] lg:w-[80%] aspect-[16/10] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/10] overflow-hidden shadow-lg"
+      onClick={() => setPlaying(true)}
+      role="button"
+      aria-label="Play video"
     >
       <iframe
         className="w-full h-full"
@@ -226,6 +229,7 @@ const HoverPlayVideo: React.FC<HoverPlayVideoProps> = ({ videoLink }) => {
         title="SISYA Video"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        loading="lazy"
       />
     </div>
   );

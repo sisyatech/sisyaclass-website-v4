@@ -259,12 +259,6 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                           </ul>
                         </div>
                       </div>
-                      <button 
-                        onClick={() => handleExploreClick(chapter.subjectName)}
-                        className={`bg-[#575CFB] w-[230px] h-[36px] text-white rounded-[10px] font-montserrat font-semibold text-[13px] leading-[10px] tracking-[0%] text-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-opacity cursor-pointer`}
-                      >
-                        Explore {chapter.subjectName} Champ Course
-                      </button>
                     </div>
                   );
                 })()}

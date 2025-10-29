@@ -35,21 +35,19 @@ const BoosterCourseSection = ({ gradeNumber }: { gradeNumber: number }) => {
           const originalPrice = typeof originalPriceNum === 'number' ? `₹ ${originalPriceNum}` : '';
           const currentPrice = typeof currentPriceNum === 'number' ? `₹ ${currentPriceNum}` : '';
 
-          const mapped: BoosterCourseItem[] = (item?.subjects || []).map((s: any) => ({
-            title: s?.name ? `${s.name} Booster Course` : 'Booster Course',
-            startDate,
-            originalPrice,
-            currentPrice,
-          }));
+          // Show only one course (not per-subject)
+          // Format date to a readable form (e.g., 17 Feb 2025)
+          const formattedStart = startDate
+            ? new Date(startDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+            : '';
 
-          // Fallback to one item if no subjects
-          const finalList = mapped.length > 0 ? mapped : [{
+          const singleCourse: BoosterCourseItem = {
             title: item?.bigCourse?.name || 'Booster Course',
-            startDate,
+            startDate: formattedStart,
             originalPrice,
             currentPrice,
-          }];
-          setCourses(finalList);
+          };
+          setCourses([singleCourse]);
           setCurrentSlide(0);
         }
       } catch (e) {
@@ -97,91 +95,36 @@ const BoosterCourseSection = ({ gradeNumber }: { gradeNumber: number }) => {
           </div>
         </RevealOnView>
 
-        {/* Mobile/Tablet: Single card with dots and arrows */}
-        <div className="lg:hidden">
-          {courses.length === 0 ? (
-            <div className="text-center text-sm text-gray-500 py-8">No booster courses found.</div>
-          ) : (
-          <>
-          <div className="flex justify-center px-4">
-            <div 
-              key={currentSlide}
-              className={`transition-all duration-[600ms] ease-in-out ${
-                cardsEntered ? "opacity-100 scale-100" : "opacity-0 scale-90"
-              }`}
-            >
-              <BoosterCourseCard
-                title={courses[currentSlide].title}
-                startDate={courses[currentSlide].startDate}
-                originalPrice={courses[currentSlide].originalPrice}
-                currentPrice={courses[currentSlide].currentPrice}
-              />
+        {/* Horizontal scrollable list (all screens) */}
+        {courses.length === 0 ? (
+          <div className="text-center text-sm text-gray-500 py-8">No booster courses found.</div>
+        ) : (
+          <div className="mt-2 -mx-3 px-3">
+            <div className="overflow-x-auto pb-2 hide-scrollbar">
+              <div className="flex gap-3 w-max snap-x snap-mandatory">
+                {courses.map((course, index) => (
+                  <div key={`${course.title}-${index}`} className="snap-center shrink-0 px-1">
+                    <RevealOnView from="bottom" durationMs={600} delayMs={index * 120}>
+                      <div className="transform scale-[0.9] sm:scale-100 origin-top-left">
+                        <BoosterCourseCard
+                          title={course.title}
+                          startDate={course.startDate}
+                          originalPrice={course.originalPrice}
+                          currentPrice={course.currentPrice}
+                          href={`/grade${gradeNumber}`}
+                        />
+                      </div>
+                    </RevealOnView>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-
-          {/* Pagination Dots */}
-          <div className="flex justify-center mt-6 space-x-2">
-            {courses.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => handleDotClick(index)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentSlide ? "bg-[#0595CE] w-6" : "bg-gray-300"
-                }`}
-                aria-label={`Go to course ${index + 1}`}
-              />
-            ))}
-          </div>
-
-          {/* Navigation Arrows */}
-          <div className="flex justify-center mt-4 space-x-6">
-            <button 
-              onClick={handlePrevSlide}
-              className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group"
-              aria-label="Previous course"
-            >
-              <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:-translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-            </button>
-            <button 
-              onClick={handleNextSlide}
-              className="w-10 h-10 border-2 border-[#D9D9D9] rounded-[14px] bg-white flex items-center justify-center hover:bg-gray-100 active:scale-95 transition-all duration-300 hover:shadow-md group"
-              aria-label="Next course"
-            >
-              <svg className="w-5 h-5 text-gray-600 group-hover:text-blue-500 group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-          </>
-          )}
-        </div>
-
-        {/* Desktop: Grid layout */}
-        <div className="hidden lg:block">
-          {courses.length === 0 ? (
-            <div className="text-center text-sm text-gray-500 py-8">No booster courses found.</div>
-          ) : (
-            <div className="grid grid-cols-3 gap-8 justify-items-center">
-              {courses.map((course, index) => (
-                <RevealOnView 
-                  key={index}
-                  from="bottom" 
-                  durationMs={800} 
-                  delayMs={index * 200}
-                >
-                  <BoosterCourseCard
-                    title={course.title}
-                    startDate={course.startDate}
-                    originalPrice={course.originalPrice}
-                    currentPrice={course.currentPrice}
-                  />
-                </RevealOnView>
-              ))}
-            </div>
-          )}
-        </div>
+        )}
+        <style jsx>{`
+          .hide-scrollbar::-webkit-scrollbar { display: none; }
+          .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        `}</style>
       </div>
     </div>
   );

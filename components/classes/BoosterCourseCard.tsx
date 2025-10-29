@@ -1,5 +1,6 @@
   import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface BoosterCourseCardProps {
   title?: string;
@@ -7,6 +8,7 @@ interface BoosterCourseCardProps {
   startDate?: string;
   originalPrice?: string;
   currentPrice?: string;
+  href?: string;
 }
 
 const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
@@ -14,7 +16,8 @@ const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
   subtitle,
   startDate,
   originalPrice,
-  currentPrice
+  currentPrice,
+  href
 }) => {
   return (
     <div className="relative w-[320px] sm:w-[360px] md:w-[380px] lg:w-[399px] h-[320px] sm:h-[350px] md:h-[370px] lg:h-[391px] bg-[#1A2439] rounded-[8px] sm:rounded-[9px] md:rounded-[10px] lg:rounded-[10.82px] border-[0.49px] border-[#CED3D3] overflow-hidden mx-auto">
@@ -37,7 +40,7 @@ const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
       </div>
 
       {/* Limited Seats Badge - Right */}
-      <div className="absolute w-[55px] sm:w-[60px] md:w-[63px] lg:w-[65.84px] h-[14px] sm:h-[15px] md:h-[16px] lg:h-[16.81px] top-[10px] sm:top-[11px] md:top-[11.6px] lg:top-[12.32px] left-[calc(100%-63px)] sm:left-[calc(100%-68px)] md:left-[calc(100%-71px)] lg:left-[315px] flex items-center justify-center">
+      <div className="absolute w-[55px] sm:w-[60px] md:w-[63px] lg:w-[65.84px] h-[14px] sm:h-[15px] md:h-[16px] lg:h-[16.81px] top-[10px] sm:top-[11px] md:top-[11.6px] lg:top-[12.32px] left-[calc(100%-75px)] sm:left-[calc(100%-80px)] md:left-[calc(100%-83px)] lg:left-[300px] flex items-center justify-center">
         <div className="flex items-center gap-0.5 sm:gap-1">
           <div className="w-[16px] sm:w-[18px] md:w-[20px] lg:w-[21.5px] h-[12px] sm:h-[13px] md:h-[14px] lg:h-[14.5px] flex items-center justify-center">
             <Image
@@ -55,17 +58,19 @@ const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
       </div>
 
       {/* Main Title */}
-      <div className="absolute w-[304px] sm:w-[344px] md:w-[364px] lg:w-[386.22px] h-[40px] sm:h-[42px] md:h-[44px] lg:h-[21.29px] top-[220px] sm:top-[240px] md:top-[255px] lg:top-[267.93px] left-[8px] sm:left-[8.5px] md:left-[8.8px] lg:left-[8.86px]">
-        <h3 className="text-[10px] sm:text-[11px] md:text-[11.5px] lg:text-[12.79px] font-bold text-white font-roboto leading-[20px] sm:leading-[21px] md:leading-[22px] lg:leading-[34.86px] text-left">
+      <div className="absolute w-[304px] sm:w-[344px] md:w-[364px] lg:w-[386.22px] h-auto top-[220px] sm:top-[240px] md:top-[255px] lg:top-[267.93px] left-[8px] sm:left-[8.5px] md:left-[8.8px] lg:left-[8.86px]">
+        <h3 className="text-[10px] sm:text-[11px] md:text-[11.5px] lg:text-[12.79px] font-bold text-white font-roboto leading-[16px] sm:leading-[18px] md:leading-[18px] lg:leading-[20px] text-left break-words">
           {title}
         </h3>
       </div>
 
       {/* Start Date */}
-      <div className="absolute w-[120px] sm:w-[125px] md:w-[130px] lg:w-[134.64px] h-[12px] sm:h-[13px] md:h-[14px] lg:h-[11.20px] top-[255px] sm:top-[285px] md:top-[300px] lg:top-[293.7px] left-[8px] sm:left-[8.5px] md:left-[8.8px] lg:left-[8.86px]">
-        <p className="text-[7px] sm:text-[7.5px] md:text-[7.8px] lg:text-[7.87px] font-normal text-white font-roboto leading-[12px] sm:leading-[13px] md:leading-[14px] lg:leading-[38.35px] text-left">
-          Starts on {startDate || subtitle}
-        </p>
+      <div className="absolute w-[180px] sm:w-[200px] md:w-[220px] lg:w-[240px] top-[255px] sm:top-[285px] md:top-[300px] lg:top-[293.7px] left-[8px] sm:left-[8.5px] md:left-[8.8px] lg:left-[8.86px]">
+        {startDate && (
+          <p className="text-[7px] sm:text-[7.5px] md:text-[7.8px] lg:text-[8.5px] font-normal text-white font-roboto leading-[12px] sm:leading-[12px] md:leading-[12px] lg:leading-[14px] text-left">
+            Starts on {startDate}
+          </p>
+        )}
       </div>
 
       {/* Divider Line */}
@@ -91,12 +96,20 @@ const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
       </div>
 
       {/* View Details Button */}
-      <div className="absolute w-[110px] sm:w-[120px] md:w-[125px] lg:w-[131.69px] h-[32px] sm:h-[35px] md:h-[37px] lg:h-[39.21px] top-[280px] sm:top-[310px] md:top-[325px] lg:top-[341.7px] left-[calc(100%-118px)] sm:left-[calc(100%-128px)] md:left-[calc(100%-133px)] lg:left-[257.48px] bg-[#FBD640] rounded-[4px] sm:rounded-[4.5px] md:rounded-[5px] lg:rounded-[5.9px] shadow-[0px_0px_3px_0px_rgba(0,0,0,0.25)] sm:shadow-[0px_0px_3.5px_0px_rgba(0,0,0,0.25)] md:shadow-[0px_0px_3.7px_0px_rgba(0,0,0,0.25)] lg:shadow-[0px_0px_3.94px_0px_rgba(0,0,0,0.25)] flex items-center justify-center">
-        <button className="w-[90px] sm:w-[100px] md:w-[105px] lg:w-[103.19px] h-[20px] sm:h-[22px] md:h-[24px] lg:h-[24.28px] flex items-center justify-center">
-          <span className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15.16px] font-medium text-[#1A2439] font-roboto leading-[20px] sm:leading-[22px] md:leading-[24px] lg:leading-[34.86px] text-center">
-            View Details
-          </span>
-        </button>
+      <div className="absolute w-[110px] sm:w-[120px] md:w-[125px] lg:w-[131.69px] h-[32px] sm:h-[35px] md:h-[37px] lg:h-[39.21px] top-[280px] sm:top-[310px] md:top-[325px] lg:top-[341.7px] left-[calc(100%-118px)] sm:left-[calc(100%-128px)] md:left-[calc(100%-133px)] lg:left-[257.48px] rounded-[4px] sm:rounded-[4.5px] md:rounded-[5px] lg:rounded-[5.9px] shadow-[0px_0px_3px_0px_rgba(0,0,0,0.25)] sm:shadow-[0px_0px_3.5px_0px_rgba(0,0,0,0.25)] md:shadow-[0px_0px_3.7px_0px_rgba(0,0,0,0.25)] lg:shadow-[0px_0px_3.94px_0px_rgba(0,0,0,0.25)] flex items-center justify-center">
+        {href ? (
+          <Link href={href} className="w-full h-full bg-[#FBD640] rounded-inherit flex items-center justify-center cursor-pointer hover:brightness-95 transition">
+            <span className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15.16px] font-medium text-[#1A2439] font-roboto leading-none text-center">
+              View Details
+            </span>
+          </Link>
+        ) : (
+          <div className="w-full h-full bg-[#FBD640] rounded-inherit flex items-center justify-center">
+            <span className="text-[12px] sm:text-[13px] md:text-[14px] lg:text-[15.16px] font-medium text-[#1A2439] font-roboto leading-none text-center">
+              View Details
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
