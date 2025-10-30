@@ -9,7 +9,7 @@ type StatsSectionProps = {
 
 export default function StatsSection({ onChooseClass }: StatsSectionProps) {
   return (
-    <section className="relative bg-white py-8 px-4 rounded-[20px] max-w-[1000px] mx-auto -mt-[75px] shadow z-[1000]">
+    <section className="relative bg-white py-8 px-4 rounded-[20px] max-w-[1000px] mx-auto -mt-[75px] shadow z-0">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="w-full md:basis-[36%] md:w-auto">
           <h2 className="font-bold text-[1.75rem] leading-tight md:text-[2.0rem] md:leading-[2.4rem] text-[#6f57e4] text-center md:text-left">
