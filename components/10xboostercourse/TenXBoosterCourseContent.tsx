@@ -118,7 +118,8 @@ export default function TenXBoosterCourseContent() {
     setShowLoader(true);
     
     try {
-      // Create registration lead
+      console.log("[PAYMENT] Starting flow", { selectedClass, phoneNumber });
+      // 1) Create registration lead (existing)
       const leadResponse = await fetch(
         "https://sisyaclass.xyz/student/new_reg_lead",
         {
@@ -132,22 +133,75 @@ export default function TenXBoosterCourseContent() {
           }),
         }
       );
-
       const leadData = await leadResponse.json();
-      if (leadData.success) {
-        localStorage.setItem("leadId", leadData.lead.id);
-        // Initiate payment - this would need an API route in Next.js
-        // For now, just hide the popup and show a message
-        setShowReservationPopup(false);
-        alert("Payment will be initiated. Please check your phone for details.");
-      } else {
+      console.log("[PAYMENT] Lead response", leadData);
+      if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
+        return;
       }
+      localStorage.setItem("leadId", leadData.lead.id);
+      console.log("[PAYMENT] Lead stored", { leadId: leadData.lead.id });
+
+      // 2) Create Razorpay order via Next.js API
+      const orderRes = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "10x Booster Course Demo" }),
+      });
+      const orderJson = await orderRes.json();
+      console.log("[PAYMENT] Order API response", orderJson);
+      if (!orderJson?.success) {
+        alert("Failed to initialize payment. Please try again.");
+        return;
+      }
+
+      // Support both PHP-like shape (data) and previous shape (order/keyId)
+      const payload = orderJson.data ? orderJson.data : {
+        order_id: orderJson.order?.id,
+        amount: orderJson.order?.amount,
+        currency: orderJson.order?.currency,
+        key_id: orderJson.keyId,
+        name: "Sisya Class",
+        description: "10x Booster Course Demo",
+        prefill: { contact: phoneNumber },
+      };
+
+      // 3) Open Razorpay Checkout
+      const options: any = {
+        key: payload.key_id,
+        amount: payload.amount,
+        currency: payload.currency,
+        name: payload.name,
+        description: payload.description,
+        order_id: payload.order_id,
+        prefill: payload.prefill,
+        handler: function (response: any) {
+          console.log("[PAYMENT] Success handler", response);
+          setShowReservationPopup(false);
+          window.location.href = `/10xboostercourse/payment/success?transactionId=${encodeURIComponent(
+            response.razorpay_payment_id || ""
+          )}&amount=${encodeURIComponent("₹19")}`;
+        },
+        modal: {
+          ondismiss: function () {
+            console.warn("[PAYMENT] Checkout dismissed by user");
+            window.location.href = `/10xboostercourse/payment/failed?transactionId=${encodeURIComponent(
+              `DISMISSED_${Date.now()}`
+            )}`;
+          },
+        },
+      };
+
+      // @ts-ignore
+      const rzp = new (window as any).Razorpay(options);
+      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      rzp.open();
     } catch (error) {
       console.error("Error:", error);
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);
+      console.log("[PAYMENT] Flow ended");
     }
   };
 

@@ -12,9 +12,9 @@ export default function PaymentFailedPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#f5f8ff] flex items-center justify-center px-4">
-      <div className="w-full max-w-[450px] bg-white shadow-md min-h-screen md:min-h-0 md:rounded-md md:h-auto md:py-10">
-        <div className="flex flex-col items-center justify-center text-center px-5 py-10">
+    <div className="min-h-screen bg-[#f5f8ff] flex flex-col items-center justify-center px-3">
+      <div className="w-full max-w-[360px] sm:max-w-[420px] md:max-w-[450px] bg-white shadow-md min-h-[80vh] md:min-h-0 md:rounded-md md:h-auto py-6 md:py-10">
+        <div className="flex flex-col items-center justify-center text-center px-4 sm:px-5 py-6 md:py-10">
           <div className="w-[120px] h-[120px] rounded-full bg-gradient-to-br from-[#FC4D4D] to-[#FF2C2C] flex items-center justify-center mb-6 shadow-[0_10px_20px_rgba(252,77,77,0.3)]">
             <span className="text-white text-6xl">✖</span>
           </div>
@@ -23,7 +23,7 @@ export default function PaymentFailedPage() {
             Unfortunately, your payment was not processed. Please try again or contact support.
           </p>
 
-          <div className="w-full max-w-[350px] bg-[#f8f9ff] rounded-xl p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-6">
+          <div className="w-full max-w-[320px] sm:max-w-[350px] bg-[#f8f9ff] rounded-xl p-4 sm:p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-5 sm:mb-6">
             <div className="flex items-center justify-between text-[14px] mb-3">
               <span className="text-[#777] flex items-center gap-2">Transaction ID</span>
               <span className="font-medium text-[#333] break-all">{transactionId}</span>
@@ -46,10 +46,16 @@ export default function PaymentFailedPage() {
             )}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-md px-5 py-3 text-[16px] font-medium shadow hover:bg-[#128C7E] transition-colors"
+            className="inline-flex items-center justify-center gap-2 bg-[#25D366] text-white rounded-md px-4 py-3 text-[15px] sm:text-[16px] font-medium shadow hover:bg-[#128C7E] transition-colors"
           >
             <span className="text-[20px]">🟢</span>
             Contact Us on WhatsApp
+          </a>
+          <a
+            href="/3dayslp"
+            className="mt-4 inline-flex items-center justify-center gap-2 bg-[#01317a] text-white rounded-md px-5 py-3 text-[15px] sm:text-[16px] font-medium shadow hover:bg-[#001d4a] transition-colors"
+          >
+            ← Back to 3-Day LP
           </a>
         </div>
       </div>

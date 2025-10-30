@@ -43,7 +43,7 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
               id="childClass"
               value={selectedClass}
               onChange={(e) => onChangeClass(e.target.value)}
-              className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white appearance-none"
+              className="w-full p-3 pr-10 border border-[#c3d3ea] rounded-lg text-base bg-white appearance-none"
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((grade) => (
                 <option key={grade} value={grade.toString()}>
@@ -51,8 +51,14 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
                 </option>
               ))}
             </select>
+            <svg
+              aria-hidden
+              viewBox="0 0 24 24"
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#555]"
+            >
+              <path fill="currentColor" d="M7 10l5 5 5-5z" />
+            </svg>
           </div>
-          <div className="text-sm font-semibold text-[#e74c3c] text-center">12 Remaining seats</div>
           <div className="relative w-full">
             <label htmlFor="phoneNumber" className="block text-sm font-medium text-[#333] mb-2">
               Enter your phone number
