@@ -40,6 +40,9 @@ export const API_ENDPOINTS = {
   GET_ALL_FEATURE_SHOWCASE_SECTION: '/student/get_all_feature_showcase_section',
   GET_ALL_FACULTY_MEMBER_CARD: '/student/get_all_faculty_member_card',
   CREATE_MERRITTO_LEAD: '/student/create_merrito_lead',
+  // Web banners/videos
+  GET_ALL_WEB_BANNERS: '/student/get_all_web_banners',
+  GET_ALL_WEB_VIDEOS: '/student/get_all_web_videos',
 };
 
 // Image URLs

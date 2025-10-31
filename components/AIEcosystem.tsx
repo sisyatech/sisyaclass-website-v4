@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from "react";
 import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
+
 
 interface Feature {
     id: string;
@@ -54,7 +56,7 @@ const AIEcosystem = () => {
                 // console.log('🚀 Fetching AI Ecosystem section data from API...');
                 // console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_all_feature_showcase_section');
                 
-                const response = await fetch('https://sisyaclass.xyz/student/get_all_feature_showcase_section', {
+                const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_FEATURE_SHOWCASE_SECTION}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

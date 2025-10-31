@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface TeacherData {
   id: string;
@@ -40,7 +41,7 @@ const Teachers = () => {
         // console.log('==============================================');
         console.log('🚀 [TEACHERS] STARTING API FETCH');
 
-        const response = await fetch("https://sisyaclass.xyz/student/get_all_faculty_member_card", {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_FACULTY_MEMBER_CARD}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

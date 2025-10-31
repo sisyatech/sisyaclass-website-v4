@@ -31,7 +31,7 @@ const InnovativeLearningTools = () => {
   useEffect(() => {
     const fetchWebVideos = async () => {
       try {
-        const response = await fetch(`https://sisyaclass.xyz/student/get_all_web_videos`, {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_WEB_VIDEOS}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -246,6 +246,8 @@ const HoverPlayVideo: React.FC<HoverPlayVideoProps> = ({ videoLink }) => {
   return (
     <div
       className="absolute left-1/2 -translate-x-1/2 top-2 sm:top-3 md:top-4 w-[80%] sm:w-[82%] md:w-[82%] lg:w-[80%] aspect-[16/10] sm:aspect-[16/10] md:aspect-[16/10] lg:aspect-[16/10] overflow-hidden shadow-lg"
+      onMouseEnter={() => setPlaying(true)}
+      onMouseLeave={() => setPlaying(false)}
       onClick={() => setPlaying(true)}
       role="button"
       aria-label="Play video"

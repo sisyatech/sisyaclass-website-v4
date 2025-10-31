@@ -19,7 +19,7 @@ const Banner = () => {
   useEffect(() => {
     const fetchWebBanners = async () => {
       try {
-        const response = await fetch(`https://sisyaclass.xyz/student/get_all_web_banners`, {
+        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_WEB_BANNERS}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
