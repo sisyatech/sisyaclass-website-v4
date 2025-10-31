@@ -5,6 +5,7 @@ import Image from "next/image";
 import { MessageSquare, Reply } from "lucide-react";
 import { getBlogById, getNestedComments, addComment, fixProfileImageUrl, type Blog, type Comment } from "../../../lib/blogApi";
 import { useUser } from "../../UserContext";
+import LoginModal from "../../LoginModal";
 
 interface BlogAuthorCommentsProps {
   blogId: string;
@@ -18,6 +19,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
   const [submitting, setSubmitting] = useState(false);
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
   const { user } = useUser();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +46,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
     e.preventDefault();
     
     if (!user) {
-      alert('Please login to comment');
+      setShowLoginModal(true);
       return;
     }
 
@@ -130,7 +132,12 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
   };
 
   return (
-    <div className="bg-gray-50 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10">
+    <div id="comments" className="bg-gray-50 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10">
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onLoginSuccess={() => setShowLoginModal(false)}
+      />
       {/* Author Section */}
       {blogData && (
         <div className="mb-4 sm:mb-5 md:mb-6">
@@ -141,14 +148,22 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
                   src={fixProfileImageUrl(blogData.authorProfile)}
                   alt={blogData.authorName}
                   fill
+                  sizes="40px"
                   className="rounded-full object-cover"
+                  unoptimized
+                  onError={(e) => {
+                    const el = e.target as HTMLImageElement;
+                    el.src = '/logo.png';
+                  }}
                 />
               ) : (
-                <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
-                  <span className="text-gray-400 text-sm font-semibold">
-                    {blogData.authorName.charAt(0).toUpperCase()}
-                  </span>
-                </div>
+                <Image
+                  src="/logo.png"
+                  alt={blogData.authorName}
+                  fill
+                  sizes="40px"
+                  className="rounded-full object-cover"
+                />
               )}
             </div>
             <div className="flex-1 text-center sm:text-left">
@@ -204,6 +219,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
+            onFocus={() => { if (!user) { setShowLoginModal(true); } }}
             placeholder={user ? "Write a comment..." : "Please login to comment"}
             disabled={!user || submitting}
             className="w-full pl-12 sm:pl-16 pr-3 sm:pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0595CE] focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
@@ -237,14 +253,22 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
                       src={fixProfileImageUrl(comment.commentedBy.profile)}
                       alt={comment.commentedBy.name}
                       fill
+                      sizes="40px"
                       className="rounded-full object-cover"
+                      unoptimized
+                      onError={(e) => {
+                        const el = e.target as HTMLImageElement;
+                        el.src = '/girl.svg';
+                      }}
                     />
                   ) : (
-                    <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
-                      <span className="text-gray-600 text-xs font-semibold">
-                        {comment.commentedBy.name.charAt(0).toUpperCase()}
-                      </span>
-                    </div>
+                    <Image
+                      src="/girl.svg"
+                      alt={comment.commentedBy.name}
+                      fill
+                      sizes="40px"
+                      className="rounded-full object-cover"
+                    />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -278,14 +302,22 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
                                 src={fixProfileImageUrl(reply.commentedBy.profile)}
                                 alt={reply.commentedBy.name}
                                 fill
+                                sizes="28px"
                                 className="rounded-full object-cover"
+                                unoptimized
+                                onError={(e) => {
+                                  const el = e.target as HTMLImageElement;
+                                  el.src = '/girl.svg';
+                                }}
                               />
                             ) : (
-                              <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
-                                <span className="text-gray-600 text-xs font-semibold">
-                                  {reply.commentedBy.name.charAt(0).toUpperCase()}
-                                </span>
-                              </div>
+                              <Image
+                                src="/girl.svg"
+                                alt={reply.commentedBy.name}
+                                fill
+                                sizes="28px"
+                                className="rounded-full object-cover"
+                              />
                             )}
                           </div>
                           <div className="flex-1">

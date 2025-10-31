@@ -64,6 +64,22 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
     }
   };
 
+  const handleScrollToComments = () => {
+    try {
+      const el = document.getElementById('comments') || document.getElementById('blog-comments');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      // Fallback: update hash so other components can react
+      if (typeof window !== 'undefined') {
+        window.location.hash = 'comments';
+      }
+    } catch (_) {
+      // no-op
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -475,9 +491,10 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
         </div>
 
         {/* Author Info and Stats */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-gray-200">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 md:gap-6 mb-4 sm:mb-6">
+          {/* Author Block */}
+          <div className="flex items-center gap-2.5 sm:gap-3.5">
+            <div className="relative w-9 h-9 sm:w-12 sm:h-12 rounded-full overflow-hidden bg-gray-200">
               {blogData.authorProfile ? (
           <Image
                   src={fixProfileImageUrl(blogData.authorProfile)}
@@ -492,46 +509,46 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <User className="w-6 h-6 text-gray-400" />
+                  <User className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" />
                 </div>
               )}
             </div>
-          <div className="flex-1">
-            <h3 className="font-montserrat font-semibold text-[14px] sm:text-[16px] text-[#1A2439]">
-                {blogData.authorName}
-            </h3>
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
-                <Calendar className="w-3 h-3" />
-                <span>{formatDate(blogData.publishedAt)}</span>
-              <span>•</span>
-                <Clock className="w-3 h-3" />
-                <span>{calculateReadTime(blogData.content)}</span>
+            <div className="flex-1">
+              <h3 className="font-montserrat font-semibold text-[13px] sm:text-[16px] text-[#1A2439] leading-tight">
+                  {blogData.authorName}
+              </h3>
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-sm text-gray-600 mt-0.5">
+                  <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span>{formatDate(blogData.publishedAt)}</span>
+                <span className="mx-1 text-gray-400">•</span>
+                  <Clock className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span>{calculateReadTime(blogData.content)}</span>
+                </div>
               </div>
-            </div>
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 sm:gap-3.5 w-full sm:w-auto">
             <button
               onClick={handleLike}
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-lg transition-colors ${
                 liked 
                   ? 'bg-red-100 text-red-600' 
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
-              <Heart className={`w-4 h-4 ${liked ? 'fill-current' : ''}`} />
-              <span className="text-sm font-medium">{likeCount}</span>
+              <Heart className={`w-4 h-4 sm:w-4 sm:h-4 ${liked ? 'fill-current' : ''}`} />
+              <span className="text-xs sm:text-sm font-medium">{likeCount}</span>
             </button>
             
-            <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-600 rounded-lg">
-              <MessageCircle className="w-4 h-4" />
-              <span className="text-sm font-medium">{blogData.activityComments}</span>
+            <div onClick={handleScrollToComments} className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-gray-100 text-gray-600 rounded-lg cursor-pointer" title="Go to comments">
+              <MessageCircle className="w-4 h-4 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm font-medium">{blogData.activityComments}</span>
             </div>
             
-            <div className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-600 rounded-lg">
-              <Eye className="w-4 h-4" />
-              <span className="text-sm font-medium">{blogData.activityReads}</span>
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-2 bg-gray-100 text-gray-600 rounded-lg">
+              <Eye className="w-4 h-4 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm font-medium">{blogData.activityReads}</span>
             </div>
           </div>
         </div>
