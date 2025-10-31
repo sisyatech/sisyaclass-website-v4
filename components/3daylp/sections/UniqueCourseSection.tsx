@@ -11,9 +11,7 @@ function HeaderIcon({ type }: { type: CardProps["icon"] }) {
     );
   }
   return (
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 fill-white">
-      <path d="M21 5c-1.11-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5zm-9 1.5C10.55 5.4 8.45 5 6.5 5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5V6.5z" />
-    </svg>
+    <img src="/3daylp/bookkk.svg" alt="book" className="w-6 h-6" />
   );
 }
 
