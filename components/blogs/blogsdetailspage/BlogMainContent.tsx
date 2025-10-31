@@ -484,6 +484,11 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
                   alt={blogData.authorName}
                   fill
                   className="object-cover"
+                  unoptimized
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.png';
+                  }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">

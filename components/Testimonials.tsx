@@ -96,6 +96,43 @@ const Testimonials = () => {
     fetchTestimonials();
   }, []);
 
+  // Fetch YouTube titles via oEmbed for each testimonial
+  useEffect(() => {
+    if (testimonials.length === 0) return;
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const entries = await Promise.all(
+          testimonials.map(async (t) => {
+            try {
+              const url = `https://www.youtube.com/oembed?url=${encodeURIComponent(
+                `https://www.youtube.com/watch?v=${t.videoId}`
+              )}&format=json`;
+              const res = await fetch(url, { method: 'GET' });
+              if (!res.ok) return [t.videoId, undefined] as const;
+              const json = await res.json();
+              return [t.videoId, json?.title as string | undefined] as const;
+            } catch {
+              return [t.videoId, undefined] as const;
+            }
+          })
+        );
+        if (cancelled) return;
+        const map: { [k: string]: string } = {};
+        for (const [id, title] of entries) {
+          if (title) map[id] = title;
+        }
+        setVideoTitles(map);
+      } catch {
+        // ignore
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [testimonials]);
+
   // Re-trigger card animation on slide change
   useEffect(() => {
     setCardEntered(false);
@@ -139,6 +176,24 @@ const Testimonials = () => {
     setCurrentIndex((prev) => (prev >= testimonials.length - 1 ? 0 : prev + 1));
   };
 
+  // Keep index in range when data changes
+  useEffect(() => {
+    if (currentIndex >= testimonials.length) setCurrentIndex(0);
+  }, [testimonials.length, currentIndex]);
+
+  // Visible items for desktop (up to 4). Do NOT duplicate when total <= 4
+  const getVisibleTestimonials = (): ProcessedTestimonial[] => {
+    if (testimonials.length === 0) return [];
+    if (testimonials.length <= 4) return testimonials;
+    const arr: ProcessedTestimonial[] = [];
+    for (let i = 0; i < 4; i++) {
+      const idx = (currentIndex + i) % testimonials.length;
+      arr.push(testimonials[idx]);
+    }
+    return arr;
+  };
+  const visibleDesktop = getVisibleTestimonials();
+
   // Show loading state
   if (loading) {
     return (
@@ -175,46 +230,62 @@ const Testimonials = () => {
           </h2>
         </div>
 
-        {/* Desktop grid */}
-        <div className={`hidden lg:flex flex-wrap justify-center -mx-2 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
-          {testimonials.map((testimonial, index) => (
-            <div
-              key={testimonial.id}
-              className={`relative group px-2 mb-4 w-[200px] lg:w-[220px] xl:w-[240px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
-              style={{ transitionDelay: entered ? `${index * 120}ms` : '0ms', aspectRatio: '9/16' }}
-              onMouseEnter={() => setActiveVideo(index)}
-              onMouseLeave={() => setActiveVideo(null)}
+        {/* Desktop: horizontal row with arrows (no wrap) */}
+          <div className={`hidden lg:block relative transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+          {testimonials.length > 4 && (
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-0 z-10 flex h-10 w-10 -translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
             >
-              <div 
-                className={`relative w-full h-full rounded-2xl overflow-hidden bg-black transition-all duration-300 ${activeVideo === index ? 'border-[3px] border-[#4A9FD8] shadow-[0_8px_16px_rgba(0,0,0,0.2)]' : 'border-[3px] border-transparent shadow-[0_4px_8px_rgba(0,0,0,0.1)]'}`}
+              <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+            </button>
+          )}
+          <div className="flex justify-center gap-5 px-8 xl:px-16">
+            {visibleDesktop.map((testimonial, index) => (
+              <div
+                key={testimonial.id}
+                className={`relative group w-[220px] xl:w-[240px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                style={{ transitionDelay: entered ? `${index * 120}ms` : '0ms', aspectRatio: '9/16' }}
+                onMouseEnter={() => setActiveVideo(index)}
+                onMouseLeave={() => setActiveVideo(null)}
               >
-                {activeVideo === index ? (
-                  <iframe
-                    ref={(el) => {
-                      videoRefs.current[index] = el!;
-                    }}
-                    src={testimonial.embedUrl}
-                    className="w-full h-full"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    style={{ border: 'none', aspectRatio: '9/16' }}
-                  />
-                    ) : (
-                      <div className="w-full h-full relative">
-                        <Image width={260} height={400} src={testimonial.thumbnail} alt={`${testimonial.name} - ${testimonial.grade}`} className="w-full h-full object-cover" sizes="(max-width: 1024px) 220px, 240px" />
-                        <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 lg:px-3 lg:py-2" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
-                          <div className="text-white text-[11px] lg:text-xs font-semibold font-montserrat leading-[1.2]">{testimonial.title}</div>
-                        </div>
-                        <div className="absolute inset-0 flex items-center justify-center z-10">
-                          <div className="rounded-full bg-transparent bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg w-[54px] h-[54px] lg:w-[60px] lg:h-[60px]">
-                            <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z" fill="#FFFFFF"/></svg>
-                          </div>
+                <div className={`relative w-full h-full rounded-2xl overflow-hidden bg-black transition-all duration-300 ${activeVideo === index ? 'border-[3px] border-[#4A9FD8] shadow-[0_8px_16px_rgba(0,0,0,0.2)]' : 'border-[3px] border-transparent shadow-[0_4px_8px_rgba(0,0,0,0.1)]'}`}>
+                  {activeVideo === index ? (
+                    <iframe
+                      ref={(el) => { videoRefs.current[index] = el!; }}
+                      src={testimonial.embedUrl}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      style={{ border: 'none', aspectRatio: '9/16' }}
+                    />
+                  ) : (
+                    <div className="w-full h-full relative">
+                      <Image width={260} height={400} src={testimonial.thumbnail} alt={`${testimonial.name} - ${testimonial.grade}`} className="w-full h-full object-cover" sizes="(max-width: 1024px) 220px, 240px" />
+                      <div className="absolute bottom-0 left-0 right-0 px-2 py-1.5 lg:px-3 lg:py-2" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
+                        <div className="text-white text-[11px] lg:text-xs font-semibold font-montserrat leading-[1.2] truncate" title={videoTitles[testimonial.videoId] || testimonial.title}>
+                          {videoTitles[testimonial.videoId] || testimonial.title}
                         </div>
                       </div>
-                    )}
+                      <div className="absolute inset-0 flex items-center justify-center z-10">
+                        <div className="rounded-full bg-transparent bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg w-[54px] h-[54px] lg:w-[60px] lg:h-[60px]">
+                          <svg width="24" height="24" className="lg:w-7 lg:h-7" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7L8 5z" fill="#FFFFFF"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          {testimonials.length > 4 && (
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-0 z-10 flex h-10 w-10 translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
+            >
+              <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+            </button>
+          )}
         </div>
 
         {/* Mobile & Tablet single card with bottom arrows */}
@@ -256,7 +327,9 @@ const Testimonials = () => {
                       <div className="w-full h-full relative cursor-pointer">
                         <Image width={300} height={460} src={t.thumbnail} alt={`${t.name} - ${t.grade}`} className="w-full h-full object-cover" sizes="(max-width: 640px) 260px, (max-width: 768px) 280px, 300px" />
                         <div className="absolute bottom-0 left-0 right-0 px-3 py-2 sm:px-4 sm:py-3" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 70%, transparent 100%)' }}>
-                          <div className="text-white text-xs sm:text-sm font-semibold font-montserrat leading-[1.3]">{t.title}</div>
+                        <div className="text-white text-xs sm:text-sm font-semibold font-montserrat leading-[1.3] truncate" title={videoTitles[t.videoId] || t.title}>
+                          {videoTitles[t.videoId] || t.title}
+                        </div>
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center z-10">
                           <div className="rounded-full bg-transparent bg-opacity-90 flex items-center justify-center cursor-pointer shadow-lg w-[60px] h-[60px] sm:w-[70px] sm:h-[70px]">

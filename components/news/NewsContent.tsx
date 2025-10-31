@@ -136,8 +136,8 @@ const NewsContent = () => {
   const featuredNews = news.find((item) => item.featured) || news[0]; // Fallback to first item if none featured
   const regularNews = news.filter((item) => item.id !== featuredNews.id);
   const firstRegularNews = regularNews[0]; // Get the first regular news item
-  // Slice remaining for the grid below (take up to 3 more)
-  const remainingRegularNews = regularNews.slice(1, isHomePage ? 4 : undefined); // Show 3 more on home page 
+  // Slice remaining for the grid below (always show up to 3 more)
+  const remainingRegularNews = regularNews.slice(1, 4);
 
 
   return (
@@ -170,6 +170,7 @@ const NewsContent = () => {
                         alt={featuredNews.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105" 
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 800px"
                         onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                           const target = e.target as HTMLImageElement;
                           target.src = 'https://placehold.co/800x320/cccccc/333333?text=Fallback';
@@ -235,6 +236,7 @@ const NewsContent = () => {
                           alt={firstRegularNews.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 400px"
                           onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                             const target = e.target as HTMLImageElement;
                             target.src = 'https://placehold.co/400x150/cccccc/333333?text=Fallback';
@@ -310,6 +312,7 @@ const NewsContent = () => {
                           alt={newsItem.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
                           onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
                             const target = e.target as HTMLImageElement;
                             target.src = 'https://placehold.co/400x150/cccccc/333333?text=Fallback';

@@ -16,6 +16,7 @@ interface ReviewData {
   content?: string;
   imageUrl?: string;
   profileImage?: string;
+  isVisible?: boolean;
   order: number;
   createdAt?: string;
   updatedAt?: string;
@@ -52,7 +53,10 @@ const Reviews = () => {
 
         if (response.ok) {
           const data: ReviewData[] = await response.json();
-          const sortedData = data
+          console.log("reviews data", data);
+          // Respect visibility flag from backend
+          const visibleData = (Array.isArray(data) ? data : []).filter(r => r.isVisible === true);
+          const sortedData = visibleData
             .sort((a, b) => a.order - b.order)
             .map(review => ({
               ...review,

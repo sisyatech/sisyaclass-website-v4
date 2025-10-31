@@ -422,6 +422,11 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
             width={48}
             height={48}
             className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex-shrink-0"
+            unoptimized
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = '/logo.png';
+            }}
           />
           <div className="flex-1">
             <h3 className="font-montserrat font-semibold text-[14px] sm:text-[16px] text-[#1A2439]">

@@ -117,6 +117,7 @@ const BlogRelatedBlogs = () => {
                     alt={blog.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-300"
+                    sizes="(max-width: 640px) 64px, (max-width: 768px) 72px, 80px"
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">

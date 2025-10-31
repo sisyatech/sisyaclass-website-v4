@@ -11,14 +11,15 @@ interface WebLinksData {
 
 const Banner = () => {
   const [webLinks, setWebLinks] = useState<WebLinksData | null>(null);
+  const [bannerHrefs, setBannerHrefs] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchWebLinks = async () => {
+    const fetchWebBanners = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`, {
+        const response = await fetch(`https://sisyaclass.xyz/student/get_all_web_banners`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -27,18 +28,21 @@ const Banner = () => {
         });
         
         if (response.ok) {
-          const rawData = await response.json();
-          
-          // Handle if response is an array, take first item
-          const data = Array.isArray(rawData) ? rawData[0] : rawData;
-          
-          if (data?.webBannerImageLink) {
-            setWebLinks(data);
-          } else {
-            // Missing banner link
+          const raw = await response.json();
+          const list: any[] = Array.isArray(raw) ? raw : [];
+          // Try to extract image link fields commonly used
+          const links = list
+            .map((item) => item?.imageLink || item?.bannerLink || item?.link || item?.webBannerImageLink)
+            .flat()
+            .filter(Boolean);
+          const hrefs = list.map((item) => item?.href || '').filter(() => true);
+
+          if (links && links.length > 0) {
+            // Normalize into our local shape
+            console.log("banners data", links);
+            setWebLinks({ id: 'web-banners', laptopVideoLink: '', webBannerImageLink: links });
+            setBannerHrefs(hrefs);
           }
-        } else {
-          // Failed response
         }
       } catch (error) {
         // Swallow fetch errors to avoid blocking render
@@ -47,7 +51,7 @@ const Banner = () => {
       }
     };
 
-    fetchWebLinks();
+    fetchWebBanners();
   }, []);
 
   // Normalize banners list
@@ -105,21 +109,40 @@ const Banner = () => {
           <div className="flex w-full snap-x snap-mandatory">
             {bannerLinks.map((link, idx) => (
               <div key={`${link}-${idx}`} className="snap-center shrink-0 w-full">
-                <div className="flex justify-center">
-                  <Image
-                    src={link}
-                    alt={`Banner ${idx + 1}`}
-                    width={1200}
-                    height={300}
-                    className="w-full h-auto max-w-full"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
-                    priority={idx === 0}
-                    unoptimized={isExternalUrl(link)}
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/backendbanner.svg';
-                    }}
-                  />
+                <div className="flex justify-center px-2 sm:px-3">
+                  {bannerHrefs[idx] ? (
+                    <a href={bannerHrefs[idx]} target="_blank" rel="noopener noreferrer" className="block w-full">
+                      <Image
+                        src={link}
+                        alt={`Banner ${idx + 1}`}
+                        width={1200}
+                        height={300}
+                        className="w-full h-auto max-w-full"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+                        priority={idx === 0}
+                        unoptimized={isExternalUrl(link)}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/backendbanner.svg';
+                        }}
+                      />
+                    </a>
+                  ) : (
+                    <Image
+                      src={link}
+                      alt={`Banner ${idx + 1}`}
+                      width={1200}
+                      height={300}
+                      className="w-full h-auto max-w-full"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+                      priority={idx === 0}
+                      unoptimized={isExternalUrl(link)}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/backendbanner.svg';
+                      }}
+                    />
+                  )}
                 </div>
               </div>
             ))}

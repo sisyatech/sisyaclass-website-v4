@@ -69,7 +69,7 @@ const AIEcosystem = () => {
                     // console.log('✅ API Data received successfully!');
                     // console.log('📦 Number of sections:', data.length);
                     // console.log('📝 Section data:', data[0]);
-                    
+                    console.log("data fo the ai ecosystem", data);
                     // Get the first active section (order 1)
                     const activeSection = data.find((section: SectionData) => section.isActive && section.order === 1);
                     if (activeSection) {

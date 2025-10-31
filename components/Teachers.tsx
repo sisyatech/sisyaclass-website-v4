@@ -38,7 +38,7 @@ const Teachers = () => {
     const fetchTeachers = async () => {
       try {
         // console.log('==============================================');
-        // console.log('🚀 [TEACHERS] STARTING API FETCH');
+        console.log('🚀 [TEACHERS] STARTING API FETCH');
 
         const response = await fetch("https://sisyaclass.xyz/student/get_all_faculty_member_card", {
           method: "POST",
@@ -48,11 +48,11 @@ const Teachers = () => {
           mode: "cors",
         });
 
-        // console.log('📊 [TEACHERS] Response status:', response.status);
+        console.log('📊 [TEACHERS] Response status:', response.status);
 
         if (response.ok) {
           const data = await response.json();
-          // console.log('✅ [TEACHERS] DATA RECEIVED:', data);
+          console.log('✅ [TEACHERS] DATA RECEIVED:', data);
 
           if (Array.isArray(data) && data.length > 0) {
             // Sort by order field
@@ -93,6 +93,13 @@ const Teachers = () => {
   const validTeachers = useMemo(() => (
     (teachers || []).filter((t) => typeof t.imageUrl === 'string' && t.imageUrl.trim().length > 0)
   ), [teachers]);
+
+  // Ensure currentSlide is in range when data length changes
+  useEffect(() => {
+    if (currentSlide >= validTeachers.length) {
+      setCurrentSlide(0);
+    }
+  }, [validTeachers.length, currentSlide]);
 
   const handlePrevSlide = () => {
     if (validTeachers.length === 0) return;
@@ -139,10 +146,11 @@ const Teachers = () => {
   // console.log('🎨 [TEACHERS] Entered:', entered);
   // console.log('🎨 [TEACHERS] Cards entered:', cardsEntered);
 
-  // Get visible teachers for desktop (4 cards)
+  // Get visible teachers for desktop (up to 4). Do NOT duplicate when total < 4
   const getVisibleTeachers = (): TeacherData[] => {
+    if (validTeachers.length === 0) return [];
+    if (validTeachers.length <= 4) return validTeachers;
     const result: TeacherData[] = [];
-    if (validTeachers.length === 0) return result;
     for (let i = 0; i < 4; i++) {
       const index = (currentSlide + i) % validTeachers.length;
       result.push(validTeachers[index]);
@@ -198,30 +206,32 @@ const Teachers = () => {
         <div
           className={`relative transition-all duration-[1500ms] ease-out ${entered ? "translate-y-0 opacity-100" : "translate-y-[160px] opacity-0"}`}
         >
-          {/* Desktop: 4 cards with side arrows */}
+          {/* Desktop: up to 4 cards (no duplicates when fewer than 4) */}
           <div className="relative hidden lg:block">
-            {/* Left Arrow */}
-            <button
-              onClick={handlePrevSlide}
-              className="absolute top-1/2 left-0 z-10 flex h-10 w-10 -translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
-            >
-              <svg
-                className="h-5 w-5 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {/* Left Arrow - shown only when more than 4 teachers */}
+            {validTeachers.length > 4 && (
+              <button
+                onClick={handlePrevSlide}
+                className="absolute top-1/2 left-0 z-10 flex h-10 w-10 -translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="h-5 w-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+            )}
 
             {/* Cards */}
-            <div className="flex justify-center gap-5 px-16">
+            <div className="flex justify-center gap-5 px-8 xl:px-16">
               {visibleTeachers.map((teacher, index) => (
                 <div
                   key={`${teacher.id}-${index}`}
@@ -263,25 +273,27 @@ const Teachers = () => {
               ))}
             </div>
 
-            {/* Right Arrow */}
-            <button
-              onClick={handleNextSlide}
-              className="absolute top-1/2 right-0 z-10 flex h-10 w-10 translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
-            >
-              <svg
-                className="h-5 w-5 text-gray-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {/* Right Arrow - shown only when more than 4 teachers */}
+            {validTeachers.length > 4 && (
+              <button
+                onClick={handleNextSlide}
+                className="absolute top-1/2 right-0 z-10 flex h-10 w-10 translate-x-2 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white transition-colors duration-300 hover:bg-gray-100"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </button>
+                <svg
+                  className="h-5 w-5 text-gray-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            )}
           </div>
 
           {/* Mobile & Tablet: single card with bottom arrows */}

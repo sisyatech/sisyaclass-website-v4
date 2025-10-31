@@ -29,31 +29,33 @@ const InnovativeLearningTools = () => {
   }, []);
 
   useEffect(() => {
-    const fetchWebLinks = async () => {
+    const fetchWebVideos = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_WEB_LINKS}`, {
+        const response = await fetch(`https://sisyaclass.xyz/student/get_all_web_videos`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           mode: 'cors',
         });
-        
+
         if (response.ok) {
-          const rawData = await response.json();
-          const data: WebLinksData = Array.isArray(rawData) ? rawData[0] : rawData;
-          
-          if (data?.laptopVideoLink) {
-            setVideoLink(data.laptopVideoLink);
-            console.log('✅ Video link loaded from API:', data.laptopVideoLink);
+          const videos = await response.json();
+          if (Array.isArray(videos) && videos.length > 0) {
+            const v = videos[0];
+            const link = v?.laptopVideoLink || v?.videoLink || v?.link || null;
+            if (link) {
+              setVideoLink(link);
+              console.log('✅ Video link loaded from web videos API:', link);
+            }
           }
         }
       } catch (error) {
-        console.error('❌ Error fetching video link:', error);
+        console.error('❌ Error fetching web videos:', error);
       }
     };
 
-    fetchWebLinks();
+    fetchWebVideos();
   }, []);
 
   return (
@@ -212,9 +214,34 @@ interface HoverPlayVideoProps {
 
 const HoverPlayVideo: React.FC<HoverPlayVideoProps> = ({ videoLink }) => {
   const [playing, setPlaying] = useState(false);
+  // Convert any YouTube watch/short links to embeddable url
+  const toEmbedUrl = (url: string): string => {
+    try {
+      const u = new URL(url);
+      // youtu.be/<id>
+      if (u.hostname === "youtu.be" && u.pathname.length > 1) {
+        const id = u.pathname.slice(1);
+        return `https://www.youtube.com/embed/${id}`;
+      }
+      // youtube.com/watch?v=<id>
+      if (u.hostname.includes("youtube.com")) {
+        if (u.pathname === "/watch") {
+          const id = u.searchParams.get("v");
+          if (id) return `https://www.youtube.com/embed/${id}`;
+        }
+        // already embed
+        if (u.pathname.startsWith("/embed/")) return url;
+      }
+    } catch (_) {
+      // fall through to return original
+    }
+    return url;
+  };
+
+  const base = toEmbedUrl(videoLink);
   const embedSrc = playing
-    ? `${videoLink}?autoplay=1&mute=0&controls=1&rel=0`
-    : `${videoLink}?autoplay=0&mute=1&controls=0&rel=0`;
+    ? `${base}?autoplay=1&mute=0&controls=1&rel=0`
+    : `${base}?autoplay=0&mute=1&controls=0&rel=0`;
 
   return (
     <div

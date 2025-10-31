@@ -15,48 +15,50 @@ const StudyMaterial = () => {
           <div className="space-y-3"> 
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>NCERT</a>
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>NCERT solutions</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 12<span className="hidden sm:inline"><br /></span></a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">NCERT solutions for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Maths</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">NCERT solutions for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Physics</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">NCERT solutions for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>science</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">NCERT solutions for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>English</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">NCERT solutions for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Hindi</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 12</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 11</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 10</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 9</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 8</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">NCERT solutions for class 7</a>
+
+
           </div>
 
           {/* Column 2 */}
           <div className="space-y-3">
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>Study Materials</a>
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>Study Materials solutions</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 12<span className="hidden sm:inline"><br /></span></a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Study Materials for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Maths</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Study Materials for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Physics</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Study Materials for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>science</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Study Materials for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>English</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Study Materials for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Hindi</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 12</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 11</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 10</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 9</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 8</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Study Materials for class 7</a>
           </div>
 
           {/* Column 3 */}
           <div className="space-y-3">
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>Sample Papers</a>
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>Sample Papers solutions</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 12<span className="hidden sm:inline"><br /></span></a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Sample Papers for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Maths</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Sample Papers for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Physics</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Sample Papers for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>science</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Sample Papers for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>English</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38] whitespace-nowrap sm:whitespace-normal">Sample Papers for class 12<span className="hidden sm:inline"><br /></span><span className="inline sm:hidden"> </span>Hindi</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 12</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 11</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 10</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 9</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 8</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Sample Papers for class 7</a>
           </div>
 
           {/* Column 4 */}
               <div className="space-y-3">
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>Previous Year Papers</a>
             <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity" style={{ color: '#161A38' }}>Previous Year Papers solutions</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12<span className="hidden sm:inline"><br /></span></a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12<span className="hidden sm:inline"><br /></span> Maths</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12<span className="hidden sm:inline"><br /></span> Physics</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12<span className="hidden sm:inline"><br /></span> science</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12<span className="hidden sm:inline"><br /></span> English</a>
-            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12<span className="hidden sm:inline"><br /></span> Hindi</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 12</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 11</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 10</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 9</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 8</a>
+            <a href="#" className="block font-roboto font-normal text-[12px] leading-[14px] tracking-wide hover:opacity-70 transition-opacity text-[#161A38]">Previous Year Papers for class 7</a>
           </div>
         </div>
       </div>

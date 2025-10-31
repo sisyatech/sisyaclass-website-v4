@@ -15,6 +15,7 @@ const AppDownload = () => {
             width={190}
             height={400}
             className="h-[260px] min-[375px]:h-[300px] sm:h-[340px] md:h-[380px] w-auto"
+            style={{ width: 'auto' }}
           />
         </div>
       </div>
@@ -27,6 +28,7 @@ const AppDownload = () => {
             width={250}
             height={500}
             className="h-[380px] lg:h-[400px] xl:h-[500px] w-auto"
+            style={{ width: 'auto' }}
           />
         </div>
       </RevealOnView>

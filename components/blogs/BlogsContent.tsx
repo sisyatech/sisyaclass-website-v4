@@ -162,6 +162,8 @@ const BlogsContent = () => {
                         alt={currentBlog.title}
                         fill
                         className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 70vw, 800px"
+                        unoptimized
                       />
                     </div>
 
@@ -238,6 +240,8 @@ const BlogsContent = () => {
                             alt={blog.title}
                             fill
                             className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            sizes="(max-width: 640px) 40vw, (max-width: 1024px) 30vw, 240px"
+                            unoptimized
                           />
                         </div>
 
