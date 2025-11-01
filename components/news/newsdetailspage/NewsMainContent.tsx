@@ -441,7 +441,7 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
       </div>
 
       {/* Featured Image */}
-      <div className="relative aspect-[16/6] bg-black">
+      <div className="relative aspect-[16/9] bg-black">
         <Image
           src={newsData.banner}
           alt={newsData.title}

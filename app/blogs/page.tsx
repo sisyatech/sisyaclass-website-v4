@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Container from "@/components/Container";
 import BlogsContent from "@/components/blogs/BlogsContent";
@@ -12,15 +13,21 @@ import FooterBottom from "@/components/FooterBottom";
 import Impact from "@/components/Impact";
 import SimilarVideos from "@/components/blogs/SimilarVideos";
 
+export const dynamic = "force-dynamic";
+
 function BlogsPageContent() {
   return (
     <Container>
       <Navbar />
       <BlogBreadcrumb />
-      <BlogsContent />
+      <Suspense fallback={<div>Loading blogs...</div>}>
+        <BlogsContent />
+      </Suspense>
       <Impact />
 
-      <SimilarVideos />
+      <Suspense fallback={<div>Loading similar blogs...</div>}>
+        <SimilarVideos />
+      </Suspense>
       <BlogBanner />
       <StudyMaterials />
 

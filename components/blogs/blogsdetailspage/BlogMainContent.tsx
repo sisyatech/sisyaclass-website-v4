@@ -556,7 +556,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
 
       {/* Featured Image */}
       {blogData.banner && (
-      <div className="relative aspect-[16/6] bg-black">
+      <div className="relative aspect-[16/9] bg-black">
         <Image
             src={blogData.banner}
           alt={blogData.title}

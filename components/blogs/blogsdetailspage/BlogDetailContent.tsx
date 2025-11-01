@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import RevealOnView from "../../Reveal/RevealOnView";
 import BlogMainContent from "./BlogMainContent";
 import BlogSocialShare from "./BlogSocialShare";
@@ -40,7 +40,9 @@ const BlogDetailContent = ({ blogId, blogData }: BlogDetailContentProps) => {
               <BlogTableOfContents blogId={blogId} />
 
               {/* Related Blogs */}
-              <BlogRelatedBlogs />
+              <Suspense fallback={<div className="bg-white rounded-lg shadow-lg p-4"><div className="text-center text-gray-500">Loading related blogs...</div></div>}>
+                <BlogRelatedBlogs />
+              </Suspense>
 
               {/* Blog Discover */}
               <BlogDiscover />
