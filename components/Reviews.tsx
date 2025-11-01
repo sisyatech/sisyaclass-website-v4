@@ -83,7 +83,7 @@ const Reviews = () => {
     setCurrentSlide((prev) => (prev === 0 ? reviews.length - 1 : prev - 1));
     setTimeout(() => setCardsEntered(true), 300);
     setIsPaused(true);
-    setTimeout(() => setIsPaused(false), 6000);
+    setTimeout(() => setIsPaused(false), 2000);
   };
 
   const handleNextSlide = () => {
@@ -91,7 +91,7 @@ const Reviews = () => {
     setCurrentSlide((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
     setTimeout(() => setCardsEntered(true), 300);
     setIsPaused(true);
-    setTimeout(() => setIsPaused(false), 6000);
+    setTimeout(() => setIsPaused(false), 2000);
   };
 
   const handleDotClick = (index: number) => {
@@ -99,7 +99,7 @@ const Reviews = () => {
     setCurrentSlide(index);
     setTimeout(() => setCardsEntered(true), 300);
     setIsPaused(true);
-    setTimeout(() => setIsPaused(false), 6000);
+    setTimeout(() => setIsPaused(false), 2000);
   };
 
   // Initialize cards animation
@@ -114,32 +114,48 @@ const Reviews = () => {
         setCardsEntered(false);
         setCurrentSlide((prev) => (prev === reviews.length - 1 ? 0 : prev + 1));
         setTimeout(() => setCardsEntered(true), 300);
-      }, 2000); // Auto-scroll every 2 seconds
+      }, 1200); // Auto-scroll every 1.2 seconds
 
       return () => clearInterval(interval);
     }
   }, [isPaused, reviews.length]);
 
-  // Auto-scroll functionality for desktop/tablet (horizontal scroll)
+  // Auto-scroll functionality for desktop/tablet (horizontal scroll) - Infinite scroll
   useEffect(() => {
     if (!isPaused && reviews.length > 0 && scrollContainerRef.current) {
-      let scrollAmount = 0;
-      const cardWidth = 305; // 300px card + 5px gap
-      const maxScroll = cardWidth * (reviews.length - 1);
-
+      const container = scrollContainerRef.current;
+      const cards = container.querySelectorAll('.snap-center');
+      
+      if (cards.length === 0) return;
+      
+      const firstCard = cards[0] as HTMLElement;
+      const cardWidth = firstCard.offsetWidth;
+      const gap = 20; // gap-5 = 20px
+      const padding = 16; // px-4 = 16px
+      const scrollDistance = cardWidth + gap;
+      const originalSetWidth = scrollDistance * reviews.length;
+      
       const interval = setInterval(() => {
-        const container = scrollContainerRef.current;
-        if (container) {
-          scrollAmount += cardWidth;
-          if (scrollAmount > maxScroll) {
-            scrollAmount = 0; // Reset to start
-          }
+        if (!container || isPaused) return;
+        
+        const currentScroll = container.scrollLeft;
+        const nextScroll = currentScroll + scrollDistance;
+        
+        // If we've scrolled through one full set, reset to start seamlessly
+        if (nextScroll >= originalSetWidth) {
+          // Instantly jump back to start (without animation) for seamless loop
           container.scrollTo({
-            left: scrollAmount,
+            left: padding,
+            behavior: 'auto'
+          });
+        } else {
+          // Smooth scroll to next card
+          container.scrollTo({
+            left: nextScroll,
             behavior: 'smooth'
           });
         }
-      }, 2000); // Auto-scroll every 2 seconds
+      }, 1200); // Auto-scroll every 1.2 seconds
 
       return () => clearInterval(interval);
     }
@@ -167,18 +183,18 @@ const Reviews = () => {
     if (isLeftSwipe) {
       handleNextSlide();
       setIsPaused(true);
-      setTimeout(() => setIsPaused(false), 6000); // Pause for 6 seconds after manual navigation
+      setTimeout(() => setIsPaused(false), 2000); // Pause for 6 seconds after manual navigation
     } else if (isRightSwipe) {
       handlePrevSlide();
       setIsPaused(true);
-      setTimeout(() => setIsPaused(false), 6000);
+      setTimeout(() => setIsPaused(false), 2000);
     }
   };
 
   // Handle manual scroll on desktop to pause auto-scroll
   const handleManualScroll = () => {
     setIsPaused(true);
-    setTimeout(() => setIsPaused(false), 6000);
+    setTimeout(() => setIsPaused(false), 2000);
   };
 
   if (loading) {
@@ -338,11 +354,12 @@ const Reviews = () => {
                 onMouseLeave={() => setIsPaused(false)}
               >
                 <div className="flex py-3 gap-5 w-max snap-x snap-mandatory">
-                  {reviews.map((review) => {
+                  {/* Render reviews twice for infinite scroll effect */}
+                  {[...reviews, ...reviews].map((review, index) => {
                     const isDesktopReviewTruncated = review.review && review.review.length > CHAR_LIMIT_DESKTOP;
                     return (
                       <div
-                        key={review.id}
+                        key={`${review.id}-${index}`}
                         className="flex-shrink-0 snap-center"
                       >
                         {/* Review Card */}
