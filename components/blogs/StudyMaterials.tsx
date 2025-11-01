@@ -13,24 +13,24 @@ const StudyMaterials = () => {
     {
       id: 1,
       title: "NCERT",
-      image: "/blogs/ncrt.png",
+      image: "/blogs/Ncertpic.png",
       description: "National Council of Educational Research and Training materials"
     },
     {
       id: 2,
       title: "Previous Year",
-      image: "/blogs/ncrt.png", 
+      image: "/blogs/questions.png", 
       description: "Central Board of Secondary Education study materials"
     },
     {
       id: 3,
       title: "Sample paper",
-      image: "/blogs/ncrt.png",
+      image: "/blogs/sample.png",
       description: "Comprehensive practice tests and mock exams"
     },
     {
       id: 4,
-      title: "Important material",
+      title: "Materials",
       image: "/blogs/ncrt.png",
       description: "Previous year question papers and sample tests"
     },
