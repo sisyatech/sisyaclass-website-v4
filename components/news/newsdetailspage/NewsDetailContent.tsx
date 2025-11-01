@@ -4,7 +4,6 @@ import NewsMainContent from "./NewsMainContent";
 import NewsSocialShare from "./NewsSocialShare";
 import NewsTableOfContents from "./NewsTableOfContents";
 import NewsRelatedNews from "./NewsRelatedNews";
-import NewsDiscover from "./NewsDiscover";
 import NewsSideImage from "./NewsSideImage";
 import FAQ from "../../FAQ";
 
@@ -39,8 +38,7 @@ const NewsDetailContent = ({ newsId }: NewsDetailContentProps) => {
               {/* Related News */}
               <NewsRelatedNews />
 
-              {/* News Discover */}
-              <NewsDiscover />
+              
 
               {/* News Side Image */}
               <NewsSideImage />

@@ -227,10 +227,10 @@ const NewsContent = () => {
             {firstRegularNews && ( 
               <div className="w-full lg:w-1/3">
                 <RevealOnView from="bottom" durationMs={800} delayMs={400}>
-                  <Link href={`/news/${firstRegularNews.id}`} className="block">
-                    <div className="group flex transform flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                  <Link href={`/news/${firstRegularNews.id}`} className="block h-full">
+                    <div className="group flex h-full transform flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                       {/* Card Image */}
-                      <div className="relative h-32 overflow-hidden sm:h-36">
+                      <div className="relative h-40 overflow-hidden sm:h-44 md:h-48 lg:h-56">
                         <Image
                           src={firstRegularNews.banner || "https://placehold.co/400x150/cccccc/333333?text=News+Item"} // Placeholder
                           alt={firstRegularNews.title}

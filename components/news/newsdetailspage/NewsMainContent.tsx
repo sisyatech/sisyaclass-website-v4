@@ -394,7 +394,7 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
   return (
     <article className="bg-white rounded-lg sm:rounded-xl shadow-lg overflow-hidden">
       {/* News Header - Above Image */}
-      <div className="p-4 sm:p-6 md:p-8 lg:p-10 pb-4 sm:pb-6">
+      <div className="p-4 sm:p-6 md:p-8 lg:p-10 pb-1 sm:pb-2">
         {/* Category Badge */}
         <div className="mb-4">
           <span className="bg-[#0595CE] text-white px-3 py-1.5 rounded-full text-sm font-semibold">
@@ -452,9 +452,9 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
       </div>
 
       {/* News Content */}
-      <div className="p-4 sm:p-6 md:p-8 lg:p-10">
+        <div className="px-4 sm:px-6 md:px-8 lg:px-10 pt-1 sm:pt-2 md:pt-3 lg:pt-4 pb-1 sm:pb-2 md:pb-3 lg:pb-4">
         {/* News Content */}
-        <div className="prose prose-lg max-w-none mb-8 sm:mb-10">
+        <div className="prose prose-lg max-w-none mb-4 sm:mb-6">
           {renderNewsContent(newsData.content)}
         </div>
 

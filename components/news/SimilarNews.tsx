@@ -1,52 +1,102 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import RevealOnView from "../Reveal/RevealOnView";
-import { getAllNews, getAllTags, calculateReadTime, fixProfileImageUrl, type News, type Tag } from "../../lib/newsApi";
+import { getAllNews, calculateReadTime, fixProfileImageUrl, type News } from "../../lib/newsApi";
 import { Clock, Eye, Calendar } from "lucide-react";
 
 const SimilarNews = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const [news, setNews] = useState<News[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [allNews, setAllNews] = useState<News[]>([]);
   const [loading, setLoading] = useState(true);
-  const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 6;
 
+  // Fetch all news once
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [newsResponse, tagsResponse] = await Promise.all([
-          getAllNews(currentPage, itemsPerPage),
-          getAllTags()
-        ]);
-        
-        setNews(newsResponse.news || []);
-        setTotalPages(Math.ceil((newsResponse.total || 0) / itemsPerPage));
-        setTags(tagsResponse || []);
+        // Fetch a larger set to filter client-side
+        const newsResponse = await getAllNews(1, 1000);
+        setAllNews(newsResponse.news || []);
       } catch (error) {
         console.error('Error fetching news:', error);
-        setNews([]);
-        setTags([]);
+        setAllNews([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [currentPage]);
+  }, []);
 
-  const filterButtons = ["All", ...tags.map(tag => tag.name)];
+  // Time-based filter options
+  const filterButtons = ["All", "Recent", "Latest", "3 Days", "7 Days", "1 Month"];
 
-  const filteredNews = activeFilter === "All" 
-    ? news 
-    : news.filter(newsItem => 
-        newsItem.tags?.some(tagItem => tagItem.tag.name === activeFilter) ||
-        newsItem.category === activeFilter
-      );
+  // Filter news based on time
+  const filteredNews = useMemo(() => {
+    if (activeFilter === "All") {
+      return [...allNews].sort((a, b) => {
+        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return dateB - dateA; // Most recent first
+      });
+    }
+    
+    if (activeFilter === "Latest") {
+      // Show all news sorted by most recent first
+      return [...allNews]
+        .filter(newsItem => newsItem.publishedAt)
+        .sort((a, b) => {
+          const dateA = new Date(a.publishedAt!).getTime();
+          const dateB = new Date(b.publishedAt!).getTime();
+          return dateB - dateA; // Most recent first
+        });
+    }
+    
+    const now = new Date();
+    let cutoffDate: Date;
+
+    switch (activeFilter) {
+      case "Recent":
+        // Last 24 hours
+        cutoffDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case "3 Days":
+        cutoffDate = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
+        break;
+      case "7 Days":
+        cutoffDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case "1 Month":
+        cutoffDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        return allNews;
+    }
+
+    return allNews
+      .filter(newsItem => {
+        if (!newsItem.publishedAt) return false;
+        const publishedDate = new Date(newsItem.publishedAt);
+        return publishedDate >= cutoffDate;
+      })
+      .sort((a, b) => {
+        const dateA = new Date(a.publishedAt!).getTime();
+        const dateB = new Date(b.publishedAt!).getTime();
+        return dateB - dateA; // Most recent first
+      });
+  }, [allNews, activeFilter]);
+
+  // Paginate filtered news
+  const paginatedNews = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredNews.slice(start, start + itemsPerPage);
+  }, [filteredNews, currentPage, itemsPerPage]);
+
+  const totalPages = Math.ceil(filteredNews.length / itemsPerPage);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -55,6 +105,11 @@ const SimilarNews = () => {
       day: 'numeric'
     });
   };
+
+  // Reset to page 1 when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeFilter]);
 
   // Pagination handlers
   const handlePageChange = (page: number) => {
@@ -109,8 +164,12 @@ const SimilarNews = () => {
             Array.from({ length: 6 }).map((_, index) => (
               <div key={index} className="w-[260px] sm:w-[300px] md:w-[320px] lg:w-[300px] xl:w-[340px] h-[400px] sm:h-[440px] md:h-[470px] lg:h-[450px] xl:h-[490px] bg-gray-200 rounded-xl animate-pulse" />
             ))
+          ) : paginatedNews.length === 0 ? (
+            <div className="col-span-full py-12 text-center">
+              <p className="text-gray-600">No news found for the selected filter.</p>
+            </div>
           ) : (
-            filteredNews.map((news, index) => (
+            paginatedNews.map((news, index) => (
             <RevealOnView
               key={news.id}
               from="bottom"
@@ -166,8 +225,9 @@ const SimilarNews = () => {
         </div>
 
         {/* Pagination */}
-        <RevealOnView from="bottom" durationMs={600} delayMs={600}>
-          <div className="flex justify-center items-center gap-1 sm:gap-2 mt-4 sm:mt-6 md:mt-8 overflow-x-auto px-4">
+        {!loading && filteredNews.length > 0 && totalPages > 1 && (
+          <RevealOnView from="bottom" durationMs={600} delayMs={600}>
+            <div className="flex justify-center items-center gap-1 sm:gap-2 mt-4 sm:mt-6 md:mt-8 overflow-x-auto px-4">
             {/* Previous Button */}
             <button
               onClick={handlePrevPage}
@@ -323,6 +383,7 @@ const SimilarNews = () => {
             </button>
           </div>
         </RevealOnView>
+        )}
       </div>
     </div>
   );
