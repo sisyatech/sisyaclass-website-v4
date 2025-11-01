@@ -88,7 +88,7 @@ const BlogRelatedBlogs = () => {
           <div className="space-y-2">
             {Array.from({ length: 3 }).map((_, index) => (
               <div key={index} className="flex gap-2 p-1.5 rounded-lg">
-                <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 bg-gray-200 rounded-lg animate-pulse" />
+                <div className="w-16 sm:w-20 md:w-24 lg:w-28 aspect-[16/9] bg-gray-200 rounded-lg animate-pulse" />
                 <div className="flex-1">
                   <div className="h-4 bg-gray-200 rounded mb-1 animate-pulse" />
                   <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
@@ -117,7 +117,7 @@ const BlogRelatedBlogs = () => {
               href={`/blogs/${blog.id}`}
               className="flex gap-2 group hover:bg-white p-1.5 rounded-lg transition-all"
             >
-              <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
+              <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 aspect-[16/9] flex-shrink-0 rounded-lg overflow-hidden">
                 {blog.banner ? (
                   <Image
                     src={blog.banner}

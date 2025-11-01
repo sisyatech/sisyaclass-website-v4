@@ -33,7 +33,7 @@ const NewsRelatedNews = () => {
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
               <div key={i} className="flex gap-3">
-                <div className="w-16 h-16 bg-gray-200 rounded"></div>
+                <div className="w-16 sm:w-20 md:w-24 lg:w-28 aspect-[16/9] bg-gray-200 rounded"></div>
                 <div className="flex-1">
                   <div className="h-4 bg-gray-200 rounded mb-2"></div>
                   <div className="h-3 bg-gray-200 rounded w-20"></div>
@@ -62,7 +62,7 @@ const NewsRelatedNews = () => {
             href={`/news/${news.id}`}
             className="flex gap-2 sm:gap-3 group hover:bg-gray-50 p-2 rounded-lg transition-all"
           >
-            <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
+            <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 aspect-[16/9] flex-shrink-0 rounded-lg overflow-hidden">
               <Image
                 src={news.banner || "/blogs/blogimage.svg"}
                 alt={news.title}
