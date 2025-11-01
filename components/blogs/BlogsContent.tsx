@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import RevealOnView from "../Reveal/RevealOnView";
-import { getAllBlogs, calculateReadTime, fixProfileImageUrl, type Blog } from "../../lib/blogApi";
+import { getAllBlogs, getBlogsByTag, calculateReadTime, fixProfileImageUrl, type Blog } from "../../lib/blogApi";
 import { Heart, MessageCircle, Eye, Calendar, Clock, User } from "lucide-react";
 
 const BlogsContent = () => {
@@ -14,16 +14,26 @@ const BlogsContent = () => {
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
   const isHomePage = pathname === "/";
+  const params = useSearchParams();
+  const tagId = params?.get('tagId') || '';
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
         setLoading(true);
-        console.log("🚀 BlogsContent: Starting to fetch blogs...");
-        const response = await getAllBlogs(1, 6); // Get first 6 blogs
-        console.log("📊 BlogsContent: Received response:", response);
-        console.log("📄 BlogsContent: Setting blogs:", response.blogs?.length || 0, "blogs");
-        setBlogs(response.blogs || []);
+        if (tagId) {
+          console.log("🚀 BlogsContent: Fetching blogs by tag:", tagId);
+          const response = await getBlogsByTag(tagId);
+          const list = Array.isArray(response.blogs) ? response.blogs : [];
+          console.log("📄 BlogsContent: Setting tag blogs:", list.length);
+          setBlogs(list.slice(0, 6));
+        } else {
+          console.log("🚀 BlogsContent: Starting to fetch blogs...");
+          const response = await getAllBlogs(1, 6); // Get first 6 blogs
+          console.log("📊 BlogsContent: Received response:", response);
+          console.log("📄 BlogsContent: Setting blogs:", response.blogs?.length || 0, "blogs");
+          setBlogs(response.blogs || []);
+        }
       } catch (error) {
         console.error("❌ BlogsContent: Error fetching blogs:", error);
         setBlogs([]);
@@ -34,7 +44,7 @@ const BlogsContent = () => {
     };
 
     fetchBlogs();
-  }, []);
+  }, [tagId]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {

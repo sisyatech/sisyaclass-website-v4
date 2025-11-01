@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
   GET_ALL_TAGS: '/student/get_all_tags',
   GET_NESTED_COMMENTS: '/student/get_nested_comments',
   GET_TRENDING_BLOGS: '/student/get_trending_blogs',
+  GET_BLOGS_BY_TAG: '/student/get_blog_by_tag',
   GENERATE_BLOG_ASSET_UPLOAD_URL: '/student/gen_blog_asset_upload_url',
   
   // News related

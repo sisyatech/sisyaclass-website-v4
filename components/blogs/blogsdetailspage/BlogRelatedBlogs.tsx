@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getTrendingBlogs, calculateReadTime, type Blog } from "../../../lib/blogApi";
+import { getTrendingBlogs, getBlogsByTag, calculateReadTime, type Blog } from "../../../lib/blogApi";
+import { useSearchParams } from "next/navigation";
 import { Clock, Eye, MessageCircle } from "lucide-react";
 
 const BlogRelatedBlogs = () => {
@@ -11,33 +12,39 @@ const BlogRelatedBlogs = () => {
   const [loading, setLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
 
+  const params = useSearchParams();
+  const tagId = params?.get('tagId') || '';
+
   useEffect(() => {
     const fetchTrendingBlogs = async (retryAttempt = 0) => {
       try {
         setLoading(true);
-        console.log(`🔄 Fetching trending blogs (attempt ${retryAttempt + 1})`);
-        
-        const response = await getTrendingBlogs();
-        console.log('📊 Trending blogs response:', response);
-        
-        // Check if response has trending property and it's an array with content
-        if (response && response.trending && Array.isArray(response.trending) && response.trending.length > 0) {
-          console.log(`✅ Found ${response.trending.length} trending blogs`);
-          setTrendingBlogs(response.trending.slice(0, 3)); // Show only top 3
-          setRetryCount(0); // Reset retry count on success
+        if (tagId) {
+          console.log(`🔄 Fetching blogs by tag ${tagId} (attempt ${retryAttempt + 1})`);
+          const byTag = await getBlogsByTag(tagId);
+          const list = Array.isArray(byTag.blogs) ? byTag.blogs : [];
+          if (list.length > 0) {
+            setTrendingBlogs(list.slice(0, 3));
+            setRetryCount(0);
+          } else {
+            setTrendingBlogs([]);
+          }
         } else {
-          console.warn('⚠️ No trending blogs data received or empty array:', response);
-          setTrendingBlogs([]);
-          
-          // Retry if we haven't exceeded max retries (increased to 5 attempts)
-          if (retryAttempt < 4) {
-            const delay = retryAttempt < 2 ? 1000 : 2000; // Shorter delay for first few attempts
-            console.log(`🔄 Retrying in ${delay/1000} seconds... (attempt ${retryAttempt + 2})`);
-            setTimeout(() => {
-              setRetryCount(retryAttempt + 1);
-              fetchTrendingBlogs(retryAttempt + 1);
-            }, delay);
-            return;
+          console.log(`🔄 Fetching trending blogs (attempt ${retryAttempt + 1})`);
+          const response = await getTrendingBlogs();
+          if (response && response.trending && Array.isArray(response.trending) && response.trending.length > 0) {
+            setTrendingBlogs(response.trending.slice(0, 3));
+            setRetryCount(0);
+          } else {
+            setTrendingBlogs([]);
+            if (retryAttempt < 4) {
+              const delay = retryAttempt < 2 ? 1000 : 2000;
+              setTimeout(() => {
+                setRetryCount(retryAttempt + 1);
+                fetchTrendingBlogs(retryAttempt + 1);
+              }, delay);
+              return;
+            }
           }
         }
       } catch (error) {
@@ -65,14 +72,14 @@ const BlogRelatedBlogs = () => {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [tagId]);
 
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-5 lg:p-6">
       <div className="mb-3 sm:mb-4">
         <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[18px] lg:text-[20px] text-[#1A2439]">
-          Trending Blogs
+          {tagId ? 'Related by Tag' : 'Trending Blogs'}
         </h3>
       </div>
       <div className="space-y-3 sm:space-y-4">

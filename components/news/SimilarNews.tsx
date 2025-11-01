@@ -13,7 +13,7 @@ const SimilarNews = () => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 9;
+  const itemsPerPage = 6;
 
   useEffect(() => {
     const fetchData = async () => {

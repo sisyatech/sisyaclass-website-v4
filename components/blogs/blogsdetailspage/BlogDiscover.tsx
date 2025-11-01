@@ -42,7 +42,7 @@ const BlogDiscover = () => {
                     tags.slice(0, 12).map((tag, index) => (
                         <Link
                             key={tag.id}
-                            href={`/blogs?tag=${encodeURIComponent(tag.name)}`}
+                            href={`/blogs?tagId=${encodeURIComponent(tag.id)}`}
                             className="bg-white text-[#1A2439] px-3 py-2 sm:px-4 sm:py-3 rounded-lg text-sm sm:text-base font-medium text-center hover:bg-[#0595CE] hover:text-white transition-all duration-300 hover:scale-105 shadow-sm hover:shadow-md flex-shrink-0 max-w-full overflow-hidden text-ellipsis"
                             style={{ maxWidth: 'calc(50% - 0.5rem)' }}
                         >

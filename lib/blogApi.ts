@@ -116,6 +116,12 @@ export interface BlogListResponse {
   cached?: boolean;
 }
 
+export interface BlogsByTagResponse {
+  tagId: string;
+  blogs: Blog[];
+  cached?: boolean;
+}
+
 export interface Tag {
   id: string;
   name: string;
@@ -384,6 +390,28 @@ export const getTrendingBlogs = async (): Promise<{ trending: Blog[]; cached?: b
     return data;
   } catch (error) {
     console.error('❌ Error fetching trending blogs:', error);
+    throw error;
+  }
+};
+
+// Get blogs by tag
+export const getBlogsByTag = async (tagId: string): Promise<BlogsByTagResponse> => {
+  try {
+    if (!tagId) throw new Error('tagId is required');
+    const url = `${API_BASE_URL}${API_ENDPOINTS.GET_BLOGS_BY_TAG}`;
+    console.log('🔎 Fetching blogs by tag:', { url, tagId });
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      mode: 'cors',
+      body: JSON.stringify({ tagId }),
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch blogs by tag');
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('❌ Error fetching blogs by tag:', error);
     throw error;
   }
 };

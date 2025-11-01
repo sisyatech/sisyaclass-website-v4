@@ -4,49 +4,96 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import RevealOnView from "../Reveal/RevealOnView";
-import { getAllBlogs, getAllTags, calculateReadTime, type Blog, type Tag } from "../../lib/blogApi";
+import { getAllBlogs, getAllTags, getBlogsByTag, calculateReadTime, type Blog, type Tag } from "../../lib/blogApi";
 import { Heart, MessageCircle, Eye, Calendar, Clock } from "lucide-react";
 
 const SimilarVideos = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [allBlogsForFilter, setAllBlogsForFilter] = useState<Blog[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(1);
-  const itemsPerPage = 9;
+  const itemsPerPage = 6;
 
+  // Fetch tags on mount (separate from blogs)
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const tagsResponse = await getAllTags();
+        setTags(tagsResponse || []);
+      } catch (error) {
+        console.error('Error fetching tags:', error);
+      }
+    };
+    fetchTags();
+  }, []);
+
+  // Fetch blogs based on filter and page
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [blogsResponse, tagsResponse] = await Promise.all([
-          getAllBlogs(currentPage, itemsPerPage),
-          getAllTags()
-        ]);
-        
-        setBlogs(blogsResponse.blogs || []);
-        setTotalPages(Math.ceil((blogsResponse.total || 0) / itemsPerPage));
-        setTags(tagsResponse || []);
+
+        if (activeFilter === "All") {
+          const blogsResponse = await getAllBlogs(currentPage, itemsPerPage);
+          setBlogs(blogsResponse.blogs || []);
+          setTotalPages(Math.ceil((blogsResponse.total || 0) / itemsPerPage));
+          setAllBlogsForFilter([]);
+        } else {
+          // Find tagId by name
+          const selected = tags.find(t => t.name === activeFilter);
+          if (selected) {
+            try {
+              const byTag = await getBlogsByTag(selected.id);
+              const list = Array.isArray(byTag.blogs) ? byTag.blogs : [];
+              setAllBlogsForFilter(list);
+              setTotalPages(Math.max(1, Math.ceil(list.length / itemsPerPage)));
+              const start = (currentPage - 1) * itemsPerPage;
+              setBlogs(list.slice(start, start + itemsPerPage));
+            } catch (apiError) {
+              console.warn('⚠️ Tag API failed, falling back to client-side filter:', apiError);
+              // Fallback: Fetch all blogs and filter client-side by tag name
+              try {
+                const allBlogsRes = await getAllBlogs(1, 1000); // Get many blogs
+                const allBlogs = allBlogsRes.blogs || [];
+                const filtered = allBlogs.filter(blog => 
+                  blog.tags && blog.tags.some(tagItem => tagItem.tag?.name === activeFilter)
+                );
+                setAllBlogsForFilter(filtered);
+                setTotalPages(Math.max(1, Math.ceil(filtered.length / itemsPerPage)));
+                const start = (currentPage - 1) * itemsPerPage;
+                setBlogs(filtered.slice(start, start + itemsPerPage));
+              } catch (fallbackError) {
+                console.error('❌ Fallback filter also failed:', fallbackError);
+                setAllBlogsForFilter([]);
+                setBlogs([]);
+                setTotalPages(1);
+              }
+            }
+          } else {
+            // Fallback to empty if tag not found
+            setAllBlogsForFilter([]);
+            setBlogs([]);
+            setTotalPages(1);
+          }
+        }
       } catch (error) {
         console.error('Error fetching blogs:', error);
         setBlogs([]);
-        setTags([]);
+        if (activeFilter !== "All") setAllBlogsForFilter([]);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, activeFilter, tags]);
 
   const filterButtons = ["All", ...tags.map(tag => tag.name)];
 
-  const filteredVideos = activeFilter === "All" 
-    ? blogs 
-    : blogs.filter(blog => 
-        blog.tags.some(tagItem => tagItem.tag.name === activeFilter)
-      );
+  const filteredVideos = blogs;
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -158,6 +205,25 @@ const SimilarVideos = () => {
                           {blog.des}
                         </p>
                       </div>
+
+                      {/* Tags */}
+                      {blog.tags && blog.tags.length > 0 && (
+                        <div className="mb-3 sm:mb-4 flex flex-wrap gap-1.5 sm:gap-2">
+                          {blog.tags.slice(0, 3).map((tagItem, idx) => (
+                            <span
+                              key={tagItem.tag?.id || idx}
+                              className="inline-block bg-[#0595CE] text-white px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-medium"
+                            >
+                              {tagItem.tag?.name || ''}
+                            </span>
+                          ))}
+                          {blog.tags.length > 3 && (
+                            <span className="inline-block text-[#0595CE] text-[9px] sm:text-[10px] font-medium px-1">
+                              +{blog.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
 
                       {/* Stats */}
                       <div className="mb-4 sm:mb-5 flex items-center justify-between">
