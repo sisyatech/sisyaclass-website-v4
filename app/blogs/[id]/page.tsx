@@ -24,6 +24,10 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   
   try {
     const blog = await getBlogById(unwrappedParams.id);
+
+    const imageUrl = blog.banner?.startsWith("http")
+  ? blog.banner
+  : `https://sisyaclass-website-v4.vercel.app/blogs/blogimage.svg`;
     
     return {
       title: `${blog.title} - Sisya Class`,
@@ -31,10 +35,10 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       openGraph: {
         title: blog.title,
         description: blog.des || "Check out this amazing blog post on Sisya Class",
-        url: `https://sisyaclass.xyz/blogs/${unwrappedParams.id}`,
+        url: `https://sisyaclass-website-v4.vercel.app/blogs/${unwrappedParams.id}`,
         images: [
           {
-            url: blog.banner || "/blogs/blogimage.svg",
+            url: imageUrl,
             width: 1200,
             height: 630,
             alt: blog.title,
@@ -47,7 +51,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
         card: "summary_large_image",
         title: blog.title,
         description: blog.des || "Check out this amazing blog post on Sisya Class",
-        images: [blog.banner || "/blogs/blogimage.svg"],
+        images: [imageUrl],
       },
     };
   } catch (error) {
