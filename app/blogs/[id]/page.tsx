@@ -10,7 +10,8 @@ import { BlogBreadcrumb } from "@/components/blogs/BlogBreadcrumb";
 import BlogDetailContent from "@/components/blogs/blogsdetailspage/BlogDetailContent";
 import BlogAuthorComments from "@/components/blogs/blogsdetailspage/BlogAuthorComments";
 import { getBlogById } from "@/lib/blogApi";
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 interface BlogDetailPageProps {
   params: Promise<{
     id: string;
@@ -79,6 +80,8 @@ function BlogDetailPageContent({ id, blogData }: { id: string; blogData: any }) 
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }

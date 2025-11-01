@@ -10,7 +10,8 @@ import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import { NewsBreadcrumb } from "@/components/news/NewsBreadcrumb";
 import NewsDetailContent from "@/components/news/newsdetailspage/NewsDetailContent";
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 interface NewsDetailPageProps {
   params: Promise<{
     id: string;
@@ -36,6 +37,8 @@ function NewsDetailPageContent({ id }: { id: string }) {
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }

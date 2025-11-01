@@ -24,6 +24,8 @@ import CTA from "@/components/CTA";
 import Reviews from "@/components/Reviews";
 import SyllabusSection from "@/components/classes/SyllabusSection";
 import { GradeBreadcrumb } from "@/components/classes/GradeBreadcrumb";
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
 interface GradePageProps {
   params: Promise<{
@@ -75,6 +77,8 @@ function GradeContent({ grade }: { grade: string }) {
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }

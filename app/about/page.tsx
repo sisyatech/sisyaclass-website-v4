@@ -15,6 +15,8 @@ import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import { useEffect } from "react";
 import { AboutBreadcrumb } from "@/components/AboutBreadcrumb";
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
 function AboutContent() {
     const { setCurrentPage, setSelectedGrade } = useMobileMenu();
@@ -64,6 +66,8 @@ function AboutContent() {
 
 
             <MobileMenu />
+            <SocialFab />
+            <WhatsAppFab />
         </>
     );
 }

@@ -7,7 +7,8 @@ import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/compone
 import PrivacyPolicyContent from "@/components/privacy/PrivacyPolicyContent";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 function PrivacyPolicyPageContent() {
     return (
         <Container>
@@ -27,6 +28,8 @@ function PrivacyPolicyPageContent() {
             {/* Footer Bottom */}
             <FooterBottom />
             <MobileMenu />
+            <SocialFab />
+            <WhatsAppFab />
         </Container>
     );
 }

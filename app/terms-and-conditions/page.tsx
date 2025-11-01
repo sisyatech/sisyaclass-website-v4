@@ -8,6 +8,8 @@ import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/compone
 import TermsAndConditionsContent from "@/components/terms/TermsAndConditionsContent";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
 function TermsAndConditionsPageContent() {
     return (
@@ -28,6 +30,8 @@ function TermsAndConditionsPageContent() {
             {/* Footer Bottom */}
             <FooterBottom />
             <MobileMenu />
+            <SocialFab />
+            <WhatsAppFab />
         </Container>
     );
 }

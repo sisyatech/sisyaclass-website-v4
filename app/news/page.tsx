@@ -12,7 +12,8 @@ import NewsContent from "@/components/news/NewsContent";
 import SimilarNews from "@/components/news/SimilarNews";
 import Impact from "@/components/Impact";
 import NewsBanner from "@/components/news/NewsBanner";
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 function NewsPageContent() {
   return (
     <Container>
@@ -28,6 +29,8 @@ function NewsPageContent() {
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }

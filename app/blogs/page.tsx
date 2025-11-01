@@ -12,7 +12,8 @@ import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import Impact from "@/components/Impact";
 import SimilarVideos from "@/components/blogs/SimilarVideos";
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 export const dynamic = "force-dynamic";
 
 function BlogsPageContent() {
@@ -37,6 +38,8 @@ function BlogsPageContent() {
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }

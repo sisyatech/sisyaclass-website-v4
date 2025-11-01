@@ -7,7 +7,8 @@ import Footer from '@/components/Footer';
 import FooterBottom from '@/components/FooterBottom';
 import HeroSection from '@/components/careers/HeroSection';
 import Impact from '@/components/Impact';
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 import ValuesSection from '@/components/careers/ValuesSection';
 import GallerySection from '@/components/careers/GallerySection';
 import OpeningsSection from '@/components/careers/OpeningSection';
@@ -84,6 +85,8 @@ function CareersContent() {
       </div>
 
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </>
   );
 }

@@ -8,6 +8,8 @@ import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/compone
 import RefundPolicyContent from "@/components/refund/RefundPolicyContent";
 import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
 function RefundPolicyPageContent() {
     return (
@@ -27,6 +29,8 @@ function RefundPolicyPageContent() {
             {/* Footer Bottom */}
             <FooterBottom />
             <MobileMenu />
+            <SocialFab />
+            <WhatsAppFab />
         </Container>
     );
 }

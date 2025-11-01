@@ -26,7 +26,8 @@ import FooterBottom from "@/components/FooterBottom";
 import SyllabusSection from "@/components/classes/SyllabusSection";
 import Chapters from "@/components/classes/chapters";
 import BoosterCourseSection from "@/components/classes/BoosterCourseSection";
-
+import SocialFab from "@/components/10xboostercourse/components/SocialFab";
+import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 interface SubjectPageProps {
   params: Promise<{
     grade: string;
@@ -95,6 +96,8 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }
