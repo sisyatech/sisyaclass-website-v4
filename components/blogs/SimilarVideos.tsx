@@ -150,7 +150,7 @@ const SimilarVideos = () => {
         </RevealOnView>
 
         {/* Blog Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-6 xl:gap-8 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-6 xl:gap-8 justify-items-center items-stretch">
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, index) => (
@@ -172,10 +172,10 @@ const SimilarVideos = () => {
                 durationMs={800}
                 delayMs={index * 100}
               >
-                <Link href={`/blogs/${blog.id}`}>
-                  <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] bg-white rounded-lg hover:shadow-xl">
+                <Link href={`/blogs/${blog.id}`} className="block h-full">
+                  <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] bg-white rounded-lg hover:shadow-xl flex flex-col h-full">
                     {/* Blog Image */}
-                    <div className="relative w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] overflow-hidden">
+                    <div className="relative w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] flex-shrink-0 overflow-hidden">
                       {blog.banner ? (
                         <Image
                           src={blog.banner}
@@ -191,17 +191,17 @@ const SimilarVideos = () => {
                     </div>
                     
                     {/* Content Container */}
-                    <div className="p-3 sm:p-4">
+                    <div className="p-3 sm:p-4 flex flex-col flex-1">
                       {/* Title */}
                       <div className="mb-3 sm:mb-4">
-                        <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[20px] lg:text-[19px] xl:text-[22px] leading-[1.4] text-[#1A2439] line-clamp-3 min-h-[60px] sm:min-h-[70px] md:min-h-[80px] lg:min-h-[75px] xl:min-h-[85px] flex items-start">
+                        <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[20px] lg:text-[19px] xl:text-[22px] leading-[1.4] text-[#1A2439] line-clamp-3">
                           {blog.title}
                         </h3>
                       </div>
                       
                       {/* Description */}
-                      <div className="mb-4 sm:mb-5">
-                        <p className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[1.4] text-[#556A8E] line-clamp-3 min-h-[45px] sm:min-h-[50px] md:min-h-[55px] lg:min-h-[52px] xl:min-h-[60px] flex items-start">
+                      <div className="mb-4 sm:mb-5 flex-1">
+                        <p className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[1.4] text-[#556A8E] line-clamp-3">
                           {blog.des}
                         </p>
                       </div>

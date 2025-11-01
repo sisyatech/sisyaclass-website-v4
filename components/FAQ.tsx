@@ -57,7 +57,7 @@ const FAQ = () => {
   };
 
   return (
-    <div id="faqs" ref={sectionRef} className="py-3 bg-white">
+    <div id="faqs" ref={sectionRef} className="pt-3 pb-8 bg-white">
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 
@@ -67,7 +67,7 @@ const FAQ = () => {
         </h2>
 
         {/* FAQ Items */}
-        <div className={`space-y-5 mb-16 sm:mb-28 md:mb-36 lg:mb-40 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
+        <div className={`space-y-5 mb-8 sm:mb-10 md:mb-12 transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[160px]'}`}>
           {faqs.map((faq, index) => (
             <div
               key={faq.id}

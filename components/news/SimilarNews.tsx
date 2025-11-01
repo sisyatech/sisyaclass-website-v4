@@ -158,7 +158,7 @@ const SimilarNews = () => {
         </RevealOnView>
 
         {/* News Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-6 xl:gap-8 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-6 xl:gap-8 justify-items-center items-stretch">
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, index) => (
@@ -176,15 +176,10 @@ const SimilarNews = () => {
               durationMs={800}
               delayMs={index * 100}
             >
-              <Link href={`/news/${news.id}`}>
-                <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[260px] sm:w-[300px] md:w-[320px] lg:w-[300px] xl:w-[340px] h-[400px] sm:h-[440px] md:h-[470px] lg:h-[450px] xl:h-[490px] relative hover:shadow-xl rounded-xl">
-                {/* SISYA CLASS Text */}
-                <div className="absolute top-0 left-[1px] font-montserrat font-bold text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#0595CE]">
-                  {news.title}
-                </div>
-                
+              <Link href={`/news/${news.id}`} className="block h-full">
+                <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[260px] sm:w-[300px] md:w-[320px] lg:w-[300px] xl:w-[340px] bg-white hover:shadow-xl rounded-xl flex flex-col h-full">
                 {/* News Image */}
-                <div className="absolute top-[22px] sm:top-[24px] md:top-[26px] lg:top-[24px] xl:top-[28px] left-0 w-full h-[160px] sm:h-[180px] md:h-[190px] lg:h-[180px] xl:h-[200px] overflow-hidden">
+                <div className="relative w-full h-[160px] sm:h-[180px] md:h-[190px] lg:h-[180px] xl:h-[200px] flex-shrink-0 overflow-hidden rounded-t-xl">
                   <Image
                     src={news.banner || "/blogs/blogimage.svg"}
                     alt={news.title}
@@ -193,29 +188,31 @@ const SimilarNews = () => {
                   />
                 </div>
                 
-                {/* Subtitle */}
-                <div className="absolute top-[190px] sm:top-[210px] md:top-[225px] lg:top-[210px] xl:top-[238px] left-[2px] w-[calc(100%-4px)] h-[50px] sm:h-[55px] md:h-[60px] lg:h-[56px] xl:h-[62px] flex items-start">
-                  <h3 className="font-montserrat font-bold text-[17px] sm:text-[19px] md:text-[21px] lg:text-[19px] xl:text-[22px] leading-[1.3] text-[#1A2439] line-clamp-2">
-                    {news.title}
-                  </h3>
-                </div>
+                {/* Content Container */}
+                <div className="p-2 sm:p-3 flex flex-col flex-1">
+                  {/* Title */}
+                  <div className="mb-2 sm:mb-3">
+                    <h3 className="font-montserrat font-bold text-[17px] sm:text-[19px] md:text-[21px] lg:text-[19px] xl:text-[22px] leading-[1.3] text-[#1A2439] line-clamp-2">
+                      {news.title}
+                    </h3>
+                  </div>
+                  
+                  {/* Description */}
+                  <div className="mb-3 sm:mb-4 flex-1">
+                    <p className="font-open-sans font-normal text-[13px] sm:text-[14px] md:text-[15px] lg:text-[14px] xl:text-[15px] leading-[1.4] text-[#556A8E] line-clamp-3">
+                      {news.des}
+                    </p>
+                  </div>
                 
-                {/* Description */}
-                <div className="absolute top-[248px] sm:top-[272px] md:top-[292px] lg:top-[272px] xl:top-[308px] left-[2px] w-[calc(100%-4px)] h-[65px] sm:h-[75px] md:h-[85px] lg:h-[80px] xl:h-[90px] flex items-start">
-                  <p className="font-open-sans font-normal text-[13px] sm:text-[14px] md:text-[15px] lg:text-[14px] xl:text-[15px] leading-[1.4] text-[#556A8E] line-clamp-3">
-                    {news.des}
-                  </p>
-                </div>
-
-                
-                {/* Author and Date */}
-                <div className="absolute top-[320px] sm:top-[353px] md:top-[383px] lg:top-[358px] xl:top-[405px] left-[2px] flex items-center gap-2">
-                  <span className="font-montserrat font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#1A2439]">
-                    {news.authorName}
-                  </span>
-                  <span className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#556A8E]">
-                    {formatDate(news.publishedAt)}
-                  </span>
+                  {/* Author and Date */}
+                  <div className="flex items-center gap-2 mt-auto">
+                    <span className="font-montserrat font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#1A2439]">
+                      {news.authorName}
+                    </span>
+                    <span className="font-open-sans font-normal text-[12px] sm:text-[13px] md:text-[14px] lg:text-[13px] xl:text-[14px] leading-[160%] text-[#556A8E]">
+                      {formatDate(news.publishedAt)}
+                    </span>
+                  </div>
                 </div>
                 </div>
               </Link>

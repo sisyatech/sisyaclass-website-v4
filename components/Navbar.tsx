@@ -460,7 +460,8 @@ const Navbar = () => {
   return (
     <ScrollEffect>
       <nav className="relative flex h-16 sm:h-18 items-center px-4 sm:px-6">
-        <div className="flex items-center space-x-3 sm:space-x-4">
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center space-x-3 sm:space-x-4">
           <button onClick={handleLogoClick} className="cursor-pointer">
             <Image 
               src={Logo} 
@@ -480,8 +481,6 @@ const Navbar = () => {
             <NavLinks />
           </div>
         </div>
-
-        <div className="flex-grow" />
 
         <div className="flex items-center space-x-2 sm:space-x-4">
           {/* User Icon - Show when logged in */}
@@ -557,7 +556,7 @@ const Navbar = () => {
             )}
           </button>
         </div>
-
+        </div>
       </nav>
     </ScrollEffect>
   );

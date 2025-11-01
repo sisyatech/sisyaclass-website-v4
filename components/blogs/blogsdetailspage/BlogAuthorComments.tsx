@@ -133,13 +133,14 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
 
   return (
     <div id="comments" className="bg-gray-50 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-10">
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onLoginSuccess={() => setShowLoginModal(false)}
-      />
-      {/* Author Section */}
-      {blogData && (
+      <div className="max-w-7xl mx-auto">
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => setShowLoginModal(false)}
+          onLoginSuccess={() => setShowLoginModal(false)}
+        />
+        {/* Author Section */}
+        {blogData && (
         <div className="mb-4 sm:mb-5 md:mb-6">
           <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 mb-3 sm:mb-4">
             <div className="relative w-14 h-14 sm:w-16 sm:h-16 md:w-18 md:h-18 lg:w-20 lg:h-20 flex-shrink-0 mx-auto sm:mx-0">
@@ -218,11 +219,19 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
           )}
           <textarea
             value={comment}
-            onChange={(e) => setComment(e.target.value)}
+            onChange={(e) => {
+              if (!user) {
+                setShowLoginModal(true);
+                return;
+              }
+              setComment(e.target.value);
+            }}
+            onClick={() => { if (!user) { setShowLoginModal(true); } }}
             onFocus={() => { if (!user) { setShowLoginModal(true); } }}
             placeholder={user ? "Write a comment..." : "Please login to comment"}
-            disabled={!user || submitting}
-            className="w-full pl-12 sm:pl-16 pr-3 sm:pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0595CE] focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
+            disabled={submitting}
+            readOnly={!user}
+            className="w-full pl-12 sm:pl-16 pr-3 sm:pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-[#0595CE] focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed cursor-text"
             rows={3}
           />
         </div>
@@ -345,6 +354,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
             </div>
           ))
         )}
+      </div>
       </div>
     </div>
   );

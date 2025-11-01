@@ -76,21 +76,21 @@ const BlogRelatedBlogs = () => {
 
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-5 lg:p-6">
-      <div className="mb-3 sm:mb-4">
+    <div className="bg-gray-50 rounded-lg shadow-lg p-2 sm:p-3 md:p-4 lg:p-4">
+      <div className="mb-2 sm:mb-2">
         <h3 className="font-montserrat font-bold text-[16px] sm:text-[18px] md:text-[18px] lg:text-[20px] text-[#1A2439]">
           {tagId ? 'Related by Tag' : 'Trending Blogs'}
         </h3>
       </div>
-      <div className="space-y-3 sm:space-y-4">
+      <div className="space-y-2 sm:space-y-2">
         {loading ? (
           // Loading skeleton
-          <div className="space-y-3">
+          <div className="space-y-2">
             {Array.from({ length: 3 }).map((_, index) => (
-              <div key={index} className="flex gap-2 sm:gap-3 p-2 rounded-lg">
+              <div key={index} className="flex gap-2 p-1.5 rounded-lg">
                 <div className="w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 bg-gray-200 rounded-lg animate-pulse" />
                 <div className="flex-1">
-                  <div className="h-4 bg-gray-200 rounded mb-2 animate-pulse" />
+                  <div className="h-4 bg-gray-200 rounded mb-1 animate-pulse" />
                   <div className="h-3 bg-gray-200 rounded w-1/2 animate-pulse" />
                 </div>
               </div>
@@ -115,7 +115,7 @@ const BlogRelatedBlogs = () => {
             <Link
               key={blog.id}
               href={`/blogs/${blog.id}`}
-              className="flex gap-2 sm:gap-3 group hover:bg-gray-50 p-2 rounded-lg transition-all"
+              className="flex gap-2 group hover:bg-white p-1.5 rounded-lg transition-all"
             >
               <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex-shrink-0 rounded-lg overflow-hidden">
                 {blog.banner ? (
@@ -133,10 +133,10 @@ const BlogRelatedBlogs = () => {
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="font-semibold text-[#1A2439] text-xs sm:text-sm line-clamp-2 group-hover:text-[#0595CE] transition-colors mb-1">
+                <h4 className="font-semibold text-[#1A2439] text-xs sm:text-sm line-clamp-2 group-hover:text-[#0595CE] transition-colors mb-0.5">
                   {blog.title}
                 </h4>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-1.5 text-xs text-gray-500">
                   <Clock className="w-3 h-3" />
                   <span>{calculateReadTime(blog.content)}</span>
                   <span>•</span>
@@ -148,7 +148,7 @@ const BlogRelatedBlogs = () => {
           ))
         )}
       </div>
-      <div className="flex justify-center mt-3 sm:mt-4">
+      <div className="flex justify-center mt-2 sm:mt-2">
         <Link
           href="/blogs"
           className="py-2 px-4 sm:px-6 md:px-8 lg:px-10 bg-[#0595CE] text-white rounded-lg hover:bg-[#047aa8] transition-colors font-semibold text-sm sm:text-base text-center"

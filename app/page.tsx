@@ -24,6 +24,8 @@ const StudyMaterial = dynamic(() => import("@/components/StudyMaterial"), { ssr:
 const Moto = dynamic(() => import("@/components/moto"), { ssr: true, loading: () => null });
 const FooterBottom = dynamic(() => import("@/components/FooterBottom"), { ssr: true, loading: () => null });
 const MobileMenu = dynamic(() => import("@/components/Navbar").then(m => m.MobileMenu), { ssr: false, loading: () => null });
+const SocialFab = dynamic(() => import("@/components/10xboostercourse/components/SocialFab"), { ssr: false });
+const WhatsAppFab = dynamic(() => import("@/components/10xboostercourse/components/WhatsAppFab"), { ssr: false });
 
 function HomeContent() {
   return (
@@ -48,6 +50,8 @@ function HomeContent() {
       <Moto />
       <FooterBottom />
       <MobileMenu />
+      <SocialFab />
+      <WhatsAppFab />
     </Container>
   );
 }

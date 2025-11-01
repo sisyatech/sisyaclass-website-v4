@@ -21,7 +21,7 @@ const AppDownload = () => {
       </div>
 
       <RevealOnView from="left" durationMs={1500}>
-        <div className="hidden lg:block absolute left-1/2 lg:-translate-x-[520px] xl:-translate-x-[600px] 2xl:-translate-x-[700px] top-0 z-10 -translate-y-[15%]">
+        <div className="hidden lg:block absolute left-1/2 lg:-translate-x-[480px] xl:-translate-x-[560px] 2xl:-translate-x-[650px] top-0 z-10 -translate-y-[15%]">
           <Image
             src="/download/phonepic.svg"
             alt="SISYA App Interface"
@@ -38,10 +38,10 @@ const AppDownload = () => {
         <RevealOnView from="right" durationMs={1500}>
           <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between gap-6 md:gap-8 lg:gap-16">
             {/* Spacer for phone on desktop */}
-            <div className="hidden lg:block flex-shrink-0 w-[280px] lg:w-[320px] xl:w-[420px]" />
+            <div className="hidden lg:block flex-shrink-0 w-[320px] lg:w-[360px] xl:w-[460px]" />
     
             {/* Right Side - Content */}
-            <div className="flex-1 text-center lg:text-left lg:ml-26 xl:ml-40">
+            <div className="flex-1 text-center lg:text-left lg:ml-32 xl:ml-48">
               <h2 className="font-montserrat font-bold text-[20px] leading-[26px] min-[375px]:text-[22px] min-[375px]:leading-[28px] sm:text-[26px] sm:leading-[30px] md:text-[28px] md:leading-[32px] lg:text-[26px] lg:leading-[30px] xl:text-3xl xl:leading-none tracking-normal mb-3 sm:mb-4 md:mb-5 lg:mb-4 xl:mb-6 text-[#1A2439]">
                 Learn Anytime, Anywhere<br className="hidden sm:inline" />
                 <span className="inline sm:hidden"> </span>at Your Own Pace
