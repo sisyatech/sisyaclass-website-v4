@@ -43,7 +43,7 @@ function HomeContent() {
       <Reviews />
       <BlogsContent />
       <NewsContent />
-      <FAQ />
+      <FAQ isHomePage={true} />
       <AppDownload />
       <Footer />
       <StudyMaterial />

@@ -1,7 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 
-const FAQ = () => {
+interface FAQProps {
+  isHomePage?: boolean;
+}
+
+const FAQ = ({ isHomePage = false }: FAQProps) => {
   const faqs = [
     {
       id: 1,
@@ -57,7 +61,7 @@ const FAQ = () => {
   };
 
   return (
-    <div id="faqs" ref={sectionRef} className="pt-3 pb-8 bg-white">
+    <div id="faqs" ref={sectionRef} className={`pt-3 bg-white ${isHomePage ? 'pb-12 sm:pb-16' : 'pb-8'}`}>
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 

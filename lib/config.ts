@@ -44,6 +44,8 @@ export const API_ENDPOINTS = {
   // Web banners/videos
   GET_ALL_WEB_BANNERS: '/student/get_all_web_banners',
   GET_ALL_WEB_VIDEOS: '/student/get_all_web_videos',
+  GET_ALL_BLOG_AD_BANNERS: '/student/get_all_blog_ad_banners',
+  GET_ALL_COURSE_PAGE_BANNERS: '/student/get_all_course_page_banners',
 };
 
 // Image URLs

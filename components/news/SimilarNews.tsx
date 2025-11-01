@@ -33,7 +33,7 @@ const SimilarNews = () => {
   }, []);
 
   // Time-based filter options
-  const filterButtons = ["All", "Recent", "Latest", "3 Days", "7 Days", "1 Month"];
+  const filterButtons = ["All", "Recent", "Oldest", "3 Days", "7 Days", "1 Month"];
 
   // Filter news based on time
   const filteredNews = useMemo(() => {
@@ -45,14 +45,14 @@ const SimilarNews = () => {
       });
     }
     
-    if (activeFilter === "Latest") {
-      // Show all news sorted by most recent first
+    if (activeFilter === "Oldest") {
+      // Show all news sorted by oldest first
       return [...allNews]
         .filter(newsItem => newsItem.publishedAt)
         .sort((a, b) => {
           const dateA = new Date(a.publishedAt!).getTime();
           const dateB = new Date(b.publishedAt!).getTime();
-          return dateB - dateA; // Most recent first
+          return dateA - dateB; // Oldest first
         });
     }
     

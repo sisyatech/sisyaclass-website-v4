@@ -18,58 +18,23 @@ const StudyMaterials = () => {
     },
     {
       id: 2,
-      title: "CBSE",
+      title: "Previous Year",
       image: "/blogs/ncrt.png", 
       description: "Central Board of Secondary Education study materials"
     },
     {
       id: 3,
-      title: "Practice Tests",
+      title: "Sample paper",
       image: "/blogs/ncrt.png",
       description: "Comprehensive practice tests and mock exams"
     },
     {
       id: 4,
-      title: "Sample Papers",
+      title: "Important material",
       image: "/blogs/ncrt.png",
       description: "Previous year question papers and sample tests"
     },
-    {
-      id: 5,
-      title: "Revision Notes",
-      image: "/blogs/ncrt.png",
-      description: "Quick revision notes for all subjects"
-    },
-    {
-      id: 6,
-      title: "Video Lectures",
-      image: "/blogs/ncrt.png",
-      description: "Expert video lectures and tutorials"
-    },
-    {
-      id: 7,
-      title: "MCQ Tests",
-      image: "/blogs/ncrt.png",
-      description: "Multiple choice question practice tests"
-    },
-    {
-      id: 8,
-      title: "Study Plans",
-      image: "/blogs/ncrt.png",
-      description: "Structured study plans and schedules"
-    },
-    {
-      id: 9,
-      title: "Exam Tips",
-      image: "/blogs/ncrt.png",
-      description: "Expert tips and strategies for exams"
-    },
-    {
-      id: 10,
-      title: "Mock Tests",
-      image: "/blogs/ncrt.png",
-      description: "Full-length mock examinations"
-    }
+    
   ];
 
   return (
@@ -88,7 +53,7 @@ const StudyMaterials = () => {
             </div>
 
             {/* Class Selection Buttons */}
-            <div className="flex flex-nowrap justify-start gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 overflow-x-auto px-2 sm:px-4 pb-2 hide-scrollbar">
+            <div className="flex flex-nowrap justify-center gap-2 sm:gap-2.5 md:gap-3 lg:gap-4 overflow-x-auto px-2 sm:px-4 pb-2 hide-scrollbar">
               {classes.map((classNum) => (
                 <button
                   key={classNum}
@@ -111,8 +76,9 @@ const StudyMaterials = () => {
             </div>
 
             {/* Materials Horizontal Scroll */}
-            <div className="overflow-x-auto overflow-y-hidden py-2 sm:py-3 md:py-4 px-2 sm:px-4 hide-scrollbar">
-              <div className="flex flex-nowrap gap-4 sm:gap-5 md:gap-6" style={{ width: 'max-content' }}>
+            <div className="py-2 sm:py-3 md:py-4 px-2 sm:px-4 flex justify-center">
+              <div className="overflow-x-auto overflow-y-hidden hide-scrollbar">
+                <div className="flex flex-nowrap gap-4 sm:gap-5 md:gap-6 justify-center" style={{ width: 'max-content' }}>
                 {materials.map((material, index) => (
                   <RevealOnView 
                     key={material.id}
@@ -156,6 +122,7 @@ const StudyMaterials = () => {
                     </div>
                   </RevealOnView>
                 ))}
+                </div>
               </div>
             </div>
           </div>
