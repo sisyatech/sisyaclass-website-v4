@@ -15,6 +15,8 @@ const NavLinks = () => {
   const [active, setActive] = useState<string | null>(null);
   const [hoveredGrade, setHoveredGrade] = useState<string | null>(null);
   const [hoveredResource, setHoveredResource] = useState<string | null>(null);
+  type CourseLink = { label: string; type: 'booster' | 'math-longterm' | 'master' };
+  const [fetchedCourseLabels, setFetchedCourseLabels] = useState<CourseLink[] | null>(null);
   const { setSelectedGrade } = useMobileMenu();
   const router = useRouter();
   
@@ -26,25 +28,41 @@ const NavLinks = () => {
     }
   };
 
-  const handleCourseClick = (gradeLabel: string, courseType: string) => {
+  const handleCourseClick = (gradeLabel: string, courseLabel: string) => {
     const gradeNumber = extractGradeFromLabel(gradeLabel);
     if (gradeNumber) {
       setSelectedGrade(gradeNumber);
-      if (courseType === "booster") {
-        router.push(`/grade${gradeNumber}`);
-      } else if (courseType === "math-longterm") {
-        router.push(`/grade${gradeNumber}/mathematics`);
-      } else if (courseType === "master") {
-        router.push(`/grade${gradeNumber}`);
-      }
+      router.push(`/grade${gradeNumber}?course=${encodeURIComponent(courseLabel)}`);
     }
   };
 
-  const courses = [
-    { label: "Booster Course", type: "booster" },
-    { label: "Math Long Term Course", type: "math-longterm" },
-    { label: "Long Term Master Course", type: "master" }
-  ];
+
+
+  // Fetch backend web labels for hovered grade
+  React.useEffect(() => {
+    const fetchWebLabels = async () => {
+      try {
+        if (!hoveredGrade) { setFetchedCourseLabels(null); return; }
+        const gradeNumber = extractGradeFromLabel(hoveredGrade);
+        if (!gradeNumber) { setFetchedCourseLabels(null); return; }
+        const res = await fetch('/api/grade-web-label', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grade: gradeNumber })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const items: CourseLink[] = Array.isArray(data?.courses) ? data.courses : [];
+          setFetchedCourseLabels(items.length > 0 ? items : null);
+        } else {
+          setFetchedCourseLabels(null);
+        }
+      } catch (e) {
+        setFetchedCourseLabels(null);
+      }
+    };
+    fetchWebLabels();
+  }, [hoveredGrade]);
 
   const handleResourceClick = (resourceLabel: string, subject?: string) => {
     if (resourceLabel === "NCERT solutions") {
@@ -130,17 +148,21 @@ const NavLinks = () => {
                     {hoveredGrade} Courses
                   </h3>
                   <div className="space-y-2">
-                    {courses.map((course) => (
-                      <motion.div
-                        key={course.type}
-                        onClick={() => handleCourseClick(hoveredGrade, course.type)}
-                        className="cursor-pointer hover:text-[#02bdfe] transition-colors text-sm py-2 px-3 rounded hover:bg-gray-50"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {course.label}
-                      </motion.div>
-                    ))}
+                    {fetchedCourseLabels && fetchedCourseLabels.length > 0 ? (
+                      fetchedCourseLabels.map((item) => (
+                        <motion.div
+                          key={item.label}
+                          onClick={() => handleCourseClick(hoveredGrade, item.label)}
+                          className="cursor-pointer hover:text-[#02bdfe] transition-colors text-sm py-2 px-3 rounded hover:bg-gray-50"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          {item.label}
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="text-sm text-gray-500 py-2 px-3">No courses available</div>
+                    )}
                   </div>
                 </motion.div>
               )}

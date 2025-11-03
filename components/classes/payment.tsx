@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 import Image from "next/image";
 import LoginModal from "../LoginModal";
@@ -23,6 +24,7 @@ interface NewSectionProps {
 }
 
 const NewSection = ({ gradeNumber }: NewSectionProps) => {
+  const searchParams = useSearchParams();
   const { user, isLoggedIn } = useUser();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -51,7 +53,14 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
-            setCourseData(data[0]);
+            const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+            let picked = data[0];
+            if (desiredLabel) {
+              const exact = data.find((d:any)=>String(d?.webLabel||'').toLowerCase() === desiredLabel);
+              const partial = exact || data.find((d:any)=>String(d?.webLabel||'').toLowerCase().includes(desiredLabel));
+              if (partial) picked = partial;
+            }
+            setCourseData(picked);
           }
         }
       } catch (error) {
@@ -62,7 +71,7 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
     };
 
     fetchCourseData();
-  }, [gradeNumber]);
+  }, [gradeNumber, searchParams]);
 
   const handleMakePayment = () => {
     console.log("Make Payment clicked for grade:", gradeNumber, "Payment method:", paymentMethod);

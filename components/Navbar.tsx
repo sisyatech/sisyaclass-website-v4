@@ -77,6 +77,8 @@ export const MobileMenu = () => {
   const [currentView, setCurrentView] = useState<'main' | 'courses' | 'resources'>('main');
   const [expandedGrade, setExpandedGrade] = useState<string | null>(null);
   const [expandedResource, setExpandedResource] = useState<string | null>(null);
+  type CourseLink = { label: string; type: 'booster' | 'math-longterm' | 'master' };
+  const [fetchedCourseLabels, setFetchedCourseLabels] = useState<CourseLink[] | null>(null);
   
   const handleGradeClick = (gradeLabel: string) => {
     // Toggle dropdown instead of navigating
@@ -88,7 +90,7 @@ export const MobileMenu = () => {
     setExpandedResource(expandedResource === resourceLabel ? null : resourceLabel);
   };
 
-  const handleCourseClick = (gradeLabel: string, courseType: string) => {
+  const handleCourseClick = (gradeLabel: string, courseLabel: string) => {
     const gradeNumber = extractGradeFromLabel(gradeLabel);
     if (gradeNumber) {
       setSelectedGrade(gradeNumber);
@@ -96,15 +98,35 @@ export const MobileMenu = () => {
       setCurrentView('main');
       setExpandedGrade(null);
       
-      if (courseType === "booster") {
-        router.push(`/grade${gradeNumber}`);
-      } else if (courseType === "math-longterm") {
-        router.push(`/grade${gradeNumber}/mathematics`);
-      } else if (courseType === "master") {
-        router.push(`/grade${gradeNumber}`);
-      }
+      router.push(`/grade${gradeNumber}?course=${encodeURIComponent(courseLabel)}`);
     }
   };
+
+  // Fetch backend web labels for expanded grade in mobile menu
+  useEffect(() => {
+    const fetchWebLabels = async () => {
+      try {
+        if (!expandedGrade) { setFetchedCourseLabels(null); return; }
+        const gradeNumber = extractGradeFromLabel(expandedGrade);
+        if (!gradeNumber) { setFetchedCourseLabels(null); return; }
+        const res = await fetch('/api/grade-web-label', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grade: gradeNumber })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const items: CourseLink[] = Array.isArray(data?.courses) ? data.courses : [];
+          setFetchedCourseLabels(items.length > 0 ? items : null);
+        } else {
+          setFetchedCourseLabels(null);
+        }
+      } catch (e) {
+        setFetchedCourseLabels(null);
+      }
+    };
+    fetchWebLabels();
+  }, [expandedGrade]);
 
   const handleResourceSubClick = (resourceLabel: string, subject: string) => {
     setIsMobileMenuOpen(false);
@@ -118,11 +140,7 @@ export const MobileMenu = () => {
     }
   };
 
-  const courses = [
-    { label: "Booster Course", type: "booster" },
-    { label: "Math Long Term Course", type: "math-longterm" },
-    { label: "Long Term Master Course", type: "master" }
-  ];
+  const fallbackCourses: never[] = [];
 
   const resourceSubjects = [
     { label: "Maths", value: "maths" },
@@ -322,18 +340,22 @@ export const MobileMenu = () => {
                     {/* Dropdown course options */}
                     {expandedGrade === link.label && (
                       <div className="mt-2 ml-4 space-y-2">
-                        {courses.map((course, courseIndex) => (
-                          <button
-                            key={course.type}
-                            className="w-full text-left py-2.5 px-4 text-sm font-medium text-gray-600 hover:text-white hover:bg-[#02bdfe] border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] bg-gray-50 group animate-in slide-in-from-right-4 fade-in"
-                            onClick={() => handleCourseClick(link.label, course.type)}
-                            style={{ animationDelay: `${courseIndex * 100}ms`, animationDuration: '400ms' }}
-                          >
-                            <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
-                              {course.label}
-                            </span>
-                          </button>
-                        ))}
+                        {fetchedCourseLabels && fetchedCourseLabels.length > 0 ? (
+                          fetchedCourseLabels.map((item, courseIndex) => (
+                            <button
+                              key={item.label}
+                              className="w-full text-left py-2.5 px-4 text-sm font-medium text-gray-600 hover:text-white hover:bg-[#02bdfe] border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] bg-gray-50 group animate-in slide-in-from-right-4 fade-in"
+                              onClick={() => handleCourseClick(link.label, item.label)}
+                              style={{ animationDelay: `${courseIndex * 100}ms`, animationDuration: '400ms' }}
+                            >
+                              <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
+                                {item.label}
+                              </span>
+                            </button>
+                          ))
+                        ) : (
+                          <div className="text-sm text-gray-500 py-2 px-4">No courses available</div>
+                        )}
                       </div>
                     )}
                   </div>

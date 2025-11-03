@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 import Image from "next/image";
 import LoginModal from "../LoginModal";
@@ -39,6 +40,7 @@ interface BigCourseData {
 }
 
 const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
+  const searchParams = useSearchParams();
   const { user, isLoggedIn } = useUser();
   const classTitle = `Class ${gradeNumber}`;
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
@@ -83,22 +85,29 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         console.log('Data length:', data?.length);
         
         if (Array.isArray(data) && data.length > 0) {
-          console.log('Setting course data:', data[0]);
-          setCourseData(data[0]);
-          
-          // Extract mentor IDs and pass them to parent component
-          if (data[0].bigCourse?.mentorList && Array.isArray(data[0].bigCourse.mentorList)) {
-            console.log('Found mentor IDs:', data[0].bigCourse.mentorList);
+          const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+          let picked = data[0];
+          if (desiredLabel) {
+            const exact = data.find((d:any)=>String(d?.webLabel||'').toLowerCase() === desiredLabel);
+            const partial = exact || data.find((d:any)=>String(d?.webLabel||'').toLowerCase().includes(desiredLabel));
+            if (partial) picked = partial;
+          }
+          console.log('Setting course data:', picked);
+          setCourseData(picked);
+
+          // Extract mentor IDs for the selected course and pass them to parent component
+          if (picked.bigCourse?.mentorList && Array.isArray(picked.bigCourse.mentorList)) {
+            console.log('Found mentor IDs:', picked.bigCourse.mentorList);
             console.log('onMentorIdsChange callback exists:', !!onMentorIdsChange);
             if (onMentorIdsChange) {
-              console.log('Calling onMentorIdsChange callback with:', data[0].bigCourse.mentorList);
-              onMentorIdsChange(data[0].bigCourse.mentorList);
+              console.log('Calling onMentorIdsChange callback with:', picked.bigCourse.mentorList);
+              onMentorIdsChange(picked.bigCourse.mentorList);
               console.log('onMentorIdsChange callback called');
             } else {
               console.log('onMentorIdsChange callback is not defined');
             }
           } else {
-            console.log('No mentorList found in course data');
+            console.log('No mentorList found in selected course data');
           }
         } else {
           console.error(`No course data available for grade ${gradeNumber}`);
@@ -114,7 +123,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
     };
 
     fetchCourseData();
-  }, [gradeNumber]);
+  }, [gradeNumber, searchParams]);
 
   const handleRegisterDemo = () => {
     console.log('Register for demo clicked for grade:', gradeNumber);
@@ -331,10 +340,10 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   const videoEmbedUrl = getYouTubeEmbedUrl(courseData.courseVideoLink);
   const rating = courseData.bigCourse.averageRating.toFixed(1);
   
-  // Extract the main title from the course name (e.g., "Quick Learning, Big Impact: Master Core Concepts with SISYA's Top Instructors!")
-  const courseTitle = courseData.bigCourse.name.includes('-') 
-    ? courseData.bigCourse.name.split('-')[1].trim() 
-    : courseData.bigCourse.name;
+  // Extract the main title from the course name; fallback to webLabel if needed
+  const rawName = courseData.bigCourse?.name || '';
+  const computedFromName = rawName.includes('-') ? rawName.split('-')[1].trim() : rawName;
+  const courseTitle = (computedFromName || courseData.webLabel || `Class ${gradeNumber} Course`).trim();
 
   console.log('Final subjects array for rendering:', subjects);
   console.log('Subjects length:', subjects.length);
@@ -354,7 +363,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         }}
       ></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div key={courseData.id} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="pt-2 sm:pt-3 md:pt-4 lg:pt-6 pb-8 sm:pb-12 md:pb-16">
           {/* Hero Section - Cleaner Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-10 lg:gap-16 xl:gap-20 items-center">
@@ -386,7 +395,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
               {/* Main Headline */}
               <RevealOnView from="left" durationMs={1000} delayMs={200}>
                 <h1 className="font-roboto font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight text-[#161A38] text-center lg:text-left">
-                  {courseTitle}
+                  {courseData.bigCourse?.name || courseTitle}
                 </h1>
               </RevealOnView>
 
