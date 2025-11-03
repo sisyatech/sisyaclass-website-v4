@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from "react";
+import Script from "next/script";
 import Image from "next/image";
 import LoginModal from "../LoginModal";
 import { useUser } from "../UserContext";
@@ -129,10 +130,93 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
     }
   };
 
-  const handlePayment = () => {
-    // Add your payment/demo registration logic here
-    console.log('Proceeding with payment/demo registration for user:', user?.name, 'Grade:', gradeNumber);
-    alert(`Redirecting to demo registration for Class ${gradeNumber} - ₹${courseData?.courseDemoPrice || 'N/A'} for ${user?.name || 'User'}`);
+  const handlePayment = async () => {
+    try {
+      const amount = courseData?.courseDemoPrice || 19;
+      const contactFromUser = (user as any)?.phone || (user as any)?.mobile || "";
+      const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
+      const contact = contactFromUser || contactFromStorage;
+
+      console.log("[PAYMENT] Starting flow (Course)", { gradeNumber, contact, amount });
+      // 1) Create registration lead
+      try {
+        const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: (user as any)?.name || courseData?.bigCourse?.name || "SISYA Course Demo",
+            phone: contact,
+            class: String(gradeNumber),
+            status: "initiated",
+          }),
+        });
+        const leadJson = await leadRes.json();
+        console.log("[PAYMENT] Lead response", leadJson);
+        if (leadJson?.success && leadJson?.lead?.id) {
+          localStorage.setItem("leadId", leadJson.lead.id);
+          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+        } else {
+          console.warn("[Course] Lead creation failed", leadJson);
+        }
+      } catch (e) {
+        console.warn("[Course] Lead request error", e);
+      }
+
+      const orderRes = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, currency: "INR", description: `Course Demo - Class ${gradeNumber}`, contact }),
+      });
+      const orderJson = await orderRes.json();
+      console.log("[PAYMENT] Order API response", orderJson);
+      if (!orderJson?.success) {
+        alert("Failed to initialize payment. Please try again.");
+        return;
+      }
+
+      const payload = orderJson.data ? orderJson.data : {
+        order_id: orderJson.order?.id,
+        amount: orderJson.order?.amount,
+        currency: orderJson.order?.currency,
+        key_id: orderJson.keyId,
+        name: "Sisya Class",
+        description: `Course Demo - Class ${gradeNumber}`,
+        prefill: { contact },
+      };
+
+      const options: any = {
+        key: payload.key_id,
+        amount: payload.amount,
+        currency: payload.currency,
+        name: payload.name,
+        description: payload.description,
+        order_id: payload.order_id,
+        prefill: payload.prefill,
+        handler: function (response: any) {
+          const amountLabel = `₹${amount}`;
+          window.location.href = `/payment/success?transactionId=${encodeURIComponent(
+            response.razorpay_payment_id || ""
+          )}&amount=${encodeURIComponent(amountLabel)}&returnUrl=${encodeURIComponent(`/class-${gradeNumber}`)}`;
+        },
+        modal: {
+          ondismiss: function () {
+            window.location.href = `/payment/failed?transactionId=${encodeURIComponent(
+              `DISMISSED_${Date.now()}`
+            )}&returnUrl=${encodeURIComponent(`/class-${gradeNumber}`)}`;
+          },
+        },
+      };
+
+      // @ts-ignore
+      const rzp = new (window as any).Razorpay(options);
+      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      rzp.open();
+    } catch (err) {
+      console.error("[Course] Payment error", err);
+      alert("Network error. Please try again.");
+    } finally {
+      console.log("[PAYMENT] Flow ended");
+    }
   };
 
   const handleLoginSuccess = (userData: any) => {
@@ -257,6 +341,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
 
   return (
     <div className="min-screen mb-8 pt-0 sm:pt-0 md:pt-1 lg:pt-2 relative">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
         
       {/* Background Container */}
       <div 
