@@ -17,6 +17,7 @@ const NavLinks = () => {
   const [hoveredResource, setHoveredResource] = useState<string | null>(null);
   type CourseLink = { label: string; type: 'booster' | 'math-longterm' | 'master' };
   const [fetchedCourseLabels, setFetchedCourseLabels] = useState<CourseLink[] | null>(null);
+  const [isLoadingCourses, setIsLoadingCourses] = useState(false);
   const { setSelectedGrade } = useMobileMenu();
   const router = useRouter();
   
@@ -42,9 +43,10 @@ const NavLinks = () => {
   React.useEffect(() => {
     const fetchWebLabels = async () => {
       try {
-        if (!hoveredGrade) { setFetchedCourseLabels(null); return; }
+        if (!hoveredGrade) { setFetchedCourseLabels(null); setIsLoadingCourses(false); return; }
         const gradeNumber = extractGradeFromLabel(hoveredGrade);
-        if (!gradeNumber) { setFetchedCourseLabels(null); return; }
+        if (!gradeNumber) { setFetchedCourseLabels(null); setIsLoadingCourses(false); return; }
+        setIsLoadingCourses(true);
         const res = await fetch('/api/grade-web-label', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -59,6 +61,8 @@ const NavLinks = () => {
         }
       } catch (e) {
         setFetchedCourseLabels(null);
+      } finally {
+        setIsLoadingCourses(false);
       }
     };
     fetchWebLabels();
@@ -148,7 +152,15 @@ const NavLinks = () => {
                     {hoveredGrade} Courses
                   </h3>
                   <div className="space-y-2">
-                    {fetchedCourseLabels && fetchedCourseLabels.length > 0 ? (
+                    {isLoadingCourses ? (
+                      <div className="flex items-center gap-2 text-sm text-gray-500 py-2 px-3">
+                        <svg className="h-4 w-4 animate-spin text-gray-400" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        Loading courses...
+                      </div>
+                    ) : fetchedCourseLabels && fetchedCourseLabels.length > 0 ? (
                       fetchedCourseLabels.map((item) => (
                         <motion.div
                           key={item.label}
