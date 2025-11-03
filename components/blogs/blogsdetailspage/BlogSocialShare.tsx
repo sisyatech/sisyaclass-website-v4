@@ -35,10 +35,9 @@ const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialSharePr
   }, [blogId, serverBlogData]);
 
   const handleShare = (platform: string) => {
-    // Use the current page URL for LinkedIn and Facebook (for meta tag fetching)
-    // Use a custom URL with title slug for Twitter, Copy, and WhatsApp
-    // const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const currentUrl = `https://sisyaclass-website-v4.vercel.app/blogs/${blogId}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://sisyaclass.xyz';
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${origin}/blogs/${blogId}`;
+    const customUrl = `${origin}/blogs/${blogId}`;
     const title = blogData?.title || "Sisya Class Blog";
     const description = blogData?.des || "Check out this amazing blog post on Sisya Class";
 
@@ -58,7 +57,7 @@ const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialSharePr
         break;
       case "twitter":
         window.open(
-          `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
+          `https://twitter.com/intent/tweet?url=${encodeURIComponent(customUrl)}&text=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
           "_blank"
         );
         break;
@@ -70,11 +69,11 @@ const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialSharePr
         );
         break;
       case "copy":
-        navigator.clipboard.writeText(currentUrl);
+        navigator.clipboard.writeText(customUrl);
         alert("Blog link copied to clipboard!");
         break;
       case "whatsapp":
-        const whatsappText = `Read: ${title}\n${currentUrl}`;
+        const whatsappText = `Read: ${title}\n${customUrl}`;
         window.open(`https://wa.me/?text=${encodeURIComponent(whatsappText)}`, "_blank");
         break;
     }
