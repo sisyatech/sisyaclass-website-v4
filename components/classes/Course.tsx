@@ -373,16 +373,16 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
               {/* Class Badge */}
               <RevealOnView from="top" durationMs={800} delayMs={0}>
                 <div className="flex flex-row items-center gap-2 sm:gap-3">
-                  <div className="relative w-[160px] sm:w-[180px] md:w-[202px] h-[28px] sm:h-[32px] md:h-[36px]">
+                  <div className="relative w-[200px] sm:w-[240px] md:w-[280px] h-[32px] sm:h-[36px] md:h-[40px]">
                     <Image 
                       src="/grades/coursebaner.svg" 
                       alt={courseData.webLabel} 
-                      width={202} 
-                      height={36}
+                      width={280} 
+                      height={40}
                       className="w-full h-full"
                       priority
                     />
-                    <span className="absolute inset-0 flex items-center justify-center text-white text-xs sm:text-sm font-semibold">
+                    <span className="absolute inset-0 flex items-center justify-center text-white text-[10px] sm:text-xs font-semibold">
                       {courseData.webLabel}
                     </span>
                   </div>
