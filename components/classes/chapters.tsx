@@ -429,7 +429,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                       <div className="w-full max-w-[360px] sm:max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-5 sm:p-6 hover:shadow-xl transition-shadow mb-5 sm:mb-6">
                         <div className="flex items-center gap-3 mb-4">
                           <div className={cn(`w-[40px] h-[40px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
-                            <Image src="/grades/math.svg" alt={chapter.subjectName} width={26} height={26} />
+                            <Image src={(() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })()} alt={chapter.subjectName} width={26} height={26} />
                           </div>
                           <div className="flex flex-col">
                             <h3 className={`font-montserrat font-semibold text-[16px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>Chapter {chapter.chapterNumber}</h3>
@@ -503,7 +503,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                             <div className="flex items-center gap-3 mb-4">
                               <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
                                 <Image 
-                                  src="/grades/math.svg" 
+                                  src={("" + (() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })())}
                                   alt={chapter.subjectName} 
                                   width={29} 
                                   height={29}
