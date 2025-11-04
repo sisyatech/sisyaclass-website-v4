@@ -210,8 +210,12 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const currentSubjects = subjects.slice(startIndex, endIndex);
 
   const handleExploreClick = (subject: string) => {
-    const subjectSlug = subject.toLowerCase().replace(/\s+/g, '-');
-    router.push(`/grade${gradeNumber || 8}/${subjectSlug}`);
+    // Get current course from URL or use the course's webLabel
+    const currentCourse = searchParams?.get('course') || courseData?.webLabel || '';
+    const subjectParam = encodeURIComponent(subject);
+    const courseParam = currentCourse ? `&course=${encodeURIComponent(currentCourse)}` : '';
+    // Navigate to the grade page with subject and course query parameters, then scroll to chapters
+    router.push(`/grade${gradeNumber || 8}?subject=${subjectParam}${courseParam}#chapters`);
   };
 
   const goToPage = (page: number) => {
@@ -297,6 +301,12 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
 
   // Don't render if no data
   if (!courseData || subjects.length === 0) {
+    return null;
+  }
+
+  // Hide syllabus section when a subject is selected (chapters will show instead)
+  const selectedSubject = searchParams?.get('subject');
+  if (selectedSubject) {
     return null;
   }
 

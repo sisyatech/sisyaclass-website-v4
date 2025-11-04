@@ -61,7 +61,7 @@ const FAQ = ({ isHomePage = false }: FAQProps) => {
   };
 
   return (
-    <div id="faqs" ref={sectionRef} className={`pt-3 bg-white ${isHomePage ? 'pb-12 sm:pb-16' : 'pb-8'}`}>
+    <div id="faqs" ref={sectionRef} className="pt-3 bg-white pb-12 sm:pb-16">
       <div className="mx-auto max-w-4xl px-4">
         {/* Title */}
         <h2 
