@@ -1,9 +1,10 @@
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface Chapter {
@@ -38,6 +39,7 @@ interface BigCourseData {
 
 const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -49,6 +51,16 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   // Subject styling configuration
   const subjectStyles: { [key: string]: { iconBg: string; titleColor: string; buttonBg: string } } = {
     Mathematics: {
+      iconBg: "bg-[#DDDEFE]",
+      titleColor: "text-[#575CFB]",
+      buttonBg: "bg-[#575CFB]"
+    },
+    Maths: {
+      iconBg: "bg-[#DDDEFE]",
+      titleColor: "text-[#575CFB]",
+      buttonBg: "bg-[#575CFB]"
+    },
+    Math: {
       iconBg: "bg-[#DDDEFE]",
       titleColor: "text-[#575CFB]",
       buttonBg: "bg-[#575CFB]"
@@ -73,6 +85,49 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
       titleColor: "text-[#E78F8E]",
       buttonBg: "bg-[#E78F8E]"
     }
+  };
+
+  // Helper function to get subject style with flexible matching
+  const getSubjectStyle = (subjectName: string) => {
+    const normalized = subjectName.trim();
+    // Try exact match first
+    if (subjectStyles[normalized]) {
+      return subjectStyles[normalized];
+    }
+    // Try case-insensitive match
+    const lowerName = normalized.toLowerCase();
+    for (const [key, value] of Object.entries(subjectStyles)) {
+      if (key.toLowerCase() === lowerName) {
+        return value;
+      }
+    }
+    // Try partial match for common variations
+    if (lowerName.includes('math')) {
+      return subjectStyles.Mathematics;
+    }
+    if (lowerName.includes('science') || lowerName.includes('physics') || lowerName.includes('chemistry') || lowerName.includes('bio')) {
+      return subjectStyles.Science;
+    }
+    if (lowerName.includes('english') || lowerName.includes('eng')) {
+      return subjectStyles.English;
+    }
+    // Default to Mathematics
+    return subjectStyles.Mathematics;
+  };
+
+  // Helper function to determine which icon to show
+  const getSubjectIcon = (subjectName: string) => {
+    const lowerName = subjectName.toLowerCase();
+    if (lowerName.includes('math')) {
+      return 'math';
+    }
+    if (lowerName.includes('science') || lowerName.includes('physics') || lowerName.includes('chemistry') || lowerName.includes('bio')) {
+      return 'science';
+    }
+    if (lowerName.includes('english') || lowerName.includes('eng')) {
+      return 'english';
+    }
+    return 'math'; // default
   };
 
   // Fetch course data from API
@@ -101,7 +156,26 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
-            setCourseData(data[0]);
+            // Get the course query parameter and filter the data
+            const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+            let picked = data[0];
+            
+            if (desiredLabel) {
+              // Try exact match first
+              const exact = data.find((d: BigCourseData) => 
+                String(d?.webLabel || '').toLowerCase() === desiredLabel
+              );
+              // Fallback to partial match
+              const partial = exact || data.find((d: BigCourseData) => 
+                String(d?.webLabel || '').toLowerCase().includes(desiredLabel)
+              );
+              if (partial) picked = partial;
+            }
+            
+            setCourseData(picked);
+            // Reset mobile index when course data changes
+            setMobileIndex(0);
+            setCurrentPage(0);
           }
         }
       } catch (error) {
@@ -112,11 +186,11 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
     };
 
     fetchCourseData();
-  }, [gradeNumber]);
+  }, [gradeNumber, searchParams]);
 
   // Map API subjects to component format
   const subjects = courseData?.subjects.map((subject) => {
-    const style = subjectStyles[subject.name] || subjectStyles.Mathematics;
+    const style = getSubjectStyle(subject.name);
     return {
       id: subject.id,
       title: subject.name,
@@ -124,7 +198,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
       iconBg: style.iconBg,
       titleColor: style.titleColor,
       buttonBg: style.buttonBg,
-      buttonText: `Explore ${subject.name} Champ Course`,
+      buttonText: `Explore ${subject.name} Subject`,
       topics: subject.taglinePoints
     };
   }) || [];
@@ -277,13 +351,13 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                       <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
                         <div className="flex items-center gap-3 mb-4">
                           <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                            {(subject.title === "Mathematics" || subject.title === "Maths") && (
+                            {getSubjectIcon(subject.title) === 'math' && (
                               <Image src="/grades/math.svg" alt="Math" width={29} height={29} />
                             )}
-                            {(subject.title === "Science" || subject.title === "Physics" || subject.title === "Chemistry") && (
+                            {getSubjectIcon(subject.title) === 'science' && (
                               <Image src="/grades/sciens.svg" alt="Science" width={29} height={29} />
                             )}
-                            {subject.title === "English" && (
+                            {getSubjectIcon(subject.title) === 'english' && (
                               <Image src="/grades/eng.svg" alt="English" width={29} height={29} />
                             )}
                           </div>
@@ -363,7 +437,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                             {/* Subject Icon and Title */}
                             <div className="flex items-center gap-3 mb-4">
                               <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                                {(subject.title === "Mathematics" || subject.title === "Maths") && (
+                                {getSubjectIcon(subject.title) === 'math' && (
                                   <Image 
                                     src="/grades/math.svg" 
                                     alt="Math" 
@@ -371,7 +445,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                                     height={29}
                                   />
                                 )}
-                               {(subject.title === "Science" || subject.title === "Physics" || subject.title === "Chemistry") && (
+                                {getSubjectIcon(subject.title) === 'science' && (
                                   <Image 
                                     src="/grades/sciens.svg" 
                                     alt="Science" 
@@ -379,7 +453,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                                     height={29}
                                   />
                                 )}
-                                {subject.title === "English" && (
+                                {getSubjectIcon(subject.title) === 'english' && (
                                   <Image 
                                     src="/grades/eng.svg" 
                                     alt="English" 
