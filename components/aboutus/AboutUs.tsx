@@ -17,21 +17,25 @@ const AboutUs = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Calculate transform values for whole component
-  const scale = Math.max(0.90, 1 - scrollY / 3000); // Compress from 1 to 0.90 (very subtle)
-  const translateY = -scrollY / 10; // Move up as you scroll (minimal movement)
+  // Calculate transform values for whole component - subtle compression
+  // Scale from 1 to 0.85 as user scrolls (subtle compression)
+  const maxScroll = 1200; // Scroll distance for full compression (slower)
+  const scale = Math.max(0.85, 1 - (scrollY / maxScroll)); // Compress from 1 to 0.85 (less dramatic)
+  const translateY = -scrollY / 12; // Move up as you scroll (less pronounced)
   const borderRadius = Math.min(20, scrollY / 20); // Radius increases as you scroll (0 to 20px)
+  const opacity = Math.max(0.8, 1 - (scrollY / (maxScroll * 2))); // Fade slightly as you scroll (less fade)
   return (
-    <>
+    <div className="relative w-full bg-white overflow-hidden">
       {/* Hero Section - Entire component animates */}
       <div 
-        className="relative w-full min-h-screen overflow-hidden"
+        className="relative w-[110%] min-h-screen overflow-hidden -mx-[5%]"
         style={{
           transform: `scale(${scale}) translateY(${translateY}px)`,
           transformOrigin: 'center center',
-          transition: 'transform 0.1s ease-out, border-radius 0.1s ease-out',
-          willChange: 'transform, border-radius',
+          transition: 'transform 0.1s ease-out, border-radius 0.1s ease-out, opacity 0.1s ease-out',
+          willChange: 'transform, border-radius, opacity',
           borderRadius: `${borderRadius}px`,
+          opacity: opacity,
         }}
       >
         {/* Background Image */}
@@ -116,7 +120,7 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
