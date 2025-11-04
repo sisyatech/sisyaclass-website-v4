@@ -58,9 +58,8 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
       try { data = text ? JSON.parse(text) : {}; } catch {}
       console.log('[CALLBACK][RESPONSE] parsed:', data);
       if (res.ok && (data?.success ?? true)) {
-        console.log('[CALLBACK] Success - closing modal');
-        setShowCallback(false);
-        setName(""); setPhone(""); setQuestion("");
+        console.log('[CALLBACK] Success - redirecting to success page');
+        window.location.href = '/3dayslp/success.php';
       } else {
         let msg = data?.message || data?.error || `Request failed (${res.status})`;
         if (res.status === 400 && typeof msg === 'string' && msg.toLowerCase().includes('lead not created')) {
@@ -88,7 +87,6 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             Class 1-10 Online Classes
           </h2>
           <ul className="mt-4 space-y-[0.6rem]">
-            <li>✅ Diwali Offer - Flat 50% Off On All Courses</li>
             <li>✅ CBSE, ICSE &amp; State Boards Covered</li>
             <li>✅ Choose Between 1 PM To 9 PM</li>
             <li>✅ Choose between Crash Course and All-In-One Course</li>
@@ -155,7 +153,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             >
               ×
             </button>
-            <h2 className="text-center text-lg font-bold text-[#01317a]">See the Difference in Just One Class</h2>
+            <h2 className="text-center text-lg font-bold text-[#01317a]">We'll Call You In 24 Hrs.</h2>
             <div className="mt-4 space-y-3">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">Enter your Name</label>

@@ -29,6 +29,30 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/10xboostercourse/payment/success.php',
+        destination: '/10xboostercourse/payment/success',
+      },
+      {
+        source: '/10xboostercourse/payment/failed.php',
+        destination: '/10xboostercourse/payment/failed',
+      },
+      {
+        source: '/3dayslp/payment/success.php',
+        destination: '/3dayslp/payment/success',
+      },
+      {
+        source: '/3dayslp/payment/failed.php',
+        destination: '/3dayslp/payment/failed',
+      },
+      {
+        source: '/3dayslp/success.php',
+        destination: '/3dayslp/payment/success',
+      },
+    ];
+  },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.

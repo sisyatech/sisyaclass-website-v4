@@ -84,12 +84,12 @@ export default function ThreeDayLPContent() {
         handler: function (response: any) {
           console.log("[3DAY] Success handler", response);
           setShowReservationPopup(false);
-          window.location.href = `/3dayslp/payment/success?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
+          window.location.href = `/3dayslp/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
             console.warn("[3DAY] Checkout dismissed by user");
-            window.location.href = `/3dayslp/payment/failed?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+            window.location.href = `/3dayslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
           },
         },
       };

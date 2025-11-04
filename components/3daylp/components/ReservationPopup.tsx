@@ -76,7 +76,7 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
             </div>
           </div>
           <button type="submit" className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]">
-            Try One Class @₹19 Only
+            Try 3 Classes @ ₹19 Only
           </button>
         </form>
       </div>
