@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface Chapter {
@@ -40,6 +40,7 @@ interface BigCourseData {
 const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
@@ -212,10 +213,12 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const handleExploreClick = (subject: string) => {
     // Get current course from URL or use the course's webLabel
     const currentCourse = searchParams?.get('course') || courseData?.webLabel || '';
-    const subjectParam = encodeURIComponent(subject);
-    const courseParam = currentCourse ? `&course=${encodeURIComponent(currentCourse)}` : '';
-    // Navigate to the grade page with subject and course query parameters, then scroll to chapters
-    router.push(`/grade${gradeNumber || 8}?subject=${subjectParam}${courseParam}#chapters`);
+    // Convert subject name to URL-friendly slug (e.g., "Mathematics" -> "mathematics")
+    const subjectSlug = subject.toLowerCase().replace(/\s+/g, '-');
+    // Build URL with course query parameter if available
+    const courseParam = currentCourse ? `?course=${encodeURIComponent(currentCourse)}` : '';
+    // Navigate to the subject page
+    router.push(`/grade${gradeNumber || 8}/${subjectSlug}${courseParam}`);
   };
 
   const goToPage = (page: number) => {
@@ -304,9 +307,11 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
     return null;
   }
 
-  // Hide syllabus section when a subject is selected (chapters will show instead)
-  const selectedSubject = searchParams?.get('subject');
-  if (selectedSubject) {
+  // Syllabus section only shows on the main grade page, not on subject pages
+  // This check ensures we don't show it on subject routes
+  const pathParts = pathname?.split('/').filter(Boolean) || [];
+  const isSubjectPage = pathname && pathname.includes('/grade') && pathParts.length > 1;
+  if (isSubjectPage) {
     return null;
   }
 

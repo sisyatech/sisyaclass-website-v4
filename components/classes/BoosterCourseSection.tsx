@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import BoosterCourseCard from "./BoosterCourseCard";
 import RevealOnView from "../Reveal/RevealOnView";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
@@ -17,6 +17,7 @@ interface BoosterCourseItem {
 
 const BoosterCourseSection = ({ gradeNumber }: { gradeNumber: number }) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [cardsEntered, setCardsEntered] = useState(false);
   const [courses, setCourses] = useState<BoosterCourseItem[]>([]);
@@ -94,8 +95,11 @@ const BoosterCourseSection = ({ gradeNumber }: { gradeNumber: number }) => {
   }, []);
 
   // Only show BoosterCourseSection when chapters are visible (when a subject is selected)
+  // Check if we're on a subject page (pathname has subject) or if subject is in query params
+  const pathParts = pathname?.split('/').filter(Boolean) || [];
+  const isSubjectPage = pathname && pathname.includes('/grade') && pathParts.length > 1;
   const selectedSubject = searchParams?.get('subject');
-  if (!selectedSubject) {
+  if (!selectedSubject && !isSubjectPage) {
     return null;
   }
 

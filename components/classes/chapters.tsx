@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface Chapter {
@@ -40,13 +40,22 @@ interface BigCourseData {
 const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
   
+  // Get subject from URL path (e.g., /grade8/mathematics -> "mathematics")
+  // or fallback to query parameter for backward compatibility
+  const pathParts = pathname?.split('/').filter(Boolean) || [];
+  // pathParts[0] = 'grade8', pathParts[1] = 'mathematics' (if subject page)
+  const subjectFromPath = pathParts.length > 1 ? decodeURIComponent(pathParts[1]).replace(/-/g, ' ') : '';
+  const selectedSubjectFromUrl = subjectFromPath || searchParams?.get('subject') || '';
+  
   // Debug: Log component render
-  const selectedSubjectFromUrl = searchParams?.get('subject') || '';
   console.log('[CHAPTERS] Component rendered:', { 
     gradeNumber, 
+    pathname,
+    subjectFromPath,
     selectedSubjectFromUrl,
     decoded: selectedSubjectFromUrl.toLowerCase()
   });
@@ -114,8 +123,8 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     fetchCourseData();
   }, [gradeNumber, searchParams]);
 
-  // Get selected subject from URL query parameter
-  const selectedSubject = (searchParams?.get('subject') || '').toLowerCase();
+  // Get selected subject from URL path or query parameter
+  const selectedSubject = selectedSubjectFromUrl.toLowerCase();
 
   // Reset mobile index and pagination when subject filter changes
   useEffect(() => {
@@ -333,9 +342,11 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     return null;
   }
 
-  // Only show chapters when a subject is selected (when user clicks "Explore Subject")
+  // Only show chapters when a subject is selected (when user clicks "Explore Subject" or on subject page)
   // If no subject is selected, this component will be hidden (SyllabusSection will show instead)
-  if (!selectedSubject) {
+  // Check if we're on a subject page (pathname has subject) or if subject is in query params
+  const isSubjectPage = pathname && pathname.includes('/grade') && pathParts.length > 1;
+  if (!selectedSubject && !isSubjectPage) {
     return null;
   }
 
