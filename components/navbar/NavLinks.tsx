@@ -94,7 +94,7 @@ const NavLinks = () => {
     <NavMenu setActive={setActive}>
       <NavMenuItem setActive={setActive} active={active} item="Courses">
         <motion.div 
-          className="flex overflow-hidden max-h-[70vh] overflow-y-auto"
+          className="flex overflow-hidden max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           animate={{ 
             width: hoveredGrade ? "400px" : "140px" 
           }}
@@ -102,7 +102,7 @@ const NavLinks = () => {
           onMouseLeave={() => setHoveredGrade(null)}
         >
           {/* Left Column - Grades */}
-          <div className="flex flex-col space-y-3 pr-6 pl-2 min-w-[140px] max-h-[70vh] overflow-y-auto">
+          <div className="flex flex-col space-y-3 pr-6 pl-2 min-w-[140px] max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {gradeLinks.map((link) => (
               <div 
                 key={link.href}
@@ -133,7 +133,7 @@ const NavLinks = () => {
           
           {/* Right Column - Course Options */}
           <motion.div 
-            className="pl-6 flex-1 overflow-y-auto max-h-[70vh]"
+            className="pl-6 flex-1 overflow-y-auto max-h-[70vh] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredGrade ? 1 : 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
@@ -184,7 +184,7 @@ const NavLinks = () => {
       </NavMenuItem>
       <NavMenuItem setActive={setActive} active={active} item="Resources For Students">
         <motion.div 
-          className="flex overflow-hidden max-h-[70vh] overflow-y-auto"
+          className="flex overflow-hidden max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           animate={{ 
             width: hoveredResource ? "600px" : "200px",
             height: hoveredResource ? "300px" : "auto"
@@ -193,7 +193,7 @@ const NavLinks = () => {
           onMouseLeave={() => setHoveredResource(null)}
         >
           {/* Left Column - Resource Categories */}
-          <div className="flex flex-col space-y-4 pr-6 pl-2 min-w-[200px] py-8 min-h-[250px] max-h-[70vh] overflow-y-auto">
+          <div className="flex flex-col space-y-4 pr-6 pl-2 min-w-[200px] py-8 min-h-[250px] max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {resourceItems.map((item) => (
               <div 
                 key={item.type}
@@ -224,7 +224,7 @@ const NavLinks = () => {
           
           {/* Right Column - Resource Options */}
           <motion.div 
-            className="pl-6 flex-1 overflow-hidden py-8 min-h-[250px] max-h-[70vh] overflow-y-auto"
+            className="pl-6 flex-1 overflow-hidden py-8 min-h-[250px] max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredResource ? 1 : 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
