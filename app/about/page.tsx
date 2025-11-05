@@ -14,7 +14,7 @@ import StudyMaterial from "@/components/StudyMaterial";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import { useEffect } from "react";
-import { AboutBreadcrumb } from "@/components/AboutBreadcrumb";
+import { AboutBreadcrumb } from "@/components/aboutus/AboutBreadcrumb";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
@@ -29,7 +29,6 @@ function AboutContent() {
     return (
         <>
             <div className="sticky top-0 z-50 shadow-sm">
-                <Container>
                     <Navbar />
                     <AboutBreadcrumb />
                     <AboutUs />
@@ -61,7 +60,6 @@ function AboutContent() {
 
                     {/* Footer Bottom */}
                     <FooterBottom />
-                </Container>
             </div>
 
 

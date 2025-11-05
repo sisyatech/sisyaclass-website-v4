@@ -21,7 +21,7 @@ const AppDownload = () => {
       </div>
 
       <RevealOnView from="left" durationMs={1500}>
-        <div className="hidden lg:block absolute left-1/2 lg:-translate-x-[480px] xl:-translate-x-[560px] 2xl:-translate-x-[650px] top-0 z-10 -translate-y-[15%]">
+        <div className="hidden lg:block absolute left-1/2 lg:-translate-x-[480px] xl:-translate-x-[560px] 2xl:-translate-x-[650px] top-3.5 z-10 -translate-y-[15%]">
           <Image
             src="/download/phonepic.svg"
             alt="SISYA App Interface"

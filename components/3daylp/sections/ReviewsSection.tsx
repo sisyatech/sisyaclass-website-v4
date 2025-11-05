@@ -162,7 +162,7 @@ export default function ReviewsSection() {
 
         <section className="relative w-full md:flex-1 overflow-hidden" aria-label="reviews">
           <button
-            className="absolute md:top-1/2 md:-translate-y-1/2 top-auto bottom-2 md:bottom-auto left-[35%] md:left-[5px] w-9 h-9 rounded-full bg-white border border-[#e5e7eb] grid place-items-center shadow disabled:opacity-60 z-20"
+            className="absolute md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:left-[5px] bottom-0 left-1/2 -translate-x-[42px] md:translate-x-0 w-9 h-9 rounded-full bg-white border border-[#e5e7eb] grid place-items-center shadow disabled:opacity-60 z-20"
             aria-label="Previous"
             onClick={() => scrollByPage(-1)}
             disabled={!canPrev}
@@ -170,7 +170,7 @@ export default function ReviewsSection() {
             <svg viewBox="0 0 24 24" className="w-5 h-5"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
           </button>
           <div
-            className="w-full overflow-x-auto snap-x snap-mandatory flex px-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            className="w-full overflow-x-auto snap-x snap-mandatory flex px-3 pb-12 md:pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             ref={viewportRef}
           >
             <div className="flex gap-2 w-max pb-1" ref={trackRef}>
@@ -218,7 +218,7 @@ export default function ReviewsSection() {
             </div>
           </div>
           <button
-            className="absolute md:top-1/2 md:-translate-y-1/2 top-auto bottom-2 md:bottom-auto right-[35%] md:right-[5px] w-9 h-9 rounded-full bg-white border border-[#e5e7eb] grid place-items-center shadow disabled:opacity-60 z-20"
+            className="absolute md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:right-[5px] bottom-0 right-1/2 translate-x-[42px] md:translate-x-0 w-9 h-9 rounded-full bg-white border border-[#e5e7eb] grid place-items-center shadow disabled:opacity-60 z-20"
             aria-label="Next"
             onClick={() => scrollByPage(1)}
             disabled={!canNext}

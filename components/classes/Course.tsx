@@ -1,5 +1,7 @@
 
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Script from "next/script";
 import Image from "next/image";
 import LoginModal from "../LoginModal";
 import { useUser } from "../UserContext";
@@ -38,6 +40,7 @@ interface BigCourseData {
 }
 
 const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
+  const searchParams = useSearchParams();
   const { user, isLoggedIn } = useUser();
   const classTitle = `Class ${gradeNumber}`;
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
@@ -82,22 +85,29 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         console.log('Data length:', data?.length);
         
         if (Array.isArray(data) && data.length > 0) {
-          console.log('Setting course data:', data[0]);
-          setCourseData(data[0]);
-          
-          // Extract mentor IDs and pass them to parent component
-          if (data[0].bigCourse?.mentorList && Array.isArray(data[0].bigCourse.mentorList)) {
-            console.log('Found mentor IDs:', data[0].bigCourse.mentorList);
+          const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+          let picked = data[0];
+          if (desiredLabel) {
+            const exact = data.find((d:any)=>String(d?.webLabel||'').toLowerCase() === desiredLabel);
+            const partial = exact || data.find((d:any)=>String(d?.webLabel||'').toLowerCase().includes(desiredLabel));
+            if (partial) picked = partial;
+          }
+          console.log('Setting course data:', picked);
+          setCourseData(picked);
+
+          // Extract mentor IDs for the selected course and pass them to parent component
+          if (picked.bigCourse?.mentorList && Array.isArray(picked.bigCourse.mentorList)) {
+            console.log('Found mentor IDs:', picked.bigCourse.mentorList);
             console.log('onMentorIdsChange callback exists:', !!onMentorIdsChange);
             if (onMentorIdsChange) {
-              console.log('Calling onMentorIdsChange callback with:', data[0].bigCourse.mentorList);
-              onMentorIdsChange(data[0].bigCourse.mentorList);
+              console.log('Calling onMentorIdsChange callback with:', picked.bigCourse.mentorList);
+              onMentorIdsChange(picked.bigCourse.mentorList);
               console.log('onMentorIdsChange callback called');
             } else {
               console.log('onMentorIdsChange callback is not defined');
             }
           } else {
-            console.log('No mentorList found in course data');
+            console.log('No mentorList found in selected course data');
           }
         } else {
           console.error(`No course data available for grade ${gradeNumber}`);
@@ -113,7 +123,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
     };
 
     fetchCourseData();
-  }, [gradeNumber]);
+  }, [gradeNumber, searchParams]);
 
   const handleRegisterDemo = () => {
     console.log('Register for demo clicked for grade:', gradeNumber);
@@ -129,10 +139,93 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
     }
   };
 
-  const handlePayment = () => {
-    // Add your payment/demo registration logic here
-    console.log('Proceeding with payment/demo registration for user:', user?.name, 'Grade:', gradeNumber);
-    alert(`Redirecting to demo registration for Class ${gradeNumber} - ₹${courseData?.courseDemoPrice || 'N/A'} for ${user?.name || 'User'}`);
+  const handlePayment = async () => {
+    try {
+      const amount = courseData?.courseDemoPrice || 19;
+      const contactFromUser = (user as any)?.phone || (user as any)?.mobile || "";
+      const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
+      const contact = contactFromUser || contactFromStorage;
+
+      console.log("[PAYMENT] Starting flow (Course)", { gradeNumber, contact, amount });
+      // 1) Create registration lead
+      try {
+        const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: (user as any)?.name || courseData?.bigCourse?.name || "SISYA Course Demo",
+            phone: contact,
+            class: String(gradeNumber),
+            status: "initiated",
+          }),
+        });
+        const leadJson = await leadRes.json();
+        console.log("[PAYMENT] Lead response", leadJson);
+        if (leadJson?.success && leadJson?.lead?.id) {
+          localStorage.setItem("leadId", leadJson.lead.id);
+          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+        } else {
+          console.warn("[Course] Lead creation failed", leadJson);
+        }
+      } catch (e) {
+        console.warn("[Course] Lead request error", e);
+      }
+
+      const orderRes = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, currency: "INR", description: `Course Demo - Class ${gradeNumber}`, contact }),
+      });
+      const orderJson = await orderRes.json();
+      console.log("[PAYMENT] Order API response", orderJson);
+      if (!orderJson?.success) {
+        alert("Failed to initialize payment. Please try again.");
+        return;
+      }
+
+      const payload = orderJson.data ? orderJson.data : {
+        order_id: orderJson.order?.id,
+        amount: orderJson.order?.amount,
+        currency: orderJson.order?.currency,
+        key_id: orderJson.keyId,
+        name: "Sisya Class",
+        description: `Course Demo - Class ${gradeNumber}`,
+        prefill: { contact },
+      };
+
+      const options: any = {
+        key: payload.key_id,
+        amount: payload.amount,
+        currency: payload.currency,
+        name: payload.name,
+        description: payload.description,
+        order_id: payload.order_id,
+        prefill: payload.prefill,
+        handler: function (response: any) {
+          const amountLabel = `₹${amount}`;
+          window.location.href = `/payment/success?transactionId=${encodeURIComponent(
+            response.razorpay_payment_id || ""
+          )}&amount=${encodeURIComponent(amountLabel)}&returnUrl=${encodeURIComponent(`/class-${gradeNumber}`)}`;
+        },
+        modal: {
+          ondismiss: function () {
+            window.location.href = `/payment/failed?transactionId=${encodeURIComponent(
+              `DISMISSED_${Date.now()}`
+            )}&returnUrl=${encodeURIComponent(`/class-${gradeNumber}`)}`;
+          },
+        },
+      };
+
+      // @ts-ignore
+      const rzp = new (window as any).Razorpay(options);
+      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      rzp.open();
+    } catch (err) {
+      console.error("[Course] Payment error", err);
+      alert("Network error. Please try again.");
+    } finally {
+      console.log("[PAYMENT] Flow ended");
+    }
   };
 
   const handleLoginSuccess = (userData: any) => {
@@ -247,16 +340,17 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   const videoEmbedUrl = getYouTubeEmbedUrl(courseData.courseVideoLink);
   const rating = courseData.bigCourse.averageRating.toFixed(1);
   
-  // Extract the main title from the course name (e.g., "Quick Learning, Big Impact: Master Core Concepts with SISYA's Top Instructors!")
-  const courseTitle = courseData.bigCourse.name.includes('-') 
-    ? courseData.bigCourse.name.split('-')[1].trim() 
-    : courseData.bigCourse.name;
+  // Extract the main title from the course name; fallback to webLabel if needed
+  const rawName = courseData.bigCourse?.name || '';
+  const computedFromName = rawName.includes('-') ? rawName.split('-')[1].trim() : rawName;
+  const courseTitle = (computedFromName || courseData.webLabel || `Class ${gradeNumber} Course`).trim();
 
   console.log('Final subjects array for rendering:', subjects);
   console.log('Subjects length:', subjects.length);
 
   return (
     <div className="min-screen mb-8 pt-0 sm:pt-0 md:pt-1 lg:pt-2 relative">
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
         
       {/* Background Container */}
       <div 
@@ -269,7 +363,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         }}
       ></div>
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div key={courseData.id} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="pt-2 sm:pt-3 md:pt-4 lg:pt-6 pb-8 sm:pb-12 md:pb-16">
           {/* Hero Section - Cleaner Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-10 lg:gap-16 xl:gap-20 items-center">
@@ -279,16 +373,16 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
               {/* Class Badge */}
               <RevealOnView from="top" durationMs={800} delayMs={0}>
                 <div className="flex flex-row items-center gap-2 sm:gap-3">
-                  <div className="relative w-[160px] sm:w-[180px] md:w-[202px] h-[28px] sm:h-[32px] md:h-[36px]">
+                  <div className="relative w-[200px] sm:w-[240px] md:w-[280px] h-[32px] sm:h-[36px] md:h-[40px]">
                     <Image 
                       src="/grades/coursebaner.svg" 
                       alt={courseData.webLabel} 
-                      width={202} 
-                      height={36}
+                      width={280} 
+                      height={40}
                       className="w-full h-full"
                       priority
                     />
-                    <span className="absolute inset-0 flex items-center justify-center text-white text-xs sm:text-sm font-semibold">
+                    <span className="absolute inset-0 flex items-center justify-center text-white text-[10px] sm:text-xs font-semibold">
                       {courseData.webLabel}
                     </span>
                   </div>
@@ -301,7 +395,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
               {/* Main Headline */}
               <RevealOnView from="left" durationMs={1000} delayMs={200}>
                 <h1 className="font-roboto font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[36px] leading-tight text-[#161A38] text-center lg:text-left">
-                  {courseTitle}
+                  {courseData.bigCourse?.name || courseTitle}
                 </h1>
               </RevealOnView>
 

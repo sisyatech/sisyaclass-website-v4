@@ -107,4 +107,3 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     </MobileMenuProvider>
   );
 }
-

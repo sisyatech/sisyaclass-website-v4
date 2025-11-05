@@ -77,21 +77,23 @@ const BoosterCourseCard: React.FC<BoosterCourseCardProps> = ({
       <div className="absolute w-[304px] sm:w-[344px] md:w-[364px] lg:w-[383px] h-[1px] sm:h-[1px] md:h-[1px] lg:h-[1.19px] top-[275px] sm:top-[305px] md:top-[320px] lg:top-[323px] left-[8px] sm:left-[8.5px] md:left-[8.8px] lg:left-[9px] border-t-[1px] sm:border-t-[1px] md:border-t-[1px] lg:border-t-[1.19px] border-[#E8E8E8] border-opacity-30"></div>
 
       {/* Price Section */}
-      <div className="absolute top-[285px] sm:top-[315px] md:top-[330px] lg:top-[346.19px] left-[8px] sm:left-[9px] md:left-[10px] lg:left-[11.79px]">
-        <div className="flex items-center gap-1.5 sm:gap-1.8 md:gap-2">
+      <div className="absolute top-[285px] sm:top-[315px] md:top-[330px] lg:top-[346.19px] left-[8px] sm:left-[9px] md:left-[10px] lg:left-[11.79px] right-[120px] sm:right-[130px] md:right-[135px] lg:right-[142px]">
+        <div className="flex items-center gap-1.5 sm:gap-1.8 md:gap-2 flex-wrap">
           {/* Current Price */}
-          <div className="w-[50px] sm:w-[55px] md:w-[58px] lg:w-[59.95px] h-[26px] sm:h-[28px] md:h-[30px] lg:h-[32.46px] flex items-center justify-start">
-            <span className="text-[16px] sm:text-[17px] md:text-[18px] lg:text-[19.5px] font-extrabold text-[#FBD640] font-roboto leading-[26px] sm:leading-[28px] md:leading-[30px] lg:leading-[53.17px] text-center">
+          <div className="h-[26px] sm:h-[28px] md:h-[30px] lg:h-[32.46px] flex items-center justify-start min-w-0">
+            <span className="text-[16px] sm:text-[17px] md:text-[18px] lg:text-[19.5px] font-extrabold text-[#FBD640] font-roboto leading-[26px] sm:leading-[28px] md:leading-[30px] lg:leading-[53.17px] whitespace-nowrap">
               {currentPrice}
             </span>
           </div>
           
           {/* Original Price */}
-          <div className="w-[38px] sm:w-[40px] md:w-[42px] lg:w-[43.24px] h-[6px] sm:h-[6px] md:h-[6px] lg:h-[6.46px] flex items-center -ml-3 sm:-ml-3.5 md:-ml-4 mt-0.5 sm:mt-0.5 md:mt-1 lg:mt-1">
-            <span className="text-[9px] sm:text-[10px] md:text-[10.5px] lg:text-[11.35px] font-medium text-gray-300 font-roboto leading-[14px] sm:leading-[15px] md:leading-[16px] lg:leading-[38.35px] line-through">
-              {originalPrice}
-            </span>
-          </div>
+          {originalPrice && (
+            <div className="h-[6px] sm:h-[6px] md:h-[6px] lg:h-[6.46px] flex items-center mt-0.5 sm:mt-0.5 md:mt-1 lg:mt-1 min-w-0">
+              <span className="text-[9px] sm:text-[10px] md:text-[10.5px] lg:text-[11.35px] font-medium text-gray-300 font-roboto leading-[14px] sm:leading-[15px] md:leading-[16px] lg:leading-[38.35px] line-through whitespace-nowrap">
+                {originalPrice}
+              </span>
+            </div>
+          )}
         </div>
       </div>
 

@@ -178,14 +178,14 @@ export default function TenXBoosterCourseContent() {
         handler: function (response: any) {
           console.log("[PAYMENT] Success handler", response);
           setShowReservationPopup(false);
-          window.location.href = `/10xboostercourse/payment/success?transactionId=${encodeURIComponent(
+          window.location.href = `/10xboostercourse/payment/success.php?transactionId=${encodeURIComponent(
             response.razorpay_payment_id || ""
           )}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
             console.warn("[PAYMENT] Checkout dismissed by user");
-            window.location.href = `/10xboostercourse/payment/failed?transactionId=${encodeURIComponent(
+            window.location.href = `/10xboostercourse/payment/failed.php?transactionId=${encodeURIComponent(
               `DISMISSED_${Date.now()}`
             )}`;
           },

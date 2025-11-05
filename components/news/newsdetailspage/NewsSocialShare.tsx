@@ -37,9 +37,9 @@ const NewsSocialShare = ({ newsId }: NewsSocialShareProps) => {
 
   const handleShare = (platform: string) => {
     if (!newsData) return;
-    
-    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const customUrl = `${window.location.origin}/news/${newsData.id}`;
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'https://sisyaclass.xyz';
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : `${origin}/news/${newsData.id}`;
+    const customUrl = `${origin}/news/${newsData.id}`;
     const title = newsData.title;
     const description = newsData.des;
     

@@ -47,13 +47,8 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
     notFound();
   }
   
-  // Validate subject
-  const validSubjects = ['mathematics', 'science', 'english'];
-  const normalizedSubject = subject.toLowerCase();
-  
-  if (!validSubjects.includes(normalizedSubject)) {
-    notFound();
-  }
+  // Normalize subject (accept any subject name from URL)
+  const normalizedSubject = subject.toLowerCase().replace(/-/g, ' ');
   
   useEffect(() => {
     setSelectedGrade(gradeNumber);

@@ -15,6 +15,9 @@ const NavLinks = () => {
   const [active, setActive] = useState<string | null>(null);
   const [hoveredGrade, setHoveredGrade] = useState<string | null>(null);
   const [hoveredResource, setHoveredResource] = useState<string | null>(null);
+  type CourseLink = { label: string; type: 'booster' | 'math-longterm' | 'master' };
+  const [fetchedCourseLabels, setFetchedCourseLabels] = useState<CourseLink[] | null>(null);
+  const [isLoadingCourses, setIsLoadingCourses] = useState(false);
   const { setSelectedGrade } = useMobileMenu();
   const router = useRouter();
   
@@ -26,25 +29,44 @@ const NavLinks = () => {
     }
   };
 
-  const handleCourseClick = (gradeLabel: string, courseType: string) => {
+  const handleCourseClick = (gradeLabel: string, courseLabel: string) => {
     const gradeNumber = extractGradeFromLabel(gradeLabel);
     if (gradeNumber) {
       setSelectedGrade(gradeNumber);
-      if (courseType === "booster") {
-        router.push(`/grade${gradeNumber}`);
-      } else if (courseType === "math-longterm") {
-        router.push(`/grade${gradeNumber}/mathematics`);
-      } else if (courseType === "master") {
-        router.push(`/grade${gradeNumber}`);
-      }
+      router.push(`/grade${gradeNumber}?course=${encodeURIComponent(courseLabel)}`);
     }
   };
 
-  const courses = [
-    { label: "Booster Course", type: "booster" },
-    { label: "Math Long Term Course", type: "math-longterm" },
-    { label: "Long Term Master Course", type: "master" }
-  ];
+
+
+  // Fetch backend web labels for hovered grade
+  React.useEffect(() => {
+    const fetchWebLabels = async () => {
+      try {
+        if (!hoveredGrade) { setFetchedCourseLabels(null); setIsLoadingCourses(false); return; }
+        const gradeNumber = extractGradeFromLabel(hoveredGrade);
+        if (!gradeNumber) { setFetchedCourseLabels(null); setIsLoadingCourses(false); return; }
+        setIsLoadingCourses(true);
+        const res = await fetch('/api/grade-web-label', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ grade: gradeNumber })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          const items: CourseLink[] = Array.isArray(data?.courses) ? data.courses : [];
+          setFetchedCourseLabels(items.length > 0 ? items : null);
+        } else {
+          setFetchedCourseLabels(null);
+        }
+      } catch (e) {
+        setFetchedCourseLabels(null);
+      } finally {
+        setIsLoadingCourses(false);
+      }
+    };
+    fetchWebLabels();
+  }, [hoveredGrade]);
 
   const handleResourceClick = (resourceLabel: string, subject?: string) => {
     if (resourceLabel === "NCERT solutions") {
@@ -72,7 +94,7 @@ const NavLinks = () => {
     <NavMenu setActive={setActive}>
       <NavMenuItem setActive={setActive} active={active} item="Courses">
         <motion.div 
-          className="flex overflow-hidden"
+          className="flex overflow-hidden max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           animate={{ 
             width: hoveredGrade ? "400px" : "140px" 
           }}
@@ -80,7 +102,7 @@ const NavLinks = () => {
           onMouseLeave={() => setHoveredGrade(null)}
         >
           {/* Left Column - Grades */}
-          <div className="flex flex-col space-y-3 pr-6 pl-2 min-w-[140px]">
+          <div className="flex flex-col space-y-3 pr-6 pl-2 min-w-[140px] max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {gradeLinks.map((link) => (
               <div 
                 key={link.href}
@@ -111,7 +133,7 @@ const NavLinks = () => {
           
           {/* Right Column - Course Options */}
           <motion.div 
-            className="pl-6 flex-1 overflow-hidden"
+            className="pl-6 flex-1 overflow-y-auto max-h-[70vh] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredGrade ? 1 : 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
@@ -130,17 +152,29 @@ const NavLinks = () => {
                     {hoveredGrade} Courses
                   </h3>
                   <div className="space-y-2">
-                    {courses.map((course) => (
-                      <motion.div
-                        key={course.type}
-                        onClick={() => handleCourseClick(hoveredGrade, course.type)}
-                        className="cursor-pointer hover:text-[#02bdfe] transition-colors text-sm py-2 px-3 rounded hover:bg-gray-50"
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {course.label}
-                      </motion.div>
-                    ))}
+                    {isLoadingCourses ? (
+                      <div className="flex items-center gap-2 text-sm text-gray-500 py-2 px-3">
+                        <svg className="h-4 w-4 animate-spin text-gray-400" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                        </svg>
+                        Loading courses...
+                      </div>
+                    ) : fetchedCourseLabels && fetchedCourseLabels.length > 0 ? (
+                      fetchedCourseLabels.map((item) => (
+                        <motion.div
+                          key={item.label}
+                          onClick={() => handleCourseClick(hoveredGrade, item.label)}
+                          className="cursor-pointer hover:text-[#02bdfe] transition-colors text-sm py-2 px-3 rounded hover:bg-gray-50"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                        >
+                          {item.label}
+                        </motion.div>
+                      ))
+                    ) : (
+                      <div className="text-sm text-gray-500 py-2 px-3">No courses available</div>
+                    )}
                   </div>
                 </motion.div>
               )}
@@ -150,7 +184,7 @@ const NavLinks = () => {
       </NavMenuItem>
       <NavMenuItem setActive={setActive} active={active} item="Resources For Students">
         <motion.div 
-          className="flex overflow-hidden"
+          className="flex overflow-hidden max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           animate={{ 
             width: hoveredResource ? "600px" : "200px",
             height: hoveredResource ? "300px" : "auto"
@@ -159,7 +193,7 @@ const NavLinks = () => {
           onMouseLeave={() => setHoveredResource(null)}
         >
           {/* Left Column - Resource Categories */}
-          <div className="flex flex-col space-y-4 pr-6 pl-2 min-w-[200px] py-8 min-h-[250px]">
+          <div className="flex flex-col space-y-4 pr-6 pl-2 min-w-[200px] py-8 min-h-[250px] max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {resourceItems.map((item) => (
               <div 
                 key={item.type}
@@ -190,7 +224,7 @@ const NavLinks = () => {
           
           {/* Right Column - Resource Options */}
           <motion.div 
-            className="pl-6 flex-1 overflow-hidden py-8 min-h-[250px]"
+            className="pl-6 flex-1 overflow-hidden py-8 min-h-[250px] max-h-[70vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredResource ? 1 : 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}

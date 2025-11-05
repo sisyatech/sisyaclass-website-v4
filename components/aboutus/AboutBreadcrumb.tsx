@@ -8,14 +8,10 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-interface GradeBreadcrumbProps {
-  gradeNumber: number;
-}
-
-export function GradeBreadcrumb({ gradeNumber }: GradeBreadcrumbProps) {
+export function AboutBreadcrumb() {
   return (
-    <div className="w-full py-1 sm:py-2">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+    <div className="w-full py-1">
+      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-8">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -25,7 +21,7 @@ export function GradeBreadcrumb({ gradeNumber }: GradeBreadcrumbProps) {
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Class {gradeNumber}</BreadcrumbPage>
+              <BreadcrumbPage>About Us</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

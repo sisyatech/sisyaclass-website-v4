@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Script from "next/script";
 import LoginModal from "./LoginModal";
 import { useUser } from "./UserContext";
 
@@ -69,10 +70,95 @@ const CTA = () => {
     }
   };
 
-  const handlePayment = () => {
-    // Add your payment/demo booking logic here
-    console.log('Proceeding with payment/demo booking for user:', user?.name);
-    alert(`Redirecting to demo booking for ${user?.name || 'User'}`);
+  const handlePayment = async () => {
+    try {
+      const contactFromUser = (user as any)?.phone || (user as any)?.mobile || "";
+      const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
+      const contact = contactFromUser || contactFromStorage;
+
+      // Default ₹19 demo
+      const amount = 19;
+
+      console.log("[PAYMENT] Starting flow (CTA)", { contact, amount });
+      // 1) Create lead
+      try {
+        const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: (user as any)?.name || "SISYA Homepage CTA",
+            phone: contact,
+            class: "homepage",
+            status: "initiated",
+          }),
+        });
+        const leadJson = await leadRes.json();
+        console.log("[PAYMENT] Lead response", leadJson);
+        if (leadJson?.success && leadJson?.lead?.id) {
+          localStorage.setItem("leadId", leadJson.lead.id);
+          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+        } else {
+          console.warn("[CTA] Lead creation failed", leadJson);
+        }
+      } catch (e) {
+        console.warn("[CTA] Lead request error", e);
+      }
+
+      const orderRes = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount, currency: "INR", description: "Homepage CTA Demo", contact }),
+      });
+      const orderJson = await orderRes.json();
+      console.log("[PAYMENT] Order API response", orderJson);
+      if (!orderJson?.success) {
+        alert("Failed to initialize payment. Please try again.");
+        return;
+      }
+
+      const payload = orderJson.data ? orderJson.data : {
+        order_id: orderJson.order?.id,
+        amount: orderJson.order?.amount,
+        currency: orderJson.order?.currency,
+        key_id: orderJson.keyId,
+        name: "Sisya Class",
+        description: "Homepage CTA Demo",
+        prefill: { contact },
+      };
+
+      const options: any = {
+        key: payload.key_id,
+        amount: payload.amount,
+        currency: payload.currency,
+        name: payload.name,
+        description: payload.description,
+        order_id: payload.order_id,
+        prefill: payload.prefill,
+        handler: function (response: any) {
+          const amountLabel = `₹${amount}`;
+          window.location.href = `/payment/success?transactionId=${encodeURIComponent(
+            response.razorpay_payment_id || ""
+          )}&amount=${encodeURIComponent(amountLabel)}`;
+        },
+        modal: {
+          ondismiss: function () {
+            window.location.href = `/payment/failed?transactionId=${encodeURIComponent(
+              `DISMISSED_${Date.now()}`
+            )}`;
+          },
+        },
+      };
+
+      // @ts-ignore
+      const rzp = new (window as any).Razorpay(options);
+      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      rzp.open();
+    } catch (err) {
+      console.error("[CTA] Payment error", err);
+      alert("Network error. Please try again.");
+    } finally {
+      console.log("[PAYMENT] Flow ended");
+    }
   };
 
   const handleLoginSuccess = (userData: any) => {
@@ -90,6 +176,8 @@ const CTA = () => {
 
   return (
     <>
+      {/* Razorpay script for checkout */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       {/* Original CTA section */}
       <div className="pt-0 pb-2 bg-white">
         <div className="mx-auto flex justify-center px-4 sm:px-6">

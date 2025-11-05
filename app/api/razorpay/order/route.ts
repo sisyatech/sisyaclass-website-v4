@@ -13,6 +13,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: "Invalid amount" }, { status: 400 });
     }
 
+    // Force rupees -> paise conversion and minimum ₹1
+    const amountPaise = Math.max(100, Math.round(amount * 100));
+
+    // Use provided defaults but allow env override
     const keyId = process.env.RAZORPAY_KEY_ID || "rzp_live_VA7aMe5xs6OpFd";
     const keySecret = process.env.RAZORPAY_KEY_SECRET || "zOvVoWMBzg3dCvy7mV1FGj4b";
 
@@ -25,7 +29,7 @@ export async function POST(request: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        amount: Math.round(amount * 100),
+        amount: amountPaise,
         currency,
         receipt,
         payment_capture: 1,

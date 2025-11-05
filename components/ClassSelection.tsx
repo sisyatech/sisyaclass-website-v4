@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Script from "next/script";
 import RevealOnView from "./Reveal/RevealOnView";
 import Image from "next/image";
 import { BackgroundRippleEffect } from "@/components/ui/background-ripple-effect";
@@ -209,13 +210,96 @@ const ClassSelection = () => {
     }
   };
 
-  // Handle payment after login
-  const handlePayment = (classNumber: number) => {
-    const price = getDemoPrice(classNumber);
-    // console.log(`Processing payment for Class ${classNumber} at ₹${price}`);
-    // Here you would integrate with your payment gateway
-    // For now, just show an alert
-    alert(`Redirecting to payment for Class ${classNumber} - ₹${price}`);
+  // Handle payment after login (Razorpay checkout)
+  const handlePayment = async (classNumber: number) => {
+    try {
+      const price = getDemoPrice(classNumber);
+      const contactFromUser = (user as any)?.phone || (user as any)?.mobile || "";
+      const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
+      const contact = contactFromUser || contactFromStorage;
+
+      console.log("[PAYMENT] Starting flow", { classNumber, contact });
+      // 1) Create registration lead similar to TenX
+      try {
+        const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: (user as any)?.name || "SISYA Demo Lead",
+            phone: contact,
+            class: String(classNumber),
+            status: "initiated",
+          }),
+        });
+        const leadJson = await leadRes.json();
+        console.log("[PAYMENT] Lead response", leadJson);
+        if (leadJson?.success && leadJson?.lead?.id) {
+          localStorage.setItem("leadId", leadJson.lead.id);
+          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+        } else {
+          console.warn("[PAYMENT] Lead creation failed", leadJson);
+        }
+      } catch (e) {
+        console.warn("[PAYMENT] Lead request error", e);
+      }
+
+      // Create Razorpay order via Next.js API (amount in INR)
+      const orderRes = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: price, currency: "INR", description: `Demo for Class ${classNumber}` , contact }),
+      });
+      const orderJson = await orderRes.json();
+      console.log("[PAYMENT] Order API response", orderJson);
+      if (!orderJson?.success) {
+        alert("Failed to initialize payment. Please try again.");
+        return;
+      }
+
+      // Support both shapes (data vs order/keyId)
+      const payload = orderJson.data ? orderJson.data : {
+        order_id: orderJson.order?.id,
+        amount: orderJson.order?.amount,
+        currency: orderJson.order?.currency,
+        key_id: orderJson.keyId,
+        name: "Sisya Class",
+        description: `Demo for Class ${classNumber}`,
+        prefill: { contact },
+      };
+
+      const options: any = {
+        key: payload.key_id,
+        amount: payload.amount,
+        currency: payload.currency,
+        name: payload.name,
+        description: payload.description,
+        order_id: payload.order_id,
+        prefill: payload.prefill,
+        handler: function (response: any) {
+          const amountLabel = `₹${price}`;
+          window.location.href = `/payment/success?transactionId=${encodeURIComponent(
+            response.razorpay_payment_id || ""
+          )}&amount=${encodeURIComponent(amountLabel)}`;
+        },
+        modal: {
+          ondismiss: function () {
+            window.location.href = `/payment/failed?transactionId=${encodeURIComponent(
+              `DISMISSED_${Date.now()}`
+            )}`;
+          },
+        },
+      };
+
+      // @ts-ignore
+      const rzp = new (window as any).Razorpay(options);
+      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      rzp.open();
+    } catch (err) {
+      console.error("[ClassSelection] Payment error", err);
+      alert("Network error. Please try again.");
+    } finally {
+      console.log("[PAYMENT] Flow ended");
+    }
   };
 
   // Handle successful login
@@ -380,6 +464,8 @@ const ClassSelection = () => {
 
   return (
     <div ref={sectionRef} className="pt-5 pb-3 sm:pb-4 md:pb-5 bg-white">
+      {/* Razorpay script */}
+      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
       
       <div className="mx-auto max-w-7xl px-4">
         {/* Headline */}

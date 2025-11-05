@@ -1,9 +1,10 @@
+"use client";
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 
 interface Chapter {
@@ -38,8 +39,26 @@ interface BigCourseData {
 
 const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
+  
+  // Get subject from URL path (e.g., /grade8/mathematics -> "mathematics")
+  // or fallback to query parameter for backward compatibility
+  const pathParts = pathname?.split('/').filter(Boolean) || [];
+  // pathParts[0] = 'grade8', pathParts[1] = 'mathematics' (if subject page)
+  const subjectFromPath = pathParts.length > 1 ? decodeURIComponent(pathParts[1]).replace(/-/g, ' ') : '';
+  const selectedSubjectFromUrl = subjectFromPath || searchParams?.get('subject') || '';
+  
+  // Debug: Log component render
+  console.log('[CHAPTERS] Component rendered:', { 
+    gradeNumber, 
+    pathname,
+    subjectFromPath,
+    selectedSubjectFromUrl,
+    decoded: selectedSubjectFromUrl.toLowerCase()
+  });
   const [currentPage, setCurrentPage] = useState(0);
   const [cardsPerPage] = useState(3);
   const [mobileIndex, setMobileIndex] = useState(0);
@@ -72,7 +91,26 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
-            setCourseData(data[0]);
+            // Get the course query parameter and filter the data
+            const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+            let picked = data[0];
+            
+            if (desiredLabel) {
+              // Try exact match first
+              const exact = data.find((d: BigCourseData) => 
+                String(d?.webLabel || '').toLowerCase() === desiredLabel
+              );
+              // Fallback to partial match
+              const partial = exact || data.find((d: BigCourseData) => 
+                String(d?.webLabel || '').toLowerCase().includes(desiredLabel)
+              );
+              if (partial) picked = partial;
+            }
+            
+            setCourseData(picked);
+            // Reset mobile index and pagination when course data changes
+            setMobileIndex(0);
+            setCurrentPage(0);
           }
         }
       } catch (error) {
@@ -83,17 +121,133 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     };
 
     fetchCourseData();
-  }, [gradeNumber]);
+  }, [gradeNumber, searchParams]);
 
-  // Get all chapters from all subjects
-  const allChapters = courseData?.subjects.flatMap(subject => 
-    subject.chapters.map(chapter => ({
+  // Get selected subject from URL path or query parameter
+  const selectedSubject = selectedSubjectFromUrl.toLowerCase();
+
+  // Reset mobile index and pagination when subject filter changes
+  useEffect(() => {
+    setMobileIndex(0);
+    setCurrentPage(0);
+  }, [selectedSubject]);
+
+  // Scroll to chapters section when subject is selected (centering in viewport)
+  useEffect(() => {
+    if (selectedSubject && !loading && courseData) {
+      // Longer delay to ensure the component has fully rendered and layout is complete
+      setTimeout(() => {
+        const chaptersElement = document.getElementById('chapters');
+        if (chaptersElement) {
+          // Get the element's position relative to the document
+          const rect = chaptersElement.getBoundingClientRect();
+          const elementTop = rect.top + window.pageYOffset;
+          const elementHeight = chaptersElement.offsetHeight || rect.height;
+          const viewportHeight = window.innerHeight;
+          
+          // Calculate scroll position to center the element vertically in viewport
+          // Position element so its center aligns with viewport center
+          const scrollPosition = elementTop + (elementHeight / 2) - (viewportHeight / 2);
+
+          window.scrollTo({
+            top: Math.max(0, scrollPosition), // Ensure we don't scroll to negative position
+            behavior: 'smooth'
+          });
+        }
+      }, 300); // Increased delay to ensure layout is complete
+    }
+  }, [selectedSubject, loading, courseData]);
+
+  // Get all chapters from all subjects, filtered by selected subject if provided
+  const allChapters = courseData?.subjects
+    .filter(subject => {
+      // If no subject filter is provided, show all subjects
+      if (!selectedSubject) return true;
+      
+      // Normalize both names for comparison
+      const subjectNameLower = subject.name.toLowerCase().trim();
+      const filterLower = selectedSubject.toLowerCase().trim();
+      
+      console.log('[CHAPTERS] Checking match:', { 
+        subjectName: subject.name,
+        subjectNameLower,
+        filterLower,
+        selectedSubject,
+        chaptersCount: subject.chapters?.length || 0
+      });
+      
+      // Direct exact match (case-insensitive)
+      if (subjectNameLower === filterLower) {
+        console.log('[CHAPTERS] ✅ Exact match found!');
+        return true;
+      }
+      
+      // Handle common variations and partial matches
+      // Map variations to standard names
+      const getStandardName = (name: string) => {
+        const lower = name.toLowerCase();
+        if (lower.includes('math')) return 'mathematics';
+        if (lower.includes('science') || lower.includes('sciens')) return 'science';
+        if (lower.includes('english') || lower.includes('eng')) return 'english';
+        return lower;
+      };
+      
+      const standardSubject = getStandardName(subjectNameLower);
+      const standardFilter = getStandardName(filterLower);
+      
+      if (standardSubject === standardFilter) {
+        console.log('[CHAPTERS] ✅ Standardized match found!');
+        return true;
+      }
+      
+      // Try partial match in either direction
+      if (subjectNameLower.includes(filterLower) || filterLower.includes(subjectNameLower)) {
+        console.log('[CHAPTERS] ✅ Partial match found!');
+        return true;
+      }
+      
+      console.log('[CHAPTERS] ❌ No match');
+      return false;
+    })
+    .flatMap(subject => {
+      console.log('[CHAPTERS] Processing subject:', { 
+        name: subject.name, 
+        chaptersCount: subject.chapters?.length || 0,
+        chapters: subject.chapters 
+      });
+      return subject.chapters.map(chapter => ({
       ...chapter,
       subjectName: subject.name,
       iconBg: "bg-[#DDDEFE]",
       titleColor: "text-[#575CFB]"
-    }))
-  ) || [];
+      }));
+    }) || [];
+
+  // Debug: Log final chapters count
+  console.log('[CHAPTERS] Final allChapters:', {
+    selectedSubject,
+    totalChapters: allChapters.length,
+    chapters: allChapters.map(ch => ({ id: ch.id, title: ch.title, subjectName: ch.subjectName }))
+  });
+
+  useEffect(() => {
+    if (courseData && selectedSubject) {
+      console.log('[CHAPTERS] Final result:', {
+        selectedSubject,
+        totalChapters: allChapters.length,
+        courseLabel: courseData.webLabel,
+        subjectsWithChapters: courseData.subjects
+          .filter(s => {
+            const sLower = s.name.toLowerCase();
+            const filterLower = selectedSubject.toLowerCase();
+            return sLower.includes(filterLower) || filterLower.includes(sLower) || 
+                   sLower.includes('sciens') && filterLower.includes('science') ||
+                   sLower.includes('science') && filterLower.includes('sciens');
+          })
+          .map(s => ({ name: s.name, chaptersCount: s.chapters?.length || 0 }))
+      });
+    }
+  }, [allChapters.length, selectedSubject, courseData]);
 
   // Calculate pagination
   const totalPages = Math.ceil(allChapters.length / cardsPerPage);
@@ -183,9 +337,38 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     );
   }
 
-  // Don't render if no data
-  if (!courseData || allChapters.length === 0) {
+  // Don't render if no course data
+  if (!courseData) {
     return null;
+  }
+
+  // Only show chapters when a subject is selected (when user clicks "Explore Subject" or on subject page)
+  // If no subject is selected, this component will be hidden (SyllabusSection will show instead)
+  // Check if we're on a subject page (pathname has subject) or if subject is in query params
+  const isSubjectPage = pathname && pathname.includes('/grade') && pathParts.length > 1;
+  if (!selectedSubject && !isSubjectPage) {
+    return null;
+  }
+
+  // Show message if no chapters found (helpful for debugging)
+  if (allChapters.length === 0) {
+    return (
+      <div className="w-full bg-white py-12 sm:py-16 md:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="text-center py-20">
+            <p className="text-gray-600 mb-2">
+              {selectedSubject 
+                ? `No chapters found for subject "${selectedSubject}" in ${courseData.webLabel}`
+                : `No chapters available for ${courseData.webLabel}`
+              }
+            </p>
+            <p className="text-sm text-gray-500">
+              Available subjects: {courseData.subjects.map(s => s.name).join(', ')}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -214,7 +397,14 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
         <RevealOnView from="left" durationMs={500} delayMs={400}>
           <div className="text-left mb-12">
             <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
-              Chapters for class {gradeNumber}
+              {selectedSubject && courseData 
+                ? `${courseData.subjects.find(s => {
+                    const sLower = s.name.toLowerCase().trim();
+                    const filterLower = selectedSubject.toLowerCase().trim();
+                    return sLower === filterLower || sLower.includes(filterLower) || filterLower.includes(sLower);
+                  })?.name || selectedSubject} Chapters for class ${gradeNumber}`
+                : `Chapters for class ${gradeNumber}`
+              }
             </h2>
             <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
               {allChapters.length} Chapter{allChapters.length > 1 ? 's' : ''} - {courseData.webLabel}
@@ -239,7 +429,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                       <div className="w-full max-w-[360px] sm:max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-5 sm:p-6 hover:shadow-xl transition-shadow mb-5 sm:mb-6">
                         <div className="flex items-center gap-3 mb-4">
                           <div className={cn(`w-[40px] h-[40px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
-                            <Image src="/grades/math.svg" alt={chapter.subjectName} width={26} height={26} />
+                            <Image src={(() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })()} alt={chapter.subjectName} width={26} height={26} />
                           </div>
                           <div className="flex flex-col">
                             <h3 className={`font-montserrat font-semibold text-[16px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>Chapter {chapter.chapterNumber}</h3>
@@ -313,7 +503,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                             <div className="flex items-center gap-3 mb-4">
                               <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
                                 <Image 
-                                  src="/grades/math.svg" 
+                                  src={("" + (() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })())}
                                   alt={chapter.subjectName} 
                                   width={29} 
                                   height={29}

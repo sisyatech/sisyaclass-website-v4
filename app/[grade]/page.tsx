@@ -23,6 +23,7 @@ import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Reviews from "@/components/Reviews";
 import SyllabusSection from "@/components/classes/SyllabusSection";
+
 import { GradeBreadcrumb } from "@/components/classes/GradeBreadcrumb";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
@@ -62,6 +63,7 @@ function GradeContent({ grade }: { grade: string }) {
       <QuickLinks mentorIds={mentorIds} />
       <Payment gradeNumber={gradeNumber} />
       <SyllabusSection gradeNumber={gradeNumber} />
+ 
       <Impact />
       <AIEcosystem />
       <InnovativeLearningTools />
