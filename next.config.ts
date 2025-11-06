@@ -29,6 +29,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/10xboostercourse',
+        destination: '/3dayslp',
+        statusCode: 302,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

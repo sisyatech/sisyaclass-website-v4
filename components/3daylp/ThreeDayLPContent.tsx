@@ -32,18 +32,21 @@ export default function ThreeDayLPContent() {
     setShowLoader(true);
     try {
       console.log("[3DAY] Starting flow", { selectedClass, phoneNumber });
-      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
+      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: "SISYA 3-Day Demo",
           phone: phoneNumber,
-          class: selectedClass,
+          cf_class: selectedClass,
           status: "initiated",
+          source:"web",
+          medium:"web",
         }),
       });
       const leadData = await leadResponse.json();
       console.log("[3DAY] Lead response", leadData);
+      alert("lead id bata ke ja")
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
