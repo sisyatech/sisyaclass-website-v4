@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 
-export default function PaymentFailedPage() {
+function PaymentFailedContent() {
   const params = useSearchParams();
   const transactionId = params.get("transactionId") || "";
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
@@ -98,4 +99,16 @@ export default function PaymentFailedPage() {
   );
 }
 
-
+export default function PaymentFailedPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#f5f8ff] text-[#01327a]">
+          Loading payment status...
+        </div>
+      }
+    >
+      <PaymentFailedContent />
+    </Suspense>
+  );
+}

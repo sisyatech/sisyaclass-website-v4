@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import React, { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 import { motion } from "framer-motion";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const params = useSearchParams();
   const transactionId = params.get("transactionId") || "";
   const amount = params.get("amount") || "₹19";
@@ -143,5 +144,16 @@ export default function PaymentSuccessPage() {
   );
 }
 
-
-
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-[#f5f8ff] text-[#01327a]">
+          Finalizing your worksheet bundle...
+        </div>
+      }
+    >
+      <PaymentSuccessContent />
+    </Suspense>
+  );
+}
