@@ -46,7 +46,6 @@ export default function ThreeDayLPContent() {
       });
       const leadData = await leadResponse.json();
       console.log("[3DAY] Lead response", leadData);
-      alert("lead id bata ke ja")
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
