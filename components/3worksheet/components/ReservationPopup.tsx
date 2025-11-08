@@ -21,23 +21,31 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white rounded-xl p-8 max-w-md w-full relative shadow-lg">
+      <div className="bg-white rounded-xl p-7 max-w-md w-full relative shadow-lg">
         <button className="absolute top-4 right-4 bg-transparent border-none text-2xl cursor-pointer text-[#333] hover:text-black" onClick={onClose}>
           ×
         </button>
-        <h2 className="text-2xl font-bold text-[#01317a] mb-4 text-center">See the Difference in Just One Class</h2>
-        <p className="text-center text-base text-[#415252] mb-4">Get Live Class, Recorded Sessions, Doubt-Solving & Performance Reports</p>
-        <br />
+        <h2 className="text-[1.65rem] font-bold text-[#01327A] text-center leading-tight">Unlock the ₹19 Worksheet Bundle</h2>
+        <p className="mt-3 text-center text-sm text-[#415252]">
+          Get 3 IIT teacher–designed worksheets + Get a Free Performance Review Call.
+        </p>
+        {/* <div className="mt-4 rounded-lg border border-[#D7E5FF] bg-[#F4F8FF] px-4 py-3 text-sm text-[#11315E]">
+          <ul className="space-y-1">
+            <li>• Class-wise Maths, Science & English practice</li>
+            <li>• Tricks, concept drills & scoring tips</li>
+            <li>• Download links valid for 48 hours</li>
+          </ul>
+        </div> */}
         <form
-          className="flex flex-col gap-4"
+          className="mt-5 flex flex-col gap-4"
           onSubmit={(e) => {
             e.preventDefault();
             onSubmit();
           }}
         >
           <div className="relative w-full">
-            <label htmlFor="childClass" className="block text-center text-sm font-medium text-[#333] mb-2">
-              Select Grade
+            <label htmlFor="childClass" className="block text-sm font-medium text-[#1C2B49] mb-2">
+              Select your child&apos;s class
             </label>
             <select
               id="childClass"
@@ -75,8 +83,8 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
               />
             </div>
           </div>
-          <button type="submit" className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]">
-            Try One Class @₹19 Only
+          <button type="submit" className="bg-[#FFD500] text-[#0B2B68] py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#FFC800]">
+            Get Worksheets for ₹19
           </button>
         </form>
       </div>

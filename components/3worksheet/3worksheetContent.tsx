@@ -25,12 +25,12 @@ export default function ThreeWorksheetContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[3DAY] Starting flow", { selectedClass, phoneNumber });
+      console.log("[3Worksheet] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA 3-Day Demo",
+          name: "SISYA 3-Worksheet Bundle",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
@@ -39,14 +39,13 @@ export default function ThreeWorksheetContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[3DAY] Lead response", leadData);
-      alert("lead id bata ke ja");
+      console.log("[3Worksheet] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[3DAY] Lead stored", { leadId: leadData.lead.id });
+      console.log("[3Worksheet] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
@@ -55,11 +54,11 @@ export default function ThreeWorksheetContent() {
           amount: 19,
           currency: "INR",
           contact: phoneNumber,
-          description: "3-Day LP Demo",
+          description: "3 Worksheet Bundle",
         }),
       });
       const orderJson = await orderRes.json();
-      console.log("[3DAY] Order API response", orderJson);
+      console.log("[3Worksheet] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -73,7 +72,7 @@ export default function ThreeWorksheetContent() {
             currency: orderJson.order?.currency,
             key_id: orderJson.keyId,
             name: "Sisya Class",
-            description: "3-Day LP Demo",
+            description: "3 Worksheet Bundle",
             prefill: { contact: phoneNumber },
           };
 
@@ -86,23 +85,23 @@ export default function ThreeWorksheetContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: function (response: any) {
-          console.log("[3DAY] Success handler", response);
+          console.log("[3 Worksheet Bundle] Success handler", response);
           setShowReservationPopup(false);
-          window.location.href = `/3dayslp/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
+          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
-            console.warn("[3DAY] Checkout dismissed by user");
-            window.location.href = `/3dayslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+            console.warn("[3Worksheet] Checkout dismissed by user");
+            window.location.href = `/3worksheet/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
           },
         },
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[3DAY] Opening Razorpay checkout", { order_id: payload.order_id });
+      console.log("[3worksheet] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[3DAY] Error", err);
+      console.error("[3worksheet] Error", err);
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);
@@ -112,7 +111,7 @@ export default function ThreeWorksheetContent() {
   return (
     <main className="min-h-screen bg-white">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-      <HeroSection onRegister={() => setShowReservationPopup(false)} />
+      <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <HowItWorksSection />
       <ReviewsSection />
       
@@ -125,7 +124,7 @@ export default function ThreeWorksheetContent() {
           </p>
           <button
             type="button"
-            onClick={() => setShowReservationPopup(false)}
+            onClick={() => setShowReservationPopup(true)}
             className="inline-flex h-[50px] min-w-[220px] items-center justify-center rounded-[12px] bg-[#FFD500] px-8 text-sm font-semibold text-[#0B2B68] shadow-md transition-transform duration-200 hover:scale-[1.02] hover:bg-[#FFE24D] active:scale-[0.98] sm:text-base cursor-pointer"
           >
             Tap To Download Worksheets

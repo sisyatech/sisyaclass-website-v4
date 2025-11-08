@@ -3,12 +3,11 @@ import Container from "@/components/Container";
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FooterBottom from "@/components/FooterBottom";
-import ThreeDayLPContent from "@/components/3daylp/ThreeDayLPContent";
 import Moto from "@/components/moto";
 import Script from "next/script";
 import ThreeWorksheetContent from "@/components/3worksheet/3worksheetContent";
 
-export default function ThreeDaysLPPage() {
+export default function ThreeWorksheetPage() {
   return (
     <MobileMenuProvider>
       <Script id="gtm-script" strategy="afterInteractive">
@@ -37,7 +36,7 @@ export default function ThreeDaysLPPage() {
       </noscript>
       <Container>
         <Navbar />
-        <ThreeWorksheetContent/>
+        <ThreeWorksheetContent />
         <Footer />
         <Moto />
         <FooterBottom />

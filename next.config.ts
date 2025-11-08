@@ -60,6 +60,14 @@ const nextConfig: NextConfig = {
         source: '/3dayslp/success.php',
         destination: '/3dayslp/payment/success',
       },
+      {
+        source: '/3worksheet/payment/failed.php',
+        destination: '/3worksheet/payment/failed',
+      },
+      {
+        source: '/3worksheet/payment/success.php',
+        destination: '/3worksheet/payment/success',
+      },
     ];
   },
   eslint: {
