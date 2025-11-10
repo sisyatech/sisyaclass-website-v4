@@ -7,6 +7,8 @@ import Footer from "@/components/Footer";
 import FooterBottom from "@/components/FooterBottom";
 import AppDownload from "@/components/AppDownload";
 import SIPBreadcrumb from "@/components/sip/SIPBreadcrumb";
+import Moto from "@/components/moto";
+import StudyMaterial from "@/components/StudyMaterial";
 
 function SIPPageContent() {
   return (
@@ -16,6 +18,8 @@ function SIPPageContent() {
       <SIPHero />
       <AppDownload />
       <Footer />
+      <StudyMaterial />
+      <Moto />
       <FooterBottom />
       <MobileMenu />
     </Container>
