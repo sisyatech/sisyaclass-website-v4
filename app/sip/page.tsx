@@ -7,6 +7,9 @@ import Footer from "@/components/Footer";
 import FooterBottom from "@/components/FooterBottom";
 import AppDownload from "@/components/AppDownload";
 import SIPBreadcrumb from "@/components/sip/SIPBreadcrumb";
+import VisionMissionSection from "@/components/sip/VisionMissionSection";
+import CollaborativeLearningSection from "@/components/sip/CollaborativeLearningSection";
+import BuildingSchoolsSection from "@/components/sip/BuildingSchoolsSection";
 import Moto from "@/components/moto";
 import StudyMaterial from "@/components/StudyMaterial";
 
@@ -16,6 +19,9 @@ function SIPPageContent() {
       <Navbar />
       <SIPBreadcrumb />
       <SIPHero />
+      <CollaborativeLearningSection />
+      <BuildingSchoolsSection />
+      <VisionMissionSection />
       <AppDownload />
       <Footer />
       <StudyMaterial />

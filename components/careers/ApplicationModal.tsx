@@ -58,7 +58,7 @@ ${formData.fullName}
     `.trim();
     
     // Create mailto link
-    const mailtoLink = `mailto:Sisyaclass@gmail.com.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const mailtoLink = `mailto:sisyaclass@gmail.com.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     
     // Open email directly
     window.location.href = mailtoLink;
@@ -66,9 +66,9 @@ ${formData.fullName}
     // Show instructions after email opens
     setTimeout(() => {
       if (formData.cv) {
-        alert(`✓ Email opened to nanaji@sisyaclass.com\n\n📎 Please attach your CV file ("${formData.cv.name}") manually and click SEND.`);
+        alert(`✓ Email opened to sisyaclass@gmail.com\n\n📎 Please attach your CV file ("${formData.cv.name}") manually and click SEND.`);
       } else {
-        alert('✓ Email opened to nanaji@sisyaclass.com\n\nYou can attach your CV if needed.');
+        alert('✓ Email opened to sisyaclass@gmail.com\n\nYou can attach your CV if needed.');
       }
       onClose();
     }, 300);
