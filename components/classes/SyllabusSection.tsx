@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
@@ -43,11 +43,8 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const pathname = usePathname();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [cardsPerPage] = useState(3);
-  const [mobileIndex, setMobileIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const desktopScrollRef = useRef<HTMLDivElement>(null);
 
   // Subject styling configuration
   const subjectStyles: { [key: string]: { iconBg: string; titleColor: string; buttonBg: string } } = {
@@ -175,8 +172,8 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
             
             setCourseData(picked);
             // Reset mobile index when course data changes
-            setMobileIndex(0);
-            setCurrentPage(0);
+            // setMobileIndex(0); // This line is removed as per the edit hint
+            // setCurrentPage(0); // This line is removed as per the edit hint
           }
         }
       } catch (error) {
@@ -192,6 +189,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   // Map API subjects to component format
   const subjects = courseData?.subjects.map((subject) => {
     const style = getSubjectStyle(subject.name);
+    const iconType = getSubjectIcon(subject.name);
     return {
       id: subject.id,
       title: subject.name,
@@ -200,15 +198,26 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
       titleColor: style.titleColor,
       buttonBg: style.buttonBg,
       buttonText: `Explore ${subject.name} Subject`,
-      topics: subject.taglinePoints
+      topics: subject.taglinePoints,
+      iconType,
+      showExploreButton: iconType !== 'english'
     };
   }) || [];
 
-  // Calculate pagination
-  const totalPages = Math.ceil(subjects.length / cardsPerPage);
-  const startIndex = currentPage * cardsPerPage;
-  const endIndex = startIndex + cardsPerPage;
-  const currentSubjects = subjects.slice(startIndex, endIndex);
+  const scrollContainer = (ref: { current: HTMLDivElement | null }, direction: -1 | 1) => {
+    const container = ref.current;
+    if (!container) return;
+    const scrollAmount = container.clientWidth * 0.85 || 320;
+    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  };
+
+  const handleMobilePrev = () => scrollContainer(mobileScrollRef, -1);
+  const handleMobileNext = () => scrollContainer(mobileScrollRef, 1);
+  const handleDesktopPrev = () => scrollContainer(desktopScrollRef, -1);
+  const handleDesktopNext = () => scrollContainer(desktopScrollRef, 1);
+
+  const showMobileArrows = subjects.length > 1;
+  const showDesktopArrows = subjects.length > 3;
 
   const handleExploreClick = (subject: string) => {
     // Get current course from URL or use the course's webLabel
@@ -221,66 +230,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
     router.push(`/grade${gradeNumber || 8}/${subjectSlug}${courseParam}`);
   };
 
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handleMobilePrev = () => {
-    if (subjects.length === 0) return;
-    setMobileIndex((prev) => (prev === 0 ? subjects.length - 1 : prev - 1));
-  };
-
-  const handleMobileNext = () => {
-    if (subjects.length === 0) return;
-    setMobileIndex((prev) => (prev === subjects.length - 1 ? 0 : prev + 1));
-  };
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEndX(null);
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (touchStartX === null || touchEndX === null) return;
-    const deltaX = touchStartX - touchEndX;
-    const threshold = 50;
-    if (deltaX > threshold) {
-      handleMobileNext();
-    } else if (deltaX < -threshold) {
-      handleMobilePrev();
-    }
-    setTouchStartX(null);
-    setTouchEndX(null);
-  };
-
-  // Build compact dots for mobile when there are many subjects
-  const getMobileDots = (): Array<number | 'ellipsis'> => {
-    const total = subjects.length;
-    if (total <= 10) {
-      return Array.from({ length: total }, (_, i) => i);
-    }
-    const neighbors = [mobileIndex - 1, mobileIndex, mobileIndex + 1].filter(
-      (i) => i >= 0 && i < total
-    );
-    const base = [0, 1, 'ellipsis' as const, ...neighbors, 'ellipsis' as const, total - 2, total - 1];
-    const seen = new Set<string>();
-    const result: Array<number | 'ellipsis'> = [];
-    for (const item of base) {
-      const key = item === 'ellipsis' ? 'e' : `${item}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(item as any);
-      }
-    }
-    // Ensure order makes sense visually
-    return result
-      .map((it) => it)
-      .filter((it) => it === 'ellipsis' || (typeof it === 'number' && it >= 0 && it < total));
-  };
+  // Touch scrolling is handled natively by the browser since the carousel is now scrollable.
 
   // Format date for display
   const formatDate = (dateString: string) => {
@@ -339,13 +289,17 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
 
         {/* Main Heading */}
         <RevealOnView from="left" durationMs={500} delayMs={400}>
-          <div className="text-left mb-12">
-            <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
-              Syllabus for class {gradeNumber}
-            </h2>
-            <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
-              ({subjects.length} Subject{subjects.length > 1 ? 's' : ''}) - {courseData.webLabel}
-            </p>
+          <div className="mb-12">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="text-left">
+                <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
+                  Syllabus for class {gradeNumber}
+                </h2>
+                <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
+                  ({subjects.length} Subject{subjects.length > 1 ? 's' : ''}) - {courseData.webLabel}
+                </p>
+              </div>
+            </div>
           </div>
         </RevealOnView>
 
@@ -353,26 +307,27 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
         <div className="md:hidden">
           <RevealOnView from="bottom" durationMs={600} delayMs={500}>
             {subjects.length > 0 && (
-              <div 
-                className="relative flex flex-col items-center"
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
-              >
-                {(() => {
-                  const subject = subjects[mobileIndex];
-                  return (
-                    <div className="w-full flex flex-col items-center">
-                      <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
+              <div className="flex flex-col items-center gap-3">
+                <div
+                  ref={mobileScrollRef}
+                  className="flex w-full gap-4 overflow-x-auto px-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                >
+                  {subjects.map((subject) => (
+                    <div
+                      key={subject.id}
+                      className="flex flex-col items-center flex-shrink-0 snap-start"
+                      style={{ flex: '0 0 calc(100% - 56px)', maxWidth: '360px' }}
+                    >
+                      <div className="w-full rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow">
                         <div className="flex items-center gap-3 mb-4">
                           <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                            {getSubjectIcon(subject.title) === 'math' && (
+                            {subject.iconType === 'math' && (
                               <Image src="/grades/math.svg" alt="Math" width={29} height={29} />
                             )}
-                            {getSubjectIcon(subject.title) === 'science' && (
+                            {subject.iconType === 'science' && (
                               <Image src="/grades/sciens.svg" alt="Science" width={29} height={29} />
                             )}
-                            {getSubjectIcon(subject.title) === 'english' && (
+                            {subject.iconType === 'english' && (
                               <Image src="/grades/eng.svg" alt="English" width={29} height={29} />
                             )}
                           </div>
@@ -394,39 +349,32 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
                           </ul>
                         </div>
                       </div>
-                      <button onClick={() => handleExploreClick(subject.title)} className={`${subject.buttonBg} w-[250.42px] h-[39.22px] text-white rounded-[10px] font-montserrat font-semibold text-[14px] leading-[10px] tracking-[0%] text-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-opacity cursor-pointer`}>{subject.buttonText}</button>
+                      {subject.showExploreButton && (
+                        <button onClick={() => handleExploreClick(subject.title)} className={`${subject.buttonBg} mt-3 w-[250.42px] h-[39.22px] text-white rounded-[10px] font-montserrat font-semibold text-[14px] leading-[10px] tracking-[0%] text-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-opacity cursor-pointer`}>
+                          {subject.buttonText}
+                        </button>
+                      )}
                     </div>
-                  );
-                })()}
-
-                <div className="flex items-center justify-center mt-4 space-x-3">
-                  <button onClick={handleMobilePrev} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group" aria-label="Previous">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                  </button>
-                  <div className="flex items-center space-x-2">
-                    {getMobileDots().map((item, idx) => {
-                      if (item === 'ellipsis') {
-                        return (
-                          <span key={`ellipsis-${idx}`} className="px-1 text-xs text-gray-400">…</span>
-                        );
-                      }
-                      const dotIndex = item as number;
-                      return (
-                        <button
-                          key={dotIndex}
-                          onClick={() => setMobileIndex(dotIndex)}
-                          className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-                            mobileIndex === dotIndex ? 'bg-[#0595CE] scale-125' : 'bg-gray-300 hover:bg-gray-400'
-                          }`}
-                          aria-label={`Go to ${dotIndex + 1}`}
-                        />
-                      );
-                    })}
-                  </div>
-                  <button onClick={handleMobileNext} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group" aria-label="Next">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                  </button>
+                  ))}
                 </div>
+                {showMobileArrows && (
+                  <div className="mt-3 flex items-center justify-center gap-6">
+                    <button
+                      onClick={handleMobilePrev}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9D9D9] bg-white shadow-sm transition-transform hover:bg-gray-100 active:scale-95"
+                      aria-label="Previous subject"
+                    >
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button
+                      onClick={handleMobileNext}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9D9D9] bg-white shadow-sm transition-transform hover:bg-gray-100 active:scale-95"
+                      aria-label="Next subject"
+                    >
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </RevealOnView>
@@ -435,142 +383,112 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
         {/* Subject Cards - Horizontal Scroll (Desktop/Tablet) */}
         <div className="hidden md:block">
         <RevealOnView from="bottom" durationMs={600} delayMs={500}>
-          <div className="relative">
-            {/* Cards Container */}
-            <div className="overflow-hidden">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentPage * 100}%)` }}
+          {subjects.length > 0 && (
+            <div className="relative">
+              <div
+                ref={desktopScrollRef}
+                className="flex gap-6 overflow-x-auto px-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
-                {Array.from({ length: totalPages }, (_, pageIndex) => (
-                  <div key={pageIndex} className="w-full flex-shrink-0">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                      {subjects.slice(pageIndex * cardsPerPage, (pageIndex + 1) * cardsPerPage).map((subject, index) => (
-                        <div key={subject.id} className="flex flex-col items-center">
-                          {/* Subject Card */}
-                          <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
-                            {/* Subject Icon and Title */}
-                            <div className="flex items-center gap-3 mb-4">
-                              <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
-                                {getSubjectIcon(subject.title) === 'math' && (
-                                  <Image 
-                                    src="/grades/math.svg" 
-                                    alt="Math" 
-                                    width={29} 
-                                    height={29}
-                                  />
-                                )}
-                                {getSubjectIcon(subject.title) === 'science' && (
-                                  <Image 
-                                    src="/grades/sciens.svg" 
-                                    alt="Science" 
-                                    width={29} 
-                                    height={29}
-                                  />
-                                )}
-                                {getSubjectIcon(subject.title) === 'english' && (
-                                  <Image 
-                                    src="/grades/eng.svg" 
-                                    alt="English" 
-                                    width={29} 
-                                    height={29}
-                                  />
-                                )}
-                              </div>
-                              <div className="flex flex-col">
-                                <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${subject.titleColor}`}>
-                                  {subject.title}
-                                </h3>
-                                <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
-                                  {subject.subtitle}
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Divider Line */}
-                            <div className="w-full h-0 border-t border-[#E8E8E8] mb-6"></div>
-
-                            {/* You will Learn Section */}
-                            <div>
-                              <h4 className="font-montserrat font-semibold text-[16px] leading-[20px] text-[#1A2439] mb-4">
-                                You will Learn
-                              </h4>
-                              <ul className="space-y-3">
-                                {subject.topics.map((topic, topicIndex) => (
-                                  <li key={topicIndex} className="flex items-start gap-3">
-                                    <div className="flex-shrink-0 mt-1">
-                                      <Image 
-                                        src="/grades/correct.svg" 
-                                        alt="Check" 
-                                        width={13} 
-                                        height={13}
-                                      />
-                                    </div>
-                                    <span className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E]">{topic}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-
-                          {/* Explore Button - Outside the card */}
-                          <button 
-                            onClick={() => handleExploreClick(subject.title)}
-                            className={`w-[250.42px] h-[39.22px] ${subject.buttonBg} text-white rounded-[10px] font-montserrat font-semibold text-[14px] leading-[10px] tracking-[0%] text-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-opacity cursor-pointer`}
-                          >
-                            {subject.buttonText}
-                          </button>
+                {subjects.map((subject) => (
+                  <div
+                    key={subject.id}
+                    className="flex flex-col items-center flex-shrink-0 w-full max-w-[380px]"
+                    style={{ flex: '0 0 100%' }}
+                  >
+                    <div className="w-full rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-4">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, subject.iconBg )}>
+                          {subject.iconType === 'math' && (
+                            <Image 
+                              src="/grades/math.svg" 
+                              alt="Math" 
+                              width={29} 
+                              height={29}
+                            />
+                          )}
+                          {subject.iconType === 'science' && (
+                            <Image 
+                              src="/grades/sciens.svg" 
+                              alt="Science" 
+                              width={29} 
+                              height={29}
+                            />
+                          )}
+                          {subject.iconType === 'english' && (
+                            <Image 
+                              src="/grades/eng.svg" 
+                              alt="English" 
+                              width={29} 
+                              height={29}
+                            />
+                          )}
                         </div>
-                      ))}
+                        <div className="flex flex-col">
+                          <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${subject.titleColor}`}>
+                            {subject.title}
+                          </h3>
+                          <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
+                            {subject.subtitle}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="w-full h-0 border-t border-[#E8E8E8] mb-6"></div>
+
+                      <div>
+                        <h4 className="font-montserrat font-semibold text-[16px] leading-[20px] text-[#1A2439] mb-4">
+                          You will Learn
+                        </h4>
+                        <ul className="space-y-3">
+                          {subject.topics.map((topic, topicIndex) => (
+                            <li key={topicIndex} className="flex items-start gap-3">
+                              <div className="flex-shrink-0 mt-1">
+                                <Image 
+                                  src="/grades/correct.svg" 
+                                  alt="Check" 
+                                  width={13} 
+                                  height={13}
+                                />
+                              </div>
+                              <span className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E]">{topic}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
+
+                    {subject.showExploreButton && (
+                      <button 
+                        onClick={() => handleExploreClick(subject.title)}
+                        className={`w-[250.42px] h-[39.22px] ${subject.buttonBg} text-white rounded-[10px] font-montserrat font-semibold text-[14px] leading-[10px] tracking-[0%] text-center shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-opacity cursor-pointer`}
+                      >
+                        {subject.buttonText}
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
+
+              {showDesktopArrows && (
+                <>
+                  <button
+                    onClick={handleDesktopPrev}
+                    className="absolute top-1/2 left-3 -translate-y-1/2 -translate-x-full flex h-10 w-10 items-center justify-center rounded-xl border-2 border-[#D9D9D9] bg-white shadow-sm transition-colors hover:bg-gray-100"
+                    aria-label="Previous subjects"
+                  >
+                    <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleDesktopNext}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 translate-x-full flex h-10 w-10 items-center justify-center rounded-xl border-2 border-[#D9D9D9] bg-white shadow-sm transition-colors hover:bg-gray-100"
+                    aria-label="Next subjects"
+                  >
+                    <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </>
+              )}
             </div>
-
-            {/* Pagination with Arrows */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center mt-8 space-x-4">
-                {/* Previous Arrow */}
-                <button
-                  onClick={() => goToPage(currentPage === 0 ? totalPages - 1 : currentPage - 1)}
-                  className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
-                  aria-label="Previous page"
-                >
-                  <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                {/* Pagination Dots */}
-                <div className="flex space-x-2">
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToPage(index)}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        currentPage === index 
-                          ? 'bg-[#0595CE] scale-125' 
-                          : 'bg-gray-300 hover:bg-gray-400'
-                      }`}
-                      aria-label={`Go to page ${index + 1}`}
-                    />
-                  ))}
-                </div>
-
-                {/* Next Arrow */}
-                <button
-                  onClick={() => goToPage(currentPage === totalPages - 1 ? 0 : currentPage + 1)}
-                  className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
-                  aria-label="Next page"
-                >
-                  <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </div>
+          )}
         </RevealOnView>
         </div>
       </div>

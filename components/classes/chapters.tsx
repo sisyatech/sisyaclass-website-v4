@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import RevealOnView from "../Reveal/RevealOnView";
@@ -43,6 +43,8 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const pathname = usePathname();
   const [courseData, setCourseData] = useState<BigCourseData | null>(null);
   const [loading, setLoading] = useState(true);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
+  const desktopScrollRef = useRef<HTMLDivElement>(null);
   
   // Get subject from URL path (e.g., /grade8/mathematics -> "mathematics")
   // or fallback to query parameter for backward compatibility
@@ -59,11 +61,17 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     selectedSubjectFromUrl,
     decoded: selectedSubjectFromUrl.toLowerCase()
   });
-  const [currentPage, setCurrentPage] = useState(0);
-  const [cardsPerPage] = useState(3);
-  const [mobileIndex, setMobileIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
+  const scrollContainer = (ref: { current: HTMLDivElement | null }, direction: -1 | 1) => {
+    const container = ref.current;
+    if (!container) return;
+    const scrollAmount = container.clientWidth * 0.9 || 320;
+    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  };
+
+  const handleMobilePrev = () => scrollContainer(mobileScrollRef, -1);
+  const handleMobileNext = () => scrollContainer(mobileScrollRef, 1);
+  const handleDesktopPrev = () => scrollContainer(desktopScrollRef, -1);
+  const handleDesktopNext = () => scrollContainer(desktopScrollRef, 1);
 
   // Fetch course data from API
   useEffect(() => {
@@ -109,8 +117,8 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
             
             setCourseData(picked);
             // Reset mobile index and pagination when course data changes
-            setMobileIndex(0);
-            setCurrentPage(0);
+            // setMobileIndex(0); // Removed
+            // setCurrentPage(0); // Removed
           }
         }
       } catch (error) {
@@ -128,8 +136,8 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
 
   // Reset mobile index and pagination when subject filter changes
   useEffect(() => {
-    setMobileIndex(0);
-    setCurrentPage(0);
+    // setMobileIndex(0); // Removed
+    // setCurrentPage(0); // Removed
   }, [selectedSubject]);
 
   // Scroll to chapters section when subject is selected (centering in viewport)
@@ -230,6 +238,9 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     chapters: allChapters.map(ch => ({ id: ch.id, title: ch.title, subjectName: ch.subjectName }))
   });
 
+  const showMobileArrows = allChapters.length > 1;
+  const showDesktopArrows = allChapters.length > 3;
+
   useEffect(() => {
     if (courseData && selectedSubject) {
       console.log('[CHAPTERS] Final result:', {
@@ -249,12 +260,6 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     }
   }, [allChapters.length, selectedSubject, courseData]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(allChapters.length / cardsPerPage);
-  const startIndex = currentPage * cardsPerPage;
-  const endIndex = startIndex + cardsPerPage;
-  const currentChapters = allChapters.slice(startIndex, endIndex);
-
   // Format date for display
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -266,62 +271,31 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     router.push(`/grade${gradeNumber || 8}/${subjectSlug}`);
   };
 
-  const goToPage = (page: number) => {
-    setCurrentPage(page);
-  };
+  // const goToPage = (page: number) => { // Removed
+  //   setCurrentPage(page); // Removed
+  // }; // Removed
 
-  const handleMobilePrev = () => {
-    if (allChapters.length === 0) return;
-    setMobileIndex((prev) => (prev === 0 ? allChapters.length - 1 : prev - 1));
-  };
+  // const onTouchStart = (e: React.TouchEvent) => { // Removed
+  //   setTouchEndX(null); // Removed
+  //   setTouchStartX(e.targetTouches[0].clientX); // Removed
+  // }; // Removed
 
-  const handleMobileNext = () => {
-    if (allChapters.length === 0) return;
-    setMobileIndex((prev) => (prev === allChapters.length - 1 ? 0 : prev + 1));
-  };
+  // const onTouchMove = (e: React.TouchEvent) => { // Removed
+  //   setTouchEndX(e.targetTouches[0].clientX); // Removed
+  // }; // Removed
 
-  const onTouchStart = (e: React.TouchEvent) => {
-    setTouchEndX(null);
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-
-  const onTouchEnd = () => {
-    if (touchStartX === null || touchEndX === null) return;
-    const deltaX = touchStartX - touchEndX;
-    const threshold = 50;
-    if (deltaX > threshold) {
-      handleMobileNext();
-    } else if (deltaX < -threshold) {
-      handleMobilePrev();
-    }
-    setTouchStartX(null);
-    setTouchEndX(null);
-  };
-
-  const getMobileDots = (): Array<number | 'ellipsis'> => {
-    const total = allChapters.length;
-    if (total <= 10) {
-      return Array.from({ length: total }, (_, i) => i);
-    }
-    const neighbors = [mobileIndex - 1, mobileIndex, mobileIndex + 1].filter(
-      (i) => i >= 0 && i < total
-    );
-    const base = [0, 1, 'ellipsis' as const, ...neighbors, 'ellipsis' as const, total - 2, total - 1];
-    const seen = new Set<string>();
-    const result: Array<number | 'ellipsis'> = [];
-    for (const item of base) {
-      const key = item === 'ellipsis' ? 'e' : `${item}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        result.push(item as any);
-      }
-    }
-    return result.filter((it) => it === 'ellipsis' || (typeof it === 'number' && it >= 0 && it < total));
-  };
+  // const onTouchEnd = () => { // Removed
+  //   if (touchStartX === null || touchEndX === null) return; // Removed
+  //   const deltaX = touchStartX - touchEndX; // Removed
+  //   const threshold = 50; // Removed
+  //   if (deltaX > threshold) { // Removed
+  //     handleMobileNext(); // Removed
+  //   } else if (deltaX < -threshold) { // Removed
+  //     handleMobilePrev(); // Removed
+  //   } // Removed
+  //   setTouchStartX(null); // Removed
+  //   setTouchEndX(null); // Removed
+  // }; // Removed
 
   // Show loading state
   if (loading) {
@@ -395,38 +369,43 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
 
         {/* Main Heading */}
         <RevealOnView from="left" durationMs={500} delayMs={400}>
-          <div className="text-left mb-12">
-            <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
-              {selectedSubject && courseData 
-                ? `${courseData.subjects.find(s => {
-                    const sLower = s.name.toLowerCase().trim();
-                    const filterLower = selectedSubject.toLowerCase().trim();
-                    return sLower === filterLower || sLower.includes(filterLower) || filterLower.includes(sLower);
-                  })?.name || selectedSubject} Chapters for class ${gradeNumber}`
-                : `Chapters for class ${gradeNumber}`
-              }
-            </h2>
-            <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
-              {allChapters.length} Chapter{allChapters.length > 1 ? 's' : ''} - {courseData.webLabel}
-            </p>
+          <div className="mb-12">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="text-left">
+                <h2 className="font-montserrat font-bold text-[32px] leading-none tracking-normal text-[#1A2439] mb-4">
+                  {selectedSubject && courseData 
+                    ? `${courseData.subjects.find(s => {
+                        const sLower = s.name.toLowerCase().trim();
+                        const filterLower = selectedSubject.toLowerCase().trim();
+                        return sLower === filterLower || sLower.includes(filterLower) || filterLower.includes(sLower);
+                      })?.name || selectedSubject} Chapters for class ${gradeNumber}`
+                    : `Chapters for class ${gradeNumber}`
+                  }
+                </h2>
+                <p className="font-montserrat font-medium text-[18px] leading-[14.79px] tracking-normal text-[#556A8E] text-left">
+                  {allChapters.length} Chapter{allChapters.length > 1 ? 's' : ''} - {courseData.webLabel}
+                </p>
+              </div>
+            </div>
           </div>
         </RevealOnView>
 
-        {/* Chapter Cards - Mobile: single card with swipe and compact dots */}
+        {/* Chapter Cards - Mobile: single card with swipe */}
         <div className="md:hidden">
           <RevealOnView from="bottom" durationMs={600} delayMs={500}>
             {allChapters.length > 0 && (
-              <div
-                className="relative flex flex-col items-center"
-                onTouchStart={onTouchStart}
-                onTouchMove={onTouchMove}
-                onTouchEnd={onTouchEnd}
-              >
-                {(() => {
-                  const chapter = allChapters[mobileIndex];
-                  return (
-                    <div className="w-full flex flex-col items-center">
-                      <div className="w-full max-w-[360px] sm:max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-5 sm:p-6 hover:shadow-xl transition-shadow mb-5 sm:mb-6">
+              <div className="flex flex-col items-center gap-3">
+                <div
+                  ref={mobileScrollRef}
+                  className="flex w-full gap-4 overflow-x-auto px-4 snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                >
+                  {allChapters.map((chapter) => (
+                    <div
+                      key={chapter.id}
+                      className="flex flex-col items-center flex-shrink-0 snap-start"
+                      style={{ flex: '0 0 calc(100% - 56px)', maxWidth: '360px' }}
+                    >
+                      <div className="w-full rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-5 sm:p-6 hover:shadow-xl transition-shadow">
                         <div className="flex items-center gap-3 mb-4">
                           <div className={cn(`w-[40px] h-[40px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
                             <Image src={(() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })()} alt={chapter.subjectName} width={26} height={26} />
@@ -450,33 +429,26 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
                         </div>
                       </div>
                     </div>
-                  );
-                })()}
-
-                <div className="flex items-center justify-center mt-4 space-x-3">
-                  <button onClick={handleMobilePrev} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group" aria-label="Previous">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-                  </button>
-                  <div className="flex items-center space-x-2">
-                    {getMobileDots().map((item, idx) => {
-                      if (item === 'ellipsis') {
-                        return <span key={`ellipsis-${idx}`} className="px-1 text-xs text-gray-400">…</span>;
-                      }
-                      const dotIndex = item as number;
-                      return (
-                        <button
-                          key={dotIndex}
-                          onClick={() => setMobileIndex(dotIndex)}
-                          className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${mobileIndex === dotIndex ? 'bg-[#0595CE] scale-125' : 'bg-gray-300 hover:bg-gray-400'}`}
-                          aria-label={`Go to ${dotIndex + 1}`}
-                        />
-                      );
-                    })}
-                  </div>
-                  <button onClick={handleMobileNext} className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group" aria-label="Next">
-                    <svg className="w-3 h-3 sm:w-4 sm:h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                  </button>
+                  ))}
                 </div>
+                {showMobileArrows && (
+                  <div className="mt-3 flex items-center justify-center gap-6">
+                    <button
+                      onClick={handleMobilePrev}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9D9D9] bg-white shadow-sm transition-transform hover:bg-gray-100 active:scale-95"
+                      aria-label="Previous chapter"
+                    >
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <button
+                      onClick={handleMobileNext}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#D9D9D9] bg-white shadow-sm transition-transform hover:bg-gray-100 active:scale-95"
+                      aria-label="Next chapter"
+                    >
+                      <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </RevealOnView>
@@ -485,116 +457,85 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
         {/* Chapter Cards - Horizontal Scroll (Desktop/Tablet) */}
         <div className="hidden md:block">
         <RevealOnView from="bottom" durationMs={600} delayMs={500}>
-          <div className="relative">
-            {/* Cards Container */}
-            <div className="overflow-hidden">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentPage * 100}%)` }}
+          {allChapters.length > 0 && (
+            <div className="relative">
+              <div
+                ref={desktopScrollRef}
+                className="flex gap-6 overflow-x-auto px-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
-                {Array.from({ length: totalPages }, (_, pageIndex) => (
-                  <div key={pageIndex} className="w-full flex-shrink-0">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-                      {allChapters.slice(pageIndex * cardsPerPage, (pageIndex + 1) * cardsPerPage).map((chapter, index) => (
-                        <div key={chapter.id} className="flex flex-col items-center">
-                          {/* Chapter Card */}
-                          <div className="w-full max-w-[380px] rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow mb-6">
-                            {/* Chapter Icon and Title */}
-                            <div className="flex items-center gap-3 mb-4">
-                              <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
+                {allChapters.map((chapter) => (
+                  <div
+                    key={chapter.id}
+                    className="flex flex-col items-center flex-shrink-0 w-full max-w-[380px]"
+                    style={{ flex: '0 0 100%' }}
+                  >
+                    <div className="w-full rounded-[24px] border border-[#EBEBEB] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.1)] p-6 hover:shadow-xl transition-shadow">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className={cn(`w-[44px] h-[44px] rounded-[6px] flex items-center justify-center flex-shrink-0`, chapter.iconBg )}>
+                          <Image 
+                            src={(() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })()}
+                            alt={chapter.subjectName} 
+                            width={29} 
+                            height={29}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>
+                            Chapter {chapter.chapterNumber}
+                          </h3>
+                          <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
+                            {chapter.title}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="w-full h-0 border-t border-[#E8E8E8] mb-6"></div>
+
+                      <div>
+                        <h4 className="font-montserrat font-semibold text-[16px] leading-[20px] text-[#1A2439] mb-4">
+                          You will Learn
+                        </h4>
+                        <ul className="space-y-3">
+                          {chapter.syllabusPoints.map((topic, topicIndex) => (
+                            <li key={topicIndex} className="flex items-start gap-3">
+                              <div className="flex-shrink-0 mt-1">
                                 <Image 
-                                  src={("" + (() => { const s = (chapter.subjectName || '').toLowerCase(); if (s.includes('english') || s.includes('eng')) return '/grades/eng.svg'; if (s.includes('science') || s.includes('physics') || s.includes('chemistry') || s.includes('bio')) return '/grades/sciens.svg'; return '/grades/math.svg'; })())}
-                                  alt={chapter.subjectName} 
-                                  width={29} 
-                                  height={29}
+                                  src="/grades/correct.svg" 
+                                  alt="Check" 
+                                  width={13} 
+                                  height={13}
                                 />
                               </div>
-                              <div className="flex flex-col">
-                                <h3 className={`font-montserrat font-semibold text-[18px] leading-[14.79px] tracking-[0%] ${chapter.titleColor}`}>
-                                  Chapter {chapter.chapterNumber}
-                                </h3>
-                                <p className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E] mt-1">
-                                  {chapter.title}
-                                </p>
-                              </div>
-                            </div>
-
-                            {/* Divider Line */}
-                            <div className="w-full h-0 border-t border-[#E8E8E8] mb-6"></div>
-
-                            {/* You will Learn Section */}
-                            <div>
-                              <h4 className="font-montserrat font-semibold text-[16px] leading-[20px] text-[#1A2439] mb-4">
-                                You will Learn
-                              </h4>
-                              <ul className="space-y-3">
-                                {chapter.syllabusPoints.map((topic, topicIndex) => (
-                                  <li key={topicIndex} className="flex items-start gap-3">
-                                    <div className="flex-shrink-0 mt-1">
-                                      <Image 
-                                        src="/grades/correct.svg" 
-                                        alt="Check" 
-                                        width={13} 
-                                        height={13}
-                                      />
-                                    </div>
-                                    <span className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E]">{topic}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                              <span className="font-montserrat font-medium text-[14px] leading-[18px] tracking-normal text-[#556A8E]">{topic}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
+
+              {showDesktopArrows && (
+                <>
+                  <button
+                    onClick={handleDesktopPrev}
+                    className="absolute top-1/2 left-3 -translate-y-1/2 -translate-x-full flex h-10 w-10 items-center justify-center rounded-xl border-2 border-[#D9D9D9] bg-white shadow-sm transition-colors hover:bg-gray-100"
+                    aria-label="Previous chapters"
+                  >
+                    <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={handleDesktopNext}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 translate-x-full flex h-10 w-10 items-center justify-center rounded-xl border-2 border-[#D9D9D9] bg-white shadow-sm transition-colors hover:bg-gray-100"
+                    aria-label="Next chapters"
+                  >
+                    <svg className="h-5 w-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </>
+              )}
             </div>
-
-            {/* Pagination with Arrows */}
-            {totalPages > 1 && (
-              <div className="flex items-center justify-center mt-8 space-x-4">
-                {/* Previous Arrow */}
-                <button
-                  onClick={() => goToPage(currentPage === 0 ? totalPages - 1 : currentPage - 1)}
-                  className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
-                  aria-label="Previous page"
-                >
-                  <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:-translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-
-                {/* Pagination Dots */}
-                <div className="flex space-x-2">
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => goToPage(index)}
-                      className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                        currentPage === index 
-                          ? 'bg-[#0595CE] scale-125' 
-                          : 'bg-gray-300 hover:bg-gray-400'
-                      }`}
-                      aria-label={`Go to page ${index + 1}`}
-                    />
-                  ))}
-                </div>
-
-                {/* Next Arrow */}
-                <button
-                  onClick={() => goToPage(currentPage === totalPages - 1 ? 0 : currentPage + 1)}
-                  className="w-8 h-8 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 hover:border-[#0595CE] transition-all duration-300 group"
-                  aria-label="Next page"
-                >
-                  <svg className="w-4 h-4 text-gray-600 group-hover:text-[#0595CE] group-hover:translate-x-0.5 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
-            )}
-          </div>
+          )}
         </RevealOnView>
         </div>
       </div>
