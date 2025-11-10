@@ -74,7 +74,7 @@ const Testimonials = () => {
                 videoId,
                 videoUrl: item.url,
                 embedUrl: `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`,
-                thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+                thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
                 title: "Student Testimonial",
                 name: "SISYA Student",
                 grade: "SISYA CLASS",
