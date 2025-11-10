@@ -1,0 +1,78 @@
+import Image from "next/image";
+
+const highlights = [
+  { number: "01", text: "IIT/NIT-qualified faculty with proven results" },
+  { number: "02", text: "Integrated curriculum mapped to CBSE, ICSE & State Boards" },
+  { number: "03", text: "24x7 AI-Powered doubt solving through SISYA App" },
+  { number: "04", text: "Recorded lectures for unlimited revision" },
+  { number: "05", text: "Daily practice sheets, quizzes, assignments, and test series" },
+  { number: "06", text: "Mentor-based academic and motivational support" },
+  { number: "07", text: "Performance dashboards for students, schools, and parents" },
+  { number: "10", text: "Zero-cost infrastructure – SISYA provides full tech support" },
+];
+
+const ProgramHighlightsSection = () => {
+  return (
+    <section className="w-full bg-white mt-16 md:mt-20">
+      <div className="mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16">
+        <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 md:flex-row md:items-center md:justify-center">
+          <div className="max-w-lg">    
+            <h2 className="text-[32px] font-bold leading-none text-[#1A2439]">
+              What is SISYA SIP?
+            </h2>
+            <h3 className="mt-2 text-[30px] font-bold leading-tight text-[#0595CE]">
+              The Complete In-School Coaching Solution
+            </h3>
+            <p className="mt-3 text-[18px] leading-[24px] text-black">
+              The SISYA School Integration Program (SIP) is a unique partnership model that enables schools to deliver Board + JEE + NEET + Olympiad preparation within their own campus.
+            </p>
+          </div>
+          <div className="hidden md:block md:flex-shrink-0 md:w-[360px]">
+            <Image
+              src="/sippics/young-girl.svg"
+              alt="Young student learning"
+              width={460}
+              height={360}
+              className="w-full object-contain"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="relative mt-0">
+        <div className="mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16">
+          <div className="relative">
+            <div className="h-[16px] w-full bg-[#0595CF]"></div>
+            <div className="w-full bg-[#0595CF]">
+              <div className="w-full rounded-none bg-[#0E5D9A] px-6 pb-10 pt-12 text-white md:px-12">
+                <div className="mb-8 flex items-center justify-between pl-9 md:pl-20    ">
+                  <h4 className="text-[24px] font-semibold">Program Highlights:</h4>    
+                </div>
+                <div className="mx-auto grid w-full max-w-4xl items-start justify-center gap-y-8 gap-x-16 md:grid-cols-2">
+                  {highlights.map((item) => (
+                    <div key={item.number} className="flex items-start gap-4 max-w-[340px]">
+                      <div
+                        className="flex h-[55px] w-[55px] flex-shrink-0 items-center justify-center rounded-[4.44px] bg-[#FFFBFB] text-[16px] font-semibold text-[#0595CF]"
+                        style={{ boxShadow: "7.41px 5.92px 0px -1.48px #0495CE" }}
+                      >
+                        {item.number}
+                      </div>
+                      <p className="text-[18px] leading-[32.6px] text-white">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-b-[24px] bg-[#058ACF] px-6 py-4 text-center text-sm font-medium text-white md:text-base">
+                With SISYA SIP, schools no longer need to rely on external coaching institutes.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ProgramHighlightsSection;
