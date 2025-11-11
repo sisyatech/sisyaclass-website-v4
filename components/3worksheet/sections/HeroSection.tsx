@@ -57,9 +57,7 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
             <span className="block whitespace-nowrap">IIT Teachers for ₹19</span>
           </h1>
 
-          <p className="mx-auto mt-4 whitespace-nowrap text-lg font-semibold text-white sm:text-xl lg:mx-0 lg:text-[1.45rem]">
-            For Grades 7-9 | 10+ tricks | June 22 | 11 AM
-          </p>
+        
 
           <ul className="mx-auto mt-6 flex w-full max-w-xl flex-col items-center gap-3 text-sm text-white sm:text-base lg:items-start">
             <li className="flex items-center gap-3">

@@ -17,6 +17,7 @@ import BuildingSchoolsSection from "@/components/sip/BuildingSchoolsSection";
 import Moto from "@/components/moto";
 import StudyMaterial from "@/components/StudyMaterial";
 import Reviews from "@/components/sip/reviews";
+import CollaborationModelSection from "@/components/sip/CollaborationModelSection";
 
 
 function SIPPageContent() {
@@ -33,6 +34,7 @@ function SIPPageContent() {
       <AdvantageSection />
       <TeachingLearningSection />
       <BestAcademicTeamSection />
+      <CollaborationModelSection />
       <Reviews />
       <Footer />
       <StudyMaterial />

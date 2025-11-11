@@ -5,7 +5,7 @@ import SIPBreadcrumb from "@/components/sip/SIPBreadcrumb";
 const SIPHero = () => {
   return (
     <section className="relative w-full bg-white">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 py-16 md:flex-row md:items-center md:justify-between md:gap-10 md:px-12 lg:px-16 lg:py-20">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-5 pb-10 md:flex-row md:items-center md:justify-between md:gap-10 md:px-12 lg:px-16 lg:pt-14 lg:pb-12">
         {/* Left Column */}
         <div className="w-full max-w-xl md:max-w-2xl">
 
@@ -20,19 +20,19 @@ const SIPHero = () => {
               Integration
             </h2>
 
-            <div className="mt-3 flex w-full items-center justify-between gap-4">
-              <span className="hidden h-[1.5px] w-[127px] border-t border-black md:block" />
-              <span className="font-roboto text-[32px] font-semibold text-black md:text-[36px] lg:text-[39px]">
+            <div className="mt-3 flex w-full items-center justify-center gap-3 sm:gap-4 md:justify-between">
+              <span className="h-[1.5px] w-[60px] border-t border-black sm:w-[90px] md:w-[127px]" />
+              <span className="font-roboto text-[28px] font-semibold text-black sm:text-[30px] md:text-[36px] lg:text-[39px]">
                 Program
               </span>
-              <span className="hidden h-[1.5px] w-[127px] border-t border-black md:block" />
+              <span className="h-[1.5px] w-[60px] border-t border-black sm:w-[90px] md:w-[127px]" />
             </div>
           </div>
 
           <div className="mt-4 inline-flex w-full max-w-[560px] flex-col items-center">
-            <div className="w-full bg-gradient-to-r from-[#0E90DA] to-[#074D74] px-[45px] py-[3px]">
+            <div className="w-full bg-gradient-to-r from-[#0E90DA] to-[#074D74] px-6 py-[3px] sm:px-10 md:px-[45px]">
               <div
-                className="flex h-[40px] w-full items-center justify-center rounded-full font-roboto text-[15px] font-medium text-white md:text-base whitespace-nowrap"
+                className="flex h-[34px] w-full items-center justify-center rounded-full px-3 text-center font-roboto text-[9px] font-medium text-white sm:h-[36px] sm:px-4 sm:text-[13px] md:h-[40px] md:px-6 md:text-base whitespace-nowrap"
                 style={{ background: 'transparent', color: '#ffffff' }}
               >
                 Become a School That Leads, with Students Who Succeed
@@ -55,7 +55,7 @@ const SIPHero = () => {
         {/* Right Column */}
         <div className="relative w-full max-w-xl">
           <div className="relative mx-auto flex w-full max-w-[520px] items-center justify-center">
-            <div className="absolute inset-0 -right-6 -top-8 hidden h-full w-full rounded-xl border-8 border-[#0E90DA] md:block" />
+            <div className="absolute inset-0 -right-6 -top-8 hidden h-full w-full rounded-xl  md:block" />
             <Image
               src="/sippics/heropic.svg"
               alt="School Integration Program Hero"

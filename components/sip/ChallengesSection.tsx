@@ -56,13 +56,13 @@ const ChallengesSection = () => {
 
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto w-full max-w-6xl px-6 py-16 text-center md:px-12 lg:px-16">
-        <h2 className="text-[30px] font-semibold text-[#0595CF] md:text-[34px]">Challenges Schools Face</h2>
-        <h3 className="mt-2 text-[30px] font-bold text-[#1A2439] md:text-[36px]">
+      <div className="mx-auto w-full max-w-6xl px-6 py-12 text-center md:px-12 lg:px-16">
+        <h2 className="text-[20px] font-semibold text-[#0595CF] sm:text-[28px] md:text-[34px]">Challenges Schools Face</h2>
+        <h3 className="mt-1 text-[18px] font-bold text-[#1A2439] sm:text-[28px] md:text-[36px]">
           Why Most Schools Struggle with Competitive Preparation
         </h3>
 
-        <div className="relative mt-12">
+        <div className="relative mt-8">
           {/* Desktop layout */}
           <div className="relative hidden items-center justify-center md:flex">
             <button
@@ -123,7 +123,7 @@ const ChallengesSection = () => {
                 </div>
               </div>
             ))}
-            <div className="mt-6 flex items-center justify-between px-4">
+            <div className="mt-4 flex items-center justify-between px-20">
               <button
                 onClick={handlePrev}
                 className="flex h-11 w-11 items-center justify-center rounded-[14px] border-2 border-[#D9D9D9] bg-white text-[#1A2439] shadow-[0_8px_16px_rgba(0,0,0,0.12)] transition-transform duration-300 hover:-translate-x-1 hover:bg-[#0595CF] hover:text-white"

@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { gradeLinks } from "@/lib/gradeLinks";
 import { resourcesLinks } from "@/lib/resourcesLinks";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   extractGradeFromLabel,
   getGradeUrl,
@@ -686,6 +686,8 @@ const Navbar = () => {
   } = useMobileMenu();
   const { user, isLoggedIn, logout } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+  const isSipPage = pathname?.startsWith("/sip");
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -742,45 +744,51 @@ const Navbar = () => {
 
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* user dropdown */}
-            {isLoggedIn && (
-              <div
-                ref={userDropdownRef}
-                className="flex items-center space-x-2 relative"
-              >
-                <div
-                  className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors"
-                  onClick={() => setIsUserDropdownOpen((p) => !p)}
-                >
-                  <div className="w-8 h-8 bg-[#02bdfe] rounded-full flex items-center justify-center hover:bg-[#02bdfe]/80 transition-colors">
-                    <User className="h-5 w-5 text-white" />
-                  </div>
-                  <span className="hidden lg:block text-sm font-medium text-gray-700 whitespace-nowrap">
-                    {user?.name || "User"}
-                  </span>
-                </div>
-
-                <div
-                  className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 transition-all duration-200 z-50 ${
-                    isUserDropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
-                  }`}
-                >
-                  <div className="py-2">
-                    <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
-                      <div className="font-medium">{user?.name}</div>
-                      <div className="text-xs text-gray-500">{user?.email}</div>
-                    </div>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsUserDropdownOpen(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
+            {isSipPage ? (
+              <div className="flex items-center justify-center h-[28px] w-[81px] rounded-[14px] bg-[#0C5896] text-xs font-semibold uppercase tracking-[0.08em] text-white">
+                SIP
               </div>
+            ) : (
+              isLoggedIn && (
+                <div
+                  ref={userDropdownRef}
+                  className="flex items-center space-x-2 relative"
+                >
+                  <div
+                    className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded-lg px-2 py-1 transition-colors"
+                    onClick={() => setIsUserDropdownOpen((p) => !p)}
+                  >
+                    <div className="w-8 h-8 bg-[#02bdfe] rounded-full flex items-center justify-center hover:bg-[#02bdfe]/80 transition-colors">
+                      <User className="h-5 w-5 text-white" />
+                    </div>
+                    <span className="hidden lg:block text-sm font-medium text-gray-700 whitespace-nowrap">
+                      {user?.name || "User"}
+                    </span>
+                  </div>
+
+                  <div
+                    className={`absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 transition-all duration-200 z-50 ${
+                      isUserDropdownOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                    }`}
+                  >
+                    <div className="py-2">
+                      <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-100">
+                        <div className="font-medium">{user?.name}</div>
+                        <div className="text-xs text-gray-500">{user?.email}</div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsUserDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )
             )}
 
             {/* contact */}
