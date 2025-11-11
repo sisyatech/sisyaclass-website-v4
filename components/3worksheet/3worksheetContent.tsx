@@ -55,6 +55,7 @@ export default function ThreeWorksheetContent() {
           currency: "INR",
           contact: phoneNumber,
           description: "3 Worksheet Bundle",
+          className: selectedClass,
         }),
       });
       const orderJson = await orderRes.json();
@@ -87,7 +88,7 @@ export default function ThreeWorksheetContent() {
         handler: function (response: any) {
           console.log("[3 Worksheet Bundle] Success handler", response);
           setShowReservationPopup(false);
-          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
+          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}&class=${encodeURIComponent(selectedClass)}`;
         },
         modal: {
           ondismiss: function () {
