@@ -1,4 +1,6 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
 
 type BookAppointmentModalProps = {
   open: boolean;
@@ -9,11 +11,76 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
   open,
   onClose,
 }) => {
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [institute, setInstitute] = useState("");
+  const [city, setCity] = useState("");
+  const [board, setBoard] = useState("");
+  const [isLocating, setIsLocating] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
+  const requestLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationError("Location services are not supported on this device.");
+      return;
+    }
+
+    setLocationError(null);
+    setIsLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        let label = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+
+        try {
+          const geoResponse = await fetch(
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+          );
+
+          if (geoResponse.ok) {
+            const data = await geoResponse.json();
+            const {
+              city: fetchedCity,
+              locality,
+              principalSubdivision,
+              countryName,
+            } = data || {};
+            const parts = [fetchedCity, locality, principalSubdivision, countryName]
+              .filter((part: string | undefined) => Boolean(part))
+              .map((part: string) => part.trim());
+
+            if (parts.length) {
+              label = [...new Set(parts)].slice(0, 3).join(", ");
+            }
+          }
+        } catch (error) {
+          console.warn("[BookAppointmentModal] reverse geocoding failed", error);
+        } finally {
+          setCity(label);
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.warn("[BookAppointmentModal] geolocation error", error);
+        if (error.code === error.PERMISSION_DENIED) {
+          setLocationError("Location permission denied. Please allow access or enter your city manually.");
+        } else if (error.code === error.TIMEOUT) {
+          setLocationError("Location request timed out. Please try again.");
+        } else {
+          setLocationError("Unable to fetch location. Please enter your city manually.");
+        }
+        setIsLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 15000 }
+    );
+  };
+
   if (!open) return null;
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 px-4">
-      <div className="relative w-full max-w-[420px] overflow-hidden rounded-[20px] bg-white shadow-[0px_16px_50px_rgba(9,22,39,0.22)]">
+      <div className="relative w-full max-w-[320px] sm:max-w-[420px] overflow-hidden rounded-[16px] sm:rounded-[20px] bg-white shadow-[0px_16px_50px_rgba(9,22,39,0.22)]">
         <button
           onClick={onClose}
           aria-label="Close"
@@ -49,6 +116,8 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
             <input
               type="tel"
               placeholder="Mobile Number"
+              value={mobileNumber}
+              onChange={(event) => setMobileNumber(event.target.value)}
               className="w-full bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE]"
             />
           </label>
@@ -56,38 +125,93 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
           <input
             type="text"
             placeholder="Name"
+            value={name}
+            onChange={(event) => setName(event.target.value)}
             className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
           />
 
-          <select className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#0595CE]">
-            <option value="">Role</option>
-            <option value="principal">Principal</option>
-            <option value="management">Management</option>
-            <option value="teacher">Teacher</option>
-          </select>
+          <input
+            type="text"
+            placeholder="Role"
+            value={role}
+            onChange={(event) => setRole(event.target.value)}
+            className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
+          />
 
-          <select className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#0595CE]">
-            <option value="">Institute/ School</option>
-            <option value="k12">K-12 School</option>
-            <option value="junior">Junior College</option>
-            <option value="coaching">Coaching Centre</option>
-          </select>
+          <input
+            type="text"
+            placeholder="Institute / School"
+            value={institute}
+            onChange={(event) => setInstitute(event.target.value)}
+            className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
+          />
 
-          <div className="relative">
+          <label className="relative flex items-center gap-3 rounded-[10px] border border-[#C3CFDB] bg-white px-4 py-3 text-sm text-[#111827] focus-within:border-[#0595CE]">
             <input
               type="text"
-              placeholder="City"
-              className="w-full rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
+              placeholder="Select Location"
+              value={city}
+              onChange={(event) => setCity(event.target.value)}
+              className="w-full bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE]"
             />
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#1A2439]/40">
-              ⌖
-            </span>
-          </div>
+            <button
+              type="button"
+              onClick={requestLocation}
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-[#0595CE]/10 text-[#0595CE] transition hover:bg-[#0595CE]/20 disabled:opacity-60"
+              aria-label="Pick location from map"
+              disabled={isLocating}
+            >
+              {isLocating ? (
+                <svg
+                  className="h-4 w-4 animate-spin"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 2a10 10 0 1 0 10 10"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M12 21C12 21 19 14.868 19 9.75C19 6.02208 15.866 3 12 3C8.13401 3 5 6.02208 5 9.75C5 14.868 12 21 12 21Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M12 11.5C13.3807 11.5 14.5 10.3807 14.5 9C14.5 7.61929 13.3807 6.5 12 6.5C10.6193 6.5 9.5 7.61929 9.5 9C9.5 10.3807 10.6193 11.5 12 11.5Z"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+            </button>
+          </label>
+
+          {locationError && (
+            <p className="text-left text-xs text-red-500">{locationError}</p>
+          )}
 
           <div className="flex items-center gap-2 rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none focus-within:border-[#0595CE]">
             <input
               type="text"
               placeholder="School Name"
+              value={board}
+              onChange={(event) => setBoard(event.target.value)}
               className="w-full bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE]"
             />
             <span className="text-base font-semibold text-[#111827]">Board</span>
