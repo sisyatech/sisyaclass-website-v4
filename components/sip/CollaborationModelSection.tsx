@@ -1,4 +1,8 @@
+ "use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import BookAppointmentModal from "./BookAppointmentModal";
 
 const sisyaProvides = [
   "Expert faculty from Top IIT/NIT-Graduates",
@@ -18,6 +22,8 @@ const schoolGains = [
 ];
 
 const CollaborationModelSection = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <section className="w-full bg-white py-10 md:py-6">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-10 px-6 text-center md:px-10 lg:px-0">
@@ -80,11 +86,15 @@ const CollaborationModelSection = () => {
           <p className="text-[14px] font-medium text-[#111826] md:text-[18px]">
             Together, we create schools that parents trust and students succeed in.
           </p>
-          <button className="inline-flex h-[42px] items-center justify-center rounded-[12px] bg-[#0595CE] px-10 text-[16px] font-semibold text-white shadow-lg transition-transform duration-200 hover:scale-105 hover:bg-[#0478B7]">
+          <button
+            onClick={() => setOpenModal(true)}
+            className="inline-flex h-[42px] items-center justify-center rounded-[12px] bg-[#0595CE] px-10 text-[16px] font-semibold text-white shadow-lg transition-transform duration-200 hover:scale-105 hover:bg-[#0478B7]"
+          >
             Talk To Expert
           </button>
         </div>
       </div>
+      <BookAppointmentModal open={openModal} onClose={() => setOpenModal(false)} />
     </section>
   );
 };

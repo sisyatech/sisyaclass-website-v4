@@ -1,8 +1,13 @@
+ "use client";
+
 import Image from "next/image";
-import Link from "next/link";
 import SIPBreadcrumb from "@/components/sip/SIPBreadcrumb";
+import { useState } from "react";
+import BookAppointmentModal from "./BookAppointmentModal";
 
 const SIPHero = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <section className="relative w-full bg-white">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-6 pt-5 pb-10 md:flex-row md:items-center md:justify-between md:gap-10 md:px-12 lg:px-16 lg:pt-14 lg:pb-12">
@@ -43,12 +48,13 @@ const SIPHero = () => {
               Andhra Pradesh&apos;s first and only EdTech company, dedicated to shaping the future of learning.
             </p>
 
-            <Link
-              href="#get-started"
-              className="mt-8 inline-flex h-[45px] w-[180px] items-center justify-center rounded-[10px] bg-gradient-to-r from-[#0E90DA] to-[#074D74] font-roboto text-lg font-semibold text-white shadow-[0px_10px_30px_rgba(14,144,218,0.35)] transition-transform hover:-translate-y-1"
+            <button
+              type="button"
+              onClick={() => setOpenModal(true)}
+              className="mt-8 inline-flex h-[45px] w-[200px] items-center justify-center rounded-[10px] bg-gradient-to-r from-[#0E90DA] to-[#074D74] font-roboto text-lg font-semibold text-white shadow-[0px_10px_30px_rgba(14,144,218,0.35)] transition-transform hover:-translate-y-1"
             >
               Get Started
-            </Link>
+            </button>
           </div>
         </div>
 
@@ -67,6 +73,7 @@ const SIPHero = () => {
           </div>
         </div>
       </div>
+      <BookAppointmentModal open={openModal} onClose={() => setOpenModal(false)} />
     </section>
   );
 };

@@ -1,5 +1,8 @@
-import React from "react";
+ "use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
+import BookAppointmentModal from "./BookAppointmentModal";
 
 const advantagePoints = [
   {
@@ -27,6 +30,8 @@ const bulletPoints = [
 ];
 
 const AdvantageSection = () => {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <section className="mt-10 w-full bg-white md:mt-12">
       <div className="relative mx-auto w-full max-w-6xl rounded-[24px] bg-[#D9EFFFB2] px-5 py-6 text-center md:px-10 md:py-8">
@@ -82,10 +87,14 @@ const AdvantageSection = () => {
           </ul>
         </div>
 
-        <button className="mt-10 inline-flex h-[40px] items-center justify-center rounded-[10px] bg-[#0595CE] px-10 text-[16px] font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-[#047AB3] sm:h-[42px] sm:px-12 sm:text-[18px]">
+        <button
+          onClick={() => setOpenModal(true)}
+          className="mt-10 inline-flex h-[40px] items-center justify-center rounded-[10px] bg-[#0595CE] px-10 text-[16px] font-semibold text-white shadow-lg transition-all hover:scale-105 hover:bg-[#047AB3] sm:h-[42px] sm:px-12 sm:text-[18px]"
+        >
           Talk To Expert
         </button>
       </div>
+      <BookAppointmentModal open={openModal} onClose={() => setOpenModal(false)} />
     </section>
   );
 };
