@@ -19,7 +19,7 @@ const schoolGains = [
 
 const CollaborationModelSection = () => {
   return (
-    <section className="w-full bg-white py-12 md:py-16">
+    <section className="w-full bg-white py-10 md:py-6">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-center gap-10 px-6 text-center md:px-10 lg:px-0">
         <div className="space-y-3">
           <p className="text-[28px] font-bold text-[#0595CE] md:text-[36px]">
