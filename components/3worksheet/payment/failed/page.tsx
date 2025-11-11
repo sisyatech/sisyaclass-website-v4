@@ -85,7 +85,7 @@ export default function PaymentFailedPage() {
               ← Try Payment Again
             </a>
             <a
-              href="https://sisya.in"
+              href="https://sisyaclass.com"
               className="text-[14px] text-[#3355A4] underline hover:text-[#21428A]"
             >
               Visit SISYA Homepage

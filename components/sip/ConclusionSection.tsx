@@ -50,7 +50,7 @@ const ConclusionSection = () => {
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex h-[42px] items-center justify-center rounded-[10px] bg-[#0595CE] px-10 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105 hover:bg-[#047bb1] sm:h-[48px] sm:px-14 sm:text-base"
+          className="inline-flex h-[42px] items-center justify-center rounded-[10px] bg-[#0595CE] px-10 text-sm font-semibold text-white transition-transform duration-200 hover:scale-105 hover:bg-[#047bb1] sm:h-[40px] sm:px-14 sm:text-base"
         >
           Get Started
         </button>
