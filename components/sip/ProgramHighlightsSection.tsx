@@ -8,10 +8,13 @@ const highlights = [
   { number: "05", text: "Daily practice sheets, quizzes, assignments, and test series" },
   { number: "06", text: "Mentor-based academic and motivational support" },
   { number: "07", text: "Performance dashboards for students, schools, and parents" },
-  { number: "10", text: "Zero-cost infrastructure – SISYA provides full tech support" },
+  { number: "08", text: "Zero-cost infrastructure – SISYA provides full tech support" },
 ];
 
 const ProgramHighlightsSection = () => {
+    const leftHighlights = highlights.slice(0, 4);
+    const rightHighlights = highlights.slice(4);
+
     return (
       <section className="w-full bg-white mt-12 md:mt-20">
         <div className="mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16">
@@ -59,20 +62,37 @@ const ProgramHighlightsSection = () => {
                   <div className="mb-8 flex items-center justify-center md:justify-between md:pl-16">
                     <h4 className="text-[22px] font-semibold sm:text-[24px]">Program Highlights:</h4>
                   </div>
-                  <div className="mx-auto grid w-full max-w-4xl items-start justify-center gap-y-6 gap-x-16 sm:gap-y-8 md:grid-cols-2">
-                    {highlights.map((item) => (
-                      <div key={item.number} className="flex max-w-[320px] items-start gap-4">
-                        <div
-                          className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-[4.44px] bg-[#FFFBFB] text-[15px] font-semibold text-[#0595CF] sm:h-[52px] sm:w-[52px] sm:text-[16px]"
-                          style={{ boxShadow: "7.41px 5.92px 0px -1.48px #0495CE" }}
-                        >
-                          {item.number}
+                  <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 sm:gap-8 md:flex-row md:items-start md:justify-center md:gap-16">
+                    <div className="flex flex-1 flex-col items-start gap-6 sm:gap-8">
+                      {leftHighlights.map((item) => (
+                        <div key={item.number} className="flex max-w-[320px] items-start gap-4">
+                          <div
+                            className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-[4.44px] bg-[#FFFBFB] text-[15px] font-semibold text-[#0595CF] sm:h-[52px] sm:w-[52px] sm:text-[16px]"
+                            style={{ boxShadow: "7.41px 5.92px 0px -1.48px #0495CE" }}
+                          >
+                            {item.number}
+                          </div>
+                          <p className="text-left text-[16px] leading-[26px] text-white sm:text-[17px] sm:leading-[28px] md:text-[18px] md:leading-[32.6px]">
+                            {item.text}
+                          </p>
                         </div>
-                        <p className="text-[16px] leading-[26px] text-white sm:text-[17px] sm:leading-[28px] md:text-[18px] md:leading-[32.6px]">
-                          {item.text}
-                        </p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                    <div className="flex flex-1 flex-col items-start gap-6 sm:gap-8">
+                      {rightHighlights.map((item) => (
+                        <div key={item.number} className="flex max-w-[320px] items-start gap-4">
+                          <div
+                            className="flex h-[48px] w-[48px] flex-shrink-0 items-center justify-center rounded-[4.44px] bg-[#FFFBFB] text-[15px] font-semibold text-[#0595CF] sm:h-[52px] sm:w-[52px] sm:text-[16px]"
+                            style={{ boxShadow: "7.41px 5.92px 0px -1.48px #0495CE" }}
+                          >
+                            {item.number}
+                          </div>
+                          <p className="text-left text-[16px] leading-[26px] text-white sm:text-[17px] sm:leading-[28px] md:text-[16px] md:leading-[32.6px]">
+                            {item.text}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
   

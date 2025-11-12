@@ -745,8 +745,9 @@ const Navbar = () => {
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* user dropdown */}
             {isSipPage ? (
-              <div className="flex items-center justify-center h-[28px] w-[81px] rounded-[14px] bg-[#0C5896] text-xs font-semibold uppercase tracking-[0.08em] text-white">
-                SIP
+              <div className="group relative flex h-[28px] w-[81px] items-center justify-center overflow-hidden rounded-[14px] bg-[#0C5896] text-xs font-semibold uppercase tracking-[0.08em] text-white transition-colors">
+                <span className="relative z-10">SIP</span>
+                <span className="pointer-events-none absolute top-0 left-[-80%] h-full w-[70%] -skew-x-12 bg-white/35 opacity-0 transition-all duration-700 ease-out group-hover:left-[130%] group-hover:opacity-100" />
               </div>
             ) : (
               isLoggedIn && (

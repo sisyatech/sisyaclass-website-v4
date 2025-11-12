@@ -4,34 +4,27 @@ import { useState } from "react";
 const challenges = [
   {
     title: "Lack of Expert Faculty",
-    description: "Qualified JEE/NEET teachers are scarce and hard to retain.",
-    image: "/sippics/hardcode.jpg",
+    description: "Qualified JEE/NEET teachers provide best training.",
+    image: "/sippics/hardcode4.svg",
   },
   {
     title: "Balancing Academics & Coaching",
     description: "Managing board syllabus alongside competitive exam preparation is tough.",
-    image: "/sippics/hardcode1.jpg",
+    image: "/sippics/hardcode.jpg",
   },
+  
   {
     title: "High Infrastructure Costs",
     description: "Smart classrooms and advanced teaching tools require investment.",
-    image: "/sippics/hardcode.jpg",
+    image: "/sippics/hardcode1.jpg",
   },
   {
     title: "Limited Personalized Support",
     description: "Schools struggle to provide individualized guidance for every student.",
-    image: "/sippics/hardcode1.jpg",
+    image: "/sippics/hardcode3.svg",
   },
-  {
-    title: "Parent Expectations",
-    description: "Families demand competitive success in addition to academic excellence.",
-    image: "/sippics/hardcode.jpg",
-  },
-  {
-    title: "Resource Constraints",
-    description: "Budget limitations make it hard to access the latest tech and content.",
-    image: "/sippics/hardcode1.jpg",
-  },
+ 
+  
 ];
 
 const ChallengesSection = () => {
@@ -75,7 +68,10 @@ const ChallengesSection = () => {
 
             <div className="flex w-full max-w-5xl items-stretch justify-center gap-8">
               {getVisibleItems(3).map((item, index) => (
-                <div key={`${item.title}-${index}`} className="flex w-[320px] flex-col items-center gap-4 text-center">
+                <div
+                  key={`${item.title}-${index}`}
+                  className="flex h-full w-[320px] flex-col items-center gap-4 text-center"
+                >
                   <div className="w-full overflow-hidden rounded-[26.5px] shadow-[0_12px_30px_rgba(0,0,0,0.12)]">
                     <Image
                       src={item.image}
@@ -86,9 +82,11 @@ const ChallengesSection = () => {
                       priority
                     />
                   </div>
-                  <div className="px-2 text-center">
-                    <p className="text-[18px] font-semibold text-black leading-none">{item.title}</p>
-                    <p className="mt-3 text-[18px] leading-[20px] text-black">{item.description}</p>
+                  <div className="flex h-full flex-col px-2 text-center">
+                    <p className="text-[15px] font-semibold leading-tight text-black">{item.title}</p>
+                    <p className="mt-3 text-[12px] leading-[20px] text-[#1A2439]">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -117,9 +115,9 @@ const ChallengesSection = () => {
                     priority
                   />
                 </div>
-                <div className="px-2 text-center">
-                  <p className="text-[18px] font-semibold text-black leading-none">{item.title}</p>
-                  <p className="mt-3 text-[18px] leading-[20px] text-black">{item.description}</p>
+                <div className="flex flex-col px-2 text-center">
+                  <p className="text-[15px] font-semibold leading-tight text-black">{item.title}</p>
+                  <p className="mt-3 text-[12px] leading-[20px] text-[#1A2439]">{item.description}</p>
                 </div>
               </div>
             ))}

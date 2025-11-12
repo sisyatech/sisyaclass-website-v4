@@ -130,13 +130,22 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
             className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
           />
 
-          <input
-            type="text"
-            placeholder="Role"
-            value={role}
-            onChange={(event) => setRole(event.target.value)}
-            className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
-          />
+          <label className="flex flex-col gap-1 text-left text-sm text-[#111827]">
+            <span className="font-medium text-[#1C283F]">Role</span>
+            <select
+              value={role}
+              onChange={(event) => setRole(event.target.value)}
+              className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#0595CE]"
+            >
+              <option value="">Select role</option>
+              <option value="Principal / Head of School">Principal / Head of School</option>
+              <option value="Management / Trustee">Management / Trustee</option>
+              <option value="Academic Coordinator">Academic Coordinator</option>
+              <option value="Teacher">Teacher</option>
+              <option value="Administrator">Administrator</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
 
           <input
             type="text"
@@ -206,16 +215,22 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
             <p className="text-left text-xs text-red-500">{locationError}</p>
           )}
 
-          <div className="flex items-center gap-2 rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none focus-within:border-[#0595CE]">
-            <input
-              type="text"
-              placeholder="School Name"
+          <label className="flex flex-col gap-1 text-left text-sm text-[#111827]">
+            <span className="font-medium text-[#1C283F]">Preferred Board</span>
+            <select
               value={board}
               onChange={(event) => setBoard(event.target.value)}
-              className="w-full bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE]"
-            />
-            <span className="text-base font-semibold text-[#111827]">Board</span>
-          </div>
+              className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none focus:border-[#0595CE]"
+            >
+              <option value="">Select board</option>
+              <option value="CBSE">CBSE</option>
+              <option value="ICSE">ICSE</option>
+              <option value="State Board">State Board</option>
+              <option value="IB">IB</option>
+              <option value="Cambridge IGCSE">Cambridge IGCSE</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
 
           <p className="text-left text-xs text-[#111827]/70">
             By signing up, you agree to our{" "}

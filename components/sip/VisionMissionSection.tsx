@@ -16,7 +16,7 @@ const leaders = [
 const VisionMissionSection = () => {
   return (
     <section className="w-full bg-white">
-      <div className="mx-auto mt-12 w-full max-w-6xl rounded-[24px] bg-[#0E5D9A] px-6 py-10 text-white sm:rounded-[26px] sm:px-8 sm:py-12 md:rounded-[31px] md:px-12 lg:px-16">
+      <div className="mx-auto mt-12 w-full max-w-6xl  bg-[#0E5D9A] px-6 py-10 text-white sm:px-8 sm:py-12 md:rounded-[31px] md:px-12 lg:px-16">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-8 text-center lg:max-w-xl lg:text-left">
             <div>

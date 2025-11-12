@@ -53,7 +53,7 @@ const AdvantageSection = () => {
                     : "pl-2 pr-2 sm:pl-6 sm:pr-10 md:pl-12 md:pr-10"
                 } space-y-2 text-left`}
               >
-                <h3 className="bg-gradient-to-r from-[#0E90DA] to-[#074D74] bg-clip-text text-[20px] font-bold leading-none text-transparent sm:text-[28px] md:text-[42px]">
+                <h3 className="bg-gradient-to-r from-[#0E90DA] to-[#074D74] bg-clip-text text-[20px] font-bold leading-[1.3] text-transparent sm:text-[28px] md:text-[42px]">
                   {item.heading}
                 </h3>
                 <p className="max-w-[280px] text-[12px] font-medium leading-[18px] text-[#1A2439] sm:max-w-[300px] sm:text-[14px] sm:leading-[22px] md:max-w-[320px] md:text-[16px] md:leading-[24px]">
