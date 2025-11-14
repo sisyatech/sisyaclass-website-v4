@@ -27,12 +27,13 @@ export default function DownloadWorksheetsSection({ onRegister }: DownloadWorksh
         {/* Teachers Group Image */}
         <div className="relative w-full max-w-[800px]">
           <Image
-            src="/board/teachersgroup.svg"
+            src="/board/teachersgroup.png"
             alt="Teachers Group"
             width={800}
             height={600}
             className="w-full h-auto object-contain"
             priority
+            unoptimized
           />
         </div>
       </div>

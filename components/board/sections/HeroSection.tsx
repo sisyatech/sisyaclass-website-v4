@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 
 type HeroSectionProps = {
@@ -15,6 +15,15 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   const [question, setQuestion] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [entered, setEntered] = React.useState(false);
+
+  // Trigger animations on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setEntered(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
 
   const isValidMobile = (num: string) => /^[6-9]\d{9}$/.test(num);
 
@@ -70,30 +79,30 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
   return (
     <section className="relative w-full bg-[#01317A] text-white overflow-hidden">
-      <div className="mx-auto flex w-full max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1400px] flex-col gap-3 px-4 pt-6 pb-4 sm:gap-3 sm:px-5 sm:pt-7 sm:pb-4 md:flex-row md:items-center md:justify-center md:gap-1 md:px-6 md:pt-10 md:pb-6 lg:gap-0 lg:px-6 lg:pt-10 lg:pb-6 xl:px-8 xl:pt-14 xl:pb-0">
+      <div className="mx-auto flex w-full max-w-[1200px] lg:max-w-[1000px] xl:max-w-[1200px] flex-col gap-3 px-4 pt-6 pb-4 sm:gap-3 sm:px-5 sm:pt-7 sm:pb-4 md:flex-row md:items-center md:justify-center md:gap-0 md:px-6 md:pt-10 md:pb-6 lg:gap-0 lg:px-6 lg:pt-10 lg:pb-6 xl:gap-0 xl:px-8 xl:pt-14 xl:pb-0">
         {/* Left Column */}
-        <div className="w-full max-w-xl sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px]">
+        <div className={`w-full max-w-xl sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[80px]'}`}>
           {/* Main Headline */}
-          <h1 className="font-roboto font-black text-[22px] leading-[28px] tracking-[0.03em] text-[#FEFEFE] sm:text-[24px] sm:leading-[30px] md:text-[28px] md:leading-[34px] lg:text-[30px] lg:leading-[36px] xl:text-[40px] xl:leading-[45px] xl:w-[700px] xl:max-w-[700px]">
+          <h1 className={`font-roboto font-black text-[22px] leading-[28px] tracking-[0.03em] text-[#FEFEFE] sm:text-[24px] sm:leading-[30px] md:text-[28px] md:leading-[34px] lg:text-[30px] lg:leading-[36px] xl:text-[40px] xl:leading-[45px] xl:w-[700px] xl:max-w-[700px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: entered ? '100ms' : '0ms' }}>
             Your Child Scores 90% In Boards Or Get Your Money Back!*
           </h1>
           
           {/* Sub-headline */}
-          <p className="mt-1 font-roboto font-medium italic text-[14px] leading-[20px] tracking-[0.03em] text-[#FEFEFE] sm:text-[16px] sm:leading-[22px] md:text-[18px] md:leading-[26px] lg:text-[17px] lg:leading-[28px] xl:text-[20px] xl:leading-[53px]">
+          <p className={`mt-1 font-roboto font-medium italic text-[14px] leading-[20px] tracking-[0.03em] text-[#FEFEFE] sm:text-[16px] sm:leading-[22px] md:text-[18px] md:leading-[26px] lg:text-[17px] lg:leading-[28px] xl:text-[20px] xl:leading-[53px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: entered ? '200ms' : '0ms' }}>
             Try 3 Demo Classes @ ₹19 and See the Change!
           </p>
 
           {/* Bullet Points */}
-          <ul className="mt-2 space-y-1.5 font-roboto font-medium text-[13px] leading-[20px] tracking-[0.03em] text-[#FEFEFE] list-disc pl-5 sm:text-[14px] sm:leading-[22px] md:text-[16px] md:leading-[24px] lg:text-[15px] lg:leading-[26px] xl:text-[18px] xl:leading-[31px]">
-            <li>CBSE Board Grade 10 Classes</li>
-            <li>Concepts made crystal clear by IIT teachers.</li>
-            <li>24/7 AI Assistant for instant doubt resolution.</li>
-            <li>Daily Practice Sheets + Mock Tests to track progress.</li>
-            <li>1-on-1 extra classes for doubt resolution.</li>
+          <ul className={`mt-2 space-y-1.5 font-roboto font-medium text-[13px] leading-[20px] tracking-[0.03em] text-[#FEFEFE] list-disc pl-5 sm:text-[14px] sm:leading-[22px] md:text-[16px] md:leading-[24px] lg:text-[15px] lg:leading-[26px] xl:text-[18px] xl:leading-[31px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: entered ? '300ms' : '0ms' }}>
+            <li className={`transition-all duration-[800ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[20px]'}`} style={{ transitionDelay: entered ? '400ms' : '0ms' }}>CBSE Board Grade 10 Classes</li>
+            <li className={`transition-all duration-[800ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[20px]'}`} style={{ transitionDelay: entered ? '500ms' : '0ms' }}>Concepts made crystal clear by IIT teachers.</li>
+            <li className={`transition-all duration-[800ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[20px]'}`} style={{ transitionDelay: entered ? '600ms' : '0ms' }}>24/7 AI Assistant for instant doubt resolution.</li>
+            <li className={`transition-all duration-[800ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[20px]'}`} style={{ transitionDelay: entered ? '700ms' : '0ms' }}>Daily Practice Sheets + Mock Tests to track progress.</li>
+            <li className={`transition-all duration-[800ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[20px]'}`} style={{ transitionDelay: entered ? '800ms' : '0ms' }}>1-on-1 extra classes for doubt resolution.</li>
           </ul>
 
           {/* Buttons */}
-          <div className="mt-6 sm:mt-7 md:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <div className={`mt-6 sm:mt-7 md:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: entered ? '900ms' : '0ms' }}>
             <button
               onClick={onRegister}
               className="w-full sm:w-[200px] md:w-[220px] lg:w-[210px] xl:w-[233px] h-[40px] sm:h-[42px] lg:h-[42px] xl:h-[44px] rounded-[11px] bg-[#ffd500] text-black font-roboto font-medium text-[14px] sm:text-[15px] md:text-[16px] lg:text-[15.5px] xl:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#ffed4e] transition-colors duration-200 flex items-center justify-center"
@@ -110,7 +119,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         </div>
 
         {/* Right Column */}
-        <div className="relative w-full mt-4 sm:mt-5 md:mt-0 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[420px] xl:max-w-[600px]">
+        <div className={`relative w-full mt-4 sm:mt-5 md:mt-0 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[420px] xl:max-w-[600px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-[80px] scale-95'}`} style={{ transitionDelay: entered ? '200ms' : '0ms' }}>
           <div className="relative mx-auto flex w-full items-center justify-center">
             <Image
               src="/board/hero.svg"
