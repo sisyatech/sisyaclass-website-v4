@@ -113,7 +113,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         <div className="relative w-full mt-4 sm:mt-5 md:mt-0 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[420px] xl:max-w-[600px]">
           <div className="relative mx-auto flex w-full items-center justify-center">
             <Image
-              src="/board/hero.png"
+              src="/board/hero.svg"
               alt="Student with 90% In Boards sign"
               width={600}
               height={600}
