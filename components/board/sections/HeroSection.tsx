@@ -81,7 +81,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
     <section className="relative w-full bg-[#01317A] text-white overflow-hidden">
       <div className="mx-auto flex w-full max-w-[1200px] lg:max-w-[1000px] xl:max-w-[1200px] flex-col gap-3 px-4 pt-6 pb-4 sm:gap-3 sm:px-5 sm:pt-7 sm:pb-4 md:flex-row md:items-center md:justify-center md:gap-0 md:px-6 md:pt-10 md:pb-6 lg:gap-0 lg:px-6 lg:pt-10 lg:pb-6 xl:gap-0 xl:px-8 xl:pt-14 xl:pb-0">
         {/* Left Column */}
-        <div className={`w-full max-w-xl sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[80px]'}`}>
+        <div className={`w-full max-w-xl sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px] mt-0 sm:-mt-3 md:-mt-4 lg:-mt-16 transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[80jpx]'}`}>
           {/* Main Headline */}
           <h1 className={`font-roboto font-black text-[22px] leading-[28px] tracking-[0.03em] text-[#FEFEFE] sm:text-[24px] sm:leading-[30px] md:text-[28px] md:leading-[34px] lg:text-[30px] lg:leading-[36px] xl:text-[40px] xl:leading-[45px] xl:w-[700px] xl:max-w-[700px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: entered ? '100ms' : '0ms' }}>
             Your Child Scores 90% In Boards Or Get Your Money Back!*
@@ -119,14 +119,14 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         </div>
 
         {/* Right Column */}
-        <div className={`relative w-full mt-4 sm:mt-5 md:mt-0 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[420px] xl:max-w-[600px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-[80px] scale-95'}`} style={{ transitionDelay: entered ? '200ms' : '0ms' }}>
+        <div className={`relative w-full mt-4 sm:mt-5 md:mt-0 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-[600px] xl:max-w-[750px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-[80px] scale-95'}`} style={{ transitionDelay: entered ? '200ms' : '0ms' }}>
           <div className="relative mx-auto flex w-full items-center justify-center">
             <Image
               src="/board/hero.svg"
               alt="Student with 90% In Boards sign"
-              width={600}
-              height={600}
-              className="relative w-full h-auto object-contain max-w-[280px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+              width={750}
+              height={750}
+              className="relative w-full h-auto object-contain max-w-[320px] sm:max-w-[380px] md:max-w-[450px] lg:max-w-[550px] xl:max-w-[650px] 2xl:max-w-[750px]"
               priority
             />
           </div>
