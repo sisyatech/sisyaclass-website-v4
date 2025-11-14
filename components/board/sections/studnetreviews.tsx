@@ -357,7 +357,7 @@ const Testimonials = ({ onRegister }: TestimonialsProps) => {
                 </h3>
                 <button
                     onClick={onRegister}
-                    className="w-full mb-10 md:w-[353px] h-[44px] rounded-[11px] flex justify-center items-center bg-[#FFE100] text-black font-roboto font-medium text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#FFED4E] transition-colors duration-200 flex-shrink-0 mx-auto mt-10"
+                    className="w-full max-w-[280px] sm:max-w-[300px] md:max-w-[320px] lg:w-[340px] xl:w-[353px] h-[44px] rounded-[11px] flex justify-center items-center bg-[#FFE100] text-black font-roboto font-medium text-[14px] sm:text-[15px] md:text-[16px] lg:text-[17px] xl:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#FFED4E] transition-colors duration-200 flex-shrink-0 mx-auto mt-10 mb-10"
                 >
                     Tap To Download Worksheets
                 </button>

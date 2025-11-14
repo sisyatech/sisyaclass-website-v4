@@ -19,7 +19,7 @@ export default function DownloadWorksheetsSection({ onRegister }: DownloadWorksh
         {/* Button */}
         <button
           onClick={onRegister}
-          className="w-[305.44px] h-[44px] rounded-[11px] bg-[#FFE100] text-black font-roboto font-medium text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#FFED4E] transition-colors duration-200 mb-8"
+          className="w-full max-w-[280px] sm:max-w-[300px] md:w-[305.44px] h-[44px] rounded-[11px] bg-[#FFE100] text-black font-roboto font-medium text-[14px] sm:text-[15px] md:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#FFED4E] transition-colors duration-200 mb-8 flex items-center justify-center mx-auto"
         >
           Tap To Download 3 Worksheets
         </button>

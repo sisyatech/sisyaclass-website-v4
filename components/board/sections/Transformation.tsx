@@ -25,7 +25,7 @@ export default function TransformationSection({ onRegister }: TransformationSect
                 {/* Button */}
                 <button
                     onClick={onRegister}
-                    className="w-full sm:w-[200px] md:w-[233px] h-[40px] sm:h-[42px] md:h-[44px] rounded-[11px] bg-[#FFE100] text-black font-roboto font-medium text-[14px] sm:text-[15px] md:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#FFED4E] transition-colors duration-200 flex-shrink-0 flex items-center justify-center"
+                    className="w-full max-w-[280px] mx-auto sm:max-w-none sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[233px] h-[44px] sm:h-[42px] md:h-[44px] rounded-[11px] bg-[#FFE100] text-black font-roboto font-medium text-[15px] sm:text-[15px] md:text-[16px] xl:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#FFED4E] transition-colors duration-200 flex-shrink-0 flex items-center justify-center"
                 >
                     Book 3 Demos @ ₹19
                 </button>
