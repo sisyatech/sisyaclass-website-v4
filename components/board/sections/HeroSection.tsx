@@ -70,21 +70,21 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
   return (
     <section className="relative w-full bg-[#01317A] text-white overflow-hidden">
-      <div className="mx-auto flex w-full max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1400px] flex-col gap-4 px-4 pt-8 pb-6 sm:gap-3 sm:px-5 sm:pt-7 sm:pb-4 md:flex-row md:items-center md:justify-center md:gap-1 md:px-6 md:pt-10 md:pb-6 lg:gap-0 lg:px-6 lg:pt-10 lg:pb-6 xl:px-8 xl:pt-14 xl:pb-0">
+      <div className="mx-auto flex w-full max-w-[1200px] lg:max-w-[1100px] xl:max-w-[1400px] flex-col gap-3 px-4 pt-6 pb-4 sm:gap-3 sm:px-5 sm:pt-7 sm:pb-4 md:flex-row md:items-center md:justify-center md:gap-1 md:px-6 md:pt-10 md:pb-6 lg:gap-0 lg:px-6 lg:pt-10 lg:pb-6 xl:px-8 xl:pt-14 xl:pb-0">
         {/* Left Column */}
-        <div className="w-full max-w-full sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px]">
+        <div className="w-full max-w-xl sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px]">
           {/* Main Headline */}
-          <h1 className="font-roboto font-black text-[20px] leading-[26px] tracking-[0.03em] text-[#FEFEFE] sm:text-[24px] sm:leading-[30px] md:text-[28px] md:leading-[34px] lg:text-[30px] lg:leading-[36px] xl:text-[40px] xl:leading-[45px] xl:w-[700px] xl:max-w-[700px]">
+          <h1 className="font-roboto font-black text-[22px] leading-[28px] tracking-[0.03em] text-[#FEFEFE] sm:text-[24px] sm:leading-[30px] md:text-[28px] md:leading-[34px] lg:text-[30px] lg:leading-[36px] xl:text-[40px] xl:leading-[45px] xl:w-[700px] xl:max-w-[700px]">
             Your Child Scores 90% In Boards Or Get Your Money Back!*
           </h1>
           
           {/* Sub-headline */}
-          <p className="mt-2 font-roboto font-medium italic text-[13px] leading-[19px] tracking-[0.03em] text-[#FEFEFE] sm:text-[16px] sm:leading-[22px] md:text-[18px] md:leading-[26px] lg:text-[17px] lg:leading-[28px] xl:text-[20px] xl:leading-[53px]">
+          <p className="mt-1 font-roboto font-medium italic text-[14px] leading-[20px] tracking-[0.03em] text-[#FEFEFE] sm:text-[16px] sm:leading-[22px] md:text-[18px] md:leading-[26px] lg:text-[17px] lg:leading-[28px] xl:text-[20px] xl:leading-[53px]">
             Try 3 Demo Classes @ ₹19 and See the Change!
           </p>
 
           {/* Bullet Points */}
-          <ul className="mt-3 space-y-1.5 font-roboto font-medium text-[12px] leading-[18px] tracking-[0.03em] text-[#FEFEFE] list-disc pl-5 sm:text-[14px] sm:leading-[22px] md:text-[16px] md:leading-[24px] lg:text-[15px] lg:leading-[26px] xl:text-[18px] xl:leading-[31px]">
+          <ul className="mt-2 space-y-1.5 font-roboto font-medium text-[13px] leading-[20px] tracking-[0.03em] text-[#FEFEFE] list-disc pl-5 sm:text-[14px] sm:leading-[22px] md:text-[16px] md:leading-[24px] lg:text-[15px] lg:leading-[26px] xl:text-[18px] xl:leading-[31px]">
             <li>CBSE Board Grade 10 Classes</li>
             <li>Concepts made crystal clear by IIT teachers.</li>
             <li>24/7 AI Assistant for instant doubt resolution.</li>
@@ -93,16 +93,16 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           </ul>
 
           {/* Buttons */}
-          <div className="mt-6 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:gap-4 md:mt-8">
+          <div className="mt-6 sm:mt-7 md:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
             <button
               onClick={onRegister}
-              className="w-full max-w-[280px] mx-auto h-[44px] rounded-[11px] bg-[#ffd500] text-black font-roboto font-medium text-[15px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#ffed4e] transition-colors duration-200 flex items-center justify-center sm:max-w-none sm:w-[180px] sm:h-[42px] sm:text-[15px] md:w-[200px] md:h-[44px] md:text-[16px] lg:w-[210px] lg:h-[42px] lg:text-[15.5px] xl:w-[233px] xl:h-[44px] xl:text-[17.46px]"
+              className="w-full sm:w-[200px] md:w-[220px] lg:w-[210px] xl:w-[233px] h-[40px] sm:h-[42px] lg:h-[42px] xl:h-[44px] rounded-[11px] bg-[#ffd500] text-black font-roboto font-medium text-[14px] sm:text-[15px] md:text-[16px] lg:text-[15.5px] xl:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-[#ffed4e] transition-colors duration-200 flex items-center justify-center"
             >
               Book 3 Demos @ ₹19
             </button>
             <button
               onClick={handleOpenCallback}
-              className="w-full max-w-[280px] mx-auto h-[44px] rounded-[11px] bg-white text-[#01317a] font-roboto font-medium text-[15px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center sm:max-w-none sm:w-[180px] sm:h-[42px] sm:text-[15px] md:w-[200px] md:h-[44px] md:text-[16px] lg:w-[210px] lg:h-[42px] lg:text-[15.5px] xl:w-[233px] xl:h-[44px] xl:text-[17.46px]"
+              className="w-full sm:w-[200px] md:w-[220px] lg:w-[210px] xl:w-[233px] h-[40px] sm:h-[42px] lg:h-[42px] xl:h-[44px] rounded-[11px] bg-white text-[#01317a] font-roboto font-medium text-[14px] sm:text-[15px] md:text-[16px] lg:text-[15.5px] xl:text-[17.46px] leading-[18.15px] tracking-[0.03em] text-center cursor-pointer hover:bg-gray-100 transition-colors duration-200 flex items-center justify-center"
             >
               Talk To A Counselor
             </button>
@@ -110,14 +110,14 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         </div>
 
         {/* Right Column */}
-        <div className="relative w-full mt-6 max-w-[260px] mx-auto sm:mt-5 sm:max-w-sm md:mt-0 md:max-w-md lg:max-w-[420px] xl:max-w-[600px]">
+        <div className="relative w-full mt-4 sm:mt-5 md:mt-0 max-w-xs sm:max-w-sm md:max-w-md lg:max-w-[420px] xl:max-w-[600px]">
           <div className="relative mx-auto flex w-full items-center justify-center">
             <Image
               src="/board/hero.svg"
               alt="Student with 90% In Boards sign"
               width={600}
               height={600}
-              className="relative w-full h-auto object-contain max-w-[260px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
+              className="relative w-full h-auto object-contain max-w-[280px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[400px] xl:max-w-[500px] 2xl:max-w-[600px]"
               priority
             />
           </div>
