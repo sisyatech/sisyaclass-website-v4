@@ -170,8 +170,7 @@ export default function PaymentSuccessPage() {
           )}
 
           <p className="text-[16px] text-[#555] leading-relaxed mb-6">
-            Thank you for purchasing the IIT teacher–designed worksheet pack.
-          </p>
+          Thank you for enrolling in our IIT teacher-led demo classes. Our team will call you shortly.          </p>
 
           <div className="w-full max-w-[320px] sm:max-w-[350px] bg-[#f8f9ff] rounded-xl p-4 sm:p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-5 sm:mb-6">
             <div className="flex items-center justify-between text-[14px] mb-3">
