@@ -51,7 +51,7 @@ export default function ThreeWorksheetContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: 1,
+          amount: 19,
           currency: "INR",
           contact: phoneNumber,
           description: "3 Worksheet Bundle",
