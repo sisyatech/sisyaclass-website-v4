@@ -122,10 +122,11 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         <div className={`relative w-full mt-4 sm:mt-5 md:mt-0 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-[600px] xl:max-w-[750px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-[80px] scale-95'}`} style={{ transitionDelay: entered ? '200ms' : '0ms' }}>
           <div className="relative mx-auto flex w-full items-center justify-center">
             <Image
-              src="/board/hero.svg"
+              src="/board/hero2.png"
               alt="Student with 90% In Boards sign"
               width={750}
               height={750}
+              unoptimized
               className="relative w-full h-auto object-contain max-w-[320px] sm:max-w-[380px] md:max-w-[450px] lg:max-w-[550px] xl:max-w-[650px] 2xl:max-w-[750px]"
               priority
             />
