@@ -9,6 +9,8 @@ import ReservationPopup from "./components/ReservationPopup";
 import ReviewsSection from "../3daylp/sections/ReviewsSection";
 import TransformationSection from "./sections/Transformation";
 import StudentReviews from "./sections/studnetreviews";
+import SocialFab from "./components/SocialFab";
+import WhatsAppFab from "./components/WhatsAppFab";
 
 export default function BoardContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
@@ -129,6 +131,8 @@ export default function BoardContent() {
           <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full w-12 h-12 animate-spin"></div>
         </div>
       )}
+      <SocialFab />
+      <WhatsAppFab />
     </main>
   );
 }
