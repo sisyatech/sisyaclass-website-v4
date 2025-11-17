@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import Script from "next/script";
 import HeroSection from "./sections/HeroSection";
 import TrialIncludedSection from "./sections/TrialIncludedSection";
@@ -11,6 +12,7 @@ import TransformationSection from "./sections/Transformation";
 import StudentReviews from "./sections/studnetreviews";
 import SocialFab from "./components/SocialFab";
 import WhatsAppFab from "./components/WhatsAppFab";
+import FAQ from "../board/sections/FAQSection";
 
 export default function BoardContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
@@ -127,10 +129,16 @@ export default function BoardContent() {
         onClose={() => setShowReservationPopup(false)}
       />
       {showLoader && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
-          <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full w-12 h-12 animate-spin"></div>
+        <div className="bg-opacity-50 fixed inset-0 z-[10000] flex items-center justify-center bg-black">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-4 border-gray-200 border-t-blue-500"></div>
         </div>
       )}
+      <FAQ />
+      <div className="py-8 text-center">
+        <Link href="/10thboards/terms-and-conditions" className="text-sm font-medium text-blue-600 underline underline-offset-4 hover:text-blue-700">
+          Terms &amp; Conditions
+        </Link>
+      </div>
       <SocialFab />
       <WhatsAppFab />
     </main>
