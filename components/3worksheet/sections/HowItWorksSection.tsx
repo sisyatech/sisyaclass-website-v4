@@ -14,7 +14,7 @@ export default function HowItWorksSection() {
             Step-1
           </div>
           <div className="text-[14px] leading-[1.5] text-[#b14b01]">
-            Download 3 worksheets For ₹19
+            Download 3 worksheets For ₹29
           </div>
         </div>
 

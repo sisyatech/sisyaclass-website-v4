@@ -14,6 +14,11 @@ export default function ThreeWorksheetContent() {
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showLoader, setShowLoader] = useState(false);
+  const [errorModal, setErrorModal] = useState<{ open: boolean; title: string; message: string }>({
+    open: false,
+    title: "",
+    message: "",
+  });
 
 
   const handleReserveClick = async () => {
@@ -26,7 +31,7 @@ export default function ThreeWorksheetContent() {
     setShowLoader(true);
     try {
       console.log("[3Worksheet] Starting flow", { selectedClass, phoneNumber });
-      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
+      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -38,6 +43,15 @@ export default function ThreeWorksheetContent() {
           medium: "web",
         }),
       });
+      if (leadResponse.status === 409) {
+        setErrorModal({
+          open: true,
+          title: "Phone Number Already Registered",
+          message: "Please use a different number to continue with the worksheet download.",
+        });
+        return;
+      }
+
       const leadData = await leadResponse.json();
       console.log("[3Worksheet] Lead response", leadData);
       if (!leadData?.success) {
@@ -51,7 +65,7 @@ export default function ThreeWorksheetContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: 19,
+          amount: 29,
           currency: "INR",
           contact: phoneNumber,
           description: "3 Worksheet Bundle",
@@ -88,7 +102,7 @@ export default function ThreeWorksheetContent() {
         handler: function (response: any) {
           console.log("[3 Worksheet Bundle] Success handler", response);
           setShowReservationPopup(false);
-          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}&class=${encodeURIComponent(selectedClass)}`;
+          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹29")}&class=${encodeURIComponent(selectedClass)}`;
         },
         modal: {
           ondismiss: function () {
@@ -144,6 +158,21 @@ export default function ThreeWorksheetContent() {
         onSubmit={handleReserveClick}
         onClose={() => setShowReservationPopup(false)}
       />
+      {errorModal.open && (
+        <div className="bg-opacity-50 fixed inset-0 z-[11000] flex items-center justify-center bg-black px-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <h3 className="text-lg font-semibold text-[#0B2B68]">{errorModal.title}</h3>
+            <p className="mt-3 text-sm text-[#4A5B7A]">{errorModal.message}</p>
+            <button
+              type="button"
+              onClick={() => setErrorModal({ open: false, title: "", message: "" })}
+              className="mt-6 w-full rounded-xl bg-[#FFD500] py-3 text-sm font-semibold text-[#0B2B68] transition hover:bg-[#FFE24D]"
+            >
+              Try Another Number
+            </button>
+          </div>
+        </div>
+      )}
       {showLoader && (
         <div className="bg-opacity-50 fixed inset-0 z-[10000] flex items-center justify-center bg-black">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-t-4 border-gray-200 border-t-blue-500"></div>

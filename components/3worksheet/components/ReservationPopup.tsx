@@ -25,7 +25,7 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
         <button className="absolute top-4 right-4 bg-transparent border-none text-2xl cursor-pointer text-[#333] hover:text-black" onClick={onClose}>
           ×
         </button>
-        <h2 className="text-[1.65rem] font-bold text-[#01327A] text-center leading-tight">Unlock the ₹19 Worksheet Bundle</h2>
+        <h2 className="text-[1.65rem] font-bold text-[#01327A] text-center leading-tight">Unlock the ₹29 Worksheet Bundle</h2>
         <p className="mt-3 text-center text-sm text-[#415252]">
           Get 3 IIT teacher–designed worksheets + Get a Free Performance Review Call.
         </p>
@@ -84,7 +84,7 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
             </div>
           </div>
           <button type="submit" className="bg-[#FFD500] text-[#0B2B68] py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#FFC800]">
-            Get Worksheets for ₹19
+            Get Worksheets for ₹29
           </button>
         </form>
       </div>

@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 export default function PaymentSuccessPage() {
   const params = useSearchParams();
   const transactionId = params.get("transactionId") || "";
-  const amount = params.get("amount") || "₹19";
+  const amount = params.get("amount") || "₹29";
   const classFromParams = params.get("class");
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
   const [selectedClass, setSelectedClass] = useState<string>("6");
@@ -128,7 +128,7 @@ export default function PaymentSuccessPage() {
             className="mb-1 rounded-2xl shadow-[0_14px_40px_rgba(16,164,252,0.25)]"
             priority
           />
-          <h1 className="text-[22px] sm:text-[24px] font-bold text-[#02BDFD]">₹19 Worksheet Bundle Unlocked!</h1>
+          <h1 className="text-[22px] sm:text-[24px] font-bold text-[#02BDFD]">₹29 Worksheet Bundle Unlocked!</h1>
           <button
           type="button"
           onClick={handleDownload}
@@ -204,7 +204,7 @@ export default function PaymentSuccessPage() {
 
           <motion.a
             href={`https://wa.me/919100312034?text=${encodeURIComponent(
-              `Hi, I just purchased the ₹19 worksheet bundle. My transaction ID is ${transactionId}`
+              `Hi, I just purchased the ₹29 worksheet bundle. My transaction ID is ${transactionId}`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

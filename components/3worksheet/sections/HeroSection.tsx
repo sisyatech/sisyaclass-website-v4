@@ -54,7 +54,7 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
         <div className="w-full max-w-xl text-center lg:w-1/2 lg:text-left">
           <h1 className="font-montserrat mx-auto max-w-none text-[1.7rem] leading-[1.05] font-bold text-white sm:text-[2.3rem] lg:mx-0 lg:text-[3rem]">
             <span className="block whitespace-nowrap">Get 3 Worksheets Designed By</span>
-            <span className="block whitespace-nowrap">IIT Teachers for ₹19</span>
+            <span className="block whitespace-nowrap">IIT Teachers for ₹29</span>
           </h1>
 
         

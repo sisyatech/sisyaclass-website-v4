@@ -47,7 +47,7 @@ function PaymentFailedContent() {
           </div>
           <h1 className="text-[24px] font-bold text-[#D91A1A] mb-3">Payment Didn&apos;t Go Through</h1>
           <p className="text-[16px] text-[#555] leading-relaxed mb-6">
-            Your ₹19 worksheet bundle wasn&apos;t unlocked yet. Don&apos;t worry—your card has not been charged. You can retry in a moment or reach out for help.
+            Your ₹29 worksheet bundle wasn&apos;t unlocked yet. Don&apos;t worry—your card has not been charged. You can retry in a moment or reach out for help.
           </p>
 
           <div className="w-full max-w-[320px] sm:max-w-[350px] bg-[#f8f9ff] rounded-xl p-4 sm:p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-5 sm:mb-6">
@@ -63,13 +63,13 @@ function PaymentFailedContent() {
             <div className="h-px bg-[#eee] my-3" />
             <div className="flex items-center justify-between text-[16px] font-bold text-[#D91A1A]">
               <span>Amount Attempted</span>
-              <span>₹19</span>
+              <span>₹29</span>
             </div>
           </div>
 
           <a
             href={`https://wa.me/919100312034?text=${encodeURIComponent(
-              `Hi, I tried purchasing the ₹19 worksheet bundle but payment failed. My transaction ID is ${transactionId}`
+              `Hi, I tried purchasing the ₹29 worksheet bundle but payment failed. My transaction ID is ${transactionId}`
             )}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -86,7 +86,7 @@ function PaymentFailedContent() {
               ← Try Payment Again
             </a>
             <a
-              href="https://sisya.in"
+              href="https://sisyaclass.com"
               className="text-[14px] text-[#3355A4] underline hover:text-[#21428A]"
             >
               Visit SISYA Homepage
