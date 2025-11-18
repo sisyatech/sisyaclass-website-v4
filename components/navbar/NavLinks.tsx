@@ -68,12 +68,16 @@ const NavLinks = () => {
     fetchWebLabels();
   }, [hoveredGrade]);
 
+  // const handleResourceClick = (resourceLabel: string, subject?: string) => {
+  //   if (resourceLabel === "NCERT solutions") {
+  //     router.push(`/ncert-solutions/${subject || 'class-12'}`);
+  //   } else {
+  //     router.push(`/resources/${resourceLabel.toLowerCase().replace(/\s+/g, '-')}`);
+  //   }
+  // };
+
   const handleResourceClick = (resourceLabel: string, subject?: string) => {
-    if (resourceLabel === "NCERT solutions") {
-      router.push(`/ncert-solutions/${subject || 'class-12'}`);
-    } else {
-      router.push(`/resources/${resourceLabel.toLowerCase().replace(/\s+/g, '-')}`);
-    }
+    console.log("clicked");
   };
 
   const ncertSubjects = [
