@@ -20,6 +20,34 @@ export default function ThreeWorksheetContent() {
     message: "",
   });
 
+  const updatePaymentStatus = async (paymentStatus: "success" | "fail") => {
+    const leadID = typeof window !== "undefined" ? localStorage.getItem("leadId") : null;
+    if (!leadID) return false;
+    try {
+      const response = await fetch("https://sisyaclass.xyz/student/update_reg_lead2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: Number(leadID),
+          status: paymentStatus,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        console.log("[3Worksheet] Lead status updated successfully");
+        return true;
+      }
+      console.warn("[3Worksheet] Failed to update lead status");
+      return false;
+    } catch (error) {
+      console.error("[3Worksheet] Error updating lead status:", error);
+      return false;
+    }
+  };
+
 
   const handleReserveClick = async () => {
     if (!phoneNumber || !selectedClass)
@@ -75,6 +103,7 @@ export default function ThreeWorksheetContent() {
       const orderJson = await orderRes.json();
       console.log("[3Worksheet] Order API response", orderJson);
       if (!orderJson?.success) {
+        await updatePaymentStatus("fail");
         alert("Failed to initialize payment. Please try again.");
         return;
       }
@@ -99,15 +128,18 @@ export default function ThreeWorksheetContent() {
         description: payload.description,
         order_id: payload.order_id,
         prefill: payload.prefill,
-        handler: function (response: any) {
+        handler: async function (response: any) {
           console.log("[3 Worksheet Bundle] Success handler", response);
           setShowReservationPopup(false);
+          await updatePaymentStatus("success");
           window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹29")}&class=${encodeURIComponent(selectedClass)}`;
         },
         modal: {
           ondismiss: function () {
             console.warn("[3Worksheet] Checkout dismissed by user");
-            window.location.href = `/3worksheet/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+            updatePaymentStatus("fail").finally(() => {
+              window.location.href = `/3worksheet/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+            });
           },
         },
       };
@@ -117,6 +149,7 @@ export default function ThreeWorksheetContent() {
       rzp.open();
     } catch (err) {
       console.error("[3worksheet] Error", err);
+      updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);

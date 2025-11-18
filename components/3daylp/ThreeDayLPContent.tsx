@@ -18,6 +18,35 @@ export default function ThreeDayLPContent() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showLoader, setShowLoader] = useState(false);
 
+  const updatePaymentStatus = async (paymentStatus: "success" | "fail") => {
+    const leadID = typeof window !== "undefined" ? localStorage.getItem("leadId") : null;
+    if (!leadID) return false;
+    try {
+      const response = await fetch("https://sisyaclass.xyz/student/update_reg_lead2", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: Number(leadID),
+          status: paymentStatus,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        console.log("[3DAY] Lead status updated successfully");
+        return true;
+      }
+
+      console.warn("[3DAY] Failed to update lead status");
+      return false;
+    } catch (error) {
+      console.error("[3DAY] Error updating lead status:", error);
+      return false;
+    }
+  };
+
   const handleChooseClass = (grade: string) => {
     setSelectedClass(grade);
     setShowReservationPopup(true);
@@ -83,15 +112,18 @@ export default function ThreeDayLPContent() {
         description: payload.description,
         order_id: payload.order_id,
         prefill: payload.prefill,
-        handler: function (response: any) {
+        handler: async function (response: any) {
           console.log("[3DAY] Success handler", response);
           setShowReservationPopup(false);
+          await updatePaymentStatus("success");
           window.location.href = `/3dayslp/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
             console.warn("[3DAY] Checkout dismissed by user");
-            window.location.href = `/3dayslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+            updatePaymentStatus("fail").finally(() => {
+              window.location.href = `/3dayslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+            });
           },
         },
       };
@@ -101,6 +133,7 @@ export default function ThreeDayLPContent() {
       rzp.open();
     } catch (err) {
       console.error("[3DAY] Error", err);
+      updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);
