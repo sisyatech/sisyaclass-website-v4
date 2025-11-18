@@ -1,4 +1,4 @@
-import sitemap from "../sitemap";
+import sitemap from "../../sitemap";
 
 const XML_HEADER = '<?xml version="1.0" encoding="UTF-8"?>';
 const URLSET_OPEN =
