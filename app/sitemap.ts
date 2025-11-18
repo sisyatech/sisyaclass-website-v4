@@ -44,16 +44,6 @@ const CHANGE_FREQUENCIES = {
   DYNAMIC: "daily" as MetadataRoute.Sitemap[number]["changeFrequency"],
 };
 
-const getAlternates = (path: string) => {
-  const fullUrl = `${BASE_URL}${path}`;
-  return {
-    canonical: fullUrl,
-    languages: {
-      "x-default": fullUrl,
-    },
-  };
-};
-
 const mapToSitemap = (
   items: any[],
   base: string,
@@ -64,7 +54,6 @@ const mapToSitemap = (
 ): MetadataRoute.Sitemap =>
   items.map((item) => {
     const path = `${base}/${item[key]}`;
-    const imageUrl = getImage ? getImage(item) : undefined;
     return {
       url: `${BASE_URL}${path}`,
       lastModified: item.publishedAt
@@ -72,8 +61,6 @@ const mapToSitemap = (
         : DEFAULT_LAST_MODIFIED,
       changeFrequency,
       priority,
-      alternates: getAlternates(path),
-      images: imageUrl ? [imageUrl] : undefined,
     };
   });
 
@@ -83,7 +70,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: DEFAULT_LAST_MODIFIED,
     changeFrequency: CHANGE_FREQUENCIES.STATIC,
     priority: path === "/" ? 1 : 0.9,
-    alternates: getAlternates(path),
   }));
 
   const gradeRoutes = (AVAILABLE_GRADES || []).map((g) => ({
@@ -91,7 +77,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: DEFAULT_LAST_MODIFIED,
     changeFrequency: CHANGE_FREQUENCIES.GRADE,
     priority: 0.8,
-    alternates: getAlternates(`/grade${g}`),
   }));
 
   const [blogs, news] = await Promise.all([
@@ -110,16 +95,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blogs",
     "id",
     CHANGE_FREQUENCIES.DYNAMIC,
-    0.7,
-    (item) => item.banner
+    0.7
   );
   const newsRoutes = mapToSitemap(
     news.news || [],
     "/news",
     "id",
     CHANGE_FREQUENCIES.DYNAMIC,
-    0.7,
-    (item) => item.banner
+    0.7
   );
 
   return [...staticRoutes, ...gradeRoutes, ...blogRoutes, ...newsRoutes];
