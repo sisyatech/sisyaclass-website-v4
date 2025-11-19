@@ -253,13 +253,15 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
         ) : comments.length === 0 ? (
           <div className="text-center text-gray-500">No comments yet. Be the first to comment!</div>
         ) : (
-          comments.map((comment, index) => (
+          comments.map((comment, index) => {
+            // console.log("[BlogAuthorComments] Rendering comment", comment);
+            return (
             <div key={comment.id}>
               <div className="flex items-start gap-2 sm:gap-3">
                 <div className="relative w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0">
-                  {comment.commentedBy.profile ? (
+                  {comment.commentedBy.id ? (
                     <Image
-                      src={fixProfileImageUrl(comment.commentedBy.profile)}
+                      src={`https://sisyaclass.xyz/student/thumbs/users/${comment.commentedBy.id}.jpg`}
                       alt={comment.commentedBy.name}
                       fill
                       sizes="40px"
@@ -352,7 +354,8 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
                 <hr className="mt-3 sm:mt-4 border-gray-200" />
               )}
             </div>
-          ))
+          );
+          })
         )}
       </div>
       </div>
