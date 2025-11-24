@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import { API_BASE_URL } from "@/lib/config";
 
 const bulletPoints = [
   "Empower schools to provide holistic education",
@@ -7,7 +9,49 @@ const bulletPoints = [
   "Give parents peace of mind by empowering their child’s learning journey",
 ];
 
+type CarouselItem = {
+  id: string;
+  imageLink?: string | null;
+  href?: string | null;
+  order: number;
+};
+
+const CAROUSEL_ENDPOINT = `${API_BASE_URL}/student/sip_carousel1`;
+
 const BuildingSchoolsSection = () => {
+  const [slides, setSlides] = useState<CarouselItem[]>([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const fetchCarousel = async () => {
+      try {
+        const res = await fetch(CAROUSEL_ENDPOINT, { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed to fetch carousel");
+        const data: CarouselItem[] = await res.json();
+        const sorted = (Array.isArray(data) ? data : [])
+          .filter((item) => !!item.imageLink)
+          .sort((a, b) => a.order - b.order);
+        setSlides(sorted);
+      } catch (error) {
+        console.error("[SIP] Failed to load carousel 1", error);
+      }
+    };
+    fetchCarousel();
+  }, []);
+
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const id = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [slides.length]);
+
+  const activeSlide = useMemo(
+    () => (slides.length ? slides[currentSlide % slides.length] : null),
+    [slides, currentSlide],
+  );
+
   return (
     <section className="w-full bg-white">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-5 pb-12 pt-14 md:flex-row md:items-center md:justify-center md:gap-10 md:px-12 lg:px-0">
@@ -46,15 +90,43 @@ const BuildingSchoolsSection = () => {
         {/* Right Image */}
         <div className="relative mx-auto w-full max-w-[320px] sm:max-w-[380px] md:mx-0 md:flex-1 md:max-w-[420px]">
           <div className="mx-auto h-[260px] w-full overflow-hidden rounded-[18px] shadow-[0px_10px_30px_rgba(16,43,64,0.08)] sm:h-[320px] md:h-[400px]">
-            <Image
-              src="/sippics/schooldemo.svg"
-              alt="School building"
-              width={450}
-              height={450}
-              className="h-full w-full object-cover"
-              priority
-            />
+            {activeSlide ? (
+              <a href={activeSlide.href || undefined} target={activeSlide.href ? "_blank" : undefined} rel="noopener noreferrer">
+                <Image
+                  src={activeSlide.imageLink || "/sippics/schooldemo.svg"}
+                  alt="SISYA school carousel"
+                  width={450}
+                  height={450}
+                  className="h-full w-full object-cover transition-opacity duration-500"
+                  priority
+                />
+              </a>
+            ) : (
+              <Image
+                src="/sippics/schooldemo.svg"
+                alt="School building"
+                width={450}
+                height={450}
+                className="h-full w-full object-cover"
+                priority
+              />
+            )}
           </div>
+
+          {slides.length > 1 && (
+            <div className="mt-4 flex justify-center gap-2">
+              {slides.map((slide, index) => (
+                <button
+                  key={slide.id}
+                  aria-label={`Go to slide ${index + 1}`}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === currentSlide ? "w-6 bg-[#0595CE]" : "w-2 bg-gray-300"
+                  }`}
+                  onClick={() => setCurrentSlide(index)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
 

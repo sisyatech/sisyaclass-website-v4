@@ -1,44 +1,59 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { API_BASE_URL } from "@/lib/config";
 
-const teacherProfiles = [
-  { name: "Srikesh Iyer", institute: "IIT Gandhinagar", image: "/sippics/teacher1.png" },
-  { name: "Nidhi", institute: "IIT Bhubaneshwar", image: "/sippics/teacher2.png" },
-  { name: "Tharun", institute: "IIT Madras", image: "/sippics/teacher3.png" },
-  { name: "Ajay", institute: "IIT Ropar", image: "/sippics/teacher1.png" },
-  { name: "Gopesh", institute: "IIT Kanpur", image: "/sippics/teacher2.png" },
-  { name: "Neha", institute: "IIT Gandhinagar", image: "/sippics/teacher3.png" },
-  { name: "Rutika", institute: "IIT Palakkad", image: "/sippics/teacher1.png" },
-  { name: "Kriti Kochar", institute: "IIT Ropar", image: "/sippics/teacher2.png" },
-  { name: "Pranav", institute: "IIT Bombay", image: "/sippics/teacher3.png" },
-  { name: "Anjali", institute: "IIT Delhi", image: "/sippics/teacher1.png" },
-  { name: "Rohit", institute: "IIT Kharagpur", image: "/sippics/teacher2.png" },
-  { name: "Meera", institute: "IIT Hyderabad", image: "/sippics/teacher3.png" },
-];
+type MentorProfile = {
+  id: string;
+  name: string;
+  institute: string;
+  imageLink?: string | null;
+  order: number;
+};
+
+const MENTOR_ENDPOINT = `${API_BASE_URL}/student/sip_mentor`;
 
 const VISIBLE_COUNT = 8;
 
 const BestAcademicTeamSection = () => {
   const [startIndex, setStartIndex] = useState(0);
+  const [mentors, setMentors] = useState<MentorProfile[]>([]);
+
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const res = await fetch(MENTOR_ENDPOINT, { cache: "no-store" });
+        if (!res.ok) throw new Error("Failed to fetch mentors");
+        const data: MentorProfile[] = await res.json();
+        const sorted = (Array.isArray(data) ? data : [])
+          .filter((mentor) => !!mentor.name)
+          .sort((a, b) => a.order - b.order);
+        setMentors(sorted);
+      } catch (error) {
+        console.error("[SIP] Failed to load mentors", error);
+      }
+    };
+    fetchMentors();
+  }, []);
 
   const visibleTeachers = useMemo(() => {
-    return Array.from({ length: Math.min(VISIBLE_COUNT, teacherProfiles.length) }, (_, idx) => {
-      const index = (startIndex + idx) % teacherProfiles.length;
-      return teacherProfiles[index];
+    if (mentors.length === 0) return [];
+    return Array.from({ length: Math.min(VISIBLE_COUNT, mentors.length) }, (_, idx) => {
+      const index = (startIndex + idx) % mentors.length;
+      return mentors[index];
     });
-  }, [startIndex]);
+  }, [startIndex, mentors]);
 
   const moveLeft = () => {
-    setStartIndex((prev) => (prev - 4 + teacherProfiles.length) % teacherProfiles.length);
+    setStartIndex((prev) => (prev - 4 + mentors.length) % mentors.length);
   };
 
   const moveRight = () => {
-    setStartIndex((prev) => (prev + 4) % teacherProfiles.length);
+    setStartIndex((prev) => (prev + 4) % mentors.length);
   };
 
-  if (!teacherProfiles.length) {
+  if (!mentors.length) {
     return null;
   }
 
@@ -73,7 +88,7 @@ const BestAcademicTeamSection = () => {
                 >
                   <div className="flex h-[96px] w-[96px] items-center justify-center rounded-full bg-[#D9EFFFB2] sm:h-[108px] sm:w-[108px] md:h-[120px] md:w-[120px]">
                     <Image
-                      src={teacher.image}
+                      src={teacher.imageLink || "/sippics/teacher1.png"}
                       alt={teacher.name}
                       width={120}
                       height={120}

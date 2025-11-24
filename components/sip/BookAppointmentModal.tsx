@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "@/lib/config";
 
 type BookAppointmentModalProps = {
   open: boolean;
@@ -19,6 +20,9 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
   const [board, setBoard] = useState("");
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const requestLocation = () => {
     if (!navigator.geolocation) {
@@ -78,9 +82,71 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
 
   if (!open) return null;
 
+  const isFormValid =
+    mobileNumber.trim().length === 10 && name.trim() && role.trim() && board.trim();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSubmitError(null);
+
+    if (!isFormValid) {
+      setSubmitError("Please fill all required fields.");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const payload = {
+        mobileNumber: mobileNumber.trim(),
+        name: name.trim(),
+        role: role.trim(),
+        institute: institute.trim(),
+        location: city.trim(),
+        preferredBoard: board.trim(),
+      };
+
+      const response = await fetch(`${API_BASE_URL}/student/sip_lead`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData?.error || "Failed to submit. Please try again.");
+      }
+
+      setShowSuccessModal(true);
+      setMobileNumber("");
+      setName("");
+      setRole("");
+      setInstitute("");
+      setCity("");
+      setBoard("");
+
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        onClose();
+      }, 5000);
+    } catch (error: any) {
+      setSubmitError(error.message || "Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 px-4">
-      <div className="relative w-full max-w-[320px] sm:max-w-[420px] overflow-hidden rounded-[16px] sm:rounded-[20px] bg-white shadow-[0px_16px_50px_rgba(9,22,39,0.22)]">
+    <div
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 px-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget && !showSuccessModal && !submitting) {
+          onClose();
+        }
+      }}
+    >
+      <div className="relative w-full max-w-[360px] sm:max-w-[400px] overflow-hidden rounded-[18px] bg-white shadow-[0px_16px_40px_rgba(9,22,39,0.24)]">
         <button
           onClick={onClose}
           aria-label="Close"
@@ -89,18 +155,18 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
           ✕
         </button>
 
-        <div className="bg-[#FFF5E4] px-6 py-5">
-          <h2 className="text-left text-[22px] font-semibold text-[#111827]">
+        <div className="bg-[#FFF5E4] px-4 py-4">
+          <h2 className="text-left text-[18px] font-semibold text-[#111827]">
             Book a Free Appointment
           </h2>
         </div>
 
-        <form className="flex flex-col gap-4 px-6 py-6">
-          <label className="flex items-center gap-3 rounded-[10px] border border-[#C3CFDB] bg-white px-4 py-3 text-sm text-[#111827] focus-within:border-[#0595CE]">
-            <span className="flex items-center gap-2">
-              <span className="text-lg">🇮🇳</span>
+        <form className="flex flex-col gap-3 px-4 py-4" onSubmit={handleSubmit}>
+          <label className="flex items-center gap-2 rounded-[10px] border border-[#C3CFDB] bg-white px-3 py-2 text-xs text-[#111827] focus-within:border-[#0595CE]">
+            <span className="flex items-center gap-1 text-sm">
+              <span>🇮🇳</span>
               <svg
-                className="h-4 w-4 text-[#1A2439]/50"
+                className="h-3 w-3 text-[#1A2439]/50"
                 viewBox="0 0 20 20"
                 fill="none"
               >
@@ -118,7 +184,7 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
               placeholder="Mobile Number"
               value={mobileNumber}
               onChange={(event) => setMobileNumber(event.target.value)}
-              className="w-full bg-transparent text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE]"
+              className="w-full bg-transparent text-xs text-[#111827] outline-none placeholder:text-[#9AA3AE]"
             />
           </label>
 
@@ -127,10 +193,10 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
             placeholder="Name"
             value={name}
             onChange={(event) => setName(event.target.value)}
-            className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
+            className="rounded-[10px] border border-[#C3CFDB] px-3 py-2 text-xs text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
           />
 
-          <label className="flex flex-col gap-1 text-left text-sm text-[#111827]">
+          <label className="flex flex-col gap-1 text-left text-xs text-[#111827]">
             <span className="font-medium text-[#1C283F]">Role</span>
             <select
               value={role}
@@ -155,7 +221,7 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
             className="rounded-[10px] border border-[#C3CFDB] px-4 py-3 text-sm text-[#111827] outline-none placeholder:text-[#9AA3AE] focus:border-[#0595CE]"
           />
 
-          <label className="relative flex items-center gap-3 rounded-[10px] border border-[#C3CFDB] bg-white px-4 py-3 text-sm text-[#111827] focus-within:border-[#0595CE]">
+          <label className="relative flex items-center gap-2 rounded-[10px] border border-[#C3CFDB] bg-white px-3 py-2 text-xs text-[#111827] focus-within:border-[#0595CE]">
             <input
               type="text"
               placeholder="Select Location"
@@ -214,6 +280,9 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
           {locationError && (
             <p className="text-left text-xs text-red-500">{locationError}</p>
           )}
+          {submitError && (
+            <p className="text-left text-xs text-red-500">{submitError}</p>
+          )}
 
           <label className="flex flex-col gap-1 text-left text-sm text-[#111827]">
             <span className="font-medium text-[#1C283F]">Preferred Board</span>
@@ -246,12 +315,26 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
 
           <button
             type="submit"
-            className="h-[46px] w-full rounded-[10px] bg-[#DDE1E7] text-sm font-semibold text-[#6B7280]"
+            disabled={!isFormValid || submitting}
+            className={`h-[46px] w-full rounded-[10px] text-sm font-semibold transition ${
+              !isFormValid || submitting
+                ? "bg-[#DDE1E7] text-[#6B7280] cursor-not-allowed"
+                : "bg-[#0595CE] text-white hover:bg-[#047bb1]"
+            }`}
           >
-            Register Now
+            {submitting ? "Registering..." : "Register Now"}
           </button>
         </form>
       </div>
+
+      {showSuccessModal && (
+        <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-black/60 px-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 text-center shadow-xl">
+            <h3 className="text-xl font-semibold text-[#111827]">Thank you for submitting</h3>
+            <p className="mt-3 text-sm text-[#4B5563]">Our team will contact you shortly.</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
