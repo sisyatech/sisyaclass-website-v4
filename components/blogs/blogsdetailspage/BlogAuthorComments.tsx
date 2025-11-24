@@ -273,13 +273,9 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
                       }}
                     />
                   ) : (
-                    <Image
-                      src="/girl.svg"
-                      alt={comment.commentedBy.name}
-                      fill
-                      sizes="40px"
-                      className="rounded-full object-cover"
-                    />
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 items-center justify-center rounded-full bg-[#E5EEFF] text-xs font-semibold text-[#1A2439] uppercase">
+                      {comment.commentedBy.name?.charAt(0) || "U"}
+                    </div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -318,17 +314,18 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
                                 unoptimized
                                 onError={(e) => {
                                   const el = e.target as HTMLImageElement;
-                                  el.src = '/girl.svg';
+                                  el.style.display = "none";
+                                  const fallback = document.createElement("div");
+                                  fallback.className =
+                                    "flex h-full w-full items-center justify-center rounded-full bg-[#E5EEFF] text-[10px] font-semibold text-[#1A2439] uppercase";
+                                  fallback.textContent = reply.commentedBy.name?.charAt(0) || "U";
+                                  el.parentElement?.appendChild(fallback);
                                 }}
                               />
                             ) : (
-                              <Image
-                                src="/girl.svg"
-                                alt={reply.commentedBy.name}
-                                fill
-                                sizes="28px"
-                                className="rounded-full object-cover"
-                              />
+                              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-[#E5EEFF] text-[10px] font-semibold text-[#1A2439] uppercase">
+                                {reply.commentedBy.name?.charAt(0) || "U"}
+                              </div>
                             )}
                           </div>
                           <div className="flex-1">
