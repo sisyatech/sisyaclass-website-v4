@@ -45,9 +45,7 @@ export default function ReservationPopup({ open, selectedClass, selectedSubject,
         <h2 className="text-xl sm:text-2xl font-bold text-[#01317a] mb-3 text-center pr-8">
           See the Difference in Just One Class
         </h2>
-        <p className="text-center text-sm sm:text-base text-[#415252] mb-6">
-          Get Live Class, Recorded Sessions, Doubt-Solving & Performance Reports
-        </p>
+        
         <form
           className="flex flex-col gap-4"
           onSubmit={(e) => {
@@ -131,7 +129,7 @@ export default function ReservationPopup({ open, selectedClass, selectedSubject,
             type="submit" 
             className="w-full bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a] active:scale-[0.98] shadow-md hover:shadow-lg"
           >
-            Try 3 Classes @ ₹19 Only
+            Tap To Pay &amp; Book
           </button>
         </form>
       </div>
