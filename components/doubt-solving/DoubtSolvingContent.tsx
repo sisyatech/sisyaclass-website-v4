@@ -16,6 +16,7 @@ import HowItWorksSection from "./sections/HowItWorksSection";
 export default function DoubtSolvingContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("10");
+  const [selectedSubject, setSelectedSubject] = useState("Math");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showLoader, setShowLoader] = useState(false);
 
@@ -68,6 +69,7 @@ export default function DoubtSolvingContent() {
           name: "SISYA Doubt Solving Demo",
           phone: phoneNumber,
           cf_class: selectedClass,
+          demoSub: selectedSubject,
           status: "initiated",
           source:"web",
           medium:"web",
@@ -155,8 +157,10 @@ export default function DoubtSolvingContent() {
       <ReservationPopup
         open={showReservationPopup}
         selectedClass={selectedClass}
+        selectedSubject={selectedSubject}
         phoneNumber={phoneNumber}
         onChangeClass={setSelectedClass}
+        onChangeSubject={setSelectedSubject}
         onChangePhone={setPhoneNumber}
         onSubmit={handleReserveClick}
         onClose={() => setShowReservationPopup(false)}

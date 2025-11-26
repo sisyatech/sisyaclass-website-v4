@@ -4,14 +4,16 @@ import React from "react";
 type ReservationPopupProps = {
   open: boolean;
   selectedClass: string;
+  selectedSubject: string;
   phoneNumber: string;
   onChangeClass: (value: string) => void;
+  onChangeSubject: (value: string) => void;
   onChangePhone: (value: string) => void;
   onSubmit: () => void;
   onClose: () => void;
 };
 
-export default function ReservationPopup({ open, selectedClass, phoneNumber, onChangeClass, onChangePhone, onSubmit, onClose }: ReservationPopupProps) {
+export default function ReservationPopup({ open, selectedClass, selectedSubject, phoneNumber, onChangeClass, onChangeSubject, onChangePhone, onSubmit, onClose }: ReservationPopupProps) {
   if (!open) return null;
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,15 +22,19 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
   };
 
   const gradeOptions = Array.from({ length: 10 }, (_, index) => (index + 1).toString());
+  const subjectOptions = [
+    { label: "Math", value: "Math" },
+    { label: "Science", value: "Science" },
+  ];
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-[10000] p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
+      className="fixed inset-0 flex items-center justify-center z-[10000] p-3 sm:p-4 bg-black/50 backdrop-blur-sm transition-opacity duration-300"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white rounded-xl p-6 sm:p-8 max-w-md w-full relative shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-xl p-5 sm:p-6 max-w-md w-full relative shadow-2xl">
         <button 
           className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center bg-transparent border-none text-2xl cursor-pointer text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors duration-200" 
           onClick={onClose}
@@ -43,14 +49,14 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
           Get Live Class, Recorded Sessions, Doubt-Solving & Performance Reports
         </p>
         <form
-          className="flex flex-col gap-5"
+          className="flex flex-col gap-4"
           onSubmit={(e) => {
             e.preventDefault();
             onSubmit();
           }}
         >
           <div className="relative w-full">
-            <label htmlFor="childClass" className="block text-center text-sm font-medium text-[#333] mb-2">
+            <label htmlFor="childClass" className="block text-left text-sm font-medium text-[#333] mb-1">
               Select Grade
             </label>
             <div className="relative">
@@ -76,7 +82,33 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
             </div>
           </div>
           <div className="relative w-full">
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-[#333] mb-2">
+            <label htmlFor="subject" className="block text-left text-sm font-medium text-[#333] mb-1">
+              Select Subject
+            </label>
+            <div className="relative">
+              <select
+                id="subject"
+                value={selectedSubject}
+                onChange={(e) => onChangeSubject(e.target.value)}
+                className="w-full p-3 pr-10 border border-[#c3d3ea] rounded-lg text-base bg-white appearance-none focus:outline-none focus:ring-2 focus:ring-[#01317a] focus:border-transparent transition-all"
+              >
+                {subjectOptions.map((subject) => (
+                  <option key={subject.value} value={subject.value}>
+                    {subject.label}
+                  </option>
+                ))}
+              </select>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#555]"
+              >
+                <path fill="currentColor" d="M7 10l5 5 5-5z" />
+              </svg>
+            </div>
+          </div>
+          <div className="relative w-full">
+            <label htmlFor="phoneNumber" className="block text-left text-sm font-medium text-[#333] mb-1">
               Enter your phone number
             </label>
             <div className="flex items-center border border-[#c3d3ea] rounded-lg overflow-hidden bg-white focus-within:ring-2 focus-within:ring-[#01317a] focus-within:border-transparent transition-all">
