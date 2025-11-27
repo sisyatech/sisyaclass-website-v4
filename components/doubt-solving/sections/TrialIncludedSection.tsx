@@ -138,7 +138,7 @@ export default function TrialIncludedSection() {
           ref={section3Ref}
           className={`transition-all duration-[1000ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[40px]'}`}
         >
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 md:gap-10">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-start gap-2 md:gap-6 md:pl-8">
             {/* Text Content - Left Side */}
             <div className={`md:w-1/2 text-center md:text-left transition-all duration-[1000ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[60px]'}`} style={{ transitionDelay: visibleSections.section3 ? '200ms' : '0ms' }}>
               <h3 className="mb-4 font-bold text-[28px] leading-[34px] tracking-normal text-right md:text-[38px] md:leading-[46.67px]">
@@ -151,8 +151,8 @@ export default function TrialIncludedSection() {
 
             {/* Images - Right Side */}
             <div className={`md:w-1/2 transition-all duration-[1000ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-[60px] scale-95'}`} style={{ transitionDelay: visibleSections.section3 ? '300ms' : '0ms' }}>
-              <div className="relative w-full max-w-[400px] mx-auto md:mx-0 flex gap-2">
-                <div className={`w-1/2 transition-all duration-[800ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: visibleSections.section3 ? '400ms' : '0ms' }}>
+              <div className="relative w-full max-w-[600px] mx-auto md:mx-0 md:ml-0 flex gap-2">
+                <div className={`w-1/3 transition-all duration-[800ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: visibleSections.section3 ? '400ms' : '0ms' }}>
                   <Image
                     src="/board/mobile1.svg"
                     alt="SISYA AI Mobile App 1"
@@ -162,10 +162,20 @@ export default function TrialIncludedSection() {
                     priority
                   />
                 </div>
-                <div className={`w-1/2 transition-all duration-[800ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: visibleSections.section3 ? '500ms' : '0ms' }}>
+                <div className={`w-1/3 transition-all duration-[800ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: visibleSections.section3 ? '500ms' : '0ms' }}>
                   <Image
                     src="/board/mobile2.svg"
                     alt="SISYA AI Mobile App 2"
+                    width={200}
+                    height={200}
+                    className="w-full h-auto object-contain"
+                    priority
+                  />
+                </div>
+                <div className={`w-1/3 transition-all duration-[800ms] ease-out ${visibleSections.section3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: visibleSections.section3 ? '600ms' : '0ms' }}>
+                  <Image
+                    src="/board/mobile3.svg"
+                    alt="SISYA AI Mobile App 3"
                     width={200}
                     height={200}
                     className="w-full h-auto object-contain"

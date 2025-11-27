@@ -77,8 +77,8 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   };
 
   return (
-    <section className="relative w-full bg-[#01317A] text-white overflow-hidden min-h-[450px] sm:min-h-[480px] md:min-h-[520px] lg:min-h-[450px] xl:min-h-[550px] pt-4 pb-0 sm:pt-5 sm:pb-0 md:pt-6 md:pb-0 lg:pt-8 lg:pb-0 xl:pt-10 xl:pb-0">
-      <div className="mx-auto flex w-full max-w-[1300px] lg:max-w-[1300px] xl:max-w-[1500px] 2xl:max-w-[1600px] flex-col gap-3 px-10 sm:px-14 md:flex-row md:items-center md:justify-between md:px-16 lg:px-20 xl:px-24">
+    <section className="relative w-full bg-[#01317A] text-white overflow-hidden min-h-[450px] sm:min-h-[480px] md:min-h-[520px] lg:min-h-[380px] xl:min-h-[420px] pt-4 pb-0 sm:pt-5 sm:pb-0 md:pt-0 md:pb-0 lg:pt-0 lg:pb-0 xl:pt-0 xl:pb-0 flex items-end">
+      <div className="mx-auto flex w-full max-w-[1300px] lg:max-w-[1300px] xl:max-w-[1500px] 2xl:max-w-[1600px] flex-col gap-3 px-10 sm:px-14 md:flex-row md:items-center md:justify-between md:px-16 lg:px-20 xl:px-24 2xl:pl-[158px] 2xl:pr-[50px]">
         <div className={`w-full max-w-xl sm:max-w-lg md:max-w-xl lg:max-w-[580px] xl:max-w-[700px] mt-4 sm:mt-3 md:mt-2 lg:mt-6 transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-[80px]'}`}>
           <h1 className={`font-roboto font-black text-[22px] leading-[28px] tracking-[0.03em] text-[#FEFEFE] sm:text-[24px] sm:leading-[30px] md:text-[28px] md:leading-[34px] lg:text-[30px] lg:leading-[36px] xl:text-[40px] xl:leading-[45px] xl:w-[700px] xl:max-w-[700px] transition-all duration-[1000ms] ease-out ${entered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[30px]'}`} style={{ transitionDelay: entered ? '100ms' : '0ms' }}>
             Your Child&apos;s Doubts Are Breaking Their Confidence
@@ -112,14 +112,14 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         </div>
 
         <div className={`relative w-full mt-4 sm:mt-5 md:mt-0 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-[700px] xl:max-w-[900px] 2xl:max-w-[1000px] transition-all duration-[1200ms] ease-out ${entered ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-[80px] scale-95'}`} style={{ transitionDelay: entered ? '200ms' : '0ms' }}>
-          <div className="relative mx-auto flex w-full items-center justify-center"> 
+          <div className="relative mx-auto flex w-full items-center justify-center ">
             <Image
-              src="/doubt-solving/doubt.svg"
+              src="/doubt-solving/app.svg"
               alt="Child with doubts breaking confidence"
-              width={900}
-              height={900}
+              width={800}
+              height={800}
               unoptimized
-              className="relative w-full h-auto object-contain max-w-[260px] sm:max-w-[360px] md:max-w-[420px] lg:max-w-[350px] xl:max-w-[350px] 2xl-max-w-[350px]"
+              className="relative w-full h-auto object-contain max-w-[260px] sm:max-w-[360px] md:max-w-[420px] lg:max-w-[350px] xl:max-w-[350px] 2xl-max-w-[350px] max-[1080px]:max-w-[300px]"
               priority
             />
           </div>
