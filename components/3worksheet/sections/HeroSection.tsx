@@ -8,33 +8,39 @@ type HeroSectionProps = {
   onRegister: () => void;
 };
 
-type Placement = "left" | "center" | "right";
+type Placement = "farLeft" | "left" | "center" | "right" | "farRight";
 
 const CARDS = [
   { id: "math", src: "/3worksheet/left_.svg", alt: "Math worksheet preview" },
   { id: "science", src: "/3worksheet/center_.svg", alt: "Science worksheet preview" },
   { id: "chemistry", src: "/3worksheet/right_.svg", alt: "Chemistry worksheet preview" },
+  { id: "english", src: "/3worksheet/pic4.svg", alt: "English worksheet preview" },
+  { id: "evs", src: "/3worksheet/pic5.svg", alt: "EVS worksheet preview" },
 ];
 
 const DESKTOP_PLACEMENT_STYLES: Record<Placement, { x: number; rotate: number; scale: number; zIndex: number }> = {
-  left: { x: -120, rotate: -10, scale: 0.94, zIndex: 10 },
-  center: { x: 0, rotate: 0, scale: 1, zIndex: 30 },
-  right: { x: 120, rotate: 10, scale: 0.94, zIndex: 20 },
+  farLeft: { x: -220, rotate: -14, scale: 0.85, zIndex: 5 },
+  left: { x: -130, rotate: -9, scale: 0.93, zIndex: 10 },
+  center: { x: 0, rotate: 0, scale: 1, zIndex: 40 },
+  right: { x: 130, rotate: 9, scale: 0.93, zIndex: 20 },
+  farRight: { x: 220, rotate: 14, scale: 0.85, zIndex: 8 },
 };
 
 const MOBILE_PLACEMENT_STYLES: Record<Placement, { x: number; rotate: number; scale: number; zIndex: number }> = {
-  left: { x: -85, rotate: -8, scale: 0.96, zIndex: 10 },
-  center: { x: 0, rotate: 0, scale: 1, zIndex: 30 },
-  right: { x: 85, rotate: 8, scale: 0.96, zIndex: 20 },
+  farLeft: { x: -150, rotate: -10, scale: 0.88, zIndex: 5 },
+  left: { x: -90, rotate: -7, scale: 0.95, zIndex: 10 },
+  center: { x: 0, rotate: 0, scale: 1, zIndex: 40 },
+  right: { x: 90, rotate: 7, scale: 0.95, zIndex: 20 },
+  farRight: { x: 150, rotate: 10, scale: 0.88, zIndex: 8 },
 };
 
 export default function HeroSection({ onRegister }: HeroSectionProps) {
-  const [placements, setPlacements] = useState<Placement[]>(["left", "center", "right"]);
+  const [placements, setPlacements] = useState<Placement[]>(["farLeft", "left", "center", "right", "farRight"]);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setPlacements((prev) => [prev[1], prev[2], prev[0]]);
+      setPlacements((prev) => [prev[1], prev[2], prev[3], prev[4], prev[0]]);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
@@ -53,8 +59,8 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-0 px-4 py-10 sm:gap-12 sm:py-16 lg:flex-row lg:items-stretch lg:py-20">
         <div className="w-full max-w-xl text-center lg:w-1/2 lg:text-left">
           <h1 className="font-montserrat mx-auto max-w-none text-[1.7rem] leading-[1.05] font-bold text-white sm:text-[2.3rem] lg:mx-0 lg:text-[3rem]">
-            <span className="block whitespace-nowrap">Get 3 Worksheets Designed By</span>
-            <span className="block whitespace-nowrap">IIT Teachers for ₹29</span>
+            <span className="block whitespace-nowrap">Get 5 Worksheets Designed By</span>
+            <span className="block whitespace-nowrap">IIT Teachers for ₹49</span>
           </h1>
 
         
@@ -66,11 +72,11 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
             </li>
             <li className="flex items-center gap-3">
               <span className="h-1 w-1 rounded-full bg-white" />
-              Class 1 - 5: 2 Maths &amp; 1 EVS
+              Class 1 - 7: 2 Maths, 2 English &amp; 1 EVS
             </li>
             <li className="flex items-center gap-3">
               <span className="h-1 w-1 rounded-full bg-white" />
-              Class 6 - 10: 1 Maths, 1 Physics &amp; 1 Chemistry
+              Class 8 - 10: 3 Maths, 1 Physics &amp; 1 Chemistry
             </li>
           </ul>
 
@@ -95,9 +101,9 @@ export default function HeroSection({ onRegister }: HeroSectionProps) {
                   whileHover={
                     placement === "center"
                       ? { scale: 1.03 }
-                      : placement === "left"
-                      ? { rotate: target.rotate - 2, scale: 0.92 }
-                      : { rotate: target.rotate + 2, scale: 0.92 }
+                      : placement === "left" || placement === "farLeft"
+                      ? { rotate: target.rotate - 2, scale: Math.max(target.scale - 0.04, 0.88) }
+                      : { rotate: target.rotate + 2, scale: Math.max(target.scale - 0.04, 0.88) }
                   }
                   style={{ zIndex: target.zIndex }}
                   transition={{ type: "spring", stiffness: 200, damping: 24 }}

@@ -37,13 +37,13 @@ export default function ThreeWorksheetContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log("[3Worksheet] Lead status updated successfully");
+        console.log("[5Worksheet] Lead status updated successfully");
         return true;
       }
-      console.warn("[3Worksheet] Failed to update lead status");
+      console.warn("[5Worksheet] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[3Worksheet] Error updating lead status:", error);
+      console.error("[5Worksheet] Error updating lead status:", error);
       return false;
     }
   };
@@ -58,12 +58,12 @@ export default function ThreeWorksheetContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[3Worksheet] Starting flow", { selectedClass, phoneNumber });
+      console.log("[5Worksheet] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA 3-Worksheet Bundle",
+          name: "SISYA 5-Worksheet Bundle",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
@@ -81,19 +81,19 @@ export default function ThreeWorksheetContent() {
       }
 
       const leadData = await leadResponse.json();
-      console.log("[3Worksheet] Lead response", leadData);
+      console.log("[5Worksheet] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[3Worksheet] Lead stored", { leadId: leadData.lead.id });
+      console.log("[5Worksheet] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: 29,
+          amount: 49,
           currency: "INR",
           contact: phoneNumber,
           description: "3 Worksheet Bundle",
@@ -101,7 +101,7 @@ export default function ThreeWorksheetContent() {
         }),
       });
       const orderJson = await orderRes.json();
-      console.log("[3Worksheet] Order API response", orderJson);
+      console.log("[5Worksheet] Order API response", orderJson);
       if (!orderJson?.success) {
         await updatePaymentStatus("fail");
         alert("Failed to initialize payment. Please try again.");
@@ -116,7 +116,7 @@ export default function ThreeWorksheetContent() {
             currency: orderJson.order?.currency,
             key_id: orderJson.keyId,
             name: "Sisya Class",
-            description: "3 Worksheet Bundle",
+            description: "5 Worksheet Bundle",
             prefill: { contact: phoneNumber },
           };
 
@@ -129,14 +129,14 @@ export default function ThreeWorksheetContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[3 Worksheet Bundle] Success handler", response);
+          console.log("[5 Worksheet Bundle] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
-          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹29")}&class=${encodeURIComponent(selectedClass)}`;
+          window.location.href = `/3worksheet/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹49")}&class=${encodeURIComponent(selectedClass)}`;
         },
         modal: {
           ondismiss: function () {
-            console.warn("[3Worksheet] Checkout dismissed by user");
+            console.warn("[5Worksheet] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
               window.location.href = `/3worksheet/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
             });
@@ -145,10 +145,10 @@ export default function ThreeWorksheetContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[3worksheet] Opening Razorpay checkout", { order_id: payload.order_id });
+      console.log("[5Worksheet] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[3worksheet] Error", err);
+      console.error("[5Worksheet] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {
