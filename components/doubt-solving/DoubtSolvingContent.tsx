@@ -119,13 +119,13 @@ export default function DoubtSolvingContent() {
           console.log("[DOUBT-SOLVING] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
-          window.location.href = `/doubt-solving/payment/success?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
+          window.location.href = `/doubt-solving/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
             console.warn("[DOUBT-SOLVING] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
-              window.location.href = `/doubt-solving/payment/failed?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+              window.location.href = `/doubt-solving/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
             });
           },
         },
