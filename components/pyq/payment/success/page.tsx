@@ -104,18 +104,18 @@ export default function PaymentSuccessPage() {
         />
       </noscript>
       <div className="min-h-screen bg-[#f5f8ff] flex flex-col items-center justify-center px-3">
-      <div className="w-full max-w-[360px] sm:max-w-[420px] md:max-w-[450px] bg-white shadow-md min-h-[80vh] md:min-h-0 md:rounded-md md:h-auto py-6 md:py-10">
-        <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 py-6 md:py-10 space-y-4">
-          <Image
-            src="/logo.png"
-            alt="SISYA Class"
-            width={120}
-            height={120}
-            className="mb-1 rounded-2xl shadow-[0_14px_40px_rgba(16,164,252,0.25)]"
-            priority
-          />
-          <h1 className="text-[22px] sm:text-[24px] font-bold text-[#02BDFD]">₹19 Worksheet Bundle Unlocked!</h1>
-          <button
+        <div className="w-full max-w-[380px] sm:max-w-[440px] md:max-w-[470px] bg-white shadow-md min-h-[80vh] md:min-h-0 md:rounded-md md:h-auto py-6 md:py-10">
+          <div className="flex flex-col items-center justify-center text-center px-4 sm:px-6 py-6 md:py-10 space-y-4">
+            <Image
+              src="/logo.png"
+              alt="SISYA Class"
+              width={120}
+              height={120}
+              className="mb-1 rounded-2xl shadow-[0_14px_40px_rgba(16,164,252,0.25)]"
+              priority
+            />
+            <h1 className="text-[22px] sm:text-[24px] font-bold text-[#02BDFD]">Thank you for enrolling in SISYA PYQ Solutions Class</h1>
+            {/* <button
             type="button"
             onClick={handleDownload}
             disabled={isDownloading}
@@ -167,85 +167,85 @@ export default function PaymentSuccessPage() {
           </button>
           {downloadMessage && (
             <p className="mb-4 text-center text-sm text-[#3355A4]">{downloadMessage}</p>
-          )}
+          )} */}
 
-          <p className="text-[16px] text-[#555] leading-relaxed mb-6">
-          Thank you for enrolling in our IIT teacher-led demo classes. Our team will call you shortly.          </p>
+            <p className="text-[16px] text-[#555] leading-relaxed mb-6">
+              Our team will contact you shortly.<br />Till then, explore SISYA AI on our App         </p>
 
-          <div className="w-full max-w-[320px] sm:max-w-[350px] bg-[#f8f9ff] rounded-xl p-4 sm:p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-5 sm:mb-6">
-            <div className="flex items-center justify-between text-[14px] mb-3">
-              <span className="text-[#777] flex items-center gap-2">Transaction ID</span>
-              <span className="font-medium text-[#333] break-all">{transactionId}</span>
+            <div className="w-full max-w-[320px] sm:max-w-[350px] bg-[#f8f9ff] rounded-xl p-4 sm:p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-5 sm:mb-6">
+              <div className="flex items-center justify-between text-[14px] mb-3">
+                <span className="text-[#777] flex items-center gap-2">Transaction ID</span>
+                <span className="font-medium text-[#333] break-all">{transactionId}</span>
+              </div>
+              <div className="flex items-center justify-between text-[14px] mb-3">
+                <span className="text-[#777] flex items-center gap-2">Date &amp; Time</span>
+                <span className="font-medium text-[#333]" suppressHydrationWarning>{currentDateTime}</span>
+              </div>
+              <div className="h-px bg-[#eee] my-3" />
+              <div className="flex items-center justify-between text-[16px] font-bold text-[#0033FF]">
+                <span>Amount Paid</span>
+                <span>{amount}</span>
+              </div>
             </div>
-            <div className="flex items-center justify-between text-[14px] mb-3">
-              <span className="text-[#777] flex items-center gap-2">Date &amp; Time</span>
-              <span className="font-medium text-[#333]" suppressHydrationWarning>{currentDateTime}</span>
-            </div>
-            <div className="h-px bg-[#eee] my-3" />
-            <div className="flex items-center justify-between text-[16px] font-bold text-[#0033FF]">
-              <span>Amount Paid</span>
-              <span>{amount}</span>
-            </div>
-          </div>
 
-          <a
-            href={`https://wa.me/919100312034?text=${encodeURIComponent(
-              `Hi, I just purchased the ₹19 worksheet bundle. My transaction ID is ${transactionId}`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[#0AA76C] text-white rounded-md px-4 py-3 text-[15px] sm:text-[16px] font-medium shadow hover:bg-[#0F8F5C] transition-colors mb-4 sm:mb-6"
-          >
-            <Image
-              src="/whatsapp.svg"
-              alt="WhatsApp"
-              width={20}
-              height={20}
-              className="h-[20px] w-[20px]"
-            />
-            Need help? Chat with us
-          </a>
-
-          <div className="w-full max-w-[320px] sm:max-w-[350px]">
-            <p className="text-[14px] sm:text-[15px] font-medium text-[#333] mb-3 flex items-center justify-center gap-2">
-              Keep learning with the SISYA app
-            </p>
-            <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-              <a href="https://play.google.com/store/apps/details?id=com.sisya.sisyaclass" className="inline-flex items-center justify-center gap-3 px-4 py-3 w-full sm:w-[160px] hover:-translate-y-[3px] hover:shadow transition">
-                <Image
-                  src="/googleplay.svg"
-                  alt="Google Play"
-                  width={150}
-                  height={150}
-                />
-              </a>
-              <a href="https://apps.apple.com/in/app/sisya-class-e-learning-app/id6739211295" className="inline-flex items-center justify-center gap-3 px-4 py-3 w-full sm:w-[160px] hover:-translate-y-[3px] hover:shadow transition">
-                <Image
-                  src="/appstore.svg"
-                  alt="Apple App Store"
-                  width={150}
-                  height={150}
-                />
-              </a>
-            </div>
-          </div>
-          <div className="flex flex-col items-center gap-3 w-full mt-5 sm:mt-6">
             <a
-              href="/pyq"
-              className="inline-flex items-center justify-center gap-2 bg-[#01317a] text-white rounded-md px-5 py-3 text-[15px] sm:text-[16px] font-medium shadow hover:bg-[#001d4a] transition-colors"
+              href={`https://wa.me/919100312034?text=${encodeURIComponent(
+                `Hi, I just purchased the ₹19 worksheet bundle. My transaction ID is ${transactionId}`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-[#0AA76C] text-white rounded-md px-4 py-3 text-[15px] sm:text-[16px] font-medium shadow hover:bg-[#0F8F5C] transition-colors mb-4 sm:mb-6"
             >
-              ← Back to PYQ Classes
+              <Image
+                src="/whatsapp.svg"
+                alt="WhatsApp"
+                width={20}
+                height={20}
+                className="h-[20px] w-[20px]"
+              />
+              Need help? Chat with us
             </a>
-            <a
-              href="https://sisyaclass.com"
-              className="text-[14px] text-[#3355A4] underline hover:text-[#21428A]"
-            >
-              Visit SISYA Homepage
-            </a>
+
+            <div className="w-full max-w-[320px] sm:max-w-[350px]">
+              <p className="text-[14px] sm:text-[15px] font-medium text-[#333] mb-3 flex items-center justify-center gap-2">
+                Keep learning with the SISYA app
+              </p>
+              <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+                <a href="https://play.google.com/store/apps/details?id=com.sisya.sisyaclass" className="inline-flex items-center justify-center gap-3 px-4 py-3 w-full sm:w-[160px] hover:-translate-y-[3px] hover:shadow transition">
+                  <Image
+                    src="/googleplay.svg"
+                    alt="Google Play"
+                    width={150}
+                    height={150}
+                  />
+                </a>
+                <a href="https://apps.apple.com/in/app/sisya-class-e-learning-app/id6739211295" className="inline-flex items-center justify-center gap-3 px-4 py-3 w-full sm:w-[160px] hover:-translate-y-[3px] hover:shadow transition">
+                  <Image
+                    src="/appstore.svg"
+                    alt="Apple App Store"
+                    width={150}
+                    height={150}
+                  />
+                </a>
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-3 w-full mt-5 sm:mt-6">
+              <a
+                href="/pyq"
+                className="inline-flex items-center justify-center gap-2 bg-[#01317a] text-white rounded-md px-5 py-3 text-[15px] sm:text-[16px] font-medium shadow hover:bg-[#001d4a] transition-colors"
+              >
+                ← Back to PYQ Classes
+              </a>
+              <a
+                href="https://sisyaclass.com"
+                className="text-[14px] text-[#3355A4] underline hover:text-[#21428A]"
+              >
+                Visit SISYA Homepage
+              </a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 }

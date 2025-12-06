@@ -34,11 +34,11 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
         >
           ×
         </button>
-        <h2 className="text-xl sm:text-2xl font-bold text-[#01317a] mb-3 text-center pr-8">
-          See the Difference in Just One Class
+        <h2 className="text-lg sm:text-xl font-bold text-[#01317a] mb-3 text-center pr-8">
+          Book 1 PYQ Solutions Class @ ₹19
         </h2>
         <p className="text-center text-sm sm:text-base text-[#415252] mb-6">
-          Get Live Class, Recorded Sessions, Doubt-Solving & Performance Reports
+          Class Link Will Be Shared On WhatsApp
         </p>
         <form
           className="flex flex-col gap-5"
