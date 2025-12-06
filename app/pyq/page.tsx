@@ -6,6 +6,7 @@ import FooterBottom from "@/components/FooterBottom";
 import PyqContent from "@/components/pyq/PyqContent";
 import Moto from "@/components/moto";
 import Script from "next/script";
+// import GTM script
 
 export default function BoardPage() {
     return (
