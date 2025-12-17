@@ -113,6 +113,18 @@ const nextConfig: NextConfig = {
         source: '/doubt-solving/success.php',
         destination: '/doubt-solving/payment/success',
       },
+      {
+        source: '/mathlp/payment/success.php',
+        destination: '/mathlp/payment/success',
+      },
+      {
+        source: '/mathlp/payment/failed.php',
+        destination: '/mathlp/payment/failed',
+      },
+      {
+        source: '/mathlp/success.php',
+        destination: '/mathlp/payment/success',
+      },
     ];
   },
   eslint: {
