@@ -125,7 +125,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
         <div className="flex-1 md:absolute md:right-4 md:bottom-[-40px] md:w-1/2 flex justify-center items-center md:items-end pointer-events-none mt-6 md:mt-0">
           <Image
-            src="/mathlp/heroerpic.png"
+            src="/mathlp/heropic1.png"
             alt="1-On-1 Maths Improvement Program"
             width={560}
             height={380}
