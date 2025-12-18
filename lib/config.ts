@@ -23,7 +23,7 @@ export const API_ENDPOINTS = {
   TOGGLE_LIKE_BLOG: '/student/toggle_like_blog',
   ADD_COMMENT: '/student/add_comment',
   UPDATE_BLOG_READ_COUNT: '/student/update_blog_read_count',
-  GET_ALL_TAGS: '/student/get_all_tags',
+  GET_ALL_TAGS: '/student/get_top_tags',
   GET_NESTED_COMMENTS: '/student/get_nested_comments',
   GET_TRENDING_BLOGS: '/student/get_trending_blogs',
   GET_BLOGS_BY_TAG: '/student/get_blog_by_tag',
