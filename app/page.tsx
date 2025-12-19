@@ -1,9 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useState, useEffect } from "react";
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
 import Navbar, { MobileMenuProvider } from "@/components/Navbar";
+import HomeInquiryPopup from "@/components/HomeInquiryPopup";
 
 // Defer below-the-fold components to reduce render-blocking CSS/JS
 const ClassSelection = dynamic(() => import("@/components/ClassSelection"), { ssr: true, loading: () => null });
@@ -28,6 +30,18 @@ const SocialFab = dynamic(() => import("@/components/10xboostercourse/components
 const WhatsAppFab = dynamic(() => import("@/components/10xboostercourse/components/WhatsAppFab"), { ssr: false });
 
 function HomeContent() {
+  const [showInquiryPopup, setShowInquiryPopup] = useState(false);
+
+  useEffect(() => {
+    // Show popup after 5-10 seconds (random between 5000-10000ms)
+    const delay = Math.random() * 5000 + 5000; // 5000 to 10000ms
+    const timer = setTimeout(() => {
+      setShowInquiryPopup(true);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <Container>
       <Navbar />
@@ -52,6 +66,7 @@ function HomeContent() {
       <MobileMenu />
       <SocialFab />
       <WhatsAppFab />
+      <HomeInquiryPopup isOpen={showInquiryPopup} onClose={() => setShowInquiryPopup(false)} />
     </Container>
   );
 }
