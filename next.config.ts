@@ -66,6 +66,18 @@ const nextConfig: NextConfig = {
         destination: '/3dayslp/payment/success',
       },
       {
+        source: '/ltc/payment/success.php',
+        destination: '/ltc/payment/success',
+      },
+      {
+        source: '/ltc/payment/failed.php',
+        destination: '/ltc/payment/failed',
+      },
+      {
+        source: '/ltc/success.php',
+        destination: '/ltc/payment/success',
+      },
+      {
         source: '/6-18monthslp/payment/success.php',
         destination: '/6-18monthslp/payment/success',
       },

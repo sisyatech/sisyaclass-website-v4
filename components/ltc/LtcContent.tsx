@@ -1,18 +1,22 @@
 "use client";
+
 import React, { useState } from "react";
 import Script from "next/script";
 import HeroSection from "./sections/HeroSection";
 import StatsSection from "./sections/StatsSection";
+import TopperBatchSection from "./sections/TopperBatchSection";
+import WhatChildWillLearnSection from "./sections/WhatChildWillLearnSection";
+import WeeklyPlanSection from "./sections/WeeklyPlanSection";
+import MonthlyWorkshops from "./sections/MonthlyWorkshops";
 import ReviewsSection from "./sections/ReviewsSection";
-import UniqueCourseSection from "./sections/UniqueCourseSection";
 import BlueStatsSection from "./sections/BlueStatsSection";
 import Testimonials from "../Testimonials";
-import HowItWorksSection from "./sections/HowItWorksSection";
 import ReservationPopup from "./components/ReservationPopup";
 import WhatsAppFab from "./components/WhatsAppFab";
 import SocialFab from "./components/SocialFab";
+import Teachers from "./sections/Teachers";
 
-export default function ThreeDayLPContent() {
+export default function LtcContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -35,15 +39,14 @@ export default function ThreeDayLPContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log(data);
-        console.log("[3DAY] Lead status updated successfully");
+        console.log("[LTC] Lead status updated successfully");
         return true;
       }
 
-      console.warn("[3DAY] Failed to update lead status");
+      console.warn("[LTC] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[3DAY] Error updating lead status:", error);
+      console.error("[LTC] Error updating lead status:", error);
       return false;
     }
   };
@@ -61,49 +64,51 @@ export default function ThreeDayLPContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[3DAY] Starting flow", { selectedClass, phoneNumber });
+      console.log("[LTC] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA 3-Day Demo",
+          name: "SISYA LTC 2026",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
-          source:"web",
-          medium:"web",
+          source: "web",
+          medium: "web",
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[3DAY] Lead response", leadData);
+      console.log("[LTC] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[3DAY] Lead stored", { leadId: leadData.lead.id });
+      console.log("[LTC] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "3-Day LP Demo" }),
+        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "LTC Demo" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[3DAY] Order API response", orderJson);
+      console.log("[LTC] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
       }
 
-      const payload = orderJson.data ? orderJson.data : {
-        order_id: orderJson.order?.id,
-        amount: orderJson.order?.amount,
-        currency: orderJson.order?.currency,
-        key_id: orderJson.keyId,
-        name: "Sisya Class",
-        description: "3-Day LP Demo",
-        prefill: { contact: phoneNumber },
-      };
+      const payload = orderJson.data
+        ? orderJson.data
+        : {
+          order_id: orderJson.order?.id,
+          amount: orderJson.order?.amount,
+          currency: orderJson.order?.currency,
+          key_id: orderJson.keyId,
+          name: "Sisya Class",
+          description: "LTC Demo",
+          prefill: { contact: phoneNumber },
+        };
 
       const options: any = {
         key: payload.key_id,
@@ -114,26 +119,30 @@ export default function ThreeDayLPContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[3DAY] Success handler", response);
+          console.log("[LTC] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
-          window.location.href = `/3dayslp/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
+          window.location.href = `/ltc/payment/success.php?transactionId=${encodeURIComponent(
+            response.razorpay_payment_id || ""
+          )}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
-            console.warn("[3DAY] Checkout dismissed by user");
+            console.warn("[LTC] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
-              window.location.href = `/3dayslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
+              window.location.href = `/ltc/payment/failed.php?transactionId=${encodeURIComponent(
+                `DISMISSED_${Date.now()}`
+              )}`;
             });
           },
         },
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[3DAY] Opening Razorpay checkout", { order_id: payload.order_id });
+      console.log("[LTC] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[3DAY] Error", err);
+      console.error("[LTC] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {
@@ -144,13 +153,15 @@ export default function ThreeDayLPContent() {
   return (
     <main className="min-h-screen bg-white">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-      <HeroSection onRegister={() => setShowReservationPopup(true)}/>
+      <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <StatsSection onChooseClass={handleChooseClass} />
+      <TopperBatchSection />
+      {/* <WhatChildWillLearnSection /> */}
+      <WeeklyPlanSection onBookDemo={() => setShowReservationPopup(true)} />
+      <MonthlyWorkshops />
       <ReviewsSection />
-      <UniqueCourseSection />
-      <BlueStatsSection />
+      <Teachers />
       <Testimonials />
-      <HowItWorksSection />
       <WhatsAppFab />
       <SocialFab />
       <ReservationPopup
@@ -163,7 +174,7 @@ export default function ThreeDayLPContent() {
         onClose={() => setShowReservationPopup(false)}
       />
       {showLoader && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10000]">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-10000">
           <div className="border-4 border-t-4 border-gray-200 border-t-blue-500 rounded-full w-12 h-12 animate-spin"></div>
         </div>
       )}
