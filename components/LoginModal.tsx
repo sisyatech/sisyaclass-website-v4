@@ -53,10 +53,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
   useEffect(() => {
     if (isOpen) {
       setStep('login');
-      setLoginData({ 
-        phone: '', 
-        otp: '', 
-        userRole: 'student', 
+      setLoginData({
+        phone: '',
+        otp: '',
+        userRole: 'student',
         selectedGrade: selectedClass,
         name: '',
         board: '',
@@ -124,7 +124,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
       } else {
         const errorData = await response.json();
         console.log('Login failed, error data:', errorData);
-        
+
         // Check if user doesn't exist (new user)
         if (errorData.message && (errorData.message.includes("User not found") || errorData.message.includes("user not found"))) {
           console.log('User not found, creating new user...');
@@ -149,10 +149,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
   const createNewUser = async () => {
     try {
       console.log('Creating new user with phone:', loginData.phone, 'userRole:', loginData.userRole);
-      
+
       // Generate a unique UUID for the user (matching your app)
       const generateUUID = () => {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
           const r = Math.random() * 16 | 0;
           const v = c === 'x' ? r : (r & 0x3 | 0x8);
           return v.toString(16);
@@ -171,9 +171,9 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         uuid: generateUUID(),
         educationBoardId: 1,
       };
-      
+
       console.log('Sending user creation request with data:', { ...userData, password: "[REDACTED]" });
-      
+
       const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_USER}`, {
         method: 'POST',
         headers: {
@@ -183,11 +183,11 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
       });
 
       console.log('Create user response status:', response.status);
-      
+
       if (response.ok) {
         const responseData = await response.json();
         console.log('User created successfully:', responseData);
-        
+
         setOtpSent(true);
         setStep('otp');
         setResendTimer(30);
@@ -228,7 +228,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
       if (response.ok) {
         const responseData = await response.json();
         console.log('OTP verification successful, response data:', responseData);
-        
+
         if (isNewUser) {
           // New user - show registration form
           setStep('register');
@@ -236,7 +236,17 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
           // Existing user - login successful
           // Extract user data from the response
           const userData = responseData.user || responseData;
-          
+          const token =
+            responseData.token ||
+            userData.token ||
+            userData.accessToken ||
+            userData.jwt ||
+            responseData.token ||
+            null;
+
+          console.log('User data:', userData);
+          console.log('Response data:', responseData);
+
           // Create proper user object for context
           const user = {
             id: userData.id || userData.userId || userData.uuid || 'temp_id',
@@ -245,9 +255,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
             phone: loginData.phone,
             grade: userData.grade || userData.selectedGrade || loginData.selectedGrade,
             board: userData.board || '',
-            userRole: userData.userRole || loginData.userRole
+            userRole: userData.userRole || loginData.userRole,
+            token: token || undefined,
           };
-          
+
           console.log('Logging in existing user:', user);
           login(user);
           onLoginSuccess(user);
@@ -325,10 +336,16 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
       if (response.ok) {
         const responseData = await response.json();
         console.log('Registration completed successfully, response data:', responseData);
-        
+
         // Extract user data from the response
         const userData = responseData.user || responseData;
-        
+        const token =
+          userData.token ||
+          userData.accessToken ||
+          userData.jwt ||
+          responseData.token ||
+          null;
+
         // Create user object for context
         const user = {
           id: userData.id || userData.userId || userData.uuid || 'temp_id',
@@ -337,9 +354,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
           phone: loginData.phone,
           grade: loginData.selectedGrade,
           board: loginData.board,
-          userRole: loginData.userRole
+          userRole: loginData.userRole,
+          token: token || undefined,
         };
-        
+
         console.log('Logging in new user after registration:', user);
         login(user);
         onLoginSuccess(user);
@@ -360,9 +378,9 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
-      <div className="bg-white rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden">
+      <div className="bg-white rounded-2xl max-w-md w-full max-h-[80vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="pt-2 pb-4 px-6">
+        <div className="pt-2 pb-4 px-6 flex-shrink-0">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <Image src="/logo.png" alt="Sisya Class" width={48} height={48} className="w-12 h-12 rounded-[10px] object-contain" />
@@ -374,7 +392,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
               ×
             </button>
           </div>
-          
+
           {step !== 'register' && (
             <div className="text-center">
               <h2 className="text-xl font-bold text-gray-800 mb-2">Login to Continue</h2>
@@ -384,7 +402,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto flex-1">
           {step === 'login' ? (
             <RevealOnView from="bottom" durationMs={500}>
               <div className="space-y-6">
@@ -423,11 +441,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
                 <button
                   onClick={handleSendOTP}
                   disabled={loading || loginData.phone.length !== 10}
-                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-                    loading || loginData.phone.length !== 10
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                  }`}
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${loading || loginData.phone.length !== 10
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
                 >
                   {loading ? 'Sending OTP...' : 'Send OTP'}
                 </button>
@@ -460,7 +477,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
                             newOtp[index] = value;
                             setLoginData(prev => ({ ...prev, otp: newOtp.join('') }));
                             setError(null);
-                            
+
                             // Auto-focus next input
                             if (index < 3) {
                               const nextInput = document.querySelector(`input[data-index="${index + 1}"]`) as HTMLInputElement;
@@ -506,11 +523,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
                 <button
                   onClick={handleVerifyOTP}
                   disabled={loading || loginData.otp.length !== 4}
-                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-                    loading || loginData.otp.length !== 4
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                  }`}
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${loading || loginData.otp.length !== 4
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
                 >
                   {loading ? 'Verifying...' : 'Verify OTP'}
                 </button>
@@ -521,11 +537,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
                   <button
                     onClick={handleResendOTP}
                     disabled={!canResend || loading}
-                    className={`text-sm font-medium ${
-                      canResend && !loading
-                        ? 'text-blue-600 hover:text-blue-700'
-                        : 'text-gray-400 cursor-not-allowed'
-                    }`}
+                    className={`text-sm font-medium ${canResend && !loading
+                      ? 'text-blue-600 hover:text-blue-700'
+                      : 'text-gray-400 cursor-not-allowed'
+                      }`}
                   >
                     {canResend ? 'Resend OTP' : `Resend in ${resendTimer}s`}
                   </button>
@@ -543,7 +558,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
           ) : (
             <RevealOnView from="bottom" durationMs={500}>
               <div className="space-y-6">
-                <div className="text-center -mt-10">
+                <div className="text-center">
                   <h3 className="text-xl font-bold text-gray-800 mb-2">Complete Your Registration</h3>
                   <p className="text-gray-600 text-sm">Please provide your details to continue</p>
                 </div>
@@ -626,11 +641,10 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
                 <button
                   onClick={handleCompleteRegistration}
                   disabled={loading || !loginData.name.trim() || !loginData.email.trim() || !loginData.board.trim()}
-                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${
-                    loading || !loginData.name.trim() || !loginData.email.trim() || !loginData.board.trim()
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                  }`}
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all ${loading || !loginData.name.trim() || !loginData.email.trim() || !loginData.board.trim()
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                    }`}
                 >
                   {loading ? 'Creating Account...' : 'Complete Registration'}
                 </button>

@@ -10,6 +10,7 @@ interface User {
   grade: number;
   board: string;
   userRole: string;
+  token?: string; // auth token from backend, if available
 }
 
 interface UserContextType {

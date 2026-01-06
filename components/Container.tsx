@@ -3,7 +3,7 @@ import React from "react";
 
 const Container = ({ children, className }: { children: React.ReactNode; className?: string }) => {
   return (
-    <div className={cn("w-full h-screen overflow-x-hidden", className)}>{children}</div>
+    <div className={cn("w-full h-screen overflow-x-hidden scrollbar-hide", className)}>{children}</div>
   );
 };
 
