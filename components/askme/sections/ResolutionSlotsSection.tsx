@@ -401,9 +401,11 @@ export default function ResolutionSlotsSection() {
                             {/* App Download Buttons */}
                             <div className="flex flex-row gap-2" style={{ marginBottom: '0' }}>
                                 <a
-                                    href="#"
+                                    href="https://apps.apple.com/in/app/sisya-class-e-learning-app/id6739211295"
                                     className="inline-flex items-center justify-center"
                                     aria-label="Download on the App Store"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                     <Image
                                         src="/appstore.svg"
@@ -414,9 +416,11 @@ export default function ResolutionSlotsSection() {
                                     />
                                 </a>
                                 <a
-                                    href="#"
+                                    href="https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&hl=en_IN"
                                     className="inline-flex items-center justify-center"
                                     aria-label="GET IT ON Google Play"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                     <Image
                                         src="/googleplay.svg"
