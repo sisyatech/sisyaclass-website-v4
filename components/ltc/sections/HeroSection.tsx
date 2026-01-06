@@ -115,10 +115,10 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           </ul>
           <div className="mt-6 mb-2 flex flex-wrap gap-4 justify-center md:justify-start">
             <button
-              className="inline-flex items-center justify-center font-semibold text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-[#ffd500] text-black"
+              className="inline-flex items-center justify-center font-semibold text-[1rem] sm:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-[#ffd500] text-black whitespace-nowrap"
               onClick={onRegister}
             >
-              Start Just @ ₹19
+              Get 5 Days Demos @19
             </button>
             <button
               className="inline-flex items-center justify-center font-semibold text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"

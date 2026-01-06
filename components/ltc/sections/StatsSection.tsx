@@ -24,6 +24,9 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
               />
             </span>
           </h2>
+          <p className="mt-1 text-center md:text-left text-base md:text-lg font-medium text-black">
+            New Batches Every Monday
+          </p>
           <div className="flex items-center gap-2 mt-4">
             <span className="bg-[#ffd500] text-black font-semibold px-4 py-2 rounded-md shadow whitespace-nowrap">
               Choose a Class to Enroll Now
