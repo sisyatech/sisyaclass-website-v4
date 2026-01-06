@@ -29,6 +29,17 @@ export default function AskMeNavbar({
         { label: "FAQ", href: "#faq" },
     ];
 
+    const handleScrollToPricing = () => {
+        if (typeof window === "undefined") return;
+        const pricingSection = document.querySelector("#pricing");
+        if (pricingSection) {
+            (pricingSection as HTMLElement).scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+    };
+
     // Close dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -131,6 +142,7 @@ export default function AskMeNavbar({
                         )}
                         <button
                             type="button"
+                            onClick={handleScrollToPricing}
                             className="group relative flex items-center justify-center overflow-hidden h-[36px] rounded-lg bg-[#02bdfe] px-4 lg:px-6 text-sm lg:text-base font-medium text-white transition-colors cursor-pointer"
                         >
                             <span className="relative z-10">Get Started</span>
