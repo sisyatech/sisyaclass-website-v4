@@ -2,7 +2,11 @@
 
 import React from "react";
 
-export default function CTASection() {
+type CTASectionProps = {
+    onPricingClick?: () => void;
+};
+
+export default function CTASection({ onPricingClick }: CTASectionProps) {
     return (
         <section className="py-16 bg-gray-900">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -62,6 +66,7 @@ export default function CTASection() {
                         {/* CTA Buttons */}
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
                             <button
+                                onClick={onPricingClick}
                                 className="rounded-lg font-semibold transition-opacity hover:opacity-90 w-full sm:w-[235px]"
                                 style={{
                                     minHeight: '61px',
@@ -80,6 +85,7 @@ export default function CTASection() {
                                 Get started for ₹29
                             </button>
                             <button
+                                onClick={onPricingClick}
                                 className="rounded-lg font-semibold transition-opacity hover:opacity-90 w-full sm:w-[169px]"
                                 style={{
                                     minHeight: '61px',

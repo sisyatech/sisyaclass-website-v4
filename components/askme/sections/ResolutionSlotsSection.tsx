@@ -6,7 +6,7 @@ import Image from "next/image";
 export default function ResolutionSlotsSection() {
     return (
         <>
-            <section className="py-12 md:py-16 bg-white">
+            <section id="solutions" className="py-12 md:py-16 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
                         {/* Left Side - Mobile App Image */}

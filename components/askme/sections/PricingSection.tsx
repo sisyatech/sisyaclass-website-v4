@@ -245,7 +245,7 @@ export default function PricingSection() {
                     }
                 }
             `}</style>
-            <section className="py-16 bg-white">
+            <section id="pricing" className="py-16 bg-white">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     {/* Header */}
                     <div className="text-center mb-12">

@@ -13,9 +13,17 @@ import FAQSection from "./sections/FAQSection";
 import CTASection from "./sections/CTASection";
 
 export default function AskMeContent() {
+    const scrollToPricing = () => {
+        if (typeof document === "undefined") return;
+        const el = document.getElementById("pricing");
+        if (el) {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    };
+
     return (
         <main className="min-h-screen bg-white pt-16 sm:pt-18">
-            <HeroSection />
+            <HeroSection onRegister={scrollToPricing} onGetCallback={scrollToPricing} />
             <ResolutionSlotsSection />
             <PersonalMentorSection />
             <HowItWorksSection />
@@ -24,7 +32,7 @@ export default function AskMeContent() {
             <FeaturesSection />
             <SocialProofSection />
             <FAQSection />
-            <CTASection />
+            <CTASection onPricingClick={scrollToPricing} />
         </main>
     );
 }
