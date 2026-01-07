@@ -161,239 +161,236 @@ export default function ResolutionSlotsSection() {
                             </p>
 
                             {/* Benefits List */}
-                            <div className="flex flex-col gap-y-6 mb-10">
-                                <div className="flex items-start gap-0">
-                                    <div className="flex items-start gap-4">
-                                        <div
-                                            className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                            <div className="grid grid-cols-2 gap-y-6 gap-x-4 md:gap-x-8 mb-10">
+                                <div className="flex items-start gap-4">
+                                    <div
+                                        className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                        style={{
+                                            width: '17px',
+                                            height: '17px',
+                                            background: 'rgba(232, 244, 252, 1)'
+                                        }}
+                                    >
+                                        <svg
+                                            className="animate-tick-draw"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
                                             style={{
-                                                width: '17px',
-                                                height: '17px',
-                                                background: 'rgba(232, 244, 252, 1)'
+                                                width: '14px',
+                                                height: '10px',
+                                                strokeDasharray: '20',
+                                                strokeDashoffset: '20',
+                                                color: 'rgba(0, 152, 211, 1)'
                                             }}
                                         >
-                                            <svg
-                                                className="animate-tick-draw"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                style={{
-                                                    width: '14px',
-                                                    height: '10px',
-                                                    strokeDasharray: '20',
-                                                    strokeDashoffset: '20',
-                                                    color: 'rgba(0, 152, 211, 1)'
-                                                }}
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 600,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(0, 0, 0, 1)',
-                                                    marginBottom: '4px'
-                                                }}
-                                            >
-                                                Zero Waiting
-                                            </h3>
-                                            <p
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 400,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(67, 86, 107, 1)'
-                                                }}
-                                            >
-                                                Pre-book time to get instant attention.
-                                            </p>
-                                        </div>
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </div>
-
-                                    <div className="flex items-start gap-4">
-                                        <div
-                                            className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                    <div>
+                                        <h3
+                                            className="w-full"
                                             style={{
-                                                width: '17px',
-                                                height: '17px',
-                                                background: 'rgba(232, 244, 252, 1)'
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 600,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(0, 0, 0, 1)',
+                                                marginBottom: '4px'
                                             }}
                                         >
-                                            <svg
-                                                className="animate-tick-draw"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                style={{
-                                                    width: '14px',
-                                                    height: '10px',
-                                                    strokeDasharray: '20',
-                                                    strokeDashoffset: '20',
-                                                    color: 'rgba(0, 152, 211, 1)'
-                                                }}
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 600,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(0, 0, 0, 1)',
-                                                    marginBottom: '4px'
-                                                }}
-                                            >
-                                                Study Routine
-                                            </h3>
-                                            <p
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 400,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(67, 86, 107, 1)'
-                                                }}
-                                            >
-                                                Sync your doubts with your homework time.
-                                            </p>
-                                        </div>
+                                            Zero Waiting
+                                        </h3>
+                                        <p
+                                            className="w-full"
+                                            style={{
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 400,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(67, 86, 107, 1)'
+                                            }}
+                                        >
+                                            Pre-book time to get instant attention.
+                                        </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-0">
-                                    <div className="flex items-start gap-4">
-                                        <div
-                                            className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                <div className="flex items-start gap-4">
+                                    <div
+                                        className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                        style={{
+                                            width: '17px',
+                                            height: '17px',
+                                            background: 'rgba(232, 244, 252, 1)'
+                                        }}
+                                    >
+                                        <svg
+                                            className="animate-tick-draw"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
                                             style={{
-                                                width: '17px',
-                                                height: '17px',
-                                                background: 'rgba(232, 244, 252, 1)'
+                                                width: '14px',
+                                                height: '10px',
+                                                strokeDasharray: '20',
+                                                strokeDashoffset: '20',
+                                                color: 'rgba(0, 152, 211, 1)'
                                             }}
                                         >
-                                            <svg
-                                                className="animate-tick-draw"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                style={{
-                                                    width: '14px',
-                                                    height: '10px',
-                                                    strokeDasharray: '20',
-                                                    strokeDashoffset: '20',
-                                                    color: 'rgba(0, 152, 211, 1)'
-                                                }}
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 600,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(0, 0, 0, 1)',
-                                                    marginBottom: '4px'
-                                                }}
-                                            >
-                                                Priority Access
-                                            </h3>
-                                            <p
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 400,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(67, 86, 107, 1)'
-                                                }}
-                                            >
-                                                Slot users always get the fastest response.
-                                            </p>
-                                        </div>
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
                                     </div>
-                                    <div className="flex items-start gap-4">
-                                        <div
-                                            className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                    <div>
+                                        <h3
+                                            className="w-full"
                                             style={{
-                                                width: '17px',
-                                                height: '17px',
-                                                background: 'rgba(232, 244, 252, 1)'
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 600,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(0, 0, 0, 1)',
+                                                marginBottom: '4px'
                                             }}
                                         >
-                                            <svg
-                                                className="animate-tick-draw"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                viewBox="0 0 24 24"
-                                                style={{
-                                                    width: '14px',
-                                                    height: '10px',
-                                                    strokeDasharray: '20',
-                                                    strokeDashoffset: '20',
-                                                    color: 'rgba(0, 152, 211, 1)'
-                                                }}
-                                            >
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </div>
-                                        <div>
-                                            <h3
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 600,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(0, 0, 0, 1)',
-                                                    marginBottom: '4px'
-                                                }}
-                                            >
-                                                Expert Lock
-                                            </h3>
-                                            <p
-                                                className="w-full"
-                                                style={{
-                                                    fontFamily: 'Roboto, sans-serif',
-                                                    fontWeight: 400,
-                                                    fontSize: 'clamp(13px, 2vw, 14px)',
-                                                    lineHeight: '1.5',
-                                                    letterSpacing: '0px',
-                                                    verticalAlign: 'middle',
-                                                    color: 'rgba(67, 86, 107, 1)'
-                                                }}
-                                            >
-                                                Subject-specific masters reserved for you.
-                                            </p>
-                                        </div>
+                                            Study Routine
+                                        </h3>
+                                        <p
+                                            className="w-full"
+                                            style={{
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 400,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(67, 86, 107, 1)'
+                                            }}
+                                        >
+                                            Sync your doubts with your homework time.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4">
+                                    <div
+                                        className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                        style={{
+                                            width: '17px',
+                                            height: '17px',
+                                            background: 'rgba(232, 244, 252, 1)'
+                                        }}
+                                    >
+                                        <svg
+                                            className="animate-tick-draw"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            style={{
+                                                width: '14px',
+                                                height: '10px',
+                                                strokeDasharray: '20',
+                                                strokeDashoffset: '20',
+                                                color: 'rgba(0, 152, 211, 1)'
+                                            }}
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3
+                                            className="w-full"
+                                            style={{
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 600,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(0, 0, 0, 1)',
+                                                marginBottom: '4px'
+                                            }}
+                                        >
+                                            Priority Access
+                                        </h3>
+                                        <p
+                                            className="w-full"
+                                            style={{
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 400,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(67, 86, 107, 1)'
+                                            }}
+                                        >
+                                            Slot users always get the fastest response.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4">
+                                    <div
+                                        className="flex-shrink-0 rounded-full flex items-center justify-center mt-1"
+                                        style={{
+                                            width: '17px',
+                                            height: '17px',
+                                            background: 'rgba(232, 244, 252, 1)'
+                                        }}
+                                    >
+                                        <svg
+                                            className="animate-tick-draw"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                            style={{
+                                                width: '14px',
+                                                height: '10px',
+                                                strokeDasharray: '20',
+                                                strokeDashoffset: '20',
+                                                color: 'rgba(0, 152, 211, 1)'
+                                            }}
+                                        >
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3
+                                            className="w-full"
+                                            style={{
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 600,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(0, 0, 0, 1)',
+                                                marginBottom: '4px'
+                                            }}
+                                        >
+                                            Expert Lock
+                                        </h3>
+                                        <p
+                                            className="w-full"
+                                            style={{
+                                                fontFamily: 'Roboto, sans-serif',
+                                                fontWeight: 400,
+                                                fontSize: 'clamp(13px, 2vw, 14px)',
+                                                lineHeight: '1.5',
+                                                letterSpacing: '0px',
+                                                verticalAlign: 'middle',
+                                                color: 'rgba(67, 86, 107, 1)'
+                                            }}
+                                        >
+                                            Subject-specific masters reserved for you.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
