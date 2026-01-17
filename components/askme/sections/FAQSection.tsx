@@ -5,29 +5,25 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const faqs = [
     {
-        question: "How quickly will I get an answer to my question?",
-        answer: "Most questions are answered within 15-30 minutes during peak hours. Complex questions may take up to 2 hours. Our expert teachers work round the clock to ensure you get timely help."
+        question: "What is Ask Me Anything (AMA) by SISYA CLASS?",
+        answer: "Ask Me Anything (AMA) is a doubt-solving feature by SISYA CLASS where students can ask academic or study-related questions and receive clear, easy-to-understand answers from experienced mentors."
     },
     {
-        question: "What subjects can I ask questions about?",
-        answer: "You can ask questions about Mathematics, Physics, Chemistry, Biology, English, and other core subjects for classes 6-12. Our team of expert educators covers all major academic subjects."
+        question: "Who can use the Ask Me Anything feature?",
+        answer: "AMA can be used by school students, college students, exam aspirants or anyone who needs help understanding concepts or solving doubts."
     },
     {
-        question: "Is there a limit to how many questions I can ask?",
-        answer: "The number of questions depends on your subscription plan. Free users get 5 questions per month, while premium members enjoy unlimited questions with priority support."
+        question: "What type of doubts can I ask?",
+        answer: "You can ask subject doubts, homework questions, exam preparation queries, concept clarifications, study tips, and basic career guidance questions."
     },
     {
-        question: "Can I ask follow-up questions?",
-        answer: "Absolutely! If you need clarification on any answer, you can ask follow-up questions. We encourage interactive learning and want to ensure you fully understand the concepts."
+        question: "How fast will I get answers to my questions?",
+        answer: "Most questions are answered within 7 to 30 minutes, depending on the complexity of the doubt and the package you choose."
     },
     {
-        question: "Are my questions kept private?",
-        answer: "Yes, your questions and personal information are completely private and secure. We follow strict data protection policies to ensure your privacy is maintained at all times."
+        question: "How do I choose the right package for me?",
+        answer: "If you have a few doubts, choose the ₹29 Starter Pack. For regular doubts, the ₹99 Value Pack is ideal. If you need continuous support, the ₹199 Mega Pack is the best option."
     },
-    {
-        question: "What if I'm not satisfied with an answer?",
-        answer: "If you're not satisfied with an answer, you can request a revision or ask for clarification. Our goal is to ensure you understand the concept completely. You can also rate answers to help us improve."
-    }
 ];
 
 export default function FAQSection() {

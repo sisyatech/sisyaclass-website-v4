@@ -6,23 +6,23 @@ import Image from "next/image";
 const testimonials = [
     {
         rating: 5,
-        text: "I used to spend hours on one Physics problem. With SISYA AMA, I got the logic in 5 minutes! Best ₹29 I ever spent.",
+        text: "Getting guidance directly from IIT faculty made complex topics much easier to understand. Their explanations are clear, practical, and very motivating.",
         studentName: "Aryan Kapoor",
+        studentClass: "CLASS 8 STUDENT",
+        avatar: "/askme/student_o.png"
+    },
+    {
+        rating: 5,
+        text: "The SISYA AI Chatbot answers my doubts instantly and accurately. It feels like having a personal tutor available anytime",
+        studentName: "Riya Sharma",
         studentClass: "CLASS 10 STUDENT",
         avatar: "/askme/student_o.png"
     },
     {
         rating: 5,
-        text: "I used to spend hours on one Physics problem. With SISYA AMA, I got the logic in 5 minutes! Best ₹29 I ever spent.",
-        studentName: "Aryan Kapoor",
-        studentClass: "CLASS 10 STUDENT",
-        avatar: "/askme/student_o.png"
-    },
-    {
-        rating: 5,
-        text: "I used to spend hours on one Physics problem. With SISYA AMA, I got the logic in 5 minutes! Best ₹29 I ever spent.",
-        studentName: "Aryan Kapoor",
-        studentClass: "CLASS 10 STUDENT",
+        text: "The Ask Me Anything feature is amazing. I can ask real questions without hesitation and get clear, useful responses every time.",
+        studentName: "Karthik Reddy",
+        studentClass: "CLASS 9 STUDENT",
         avatar: "/askme/student_o.png"
     }
 ];

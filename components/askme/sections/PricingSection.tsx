@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Script from "next/script";
 import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 import LoginModal from "@/components/LoginModal";
@@ -18,6 +19,7 @@ type DoubtPackage = {
 };
 
 export default function PricingSection() {
+    const router = useRouter();
     const [packages, setPackages] = useState<DoubtPackage[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [processingPackageId, setProcessingPackageId] = useState<number | null>(null);
@@ -61,8 +63,84 @@ export default function PricingSection() {
         fetchPackages();
     }, []);
 
+    const createDoubtLead = async (pkg: DoubtPackage, currentUser: any, amount: number, status: string) => {
+        try {
+            const token = (currentUser as any)?.token;
+            const leadPayload = {
+                name: currentUser?.name || currentUser?.fullName || "",
+                studentClass: currentUser?.grade || currentUser?.studentClass || "",
+                email: currentUser?.email || "",
+                phone: currentUser?.phone || currentUser?.mobile || "",
+                doubtPackageId: pkg.id,
+                amount: amount,
+                source: "landing_page",
+                status: status
+            };
+
+            const leadRes = await fetch(`${API_BASE_URL}/student/create_doubt_lead`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify(leadPayload),
+            });
+
+            const leadJson = await leadRes.json();
+            if (leadRes.ok && leadJson?.success && leadJson?.data?.id) {
+                // Store leadId in localStorage
+                localStorage.setItem("doubtLeadId", leadJson.data.id.toString());
+                return leadJson.data.id;
+            } else {
+                console.error("[DoubtLead] Failed to create doubt lead:", leadJson);
+                return null;
+            }
+        } catch (err) {
+            console.error("[DoubtLead] Error creating doubt lead:", err);
+            return null;
+        }
+    };
+
+    const updateDoubtLead = async (leadId: string, status: string, failureReason?: string) => {
+        try {
+            const token = (user as any)?.token;
+            const updatePayload: any = {
+                leadId: leadId,
+                status: status
+            };
+
+            if (failureReason) {
+                updatePayload.failureReason = failureReason;
+            }
+
+            const updateRes = await fetch(`${API_BASE_URL}/student/update_doubt_lead`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
+                body: JSON.stringify(updatePayload),
+            });
+
+            const updateJson = await updateRes.json();
+            if (!updateRes.ok || !updateJson?.success) {
+                console.error("[DoubtLead] Failed to update doubt lead:", updateJson);
+            }
+        } catch (err) {
+            console.error("[DoubtLead] Error updating doubt lead:", err);
+        } finally {
+            // Clear leadId from localStorage after update
+            localStorage.removeItem("doubtLeadId");
+        }
+    };
+
     const startPayment = async (pkg: DoubtPackage, currentUser: any) => {
         if (typeof window === "undefined") return;
+
+        let doubtLeadId: string | null = null;
+        const amountNumber = Number(
+            pkg.discountedPrice && pkg.discountedPrice !== "0" ? pkg.discountedPrice : pkg.price
+        );
 
         try {
             setProcessingPackageId(pkg.id);
@@ -71,9 +149,10 @@ export default function PricingSection() {
                 (currentUser && (currentUser.phone || currentUser.mobile)) ||
                 (typeof window !== "undefined" ? localStorage.getItem("mobileNumber") || "" : "");
 
-            const amountNumber = Number(
-                pkg.discountedPrice && pkg.discountedPrice !== "0" ? pkg.discountedPrice : pkg.price
-            );
+
+
+            // Create doubt lead before starting payment
+            doubtLeadId = await createDoubtLead(pkg, currentUser, amountNumber, "INITIATED");
 
             const orderRes = await fetch("/api/razorpay/order", {
                 method: "POST",
@@ -122,6 +201,10 @@ export default function PricingSection() {
                         console.log("[DoubtPayment] Using auth token for purchase_doubt_package:", token);
                         if (!currentUser || !currentUser.id) {
                             console.error("[DoubtPayment] Missing user data for purchaseDoubtPackage");
+                            // Update lead status to FAILED
+                            if (doubtLeadId) {
+                                await updateDoubtLead(doubtLeadId, "FAILED", "Missing user data");
+                            }
                             setStatusPopup({
                                 type: "error",
                                 message: "Could not verify your account. Please log in again.",
@@ -148,43 +231,42 @@ export default function PricingSection() {
 
                         const purchaseJson = await purchaseRes.json();
                         if (purchaseRes.ok && purchaseJson?.success) {
-                            setStatusPopup({
-                                type: "success",
-                                message:
-                                    purchaseJson?.message ||
-                                    `Successfully purchased ${pkg.doubtCount} doubts.`,
-                            });
+                            // Update lead status to SUCCESS
+                            if (doubtLeadId) {
+                                await updateDoubtLead(doubtLeadId, "SUCCESS");
+                            }
+                            router.push(`/askme/payment/success.php?transactionId=${response.razorpay_payment_id}&amount=₹${amountNumber}`);
                         } else {
                             console.error(
                                 "[DoubtPayment] purchase_doubt_package failed",
                                 purchaseJson
                             );
-                            setStatusPopup({
-                                type: "error",
-                                message:
-                                    purchaseJson?.error ||
-                                    "Payment was captured but purchase could not be completed. Please contact support.",
-                            });
+                            // Update lead status to FAILED
+                            if (doubtLeadId) {
+                                await updateDoubtLead(doubtLeadId, "FAILED", purchaseJson?.error || "Purchase failed");
+                            }
+                            router.push(`/askme/payment/failed.php?transactionId=${response.razorpay_payment_id || payload.order_id || 'N/A'}&amount=₹${amountNumber}`);
                         }
                     } catch (err) {
                         console.error("[DoubtPayment] Error completing purchase:", err);
-                        setStatusPopup({
-                            type: "error",
-                            message:
-                                "Payment was successful but we could not complete your purchase. Please contact support.",
-                        });
+                        // Update lead status to FAILED
+                        if (doubtLeadId) {
+                            await updateDoubtLead(doubtLeadId, "FAILED", "Error completing purchase");
+                        }
+                        router.push(`/askme/payment/failed.php?transactionId=${response?.razorpay_payment_id || payload?.order_id || 'N/A'}&amount=₹${amountNumber}`);
                     } finally {
                         setProcessingPackageId(null);
                     }
                 },
                 modal: {
-                    ondismiss: function () {
+                    ondismiss: async function () {
                         console.warn("[DoubtPayment] Payment modal dismissed by user");
+                        // Update lead status to FAILED
+                        if (doubtLeadId) {
+                            await updateDoubtLead(doubtLeadId, "FAILED", "Payment cancelled by user");
+                        }
                         setProcessingPackageId(null);
-                        setStatusPopup({
-                            type: "error",
-                            message: "Payment cancelled. No money was deducted.",
-                        });
+                        router.push(`/askme/payment/failed.php?transactionId=CANCELLED&amount=₹${amountNumber}`);
                     },
                 },
             };
@@ -194,10 +276,11 @@ export default function PricingSection() {
             rzp.open();
         } catch (err) {
             console.error("[DoubtPayment] Payment error:", err);
-            setStatusPopup({
-                type: "error",
-                message: "Something went wrong while processing the payment. Please try again.",
-            });
+            // Update lead status to FAILED
+            if (doubtLeadId) {
+                await updateDoubtLead(doubtLeadId, "FAILED", "Payment processing error");
+            }
+            router.push(`/askme/payment/failed.php?transactionId=ERROR&amount=₹${amountNumber}`);
             setProcessingPackageId(null);
         }
     };
@@ -537,52 +620,54 @@ export default function PricingSection() {
             />
 
             {/* Status Popup */}
-            {statusPopup && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-                    <div className="relative w-full max-w-sm rounded-2xl bg-white shadow-2xl p-6 sm:p-7">
-                        {/* Close button */}
-                        <button
-                            onClick={() => setStatusPopup(null)}
-                            className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 text-lg"
-                            aria-label="Close"
-                        >
-                            ×
-                        </button>
+            {
+                statusPopup && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+                        <div className="relative w-full max-w-sm rounded-2xl bg-white shadow-2xl p-6 sm:p-7">
+                            {/* Close button */}
+                            <button
+                                onClick={() => setStatusPopup(null)}
+                                className="absolute right-3 top-3 text-gray-400 hover:text-gray-600 text-lg"
+                                aria-label="Close"
+                            >
+                                ×
+                            </button>
 
-                        {/* Icon */}
-                        <div
-                            className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${statusPopup.type === "success" ? "bg-emerald-50" : "bg-red-50"
-                                }`}
-                        >
-                            {statusPopup.type === "success" ? (
-                                <span className="text-emerald-500 text-2xl">✓</span>
-                            ) : (
-                                <span className="text-red-500 text-2xl">!</span>
-                            )}
+                            {/* Icon */}
+                            <div
+                                className={`mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full ${statusPopup.type === "success" ? "bg-emerald-50" : "bg-red-50"
+                                    }`}
+                            >
+                                {statusPopup.type === "success" ? (
+                                    <span className="text-emerald-500 text-2xl">✓</span>
+                                ) : (
+                                    <span className="text-red-500 text-2xl">!</span>
+                                )}
+                            </div>
+
+                            {/* Title */}
+                            <h3 className="text-lg font-semibold text-gray-900 text-center mb-1.5">
+                                {statusPopup.type === "success"
+                                    ? "Purchase Successful"
+                                    : "Something went wrong"}
+                            </h3>
+
+                            {/* Message */}
+                            <p className="text-sm text-gray-600 text-center mb-4">
+                                {statusPopup.message}
+                            </p>
+
+                            {/* CTA */}
+                            <button
+                                onClick={() => setStatusPopup(null)}
+                                className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+                            >
+                                Got it
+                            </button>
                         </div>
-
-                        {/* Title */}
-                        <h3 className="text-lg font-semibold text-gray-900 text-center mb-1.5">
-                            {statusPopup.type === "success"
-                                ? "Purchase Successful"
-                                : "Something went wrong"}
-                        </h3>
-
-                        {/* Message */}
-                        <p className="text-sm text-gray-600 text-center mb-4">
-                            {statusPopup.message}
-                        </p>
-
-                        {/* CTA */}
-                        <button
-                            onClick={() => setStatusPopup(null)}
-                            className="mt-2 inline-flex w-full items-center justify-center rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
-                        >
-                            Got it
-                        </button>
                     </div>
-                </div>
-            )}
+                )
+            }
         </>
     );
 }

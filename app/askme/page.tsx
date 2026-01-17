@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "@/components/Container";
 import Footer from "@/components/Footer";
 import FooterBottom from "@/components/FooterBottom";
@@ -9,9 +9,21 @@ import AskMeContent from "@/components/askme/AskMeContent";
 import Script from "next/script";
 import AskMeNavbar from "@/components/askme/AskMeNavbar";
 import AskMeMobileMenu from "@/components/askme/AskMeMobileMenu";
+import HomeInquiryPopup from "@/components/HomeInquiryPopup";
 
 export default function AskMePage() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [showInquiryPopup, setShowInquiryPopup] = useState(false);
+
+    useEffect(() => {
+        // Show popup after 5-10 seconds (random between 5000-10000ms)
+        const delay = Math.random() * 5000 + 5000; // 5000 to 10000ms
+        const timer = setTimeout(() => {
+            setShowInquiryPopup(true);
+        }, delay);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen((prev) => !prev);
@@ -56,6 +68,7 @@ export default function AskMePage() {
                     isOpen={isMobileMenuOpen}
                     onClose={() => setIsMobileMenuOpen(false)}
                 />
+                <HomeInquiryPopup isOpen={showInquiryPopup} onClose={() => setShowInquiryPopup(false)} />
             </Container>
         </>
     );
