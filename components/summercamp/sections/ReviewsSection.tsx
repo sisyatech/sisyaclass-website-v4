@@ -16,80 +16,51 @@ const payload: { data: Review[] } = {
     {
       id: "f5295a39-6674-4559-b900-332118177ff9",
       userName: "Anandita Banerjee",
-      userImage:
-        "https://play-lh.googleusercontent.com/a-/ALV-UjXLN4umnLse0EUiybmg0wMbE9npTa7D68_QjzhHK0bhCzI8kzIQ",
+      userImage: "https://play-lh.googleusercontent.com/a-/ALV-UjXLN4umnLse0EUiybmg0wMbE9npTa7D68_QjzhHK0bhCzI8kzIQ",
       date: "2025-08-11T04:28:41.176Z",
       score: 5,
       url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=f5295a39-6674-4559-b900-332118177ff9",
-      text:
-        "I love about this Sisya Class is a user-friendly app that's perfect for online learning. It offers seamless scheduling, interactive tools, and multimedia support, making it easy for students and educators to collaborate effectively. Overall, it's a strong choice for digital education.",
-    },
-    {
-      id: "efe74a25-fd09-44bd-9865-302be1d5f190",
-      userName: "Aasrit Kaur",
-      userImage:
-        "https://play-lh.googleusercontent.com/a/ACg8ocJeKYKjog594qkQ6xapy3AHncB4XWUZb6a1QqObqxMqODZXUA=mo",
-      date: "2025-08-08T12:35:04.475Z",
-      score: 5,
-      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=efe74a25-fd09-44bd-9865-302be1d5f190",
-      text:
-        "I’ve been using the Sisya Class App for a while now, and I must say — it’s one of the most reliable and well-structured learning platforms out there. Whether you're a school student or preparing for competitive exams, this app makes concepts clear, engaging, and easy to understand.",
+      text: "Sisya Class is a user-friendly app that is perfect for online learning. It offers seamless scheduling, interactive tools, and multimedia support, making collaboration easy for students and educators. Overall, it is a strong choice for digital education."
     },
     {
       id: "8cfef395-e46a-4371-9bbe-934b36ee9533",
       userName: "Shabaaz Baig",
-      userImage:
-        "https://play-lh.googleusercontent.com/a-/ALV-UjWYedNNIvu2AVKsA3la5pzamd35XolfuBiuVWSmIdVcFcDTr-8",
+      userImage: "https://play-lh.googleusercontent.com/a-/ALV-UjWYedNNIvu2AVKsA3la5pzamd35XolfuBiuVWSmIdVcFcDTr-8",
       date: "2025-08-19T13:56:58.119Z",
       score: 5,
       url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=8cfef395-e46a-4371-9bbe-934b36ee9533",
-      text:
-        "Sisya is a great app where you can learn maths easily for people who think maths is hard even I was weak in maths but now I'm seriously improving thanks to sisya and especially snehal sir who teaches me maths like it's like solving a puzzle so thanks again sisya for helping me in my studies and regaining my reputation in my class thanks",
+      text: "Sisya is a great app for learning maths. I was weak earlier, but now I am improving a lot. The teaching style feels like solving a puzzle and has really boosted my confidence in class."
     },
     {
-      id: "3ef9c389-5082-4f60-a2f8-cd1840611756",
-      userName: "C.S. Sachindra",
-      userImage:
-        "https://play-lh.googleusercontent.com/a-/ALV-UjXoTZs_x9g8coepdsY1dl_J8Rxd7SuOubnjYYEI6-BGp_l6an4y",
-      date: "2025-05-20T10:37:22.263Z",
+      id: "1183135e-9c97-4ca2-97f3-5fe58f3da89d",
+      userName: "Barnali Das",
+      userImage: "https://play-lh.googleusercontent.com/a/ACg8ocIrD-fk6Ux7CuXKdFdgYI6ZWltwbMwt-hrU7-CcTC5hCK8QXQ=mo",
+      date: "2025-09-12T13:57:50.934Z",
       score: 5,
-      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=3ef9c389-5082-4f60-a2f8-cd1840611756",
-      text:
-        "My brother has been learning through the Sisya app, and the experience has been amazing for him. The AI-powered features and instant doubt support have really made his learning smoother and more efficient. What stands out the most is the teaching style – it's interactive and engaging, which helps him stay interested in his studies. Definitely a great platform for students!",
+      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=1183135e-9c97-4ca2-97f3-5fe58f3da89d",
+      text: "Classes are going very well, and teachers explain concepts clearly while ensuring there are no doubts. The AI support, daily practice, and homework schedule have helped me stay focused and consistent."
     },
     {
-      id: "4d3ca5e5-7356-41e2-9148-289dcec0f514",
-      userName: "JASMINE ZAIDI",
-      userImage:
-        "https://play-lh.googleusercontent.com/a/ACg8ocIVxsSTkM6fIpY8mAgiiWfK27NCZsC0p94HqKjtdFLTx5O6MHAx=mo",
-      date: "2025-05-20T10:10:07.906Z",
+      id: "be2bb5fd-2927-47a1-9b10-a3e7ac19e6e8",
+      userName: "Anita Deshpande",
+      userImage: "https://play-lh.googleusercontent.com/a-/ALV-UjVpc_a0TAG974Do5J3lWLNRSP7K1gNIdPCNN3N1b37f1tMrGWSi",
+      date: "2025-09-18T12:51:38.130Z",
       score: 5,
-      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=4d3ca5e5-7356-41e2-9148-289dcec0f514",
-      text:
-        "Sisya is a great small edtech company that offers quality learning in a fun and easy way. The content is clear, engaging, and perfect for young learners. The team is supportive and truly cares about education. A wonderful platform for kids to learn and grow!",
+      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=be2bb5fd-2927-47a1-9b10-a3e7ac19e6e8",
+      text: "Sisya App is simple and easy to navigate. The study materials and doubt-solving feature are very helpful for students. A great learning experience overall."
     },
     {
-      id: "7e86bbd6-67b7-423c-b869-0405e4c46663",
-      userName: "011 cadet Yasmin",
-      userImage:
-        "https://play-lh.googleusercontent.com/a-/ALV-UjVbvJg1FaaoZPcQcF456HgZIqLqkuBl3f6Gz8YMdi1i5HzA6krm",
-      date: "2025-05-20T10:43:00.592Z",
+      id: "efe74a25-fd09-44bd-9865-302be1d5f190",
+      userName: "Aasrit Kaur",
+      userImage: "https://play-lh.googleusercontent.com/a/ACg8ocJeKYKjog594qkQ6xapy3AHncB4XWUZb6a1QqObqxMqODZXUA=mo",
+      date: "2025-08-08T12:35:04.475Z",
       score: 5,
-      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=7e86bbd6-67b7-423c-b869-0405e4c46663",
-      text:
-        "Sisya Class has been a game changer in my child's learning journey. The content is clear, engaging and tailored to help students truly understand concepts. I have seen real improvement in my child's studies thanks to their dedicated approach and support. Thank you SISYA CLASS!",
-    },
-    {
-      id: "8cce27f4-2de7-477c-bb14-cd091d148c89",
-      userName: "pavan yaswant",
-      userImage:
-        "https://play-lh.googleusercontent.com/a-/ALV-UjVFowfahWoZiEX-xTFmdvIxCdeL3oibuB77TK1dKfsCdmyL1mxYnQ",
-      date: "2025-05-20T10:43:50.590Z",
-      score: 5,
-      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=8cce27f4-2de7-477c-bb14-cd091d148c89",
-      text:
-        "Great UI, fast response, and user friendly experience and the AI is top notch and classes were amazing. Their mentors and master teachers were really helpful in solving doubts. Would recommend for JEE preparation.",
-    },
+      url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=efe74a25-fd09-44bd-9865-302be1d5f190",
+      text: "Sisya Class App is one of the most reliable and well-structured learning platforms. It makes concepts clear, engaging, and easy to understand for both school and competitive exam students."
+    }
+
+
+
   ],
 };
 

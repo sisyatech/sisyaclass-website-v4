@@ -15,6 +15,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   const [phone, setPhone] = React.useState("");
   const [question, setQuestion] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
+  const [isSuccess, setIsSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   const isValidMobile = (num: string) => /^[6-9]\d{9}$/.test(num);
@@ -69,8 +70,8 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
       } catch { }
       console.log("[LTC][CALLBACK][RESPONSE] parsed:", data);
       if (res.ok && (data?.success ?? true)) {
-        console.log("[LTC][CALLBACK] Success - redirecting to success page");
-        window.location.href = "/ltc/payment/success.php";
+        console.log("[LTC][CALLBACK] Success - showing success state");
+        setIsSuccess(true);
       } else {
         let msg = data?.message || data?.error || `Request failed (${res.status})`;
         if (res.status === 400 && typeof msg === "string" && msg.toLowerCase().includes("lead not created")) {
@@ -158,55 +159,82 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             >
               ×
             </button>
-            <h2 className="text-center text-lg font-bold text-[#01317a]">We&apos;ll Call You In 24 Hrs.</h2>
-            <div className="mt-4 space-y-3">
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">Enter your Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-800 outline-none focus:ring-2 focus:ring-[#02bdfe]"
-                  placeholder="Enter your name"
-                  disabled={submitting}
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">Enter your phone number</label>
-                <div className="flex">
-                  <div className="flex items-center justify-center w-14 rounded-l-md border border-gray-300 bg-gray-100 text-gray-700">
-                    +91
+            <h2 className="text-center text-lg font-bold text-[#01317a]">
+              {isSuccess ? "Request Submitted!" : "We'll Call You In 24 Hrs."}
+            </h2>
+            {isSuccess ? (
+              <div className="mt-6 text-center space-y-4">
+                <div className="flex justify-center">
+                  <div className="bg-green-100 p-3 rounded-full">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
+                </div>
+                <p className="text-gray-600">Our counselor will call you within 24 hours to answer your questions.</p>
+                <button
+                  onClick={() => {
+                    setShowCallback(false);
+                    setIsSuccess(false);
+                    setName("");
+                    setPhone("");
+                    setQuestion("");
+                  }}
+                  className="w-full rounded-md bg-[#01317a] py-3 font-bold text-white hover:bg-[#01317a]/90"
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              <div className="mt-4 space-y-3">
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Enter your Name</label>
                   <input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))}
-                    className="flex-1 rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-gray-800 outline-none focus:ring-2 focus:ring-[#02bdfe]"
-                    placeholder="Enter your phone number"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-gray-800 outline-none focus:ring-2 focus:ring-[#02bdfe]"
+                    placeholder="Enter your name"
                     disabled={submitting}
                   />
                 </div>
-              </div>
-              <div>
-                <label className="block text-sm text-gray-600 mb-1">Enter your Question or Concern</label>
-                <textarea
-                  value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
-                  className="w-full min-h-[80px] rounded-md border border-gray-300 px-3 py-2 text-gray-800 outline-none focus:ring-2 focus:ring-[#02bdfe]"
-                  placeholder="Enter your question"
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Enter your phone number</label>
+                  <div className="flex">
+                    <div className="flex items-center justify-center w-14 rounded-l-md border border-gray-300 bg-gray-100 text-gray-700">
+                      +91
+                    </div>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, "").slice(0, 10))}
+                      className="flex-1 rounded-r-md border border-l-0 border-gray-300 px-3 py-2 text-gray-800 outline-none focus:ring-2 focus:ring-[#02bdfe]"
+                      placeholder="Enter your phone number"
+                      disabled={submitting}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-600 mb-1">Enter your Question or Concern</label>
+                  <textarea
+                    value={question}
+                    onChange={(e) => setQuestion(e.target.value)}
+                    className="w-full min-h-[80px] rounded-md border border-gray-300 px-3 py-2 text-gray-800 outline-none focus:ring-2 focus:ring-[#02bdfe]"
+                    placeholder="Enter your question"
+                    disabled={submitting}
+                  />
+                </div>
+                {error && <div className="text-sm text-red-600">{error}</div>}
+                <button
+                  type="button"
+                  className="w-full rounded-md bg-[#1B9CFF] py-3 font-bold text-white hover:bg-[#1B9CFF]/90 disabled:opacity-60"
+                  onClick={handleSubmitCallback}
                   disabled={submitting}
-                />
+                >
+                  {submitting ? "Submitting..." : "Submit"}
+                </button>
               </div>
-              {error && <div className="text-sm text-red-600">{error}</div>}
-              <button
-                type="button"
-                className="w-full rounded-md bg-[#1B9CFF] py-3 font-bold text-white hover:bg-[#1B9CFF]/90 disabled:opacity-60"
-                onClick={handleSubmitCallback}
-                disabled={submitting}
-              >
-                {submitting ? "Submitting..." : "Submit"}
-              </button>
-            </div>
+            )}
           </div>
         </div>
       )}
