@@ -116,9 +116,9 @@ export default function ReviewsSection() {
       <h2 className="text-center mb-1 font-bold text-[26px]">Trusted by Parents, Loved by Students</h2>
       <div className="text-center text-[#6b7280] text-[13px] mb-[18px]">More than promises — results you can see</div>
 
-      <div className="flex flex-col md:flex-row md:items-start md:gap-6">
-        <aside className="flex flex-col items-center justify-center rounded-[16px] p-4 w-full md:w-[220px] shrink-0" aria-label="summary">
-          <h4 className="m-0 mb-2 tracking-wide text-[30px] text-[#111827]">EXCELLENT</h4>
+      <div className="flex flex-col md:flex-row md:items-start md:gap-8 lg:gap-12">
+        <aside className="flex flex-col items-center justify-center rounded-[16px] p-4 w-full md:w-[220px] shrink-0 md:-ml-20 lg:-ml-32 mt-2 md:mt-6" aria-label="summary">
+          <h4 className="m-0 mb-2 tracking-wide text-[24px] md:text-[30px] text-[#111827]">EXCELLENT</h4>
           <div className="flex gap-[2px] my-[2px]" aria-label="5 out of 5">
             {Array.from({ length: 5 }).map((_, i) => (
               <img key={i} src="/3daylp/star-filled.svg" alt="star" className="w-[18px] h-[18px] inline-block" />
@@ -126,77 +126,103 @@ export default function ReviewsSection() {
           </div>
           <div className="font-extrabold text-[14px] text-[#111827] mt-1">4.8</div>
           <div className="text-[#6b7280] text-[12px] my-1 text-center">Based on 300+ reviews</div>
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-1 mt-2">
             <img className="w-[150px] h-auto md:w-[95px]" src="/3daylp/google_b.svg" alt="Google Reviews" />
           </div>
         </aside>
 
-        <section className="relative w-full md:flex-1 overflow-hidden" aria-label="reviews">
-          <button
-            className="absolute md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:left-[5px] bottom-0 left-1/2 -translate-x-[42px] md:translate-x-0 w-9 h-9 rounded-full bg-white border border-[#e5e7eb] grid place-items-center shadow disabled:opacity-60 z-20"
-            aria-label="Previous"
-            onClick={() => scrollByPage(-1)}
-            disabled={!canPrev}
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" /></svg>
-          </button>
-          <div
-            className="w-full overflow-x-auto snap-x snap-mandatory flex px-3 pb-12 md:pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            ref={viewportRef}
-          >
-            <div className="flex gap-2 w-max pb-1" ref={trackRef}>
-              {reviews.map((r) => (
-                <article
-                  key={r.id}
-                  className="flex-none w-[240px] md:w-[240px] bg-[#f7f7f8] border border-[#e5e7eb] rounded-[8px] shadow p-[6px] snap-start cursor-pointer relative"
-                  onClick={() => window.open(r.url, "_blank")}
-                >
-                  <div className="absolute right-1.5 top-1.5 opacity-80" aria-hidden>
-                    <img src="/3daylp/gogle_s.svg" alt="g" className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex items-center gap-1 mb-1">
-                    <img
-                      className="w-5 h-5 rounded-full object-cover border border-[#e5e7eb] bg-white"
-                      src={r.userImage}
-                      alt={r.userName}
-                      onError={(e: any) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.outerHTML = `<div class='avatar-fallback'>${r.userName
-                          .charAt(0)
-                          .toUpperCase()}</div>`;
-                      }}
-                    />
-                    <div className="flex flex-col leading-tight">
-                      <div className="font-semibold text-[10px] leading-4 text-[#111827]">{r.userName}</div>
-                      <div className="text-[8px] leading-3 text-[#9ca3af]">{fmtDate(r.date)}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 mb-1">
-                    <div className="flex gap-[2px] leading-none" aria-label="5 out of 5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <img key={i} src="/3daylp/star-filled.svg" alt="star" className="w-3.5 h-3.5 inline-block" />
-                      ))}
-                    </div>
-                    <div className="font-bold text-[11px] text-[#111827] leading-none">
-                      <img src="/3daylp/blue_tick.svg" alt="verified" className="w-3.5 h-3.5 inline-block align-middle" />
-                    </div>
-                  </div>
-                  <div className="text-[10px] leading-4 text-[#374151] overflow-hidden [display:-webkit-box] [WebkitLineClamp:5] [WebkitBoxOrient:vertical] text-ellipsis">
-                    {r.text || ""}
-                  </div>
-                </article>
-              ))}
-            </div>
+        <div className="flex-1 w-full relative mt-4 md:mt-3 md:-ml-5 lg:-ml-9">
+          {/* Main Review Box Container */}
+          <div className="bg-[#fcfcfd] border border-[#f1f2f4] rounded-[24px] p-2 md:p-3 relative shadow-sm">
+            {/* Side Buttons - Desktop Only */}
+            <button
+              className="hidden md:flex absolute top-1/2 -translate-y-1/2 -left-8 md:-left-12 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-[#e5e7eb] items-center justify-center shadow-md disabled:opacity-0 z-20 hover:bg-gray-50 transition-all active:scale-90"
+              aria-label="Previous"
+              onClick={() => scrollByPage(-1)}
+              disabled={!canPrev}
+            >
+              <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8 text-gray-700"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor" /></svg>
+            </button>
+
+            <section className="w-full relative overflow-hidden" aria-label="reviews">
+              <div
+                className="w-full overflow-x-auto snap-x snap-mandatory flex pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                ref={viewportRef}
+              >
+                <div className="flex gap-4 w-max px-2 pb-1" ref={trackRef}>
+                  {reviews.map((r) => (
+                    <article
+                      key={r.id}
+                      className="flex-none w-[calc(100vw-80px)] md:w-[235px] lg:w-[242px] bg-white border border-[#e5e7eb] rounded-[16px] shadow-sm p-4 snap-start cursor-pointer relative hover:shadow-md transition-shadow"
+                      onClick={() => window.open(r.url, "_blank")}
+                    >
+                      <div className="absolute right-3 top-3 opacity-80" aria-hidden>
+                        <img src="/3daylp/gogle_s.svg" alt="g" className="w-4 h-4" />
+                      </div>
+                      <div className="flex items-center gap-3 mb-3">
+                        <img
+                          className="w-10 h-10 rounded-full object-cover border border-[#e5e7eb] bg-white"
+                          src={r.userImage}
+                          alt={r.userName}
+                          onError={(e: any) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.outerHTML = `<div class='avatar-fallback'>${r.userName
+                              .charAt(0)
+                              .toUpperCase()}</div>`;
+                          }}
+                        />
+                        <div className="flex flex-col leading-tight">
+                          <div className="font-bold text-[12px] text-[#111827]">{r.userName}</div>
+                          <div className="text-[10px] text-[#9ca3af]">{fmtDate(r.date)}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5 mb-3">
+                        <div className="flex gap-[2px] leading-none" aria-label="5 out of 5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <img key={i} src="/3daylp/star-filled.svg" alt="star" className="w-4 h-4 inline-block" />
+                          ))}
+                        </div>
+                        <img src="/3daylp/blue_tick.svg" alt="verified" className="w-4 h-4 inline-block" />
+                      </div>
+                      <div className="text-[12px] leading-relaxed text-[#374151] overflow-hidden [display:-webkit-box] [WebkitLineClamp:5] [WebkitBoxOrient:vertical] text-ellipsis">
+                        {r.text || ""}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            <button
+              className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-8 md:-right-12 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-[#e5e7eb] items-center justify-center shadow-md disabled:opacity-0 z-20 hover:bg-gray-50 transition-all active:scale-90"
+              aria-label="Next"
+              onClick={() => scrollByPage(1)}
+              disabled={!canNext}
+            >
+              <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8 text-gray-700"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z" fill="currentColor" /></svg>
+            </button>
           </div>
-          <button
-            className="absolute md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:right-[5px] bottom-0 right-1/2 translate-x-[42px] md:translate-x-0 w-9 h-9 rounded-full bg-white border border-[#e5e7eb] grid place-items-center shadow disabled:opacity-60 z-20"
-            aria-label="Next"
-            onClick={() => scrollByPage(1)}
-            disabled={!canNext}
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z" /></svg>
-          </button>
-        </section>
+
+          {/* Navigation Buttons Below Review Box - Mobile Only */}
+          <div className="flex md:hidden justify-center items-center gap-6 mt-6 pb-2">
+            <button
+              className="w-11 h-11 rounded-full bg-white border border-[#e5e7eb] flex items-center justify-center shadow-md disabled:opacity-30 z-20 hover:bg-gray-50 transition-all active:scale-90"
+              aria-label="Previous"
+              onClick={() => scrollByPage(-1)}
+              disabled={!canPrev}
+            >
+              <svg viewBox="0 0 24 24" className="w-7 h-7 text-gray-700"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor" /></svg>
+            </button>
+            <button
+              className="w-11 h-11 rounded-full bg-white border border-[#e5e7eb] flex items-center justify-center shadow-md disabled:opacity-30 z-20 hover:bg-gray-50 transition-all active:scale-90"
+              aria-label="Next"
+              onClick={() => scrollByPage(1)}
+              disabled={!canNext}
+            >
+              <svg viewBox="0 0 24 24" className="w-7 h-7 text-gray-700"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z" fill="currentColor" /></svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
