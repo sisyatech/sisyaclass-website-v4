@@ -149,6 +149,18 @@ const nextConfig: NextConfig = {
         source: '/mathlp/success.php',
         destination: '/mathlp/payment/success',
       },
+      {
+        source: '/summercamp/payment/success.php',
+        destination: '/summercamp/payment/success',
+      },
+      {
+        source: '/summercamp/payment/failed.php',
+        destination: '/summercamp/payment/failed',
+      },
+      {
+        source: '/summercamp/success.php',
+        destination: '/summercamp/payment/success',
+      },
     ];
   },
   eslint: {
