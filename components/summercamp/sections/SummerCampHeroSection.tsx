@@ -78,7 +78,7 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
   ];
 
   return (
-    <section className="relative w-full overflow-hidden pt-4 pb-12 md:pb-24 lg:pb-32 min-h-[500px] md:min-h-[600px] 2xl:min-h-[900px] flex flex-col items-center">
+    <section className="relative w-full overflow-hidden pt-4 pb-12 md:pb-24 lg:pb-32 min-h-[650px] md:min-h-[600px] 2xl:min-h-[900px] flex flex-col items-center">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
