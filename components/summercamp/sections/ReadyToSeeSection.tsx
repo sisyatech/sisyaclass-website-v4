@@ -29,17 +29,28 @@ export default function ReadyToSeeSection({ onBookDemo }: ReadyToSeeSectionProps
                 </motion.div>
 
                 {/* Center Content */}
-                <div className="flex flex-col items-center text-center">
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-[#1a2439] mb-8">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    className="flex flex-col items-center text-center"
+                >
+                    <motion.h2
+                        animate={{ scale: [1, 1.02, 1] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                        className="text-2xl md:text-3xl lg:text-4xl font-black text-[#1a2439] mb-8"
+                    >
                         Ready to See How Your Child Performs?
-                    </h2>
-                    <button
+                    </motion.h2>
+                    <motion.button
+                        whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(235, 77, 45, 0.4)" }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={onBookDemo}
-                        className="bg-[#eb4d2d] hover:bg-[#d43f21] text-white font-bold text-lg md:text-xl py-3 px-10 rounded-xl shadow-[0_4px_10px_rgba(235,77,45,0.3)] transition-all active:scale-95 border-b-4 border-[#b53a22]"
+                        className="bg-[#eb4d2d] text-white font-bold text-lg md:text-xl py-3 px-10 rounded-xl shadow-[0_4px_10px_rgba(235,77,45,0.3)] transition-colors border-b-4 border-[#b53a22]"
                     >
                         Get 3 Demos @ ₹19
-                    </button>
-                </div>
+                    </motion.button>
+                </motion.div>
 
                 {/* Right Balloon */}
                 <motion.div

@@ -114,12 +114,16 @@ export default function TopperBatchSection() {
                         <motion.div
                             key={idx}
                             variants={itemVariants}
-                            whileHover={{ y: -8, scale: 1.02 }}
+                            whileHover={{
+                                y: -12,
+                                scale: 1.05,
+                                boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.15)",
+                            }}
                             className={`
                                 bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.06)] border-2 border-transparent
-                                hover:border-[#2196F3] py-4 px-3 md:py-8 md:px-6 flex flex-col items-center justify-between text-center 
+                                hover:border-[#eb4d2d] py-4 px-3 md:py-8 md:px-6 flex flex-col items-center justify-between text-center 
                                 transition-all duration-300 w-full lg:w-[220px] min-h-[160px] md:min-h-[220px]
-                                ${idx === 0 ? 'border-[#2196F3]' : ''}
+                                ${idx === 0 ? 'border-[#eb4d2d]' : ''}
                             `}
                         >
                             <div className="mb-3 md:mb-6 relative w-10 h-10 md:w-16 md:h-16 flex-shrink-0">

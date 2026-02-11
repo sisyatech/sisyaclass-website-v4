@@ -16,12 +16,14 @@ export default function SummerCampTeachersSection({ onTap }: SummerCampTeachersS
                     Tap To Learn From The Best
                 </h2>
 
-                <button
+                <motion.button
+                    whileHover={{ scale: 1.05, backgroundColor: "#d43f21" }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={onTap}
-                    className="bg-[#eb4d2d] text-white px-8 py-3 rounded-full font-bold text-base md:text-lg shadow-lg mb-10 md:mb-16 hover:bg-[#d43f21] transition-all active:scale-95 cursor-pointer"
+                    className="bg-[#eb4d2d] text-white px-8 py-3 rounded-full font-bold text-base md:text-lg shadow-lg mb-10 md:mb-16 cursor-pointer"
                 >
                     Tap To Learn From IIT Teachers
-                </button>
+                </motion.button>
 
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -39,18 +41,24 @@ export default function SummerCampTeachersSection({ onTap }: SummerCampTeachersS
                 </motion.div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl">
-                    <div className="flex flex-col items-center text-center">
-                        <span className="text-[#eb4d2d] text-3xl md:text-5xl font-black mb-2">10,000+</span>
-                        <p className="text-[#4a5568] font-bold text-xs md:text-sm">Live Streaming Hours</p>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <span className="text-[#eb4d2d] text-3xl md:text-5xl font-black mb-2">98%</span>
-                        <p className="text-[#4a5568] font-bold text-xs md:text-sm">The Choice of Parents</p>
-                    </div>
-                    <div className="flex flex-col items-center text-center">
-                        <span className="text-[#eb4d2d] text-3xl md:text-5xl font-black mb-2">1000+</span>
-                        <p className="text-[#4a5568] font-bold text-xs md:text-sm">IIT & NIT Crafted Sessions</p>
-                    </div>
+                    {[
+                        { val: "10,000+", label: "Live Streaming Hours" },
+                        { val: "98%", label: "The Choice of Parents" },
+                        { val: "1000+", label: "IIT & NIT Crafted Sessions" }
+                    ].map((stat, idx) => (
+                        <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: idx * 0.1 }}
+                            whileHover={{ scale: 1.1, color: "#eb4d2d" }}
+                            className="flex flex-col items-center text-center cursor-default"
+                        >
+                            <span className="text-[#eb4d2d] text-3xl md:text-5xl font-black mb-2">{stat.val}</span>
+                            <p className="text-[#4a5568] font-bold text-xs md:text-sm">{stat.label}</p>
+                        </motion.div>
+                    ))}
                 </div>
             </div>
         </section>

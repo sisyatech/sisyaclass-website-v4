@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo, useRef, useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 type Review = {
   id: string;
@@ -58,9 +59,6 @@ const payload: { data: Review[] } = {
       url: "https://play.google.com/store/apps/details?id=com.sisya.sisyaclass&reviewId=efe74a25-fd09-44bd-9865-302be1d5f190",
       text: "Sisya Class App is one of the most reliable and well-structured learning platforms. It makes concepts clear, engaging, and easy to understand for both school and competitive exam students."
     }
-
-
-
   ],
 };
 
@@ -117,8 +115,20 @@ export default function ReviewsSection() {
       <div className="text-center text-[#6b7280] text-[13px] mb-[18px]">More than promises — results you can see</div>
 
       <div className="flex flex-col md:flex-row md:items-start md:gap-8 lg:gap-12">
-        <aside className="flex flex-col items-center justify-center rounded-[16px] p-4 w-full md:w-[220px] shrink-0 md:-ml-20 lg:-ml-32 mt-2 md:mt-6" aria-label="summary">
-          <h4 className="m-0 mb-2 tracking-wide text-[24px] md:text-[30px] text-[#111827]">EXCELLENT</h4>
+        <motion.aside
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-col items-center justify-center rounded-[16px] p-4 w-full md:w-[220px] shrink-0 md:-ml-20 lg:-ml-32 mt-2 md:mt-6"
+          aria-label="summary"
+        >
+          <motion.h4
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="m-0 mb-2 tracking-wide text-[24px] md:text-[30px] text-[#111827]"
+          >
+            EXCELLENT
+          </motion.h4>
           <div className="flex gap-[2px] my-[2px]" aria-label="5 out of 5">
             {Array.from({ length: 5 }).map((_, i) => (
               <img key={i} src="/3daylp/star-filled.svg" alt="star" className="w-[18px] h-[18px] inline-block" />
@@ -126,23 +136,33 @@ export default function ReviewsSection() {
           </div>
           <div className="font-extrabold text-[14px] text-[#111827] mt-1">4.8</div>
           <div className="text-[#6b7280] text-[12px] my-1 text-center">Based on 300+ reviews</div>
-          <div className="flex flex-col items-center gap-1 mt-2">
+          <motion.div
+            whileHover={{ y: -5 }}
+            className="flex flex-col items-center gap-1 mt-2"
+          >
             <img className="w-[150px] h-auto md:w-[95px]" src="/3daylp/google_b.svg" alt="Google Reviews" />
-          </div>
-        </aside>
+          </motion.div>
+        </motion.aside>
 
-        <div className="flex-1 w-full relative mt-4 md:mt-3 md:-ml-5 lg:-ml-9">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex-1 w-full relative mt-4 md:mt-3 md:-ml-5 lg:-ml-9"
+        >
           {/* Main Review Box Container */}
           <div className="bg-[#fcfcfd] border border-[#f1f2f4] rounded-[24px] p-2 md:p-3 relative shadow-sm">
             {/* Side Buttons - Desktop Only */}
-            <button
-              className="hidden md:flex absolute top-1/2 -translate-y-1/2 -left-8 md:-left-12 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-[#e5e7eb] items-center justify-center shadow-md disabled:opacity-0 z-20 hover:bg-gray-50 transition-all active:scale-90"
+            <motion.button
+              whileHover={{ scale: 1.1, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              className="hidden md:flex absolute top-1/2 -translate-y-1/2 -left-8 md:-left-12 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-[#e5e7eb] items-center justify-center shadow-md disabled:opacity-0 z-20 hover:bg-gray-50 transition-colors active:scale-90"
               aria-label="Previous"
               onClick={() => scrollByPage(-1)}
               disabled={!canPrev}
             >
               <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8 text-gray-700"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor" /></svg>
-            </button>
+            </motion.button>
 
             <section className="w-full relative overflow-hidden" aria-label="reviews">
               <div
@@ -150,10 +170,18 @@ export default function ReviewsSection() {
                 ref={viewportRef}
               >
                 <div className="flex gap-4 w-max px-2 pb-1" ref={trackRef}>
-                  {reviews.map((r) => (
-                    <article
+                  {reviews.map((r, idx) => (
+                    <motion.article
                       key={r.id}
-                      className="flex-none w-[calc(100vw-80px)] md:w-[235px] lg:w-[242px] bg-white border border-[#e5e7eb] rounded-[16px] shadow-sm p-4 snap-start cursor-pointer relative hover:shadow-md transition-shadow"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.05 }}
+                      whileHover={{
+                        y: -8,
+                        boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                      }}
+                      className="flex-none w-[calc(100vw-80px)] md:w-[235px] lg:w-[242px] bg-white border border-[#e5e7eb] rounded-[16px] shadow-sm p-4 snap-start cursor-pointer relative transition-all"
                       onClick={() => window.open(r.url, "_blank")}
                     >
                       <div className="absolute right-3 top-3 opacity-80" aria-hidden>
@@ -187,45 +215,47 @@ export default function ReviewsSection() {
                       <div className="text-[12px] leading-relaxed text-[#374151] overflow-hidden [display:-webkit-box] [WebkitLineClamp:5] [WebkitBoxOrient:vertical] text-ellipsis">
                         {r.text || ""}
                       </div>
-                    </article>
+                    </motion.article>
                   ))}
                 </div>
               </div>
             </section>
 
-            <button
-              className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-8 md:-right-12 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-[#e5e7eb] items-center justify-center shadow-md disabled:opacity-0 z-20 hover:bg-gray-50 transition-all active:scale-90"
+            <motion.button
+              whileHover={{ scale: 1.1, x: 5 }}
+              whileTap={{ scale: 0.9 }}
+              className="hidden md:flex absolute top-1/2 -translate-y-1/2 -right-8 md:-right-12 w-9 h-9 md:w-11 md:h-11 rounded-full bg-white border border-[#e5e7eb] items-center justify-center shadow-md disabled:opacity-0 z-20 hover:bg-gray-50 transition-colors active:scale-90"
               aria-label="Next"
               onClick={() => scrollByPage(1)}
               disabled={!canNext}
             >
               <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8 text-gray-700"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z" fill="currentColor" /></svg>
-            </button>
+            </motion.button>
           </div>
 
           {/* Navigation Buttons Below Review Box - Mobile Only */}
           <div className="flex md:hidden justify-center items-center gap-6 mt-6 pb-2">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               className="w-11 h-11 rounded-full bg-white border border-[#e5e7eb] flex items-center justify-center shadow-md disabled:opacity-30 z-20 hover:bg-gray-50 transition-all active:scale-90"
               aria-label="Previous"
               onClick={() => scrollByPage(-1)}
               disabled={!canPrev}
             >
               <svg viewBox="0 0 24 24" className="w-7 h-7 text-gray-700"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" fill="currentColor" /></svg>
-            </button>
-            <button
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               className="w-11 h-11 rounded-full bg-white border border-[#e5e7eb] flex items-center justify-center shadow-md disabled:opacity-30 z-20 hover:bg-gray-50 transition-all active:scale-90"
               aria-label="Next"
               onClick={() => scrollByPage(1)}
               disabled={!canNext}
             >
               <svg viewBox="0 0 24 24" className="w-7 h-7 text-gray-700"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z" fill="currentColor" /></svg>
-            </button>
+            </motion.button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );
 }
-
-

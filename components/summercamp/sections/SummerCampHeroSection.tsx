@@ -138,31 +138,53 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
           <h3 className="text-black font-bold text-center md:text-left text-xs md:text-lg mb-2 md:mb-4">Includes</h3>
           <div className="flex flex-col md:grid md:grid-cols-5 gap-1 md:gap-3">
             {includes.map((item, idx) => (
-              <div key={idx} className="bg-[#fff9bd] md:bg-yellow-50/90 rounded-sm md:rounded-lg p-1.5 md:p-3 flex items-center md:flex-col justify-center text-center gap-1.5 md:gap-2 transition-transform hover:scale-105 shadow-sm md:shadow-md border border-white/50">
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + idx * 0.1 }}
+                whileHover={{
+                  scale: 1.05,
+                  backgroundColor: "#fffdf0",
+                  rotate: [0, -1, 1, -1, 0],
+                  transition: { duration: 0.3 }
+                }}
+                className="bg-[#fff9bd] md:bg-yellow-50/90 rounded-sm md:rounded-lg p-1.5 md:p-3 flex items-center md:flex-col justify-center text-center gap-1.5 md:gap-2 shadow-sm md:shadow-md border border-white/50 cursor-default"
+              >
                 <div className="hidden md:block bg-white p-1.5 rounded-md shadow-sm">{item.icon}</div>
                 <p className="text-black text-[8px] md:text-[11px] font-bold leading-tight">
                   {item.text}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col md:flex-row gap-2.5 md:gap-4 w-full max-w-2xl justify-center z-20 mt-4 md:mt-8 px-6 min-[375px]:px-16 min-[425px]:px-24 md:px-0">
-          <button
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="flex flex-col md:flex-row gap-2.5 md:gap-4 w-full max-w-2xl justify-center z-20 mt-4 md:mt-8 px-6 min-[375px]:px-16 min-[425px]:px-24 md:px-0"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(235, 77, 45, 0.4)" }}
+            whileTap={{ scale: 0.95 }}
             onClick={onRegister}
-            className="w-full md:w-auto bg-[#eb4d2d] hover:bg-[#d43f21] text-white font-black text-sm md:text-2xl py-2 md:py-3 px-4 md:px-6 rounded-full shadow-[0_3px_6px_rgba(235,77,45,0.4)] flex items-center justify-center border-2 border-white transition-all active:scale-95 whitespace-nowrap"
+            className="w-full md:w-auto bg-[#eb4d2d] text-white font-black text-sm md:text-2xl py-2 md:py-3 px-4 md:px-6 rounded-full shadow-[0_3px_6px_rgba(235,77,45,0.4)] flex items-center justify-center border-2 border-white transition-colors whitespace-nowrap"
           >
             Get 3 Demos @ ₹19
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05, backgroundColor: "#f9fafb" }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleOpenCallback}
-            className="w-full md:w-auto bg-white hover:bg-gray-50 text-[#eb4d2d] font-black text-sm md:text-2xl py-2 md:py-3 px-4 md:px-6 rounded-full shadow-[0_3px_6px_rgba(255,255,255,0.3)] flex items-center justify-center border-2 border-[#eb4d2d] transition-all active:scale-95 whitespace-nowrap"
+            className="w-full md:w-auto bg-white text-[#eb4d2d] font-black text-sm md:text-2xl py-2 md:py-3 px-4 md:px-6 rounded-full shadow-[0_3px_6px_rgba(255,255,255,0.3)] flex items-center justify-center border-2 border-[#eb4d2d] transition-colors whitespace-nowrap"
           >
             Talk To Our Counselor
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
 
       {/* Background Bottom Greenery Placeholder - Not needed if using full image, but keeping a subtle blend */}
