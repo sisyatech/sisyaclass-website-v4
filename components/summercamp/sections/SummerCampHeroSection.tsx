@@ -123,7 +123,7 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-[10px] md:text-xl font-bold text-black mb-3 md:mb-8 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
+          className="text-[12px] md:text-xl font-bold text-black mb-3 md:mb-8 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]"
         >
           While Feeling Like a Game
         </motion.p>
@@ -153,7 +153,7 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
                 className="bg-[#fff9bd] md:bg-yellow-50/90 rounded-sm md:rounded-lg p-1.5 md:p-3 flex items-center md:flex-col justify-center text-center gap-1.5 md:gap-2 shadow-sm md:shadow-md border border-white/50 cursor-default"
               >
                 <div className="hidden md:block bg-white p-1.5 rounded-md shadow-sm">{item.icon}</div>
-                <p className="text-black text-[8px] md:text-[11px] font-bold leading-tight">
+                <p className="text-black text-[10px] md:text-[11px] font-bold leading-tight">
                   {item.text}
                 </p>
               </motion.div>
