@@ -115,7 +115,7 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
         <motion.h1
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-lg md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.4)] md:drop-shadow-[0_4px_4px_rgba(0,0,0,0.4)] mb-7 md:whitespace-nowrap"
+          className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white drop-shadow-[0_1.5px_1.5px_rgba(0,0,0,0.4)] md:drop-shadow-[0_4px_4px_rgba(0,0,0,0.4)] mb-7 md:whitespace-nowrap"
         >
           A Summer Camp That Builds Skills
         </motion.h1>
@@ -135,7 +135,7 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
           transition={{ delay: 0.4 }}
           className="bg-[#bceeff]/80 backdrop-blur-sm md:bg-white/20 md:backdrop-blur-md rounded-lg md:rounded-xl p-4 md:p-6 w-[92%] min-[375px]:w-[85%] min-[425px]:w-[75%] md:w-full max-w-4xl border border-white/40 shadow-xl mb-5 md:mb-10"
         >
-          <h3 className="text-black font-bold text-center md:text-left text-sm md:text-lg mb-2 md:mb-4">Includes</h3>
+          <h3 className="text-black font-bold text-left text-sm md:text-lg mb-2 md:mb-4 pl-9 md:pl-0">Includes</h3>
           <div className="flex flex-col md:grid md:grid-cols-5 gap-1 md:gap-3">
             {includes.map((item, idx) => (
               <motion.div
@@ -150,9 +150,9 @@ export default function SummerCampHeroSection({ onRegister, onGetCallback }: Her
                   rotate: [0, -1, 1, -1, 0],
                   transition: { duration: 0.3 }
                 }}
-                className="bg-[#fff9bd] md:bg-yellow-50/90 rounded-sm md:rounded-lg p-2.5 md:p-3 flex items-center md:flex-col justify-center text-center gap-1.5 md:gap-2 shadow-sm md:shadow-md border border-white/50 cursor-default"
+                className="bg-[#fff9bd] md:bg-yellow-50/90 rounded-sm md:rounded-lg p-2.5 md:p-3 pl-9 md:pl-3 flex items-center md:flex-col justify-start md:justify-center text-left md:text-center gap-1.5 md:gap-2 shadow-sm md:shadow-md border border-white/50 cursor-default"
               >
-                <div className="hidden md:block bg-white p-1.5 rounded-md shadow-sm">{item.icon}</div>
+                <div className="bg-white p-1 md:p-1.5 rounded-md shadow-sm flex-shrink-0">{item.icon}</div>
                 <p className="text-black text-[12px] md:text-[14px] font-bold leading-tight">
                   {item.text}
                 </p>
