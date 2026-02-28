@@ -101,28 +101,32 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base font-semibold tracking-wide mb-2 uppercase">
             Grades 1-10 | All Boards
           </p>
-          <h1 className="text-3xl md:text-[3rem] md:leading-[3.5rem] font-bold mb-4">
-            IIT/NIT Educators. 24/7 AI Support
-            <br className="hidden md:block" /> Just @ ₹19 to Begin
+
+          <h1 className="text-[1.05rem] sm:text-[1.35rem] md:text-[2rem] lg:text-[3rem] lg:leading-[3.5rem] font-bold mb-4 whitespace-nowrap">
+            <span className="block">We Promise 90% in Finals*</span>
+            <span className="block">IIT/NIT Educators. 24/7 AI Support</span>
           </h1>
+
           <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
             Maths | EVS | English | Physics | Chemistry
           </p>
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
-            <li>✅ 500 Hrs Live + Class Recordings Available Anytime</li>
+            <li>✅500 Hrs Live + Class Recordings Available Anytime</li>
             <li>✅ Free 2 Month Revision + Summer Camp</li>
             <li>✅ Triple Teacher Model ensures 3x the attention</li>
             <li>✅ AI + Teacher Doubt Solving, Anytime</li>
           </ul>
-          <div className="mt-6 mb-2 flex flex-wrap gap-4 justify-center md:justify-start">
+
+          {/* Buttons: always side by side (flex-row), unchanged for laptop */}
+          <div className="mt-6 mb-2 flex flex-row gap-2 sm:gap-3 md:gap-4 justify-center md:justify-start">
             <button
-              className="inline-flex items-center justify-center font-semibold text-[1rem] sm:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-[#ffd500] text-black whitespace-nowrap"
+              className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-[#ffd500] text-black whitespace-nowrap"
               onClick={onRegister}
             >
-              Get 5 Days Demos @19
+              Get 3 Days Demos @19
             </button>
             <button
-              className="inline-flex items-center justify-center font-semibold text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
+              className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
               onClick={handleOpenCallback}
             >
               Talk To A Counselor
@@ -134,16 +138,42 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           initial={{ opacity: 0, scale: 0.8, y: 50 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex-1 md:absolute md:right-4 md:bottom-[-40px] md:w-1/2 flex justify-center items-center md:items-end pointer-events-none mt-6 md:mt-0"
+          className="flex-1 md:absolute md:right-0 md:bottom-[-40px] md:w-1/2 flex justify-center items-center md:items-end pointer-events-none mt-6 md:mt-0"
         >
           <Image
-            src="/ltc/child.png"
-            alt="1-On-1 Maths Improvement Program"
-            width={560}
-            height={380}
-            className="w-full max-w-md md:max-w-none md:w-auto object-contain drop-shadow-2xl"
+            src="/ltc/school_girl.svg"
+            alt="girl"
+            width={360}
+            height={300}
+            className="object-contain drop-shadow-2xl translate-x-32 md:translate-x-40"
             priority
           />
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="hidden md:block absolute top-48 right-64 z-20"
+          >
+            <Image
+              src="/ltc/cube.png"
+              alt="cube"
+              width={70}
+              height={70}
+              className="pointer-events-none"
+            />
+          </motion.div>
+          <motion.div
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            className="hidden md:block absolute top-32 right-[-40px] z-20"
+          >
+            <Image
+              src="/ltc/funcion1.svg"
+              alt="function"
+              width={60}
+              height={60}
+              className="pointer-events-none"
+            />
+          </motion.div>
         </motion.div>
       </div>
 
@@ -241,5 +271,3 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
     </section>
   );
 }
-
-

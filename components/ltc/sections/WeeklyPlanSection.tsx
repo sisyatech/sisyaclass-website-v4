@@ -65,7 +65,7 @@ export default function WeeklyPlanSection({ onBookDemo }: WeeklyPlanSectionProps
             className="inline-flex items-center justify-center rounded-2xl bg-[#ffd500] px-6 sm:px-8 md:px-12 py-2.5 sm:py-3 md:py-3.5 text-sm sm:text-base md:text-lg font-semibold text-black shadow-[0_10px_25px_rgba(0,0,0,0.18)] hover:shadow-[0_14px_30px_rgba(0,0,0,0.2)] transition-transform duration-200 hover:-translate-y-0.5"
             onClick={onBookDemo}
           >
-            Book 5 Demos @ ₹19
+            Book 3 Demos @ ₹19
           </button>
         </div>
       </div>
