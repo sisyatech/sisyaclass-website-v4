@@ -90,8 +90,8 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   };
 
   return (
-    <section className="bg-[#01317a] text-white relative overflow-hidden py-8 md:py-10 min-h-[420px] md:min-h-[500px]">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-stretch gap-6 min-h-[380px] relative px-4">
+    <section className="bg-[#01317a] text-white relative overflow-hidden pt-8 pb-0 md:py-10 min-h-[420px] md:min-h-[500px]">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-stretch gap-0 md:gap-6 min-h-[380px] relative px-4">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
@@ -111,7 +111,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             Maths | EVS | English | Physics | Chemistry
           </p>
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
-            <li>✅500 Hrs Live + Class Recordings Available Anytime</li>
+            <li>✅ 500 Hrs Live + Class Recordings Available Anytime</li>
             <li>✅ Free 2 Month Revision + Summer Camp</li>
             <li>✅ Triple Teacher Model ensures 3x the attention</li>
             <li>✅ AI + Teacher Doubt Solving, Anytime</li>
@@ -138,14 +138,14 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           initial={{ opacity: 0, scale: 0.8, y: 50 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex-1 md:absolute md:right-0 md:bottom-[-40px] md:w-1/2 flex justify-center items-center md:items-end pointer-events-none mt-6 md:mt-0"
+          className="flex-1 md:absolute md:right-0 md:bottom-[-40px] md:w-1/2 flex justify-center items-center md:items-end pointer-events-none mt-0 md:mt-0"
         >
           <Image
             src="/ltc/school_girl.svg"
             alt="girl"
             width={360}
             height={300}
-            className="object-contain drop-shadow-2xl translate-x-32 md:translate-x-40"
+            className="object-contain drop-shadow-2xl translate-x-0 md:translate-x-40"
             priority
           />
           <motion.div
