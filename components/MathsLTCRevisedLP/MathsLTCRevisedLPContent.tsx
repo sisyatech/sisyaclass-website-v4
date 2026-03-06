@@ -36,14 +36,14 @@ export default function MathsLTCRevisedLPContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log("[MATHS-LTC] Lead status updated successfully");
+        //console.log("[MATHS-LTC] Lead status updated successfully");
         return true;
       }
 
-      console.warn("[MATHS-LTC] Failed to update lead status");
+      //console.warn("[MATHS-LTC] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[MATHS-LTC] Error updating lead status:", error);
+      //console.error("[MATHS-LTC] Error updating lead status:", error);
       return false;
     }
   };
@@ -61,7 +61,7 @@ export default function MathsLTCRevisedLPContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[MATHS-LTC] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[MATHS-LTC] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,13 +75,13 @@ export default function MathsLTCRevisedLPContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[MATHS-LTC] Lead response", leadData);
+      //console.log("[MATHS-LTC] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[MATHS-LTC] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[MATHS-LTC] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
@@ -89,7 +89,7 @@ export default function MathsLTCRevisedLPContent() {
         body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "Maths LTC Demo" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[MATHS-LTC] Order API response", orderJson);
+      //console.log("[MATHS-LTC] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -116,7 +116,7 @@ export default function MathsLTCRevisedLPContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[MATHS-LTC] Success handler", response);
+          //console.log("[MATHS-LTC] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
           window.location.href = `/mathlp/payment/success.php?transactionId=${encodeURIComponent(
@@ -125,7 +125,7 @@ export default function MathsLTCRevisedLPContent() {
         },
         modal: {
           ondismiss: function () {
-            console.warn("[MATHS-LTC] Checkout dismissed by user");
+            //console.warn("[MATHS-LTC] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
               window.location.href = `/mathlp/payment/failed.php?transactionId=${encodeURIComponent(
                 `DISMISSED_${Date.now()}`
@@ -136,10 +136,10 @@ export default function MathsLTCRevisedLPContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[MATHS-LTC] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[MATHS-LTC] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[MATHS-LTC] Error", err);
+      //console.error("[MATHS-LTC] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {

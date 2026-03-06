@@ -10,7 +10,7 @@ export default function PaymentFailedPage() {
 
   useEffect(() => {
     setCurrentDateTime(new Date().toLocaleString());
-    console.warn("[PAYMENT] Failed page params", { transactionId });
+    //console.warn("[PAYMENT] Failed page params", { transactionId });
   }, []);
 
   return (

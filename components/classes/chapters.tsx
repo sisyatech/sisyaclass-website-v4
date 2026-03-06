@@ -54,7 +54,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const selectedSubjectFromUrl = subjectFromPath || searchParams?.get('subject') || '';
   
   // Debug: Log component render
-  console.log('[CHAPTERS] Component rendered:', { 
+  //console.log('[CHAPTERS] Component rendered:', { 
     gradeNumber, 
     pathname,
     subjectFromPath,
@@ -122,7 +122,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
           }
         }
       } catch (error) {
-        console.error("Error fetching chapters data:", error);
+        //console.error("Error fetching chapters data:", error);
       } finally {
         setLoading(false);
       }
@@ -176,7 +176,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
       const subjectNameLower = subject.name.toLowerCase().trim();
       const filterLower = selectedSubject.toLowerCase().trim();
       
-      console.log('[CHAPTERS] Checking match:', { 
+      //console.log('[CHAPTERS] Checking match:', { 
         subjectName: subject.name,
         subjectNameLower,
         filterLower,
@@ -186,7 +186,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
       
       // Direct exact match (case-insensitive)
       if (subjectNameLower === filterLower) {
-        console.log('[CHAPTERS] ✅ Exact match found!');
+        //console.log('[CHAPTERS] ✅ Exact match found!');
         return true;
       }
       
@@ -204,21 +204,21 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
       const standardFilter = getStandardName(filterLower);
       
       if (standardSubject === standardFilter) {
-        console.log('[CHAPTERS] ✅ Standardized match found!');
+        //console.log('[CHAPTERS] ✅ Standardized match found!');
         return true;
       }
       
       // Try partial match in either direction
       if (subjectNameLower.includes(filterLower) || filterLower.includes(subjectNameLower)) {
-        console.log('[CHAPTERS] ✅ Partial match found!');
+        //console.log('[CHAPTERS] ✅ Partial match found!');
         return true;
       }
       
-      console.log('[CHAPTERS] ❌ No match');
+      //console.log('[CHAPTERS] ❌ No match');
       return false;
     })
     .flatMap(subject => {
-      console.log('[CHAPTERS] Processing subject:', { 
+      //console.log('[CHAPTERS] Processing subject:', { 
         name: subject.name, 
         chaptersCount: subject.chapters?.length || 0,
         chapters: subject.chapters 
@@ -232,7 +232,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     }) || [];
 
   // Debug: Log final chapters count
-  console.log('[CHAPTERS] Final allChapters:', {
+  //console.log('[CHAPTERS] Final allChapters:', {
     selectedSubject,
     totalChapters: allChapters.length,
     chapters: allChapters.map(ch => ({ id: ch.id, title: ch.title, subjectName: ch.subjectName }))
@@ -243,7 +243,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
 
   useEffect(() => {
     if (courseData && selectedSubject) {
-      console.log('[CHAPTERS] Final result:', {
+      //console.log('[CHAPTERS] Final result:', {
         selectedSubject,
         totalChapters: allChapters.length,
         courseLabel: courseData.webLabel,

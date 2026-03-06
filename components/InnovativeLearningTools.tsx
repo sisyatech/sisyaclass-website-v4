@@ -46,12 +46,12 @@ const InnovativeLearningTools = () => {
             const link = v?.laptopVideoLink || v?.videoLink || v?.link || null;
             if (link) {
               setVideoLink(link);
-              console.log('✅ Video link loaded from web videos API:', link);
+              //console.log('✅ Video link loaded from web videos API:', link);
             }
           }
         }
       } catch (error) {
-        console.error('❌ Error fetching web videos:', error);
+        //console.error('❌ Error fetching web videos:', error);
       }
     };
 

@@ -14,7 +14,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
       onRegister();
     } else {
       // Default action - could scroll to a form or open a modal
-      console.log('Ask question clicked');
+      //console.log('Ask question clicked');
     }
   };
 
@@ -23,7 +23,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
       onGetCallback();
     } else {
       // Default action - could scroll to plans section
-      console.log('Browse plans clicked');
+      //console.log('Browse plans clicked');
     }
   };
 

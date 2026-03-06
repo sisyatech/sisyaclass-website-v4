@@ -17,12 +17,12 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
     const fetchNewsData = async () => {
       try {
         setLoading(true);
-        console.log('📰 NewsMainContent: Fetching news with ID:', newsId);
+        //console.log('📰 NewsMainContent: Fetching news with ID:', newsId);
         const news = await getNewsById(newsId);
-        console.log('📰 NewsMainContent: Received news data:', news);
+        //console.log('📰 NewsMainContent: Received news data:', news);
         setNewsData(news);
       } catch (error) {
-        console.error('❌ NewsMainContent: Error fetching news:', error);
+        //console.error('❌ NewsMainContent: Error fetching news:', error);
         setNewsData(null);
       } finally {
         setLoading(false);

@@ -34,9 +34,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const userData = JSON.parse(savedUser);
         setUser(userData);
         setIsLoggedIn(true);
-        console.log('UserContext: Restored logged-in user from localStorage:', userData.name);
+        //console.log('UserContext: Restored logged-in user from localStorage:', userData.name);
       } catch (error) {
-        console.error('Error parsing saved user data:', error);
+        //console.error('Error parsing saved user data:', error);
         localStorage.removeItem('sisya_user');
       }
     }
@@ -44,23 +44,23 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Debug: Log state changes
   useEffect(() => {
-    console.log('UserContext: State changed - isLoggedIn:', isLoggedIn, 'user:', user);
+    //console.log('UserContext: State changed - isLoggedIn:', isLoggedIn, 'user:', user);
   }, [isLoggedIn, user]);
 
   const login = (userData: User) => {
-    console.log('UserContext: User logged in successfully:', userData.name, 'with data:', userData);
+    //console.log('UserContext: User logged in successfully:', userData.name, 'with data:', userData);
     setUser(userData);
     setIsLoggedIn(true);
     localStorage.setItem('sisya_user', JSON.stringify(userData));
-    console.log('UserContext: User state updated and saved to localStorage');
+    //console.log('UserContext: User state updated and saved to localStorage');
   };
 
   const logout = () => {
-    console.log('UserContext: User logged out');
+    //console.log('UserContext: User logged out');
     setUser(null);
     setIsLoggedIn(false);
     localStorage.removeItem('sisya_user');
-    console.log('UserContext: User state cleared and removed from localStorage');
+    //console.log('UserContext: User state cleared and removed from localStorage');
   };
 
   return (

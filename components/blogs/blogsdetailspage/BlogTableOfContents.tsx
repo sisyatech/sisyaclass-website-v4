@@ -30,7 +30,7 @@ const BlogTableOfContents = ({ blogId }: BlogTableOfContentsProps) => {
           setTocItems([]);
         }
       } catch (error) {
-        console.error('Error fetching blog for TOC:', error);
+        //console.error('Error fetching blog for TOC:', error);
         setTocItems([]);
       } finally {
         setLoading(false);

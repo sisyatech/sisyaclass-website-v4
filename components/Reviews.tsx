@@ -53,7 +53,7 @@ const Reviews = () => {
 
         if (response.ok) {
           const data: ReviewData[] = await response.json();
-          console.log("reviews data", data);
+          //console.log("reviews data", data);
           // Respect visibility flag from backend
           const visibleData = (Array.isArray(data) ? data : []).filter(r => r.isVisible === true);
           const sortedData = visibleData
@@ -66,10 +66,10 @@ const Reviews = () => {
             }));
           setReviews(sortedData);
         } else {
-          // console.error('❌ [REVIEWS] API request failed');
+          // //console.error('❌ [REVIEWS] API request failed');
         }
       } catch (error) {
-        // console.error('❌ [REVIEWS] Fetch error:', error);
+        // //console.error('❌ [REVIEWS] Fetch error:', error);
       } finally {
         setLoading(false);
       }

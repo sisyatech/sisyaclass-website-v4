@@ -20,18 +20,18 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
   const handleOpenCallback = () => {
     if (onGetCallback) {
-      console.log('[CALLBACK] External onGetCallback handler invoked');
+      //console.log('[CALLBACK] External onGetCallback handler invoked');
       onGetCallback();
       return;
     }
-    console.log('[CALLBACK] Opening internal callback modal');
+    //console.log('[CALLBACK] Opening internal callback modal');
     setShowCallback(true);
   };
 
   const handleSubmitCallback = async () => {
     setError(null);
-    if (!name.trim()) { console.log('[CALLBACK][VALIDATION] Missing name'); setError("Please enter your name"); return; }
-    if (!isValidMobile(phone)) { console.log('[CALLBACK][VALIDATION] Invalid phone:', phone); setError("Enter a valid 10-digit mobile number"); return; }
+    if (!name.trim()) { //console.log('[CALLBACK][VALIDATION] Missing name'); setError("Please enter your name"); return; }
+    if (!isValidMobile(phone)) { //console.log('[CALLBACK][VALIDATION] Invalid phone:', phone); setError("Enter a valid 10-digit mobile number"); return; }
     setSubmitting(true);
     try {
       const email = `${phone}@gmail.com`;
@@ -45,34 +45,34 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         medium: 'web',
         campaign: 'CALLBACK'
       };
-      console.log('[CALLBACK][REQUEST] create_merrito_lead →', payload);
+      //console.log('[CALLBACK][REQUEST] create_merrito_lead →', payload);
       const res = await fetch('https://sisyaclass.xyz/student/create_merrito_lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      console.log('[CALLBACK][RESPONSE] status:', res.status);
+      //console.log('[CALLBACK][RESPONSE] status:', res.status);
       const text = await res.text();
-      console.log('[CALLBACK][RESPONSE] raw:', text);
+      //console.log('[CALLBACK][RESPONSE] raw:', text);
       let data: any = {};
       try { data = text ? JSON.parse(text) : {}; } catch { }
-      console.log('[CALLBACK][RESPONSE] parsed:', data);
+      //console.log('[CALLBACK][RESPONSE] parsed:', data);
       if (res.ok && (data?.success ?? true)) {
-        console.log('[CALLBACK] Success - redirecting to success page');
+        //console.log('[CALLBACK] Success - redirecting to success page');
         window.location.href = '/3dayslp/success.php';
       } else {
         let msg = data?.message || data?.error || `Request failed (${res.status})`;
         if (res.status === 400 && typeof msg === 'string' && msg.toLowerCase().includes('lead not created')) {
           msg = 'Too many attempts, try again after some time';
         }
-        console.warn('[CALLBACK] Failed:', msg);
+        //console.warn('[CALLBACK] Failed:', msg);
         setError(msg);
       }
     } catch (e) {
-      console.error('[CALLBACK] Network error:', e);
+      //console.error('[CALLBACK] Network error:', e);
       setError("Network error. Please try again.");
     } finally {
-      console.log('[CALLBACK] Submit finished');
+      //console.log('[CALLBACK] Submit finished');
       setSubmitting(false);
     }
   };

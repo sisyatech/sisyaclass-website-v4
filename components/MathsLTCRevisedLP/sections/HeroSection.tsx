@@ -20,23 +20,23 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
   const handleOpenCallback = () => {
     if (onGetCallback) {
-      console.log("[MATHS-LTC][CALLBACK] External onGetCallback handler invoked");
+      //console.log("[MATHS-LTC][CALLBACK] External onGetCallback handler invoked");
       onGetCallback();
       return;
     }
-    console.log("[MATHS-LTC][CALLBACK] Opening internal callback modal");
+    //console.log("[MATHS-LTC][CALLBACK] Opening internal callback modal");
     setShowCallback(true);
   };
 
   const handleSubmitCallback = async () => {
     setError(null);
     if (!name.trim()) {
-      console.log("[MATHS-LTC][CALLBACK][VALIDATION] Missing name");
+      //console.log("[MATHS-LTC][CALLBACK][VALIDATION] Missing name");
       setError("Please enter your name");
       return;
     }
     if (!isValidMobile(phone)) {
-      console.log("[MATHS-LTC][CALLBACK][VALIDATION] Invalid phone:", phone);
+      //console.log("[MATHS-LTC][CALLBACK][VALIDATION] Invalid phone:", phone);
       setError("Enter a valid 10-digit mobile number");
       return;
     }
@@ -53,36 +53,36 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         medium: "web",
         campaign: "CALLBACK",
       };
-      console.log("[MATHS-LTC][CALLBACK][REQUEST] create_merrito_lead →", payload);
+      //console.log("[MATHS-LTC][CALLBACK][REQUEST] create_merrito_lead →", payload);
       const res = await fetch("https://sisyaclass.xyz/student/create_merrito_lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      console.log("[MATHS-LTC][CALLBACK][RESPONSE] status:", res.status);
+      //console.log("[MATHS-LTC][CALLBACK][RESPONSE] status:", res.status);
       const text = await res.text();
-      console.log("[MATHS-LTC][CALLBACK][RESPONSE] raw:", text);
+      //console.log("[MATHS-LTC][CALLBACK][RESPONSE] raw:", text);
       let data: any = {};
       try {
         data = text ? JSON.parse(text) : {};
       } catch {}
-      console.log("[MATHS-LTC][CALLBACK][RESPONSE] parsed:", data);
+      //console.log("[MATHS-LTC][CALLBACK][RESPONSE] parsed:", data);
       if (res.ok && (data?.success ?? true)) {
-        console.log("[MATHS-LTC][CALLBACK] Success - redirecting to success page");
+        //console.log("[MATHS-LTC][CALLBACK] Success - redirecting to success page");
         window.location.href = "/3dayslp/success.php";
       } else {
         let msg = data?.message || data?.error || `Request failed (${res.status})`;
         if (res.status === 400 && typeof msg === "string" && msg.toLowerCase().includes("lead not created")) {
           msg = "Too many attempts, try again after some time";
         }
-        console.warn("[MATHS-LTC][CALLBACK] Failed:", msg);
+        //console.warn("[MATHS-LTC][CALLBACK] Failed:", msg);
         setError(msg);
       }
     } catch (e) {
-      console.error("[MATHS-LTC][CALLBACK] Network error:", e);
+      //console.error("[MATHS-LTC][CALLBACK] Network error:", e);
       setError("Network error. Please try again.");
     } finally {
-      console.log("[MATHS-LTC][CALLBACK] Submit finished");
+      //console.log("[MATHS-LTC][CALLBACK] Submit finished");
       setSubmitting(false);
     }
   };

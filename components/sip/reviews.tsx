@@ -64,7 +64,7 @@ const Reviews = () => {
           setReviews(sortedData);
         }
       } catch (error) {
-        // console.error("[REVIEWS] Fetch error", error);
+        // //console.error("[REVIEWS] Fetch error", error);
       } finally {
         setLoading(false);
       }

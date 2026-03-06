@@ -55,17 +55,17 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
   }, [gradeNumber, setSelectedGrade]);
 
   useEffect(() => {
-    console.log('SubjectContent: mentorIds state changed to:', mentorIds);
+    //console.log('SubjectContent: mentorIds state changed to:', mentorIds);
   }, [mentorIds]);
 
   const handleMentorIdsChange = (ids: number[]) => {
-    console.log('SubjectContent: Received mentor IDs:', ids);
-    console.log('SubjectContent: Setting mentorIds state to:', ids);
+    //console.log('SubjectContent: Received mentor IDs:', ids);
+    //console.log('SubjectContent: Setting mentorIds state to:', ids);
     setMentorIds(ids);
-    console.log('SubjectContent: mentorIds state updated');
+    //console.log('SubjectContent: mentorIds state updated');
   };
 
-  console.log('SubjectContent: handleMentorIdsChange function:', handleMentorIdsChange);
+  //console.log('SubjectContent: handleMentorIdsChange function:', handleMentorIdsChange);
 
   return (
     <Container>

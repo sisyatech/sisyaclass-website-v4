@@ -25,7 +25,7 @@ const NewsSocialShare = ({ newsId }: NewsSocialShareProps) => {
         const news = await getNewsById(newsId);
         setNewsData(news);
       } catch (error) {
-        console.error('Error fetching news:', error);
+        //console.error('Error fetching news:', error);
         setNewsData(null);
       } finally {
         setLoading(false);

@@ -77,7 +77,7 @@ const NavLinks = () => {
   // };
 
   const handleResourceClick = (resourceLabel: string, subject?: string) => {
-    console.log("clicked");
+    //console.log("clicked");
   };
 
   const ncertSubjects = [

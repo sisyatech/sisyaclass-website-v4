@@ -31,20 +31,20 @@ const NewsContent = () => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        // console.log("📰 NewsContent: Starting to fetch news...");
+        // //console.log("📰 NewsContent: Starting to fetch news...");
         // Fetch only the necessary number of items (1 featured + 3 regular = 4)
         // Adjust page size if your API supports filtering featured items
         const response = await getAllNews(1, 6); // Fetch a few extra just in case
-        // console.log("📰 NewsContent: Received response:", response);
+        // //console.log("📰 NewsContent: Received response:", response);
         const fetchedNews = response.news || [];
-        // console.log("📰 NewsContent: Setting news:", fetchedNews.length, "news items");
+        // //console.log("📰 NewsContent: Setting news:", fetchedNews.length, "news items");
         setNews(fetchedNews);
       } catch (error) {
-        console.error("❌ NewsContent: Error fetching news:", error);
+        //console.error("❌ NewsContent: Error fetching news:", error);
         setNews([]); // Set to empty array on error
       } finally {
         setLoading(false);
-        // console.log("✅ NewsContent: Finished fetching news");
+        // //console.log("✅ NewsContent: Finished fetching news");
       }
     };
 

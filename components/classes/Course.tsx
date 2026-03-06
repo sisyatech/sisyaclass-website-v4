@@ -48,8 +48,8 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   const [error, setError] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  console.log('Course component rendered with gradeNumber:', gradeNumber, 'type:', typeof gradeNumber);
-  console.log('Course component onMentorIdsChange callback:', onMentorIdsChange);
+  //console.log('Course component rendered with gradeNumber:', gradeNumber, 'type:', typeof gradeNumber);
+  //console.log('Course component onMentorIdsChange callback:', onMentorIdsChange);
 
   useEffect(() => {
     const fetchCourseData = async () => {
@@ -57,7 +57,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         setLoading(true);
         setError(null);
         
-        console.log(`Fetching course data for grade: ${gradeNumber}`);
+        //console.log(`Fetching course data for grade: ${gradeNumber}`);
         const response = await fetch(
           `${API_BASE_URL}${API_ENDPOINTS.GET_BIG_COURSE_BY_GRADE}`,
           {
@@ -71,18 +71,18 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
           }
         );
         
-        console.log('Response status:', response.status);
+        //console.log('Response status:', response.status);
         
         if (!response.ok) {
           const errorText = await response.text();
-          console.error('API Error Response:', errorText);
+          //console.error('API Error Response:', errorText);
           throw new Error(`Failed to fetch course data: ${response.status} ${response.statusText}`);
         }
         
         const data = await response.json();
-        console.log('Fetched data:', data);
-        console.log('Data is array:', Array.isArray(data));
-        console.log('Data length:', data?.length);
+        //console.log('Fetched data:', data);
+        //console.log('Data is array:', Array.isArray(data));
+        //console.log('Data length:', data?.length);
         
         if (Array.isArray(data) && data.length > 0) {
           const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
@@ -92,31 +92,31 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
             const partial = exact || data.find((d:any)=>String(d?.webLabel||'').toLowerCase().includes(desiredLabel));
             if (partial) picked = partial;
           }
-          console.log('Setting course data:', picked);
+          //console.log('Setting course data:', picked);
           setCourseData(picked);
 
           // Extract mentor IDs for the selected course and pass them to parent component
           if (picked.bigCourse?.mentorList && Array.isArray(picked.bigCourse.mentorList)) {
-            console.log('Found mentor IDs:', picked.bigCourse.mentorList);
-            console.log('onMentorIdsChange callback exists:', !!onMentorIdsChange);
+            //console.log('Found mentor IDs:', picked.bigCourse.mentorList);
+            //console.log('onMentorIdsChange callback exists:', !!onMentorIdsChange);
             if (onMentorIdsChange) {
-              console.log('Calling onMentorIdsChange callback with:', picked.bigCourse.mentorList);
+              //console.log('Calling onMentorIdsChange callback with:', picked.bigCourse.mentorList);
               onMentorIdsChange(picked.bigCourse.mentorList);
-              console.log('onMentorIdsChange callback called');
+              //console.log('onMentorIdsChange callback called');
             } else {
-              console.log('onMentorIdsChange callback is not defined');
+              //console.log('onMentorIdsChange callback is not defined');
             }
           } else {
-            console.log('No mentorList found in selected course data');
+            //console.log('No mentorList found in selected course data');
           }
         } else {
-          console.error(`No course data available for grade ${gradeNumber}`);
+          //console.error(`No course data available for grade ${gradeNumber}`);
           throw new Error(`No course data available for grade ${gradeNumber}. Please contact support or try a different grade.`);
         }
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : "An error occurred";
         setError(errorMessage);
-        console.error("Error fetching course data:", err);
+        //console.error("Error fetching course data:", err);
       } finally {
         setLoading(false);
       }
@@ -126,15 +126,15 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   }, [gradeNumber, searchParams]);
 
   const handleRegisterDemo = () => {
-    console.log('Register for demo clicked for grade:', gradeNumber);
+    //console.log('Register for demo clicked for grade:', gradeNumber);
     
     if (isLoggedIn && user) {
       // User is logged in, proceed with payment/demo registration
-      console.log('User is logged in, proceeding with demo registration:', user.name);
+      //console.log('User is logged in, proceeding with demo registration:', user.name);
       handlePayment();
     } else {
       // User is not logged in, show login modal
-      console.log('User not logged in, showing login modal');
+      //console.log('User not logged in, showing login modal');
       setShowLoginModal(true);
     }
   };
@@ -146,7 +146,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
       const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
       const contact = contactFromUser || contactFromStorage;
 
-      console.log("[PAYMENT] Starting flow (Course)", { gradeNumber, contact, amount });
+      //console.log("[PAYMENT] Starting flow (Course)", { gradeNumber, contact, amount });
       // 1) Create registration lead
       try {
         const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
@@ -160,15 +160,15 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
           }),
         });
         const leadJson = await leadRes.json();
-        console.log("[PAYMENT] Lead response", leadJson);
+        //console.log("[PAYMENT] Lead response", leadJson);
         if (leadJson?.success && leadJson?.lead?.id) {
           localStorage.setItem("leadId", leadJson.lead.id);
-          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+          //console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
         } else {
-          console.warn("[Course] Lead creation failed", leadJson);
+          //console.warn("[Course] Lead creation failed", leadJson);
         }
       } catch (e) {
-        console.warn("[Course] Lead request error", e);
+        //console.warn("[Course] Lead request error", e);
       }
 
       const orderRes = await fetch("/api/razorpay/order", {
@@ -177,7 +177,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         body: JSON.stringify({ amount, currency: "INR", description: `Course Demo - Class ${gradeNumber}`, contact }),
       });
       const orderJson = await orderRes.json();
-      console.log("[PAYMENT] Order API response", orderJson);
+      //console.log("[PAYMENT] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -218,18 +218,18 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
 
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[Course] Payment error", err);
+      //console.error("[Course] Payment error", err);
       alert("Network error. Please try again.");
     } finally {
-      console.log("[PAYMENT] Flow ended");
+      //console.log("[PAYMENT] Flow ended");
     }
   };
 
   const handleLoginSuccess = (userData: any) => {
-    console.log('Course: Login successful, user data:', userData);
+    //console.log('Course: Login successful, user data:', userData);
     setShowLoginModal(false);
     // Proceed with payment after successful login
     setTimeout(() => {
@@ -249,7 +249,7 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=1&modestbranding=1&rel=0`;
       }
     } catch (err) {
-      console.error("Error parsing YouTube URL:", err);
+      //console.error("Error parsing YouTube URL:", err);
     }
     return "";
   };
@@ -324,17 +324,17 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   // Get subjects from API - use searchTags if subjects array is empty or use subject names
   let subjects: string[] = [];
   
-  console.log('Course data subjects:', courseData.subjects);
-  console.log('Course data searchTags:', courseData.bigCourse?.searchTags);
+  //console.log('Course data subjects:', courseData.subjects);
+  //console.log('Course data searchTags:', courseData.bigCourse?.searchTags);
   
   if (courseData.subjects && courseData.subjects.length > 0) {
     subjects = courseData.subjects.map(subject => subject.name);
-    console.log('Mapped subject names:', subjects);
+    //console.log('Mapped subject names:', subjects);
   } else if (courseData.bigCourse?.searchTags && courseData.bigCourse.searchTags.length > 0) {
     subjects = courseData.bigCourse.searchTags.map(tag => tag.charAt(0).toUpperCase() + tag.slice(1).trim());
-    console.log('Using searchTags as subjects:', subjects);
+    //console.log('Using searchTags as subjects:', subjects);
   } else {
-    console.log('No subjects or tags available');
+    //console.log('No subjects or tags available');
   }
   
   const videoEmbedUrl = getYouTubeEmbedUrl(courseData.courseVideoLink);
@@ -345,8 +345,8 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
   const computedFromName = rawName.includes('-') ? rawName.split('-')[1].trim() : rawName;
   const courseTitle = (computedFromName || courseData.webLabel || `Class ${gradeNumber} Course`).trim();
 
-  console.log('Final subjects array for rendering:', subjects);
-  console.log('Subjects length:', subjects.length);
+  //console.log('Final subjects array for rendering:', subjects);
+  //console.log('Subjects length:', subjects.length);
 
   return (
     <div className="min-screen mb-8 pt-0 sm:pt-0 md:pt-1 lg:pt-2 relative">

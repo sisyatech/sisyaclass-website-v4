@@ -41,14 +41,14 @@ export default function SummerCampContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log("[SummerCamp] Lead status updated successfully");
+        //console.log("[SummerCamp] Lead status updated successfully");
         return true;
       }
 
-      console.warn("[SummerCamp] Failed to update lead status");
+      //console.warn("[SummerCamp] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[SummerCamp] Error updating lead status:", error);
+      //console.error("[SummerCamp] Error updating lead status:", error);
       return false;
     }
   };
@@ -66,7 +66,7 @@ export default function SummerCampContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[SummerCamp] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[SummerCamp] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,13 +80,13 @@ export default function SummerCampContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[SummerCamp] Lead response", leadData);
+      //console.log("[SummerCamp] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[SummerCamp] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[SummerCamp] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
@@ -94,7 +94,7 @@ export default function SummerCampContent() {
         body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "Summer Camp Demo" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[SummerCamp] Order API response", orderJson);
+      //console.log("[SummerCamp] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -121,7 +121,7 @@ export default function SummerCampContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[SummerCamp] Success handler", response);
+          //console.log("[SummerCamp] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
           window.location.href = `/summercamp/payment/success.php?transactionId=${encodeURIComponent(
@@ -130,7 +130,7 @@ export default function SummerCampContent() {
         },
         modal: {
           ondismiss: function () {
-            console.warn("[SummerCamp] Checkout dismissed by user");
+            //console.warn("[SummerCamp] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
               window.location.href = `/summercamp/payment/failed.php?transactionId=${encodeURIComponent(
                 `DISMISSED_${Date.now()}`
@@ -141,10 +141,10 @@ export default function SummerCampContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[SummerCamp] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[SummerCamp] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[SummerCamp] Error", err);
+      //console.error("[SummerCamp] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {

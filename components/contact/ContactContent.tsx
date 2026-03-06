@@ -72,7 +72,7 @@ const ContactContent = () => {
         campaign: "contactus"
       };
 
-      console.log('Sending payload:', payload);
+      //console.log('Sending payload:', payload);
 
       const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.CREATE_MERRITTO_LEAD}`, {
         method: 'POST',
@@ -82,12 +82,12 @@ const ContactContent = () => {
         body: JSON.stringify(payload)
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', response.headers);
+      //console.log('Response status:', response.status);
+      //console.log('Response headers:', response.headers);
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Success response:', responseData);
+        //console.log('Success response:', responseData);
         setPopupMessage('Thank you for contacting us! We will get back to you soon.');
         setPopupType("success");
         setShowPopup(true);
@@ -103,7 +103,7 @@ const ContactContent = () => {
         });
       } else {
         const errorData = await response.text();
-        console.error('Error response:', errorData);
+        //console.error('Error response:', errorData);
         
         // Check if it's a Merritto-specific error
         if (errorData.includes('Merritto') || errorData.includes('Failed to send lead')) {
@@ -128,7 +128,7 @@ const ContactContent = () => {
         }
       }
     } catch (error) {
-      console.error('Error submitting form:', error);
+      //console.error('Error submitting form:', error);
       setPopupMessage('Something went wrong. Please try again.');
       setPopupType("error");
       setShowPopup(true);

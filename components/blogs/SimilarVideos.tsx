@@ -24,7 +24,7 @@ const SimilarVideos = () => {
         const tagsResponse = await getAllTags();
         setTags(tagsResponse || []);
       } catch (error) {
-        console.error('Error fetching tags:', error);
+        //console.error('Error fetching tags:', error);
       }
     };
     fetchTags();
@@ -53,7 +53,7 @@ const SimilarVideos = () => {
               const start = (currentPage - 1) * itemsPerPage;
               setBlogs(list.slice(start, start + itemsPerPage));
             } catch (apiError) {
-              console.warn('⚠️ Tag API failed, falling back to client-side filter:', apiError);
+              //console.warn('⚠️ Tag API failed, falling back to client-side filter:', apiError);
               // Fallback: Fetch all blogs and filter client-side by tag name
               try {
                 const allBlogsRes = await getAllBlogs(1, 1000); // Get many blogs
@@ -66,7 +66,7 @@ const SimilarVideos = () => {
                 const start = (currentPage - 1) * itemsPerPage;
                 setBlogs(filtered.slice(start, start + itemsPerPage));
               } catch (fallbackError) {
-                console.error('❌ Fallback filter also failed:', fallbackError);
+                //console.error('❌ Fallback filter also failed:', fallbackError);
                 setAllBlogsForFilter([]);
                 setBlogs([]);
                 setTotalPages(1);
@@ -80,7 +80,7 @@ const SimilarVideos = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching blogs:', error);
+        //console.error('Error fetching blogs:', error);
         setBlogs([]);
         if (activeFilter !== "All") setAllBlogsForFilter([]);
       } finally {

@@ -31,7 +31,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
         // Update read count only once when component mounts
         await updateBlogReadCount(blogId);
       } catch (error) {
-        console.error('Error fetching blog:', error);
+        //console.error('Error fetching blog:', error);
         setBlogData(null);
       } finally {
         setLoading(false);
@@ -60,7 +60,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
       setLiked(!liked);
       setLikeCount(prev => liked ? prev - 1 : prev + 1);
     } catch (error) {
-      console.error('Error toggling like:', error);
+      //console.error('Error toggling like:', error);
     }
   };
 
@@ -286,7 +286,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
                     return (
                       <tr key={rowIndex}>
                         {row.content ? row.content.map((cell: any, cellIndex: number) => {
-                          console.log(`Cell ${rowIndex}-${cellIndex}:`, cell);
+                          //console.log(`Cell ${rowIndex}-${cellIndex}:`, cell);
                           // Check if this is a table header cell
                           const isHeaderCell = cell.type === 'tableHeader';
                           const CellTag = isHeaderCell ? 'th' : 'td';

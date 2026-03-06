@@ -48,7 +48,7 @@ const Testimonials = () => {
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
-        // console.log('🚀 [TESTIMONIALS] Fetching data from API...');
+        // //console.log('🚀 [TESTIMONIALS] Fetching data from API...');
         
         const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_TESTIMONIAL_REEL}`, {
           method: 'POST',
@@ -60,7 +60,7 @@ const Testimonials = () => {
 
         if (response.ok) {
           const data: TestimonialData[] = await response.json();
-          // console.log('✅ [TESTIMONIALS] Data received:', data);
+          // //console.log('✅ [TESTIMONIALS] Data received:', data);
           
           // Process the data to extract video IDs and create embed URLs
           const processed: ProcessedTestimonial[] = data
@@ -81,13 +81,13 @@ const Testimonials = () => {
               };
             });
           
-          // console.log('✅ [TESTIMONIALS] Processed testimonials:', processed);
+          // //console.log('✅ [TESTIMONIALS] Processed testimonials:', processed);
           setTestimonials(processed);
         } else {
-          // console.error('❌ [TESTIMONIALS] API request failed');
+          // //console.error('❌ [TESTIMONIALS] API request failed');
         }
       } catch (error) {
-        // console.error('❌ [TESTIMONIALS] Fetch error:', error);
+        // //console.error('❌ [TESTIMONIALS] Fetch error:', error);
       } finally {
         setLoading(false);
       }

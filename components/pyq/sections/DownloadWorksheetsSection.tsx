@@ -10,7 +10,7 @@ type DownloadWorksheetsSectionProps = {
 export default function DownloadWorksheetsSection({ onRegister }: DownloadWorksheetsSectionProps) {
   const handleDownload = () => {
     // Add download functionality here
-    console.log("Download worksheets clicked");
+    //console.log("Download worksheets clicked");
   };
 
   return (

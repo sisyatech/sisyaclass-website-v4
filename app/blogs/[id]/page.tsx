@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       },
     };
   } catch (error) {
-    console.error('Error generating metadata:', error);
+    //console.error('Error generating metadata:', error);
     
     return {
       title: "Blog Post - Sisya Class",
@@ -98,7 +98,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   try {
     blogData = await getBlogById(unwrappedParams.id);
   } catch (error) {
-    console.error('Error fetching blog data:', error);
+    //console.error('Error fetching blog data:', error);
   }
   
   return (

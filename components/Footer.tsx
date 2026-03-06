@@ -38,7 +38,7 @@ const Footer = () => {
     };
 
     try {
-      // console.log("Sending payload:", JSON.stringify(payload), "to", apiUrl);
+      // //console.log("Sending payload:", JSON.stringify(payload), "to", apiUrl);
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -49,9 +49,9 @@ const Footer = () => {
         mode: 'cors' // Explicitly set CORS mode
       });
 
-      // console.log("API Response Status:", response.status);
+      // //console.log("API Response Status:", response.status);
       const responseBody = await response.text(); // Read body once
-      // console.log("API Response Body:", responseBody);
+      // //console.log("API Response Body:", responseBody);
 
       if (response.ok) {
         // Try parsing JSON only if response is OK
@@ -59,10 +59,10 @@ const Footer = () => {
             const successData = JSON.parse(responseBody); // Assuming responseBody is defined from above
             setMessage("Link sent successfully!");
             setPhoneNumber(''); // Clear input
-            // console.log("API call successful:", successData);
+            // //console.log("API call successful:", successData);
         } catch (jsonError) {
              // Handle cases where OK response is not JSON (or empty)
-             // console.log("API call successful but response was not valid JSON:", responseBody);
+             // //console.log("API call successful but response was not valid JSON:", responseBody);
              setMessage("Link sent successfully! (Check SMS)"); // Provide generic success
              setPhoneNumber('');
         }
@@ -77,12 +77,12 @@ const Footer = () => {
              errorMessage = `Server error (${response.status}): ${responseBody}`; // Use raw text if not JSON
         }
         setMessage(`Error: ${errorMessage}`);
-        console.error("API call failed:", response.status, responseBody);
+        //console.error("API call failed:", response.status, responseBody);
       }
     } catch (error) {
       // Handle network errors (fetch itself failed)
       setMessage("A network error occurred. Please check your connection and try again.");
-      console.error("Network error:", error);
+      //console.error("Network error:", error);
     } finally {
       setIsLoading(false);
     }

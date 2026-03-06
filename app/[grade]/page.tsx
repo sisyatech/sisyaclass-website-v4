@@ -51,7 +51,7 @@ function GradeContent({ grade }: { grade: string }) {
   }, [gradeNumber, setSelectedGrade]);
 
   const handleMentorIdsChange = (ids: number[]) => {
-    console.log('GradeContent: Received mentor IDs:', ids);
+    //console.log('GradeContent: Received mentor IDs:', ids);
     setMentorIds(ids);
   };
 

@@ -39,7 +39,7 @@ const Banner = () => {
 
           if (links && links.length > 0) {
             // Normalize into our local shape
-            console.log("banners data", links);
+            //console.log("banners data", links);
             setWebLinks({ id: 'web-banners', laptopVideoLink: '', webBannerImageLink: links });
             setBannerHrefs(hrefs);
           }

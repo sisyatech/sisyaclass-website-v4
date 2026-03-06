@@ -45,7 +45,7 @@ const NewsBanner = () => {
           setBannerLinks(["/blogs/blogbanner.png"]);
         }
       } catch (error) {
-        console.error("Error fetching course page banner:", error);
+        //console.error("Error fetching course page banner:", error);
         // Fallback to default image on error
         setBannerLinks(["/blogs/blogbanner.png"]);
       } finally {

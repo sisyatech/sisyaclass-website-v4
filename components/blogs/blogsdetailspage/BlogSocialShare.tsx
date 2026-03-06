@@ -21,9 +21,9 @@ const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialSharePr
           setLoading(true);
           const blog = await getBlogById(blogId);
           setBlogData(blog);
-          console.log("Blog data loaded for sharing:", blog);
+          //console.log("Blog data loaded for sharing:", blog);
         } catch (error) {
-          console.error("Error fetching blog for sharing:", error);
+          //console.error("Error fetching blog for sharing:", error);
           setBlogData(null);
         } finally {
           setLoading(false);
@@ -45,7 +45,7 @@ const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialSharePr
     const shareText = `Read ${title} - ${description}`;
     // const fullShareText = `${shareText} ${currentUrl}`;
 
-    console.log("Sharing with data:", { title, description, currentUrl, shareText });
+    //console.log("Sharing with data:", { title, description, currentUrl, shareText });
 
     switch (platform) {
       case "facebook":

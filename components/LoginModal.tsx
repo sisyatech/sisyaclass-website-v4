@@ -123,16 +123,16 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         setIsNewUser(false); // Existing user
       } else {
         const errorData = await response.json();
-        console.log('Login failed, error data:', errorData);
+        //console.log('Login failed, error data:', errorData);
 
         // Check if user doesn't exist (new user)
         if (errorData.message && (errorData.message.includes("User not found") || errorData.message.includes("user not found"))) {
-          console.log('User not found, creating new user...');
+          //console.log('User not found, creating new user...');
           // Create new user first
           try {
             await createNewUser();
           } catch (createError) {
-            console.error('Failed to create user:', createError);
+            //console.error('Failed to create user:', createError);
             throw createError;
           }
         } else {
@@ -148,7 +148,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
 
   const createNewUser = async () => {
     try {
-      console.log('Creating new user with phone:', loginData.phone, 'userRole:', loginData.userRole);
+      //console.log('Creating new user with phone:', loginData.phone, 'userRole:', loginData.userRole);
 
       // Generate a unique UUID for the user (matching your app)
       const generateUUID = () => {
@@ -172,7 +172,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         educationBoardId: 1,
       };
 
-      console.log('Sending user creation request with data:', { ...userData, password: "[REDACTED]" });
+      //console.log('Sending user creation request with data:', { ...userData, password: "[REDACTED]" });
 
       const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_USER}`, {
         method: 'POST',
@@ -182,11 +182,11 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         body: JSON.stringify(userData)
       });
 
-      console.log('Create user response status:', response.status);
+      //console.log('Create user response status:', response.status);
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('User created successfully:', responseData);
+        //console.log('User created successfully:', responseData);
 
         setOtpSent(true);
         setStep('otp');
@@ -195,11 +195,11 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         setIsNewUser(true); // New user
       } else {
         const errorData = await response.json();
-        console.error('Create user failed:', errorData);
+        //console.error('Create user failed:', errorData);
         throw new Error(errorData.error || errorData.message || 'Failed to create user');
       }
     } catch (err) {
-      console.error('Error in createNewUser:', err);
+      //console.error('Error in createNewUser:', err);
       throw new Error(err instanceof Error ? err.message : 'Failed to create user. Please try again.');
     }
   };
@@ -227,7 +227,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('OTP verification successful, response data:', responseData);
+        //console.log('OTP verification successful, response data:', responseData);
 
         if (isNewUser) {
           // New user - show registration form
@@ -244,8 +244,8 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
             responseData.token ||
             null;
 
-          console.log('User data:', userData);
-          console.log('Response data:', responseData);
+          //console.log('User data:', userData);
+          //console.log('Response data:', responseData);
 
           // Create proper user object for context
           const user = {
@@ -259,7 +259,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
             token: token || undefined,
           };
 
-          console.log('Logging in existing user:', user);
+          //console.log('Logging in existing user:', user);
           login(user);
           onLoginSuccess(user);
           onClose();
@@ -335,7 +335,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Registration completed successfully, response data:', responseData);
+        //console.log('Registration completed successfully, response data:', responseData);
 
         // Extract user data from the response
         const userData = responseData.user || responseData;
@@ -358,7 +358,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
           token: token || undefined,
         };
 
-        console.log('Logging in new user after registration:', user);
+        //console.log('Logging in new user after registration:', user);
         login(user);
         onLoginSuccess(user);
         onClose();
@@ -367,7 +367,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess, selectedClass = 1 }: Logi
         throw new Error(errorData.message || 'Registration failed');
       }
     } catch (err) {
-      console.error('LoginModal: registration error:', err);
+      //console.error('LoginModal: registration error:', err);
       setError(err instanceof Error ? err.message : 'Registration failed. Please try again.');
     } finally {
       setLoading(false);

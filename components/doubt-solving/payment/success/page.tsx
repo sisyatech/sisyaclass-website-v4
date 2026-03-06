@@ -40,7 +40,7 @@ export default function PaymentSuccessPage() {
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error("[Worksheet Download] error downloading", fileName, error);
+      //console.error("[Worksheet Download] error downloading", fileName, error);
       throw error;
     }
   };

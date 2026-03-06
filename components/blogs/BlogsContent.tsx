@@ -22,24 +22,24 @@ const BlogsContent = () => {
       try {
         setLoading(true);
         if (tagId) {
-          console.log("🚀 BlogsContent: Fetching blogs by tag:", tagId);
+          //console.log("🚀 BlogsContent: Fetching blogs by tag:", tagId);
           const response = await getBlogsByTag(tagId);
           const list = Array.isArray(response.blogs) ? response.blogs : [];
-          console.log("📄 BlogsContent: Setting tag blogs:", list.length);
+          //console.log("📄 BlogsContent: Setting tag blogs:", list.length);
           setBlogs(list.slice(0, 6));
         } else {
-          console.log("🚀 BlogsContent: Starting to fetch blogs...");
+          //console.log("🚀 BlogsContent: Starting to fetch blogs...");
           const response = await getAllBlogs(1, 6); // Get first 6 blogs
-          console.log("📊 BlogsContent: Received response:", response);
-          console.log("📄 BlogsContent: Setting blogs:", response.blogs?.length || 0, "blogs");
+          //console.log("📊 BlogsContent: Received response:", response);
+          //console.log("📄 BlogsContent: Setting blogs:", response.blogs?.length || 0, "blogs");
           setBlogs(response.blogs || []);
         }
       } catch (error) {
-        console.error("❌ BlogsContent: Error fetching blogs:", error);
+        //console.error("❌ BlogsContent: Error fetching blogs:", error);
         setBlogs([]);
       } finally {
         setLoading(false);
-        console.log("✅ BlogsContent: Finished fetching blogs");
+        //console.log("✅ BlogsContent: Finished fetching blogs");
       }
     };
 
@@ -59,7 +59,7 @@ const BlogsContent = () => {
   // Log current blog data when it changes
   useEffect(() => {
     if (currentBlog) {
-      console.log("📋 BlogsContent: Current blog data:", {
+      //console.log("📋 BlogsContent: Current blog data:", {
         id: currentBlog.id,
         title: currentBlog.title,
         author: currentBlog.authorName,
@@ -68,7 +68,7 @@ const BlogsContent = () => {
         reads: currentBlog.activityReads,
         tags: currentBlog.tags?.length || 0,
       });
-      console.log("🔧 Fixed profile URL:", fixProfileImageUrl(currentBlog.authorProfile));
+      //console.log("🔧 Fixed profile URL:", fixProfileImageUrl(currentBlog.authorProfile));
     }
   }, [currentBlog]);
 

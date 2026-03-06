@@ -1424,15 +1424,15 @@ ob_end_flush();
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            console.log("Lead status updated successfully");
+                            //console.log("Lead status updated successfully");
                             return true;
                         } else {
-                            console.log("Failed to update lead status");
+                            //console.log("Failed to update lead status");
                             return false;
                         }
                     })
                     .catch(error => {
-                        console.log('Error updating lead status:', error);
+                        //console.log('Error updating lead status:', error);
                         return false;
                     });
             } else {
@@ -1483,7 +1483,7 @@ ob_end_flush();
                         })
                         .then(res => res.json())
                         .then(paymentData => {
-                            console.log('Full Payment Details:', paymentData);
+                            //console.log('Full Payment Details:', paymentData);
 
                             return fetch('../Functions/send_whatsapp_message.php', {
                                 method: 'POST',
@@ -1525,7 +1525,7 @@ ob_end_flush();
                             });
                         })
                         .catch(error => {
-                            console.error('Payment error:', error);
+                            //console.error('Payment error:', error);
 
                             const form = document.createElement('form');
                             form.method = 'POST';
@@ -1584,14 +1584,14 @@ ob_end_flush();
                         initiateRazorpayPayment(data.data);
                     } else {
                         document.getElementById("loader").style.display = "none";
-                        console.error('Payment initialization failed. Please try again.');
+                        //console.error('Payment initialization failed. Please try again.');
                     }
                 })
                 .catch(error => {
-                    console.error("Error:", error);
+                    //console.error("Error:", error);
                     // Hide loader if request fails
                     document.getElementById("loader").style.display = "none";
-                    console.error('Network error. Please try again. payment issue');
+                    //console.error('Network error. Please try again. payment issue');
                 });
         }
 
@@ -1627,14 +1627,14 @@ ob_end_flush();
                         } else {
                             // Hide loader if request fails
                             document.getElementById("loader").style.display = "none";
-                            console.error('Something went wrong. Please try again.');
+                            //console.error('Something went wrong. Please try again.');
                         }
                     })
                     .catch(error => {
-                        console.error('Error checking phone number:', error);
+                        //console.error('Error checking phone number:', error);
                         // Hide loader if request fails
                         document.getElementById("loader").style.display = "none";
-                        console.error('Network error. Please try again.');
+                        //console.error('Network error. Please try again.');
                     });
             } else {
                 // Hide loader before showing bottom sheet
@@ -1652,7 +1652,7 @@ ob_end_flush();
             const mobileNumber = document.getElementById('phoneNumber').value;
             const childClass = document.getElementById('childClass').value;
 
-            console.log(`child class ${childClass}`)
+            //console.log(`child class ${childClass}`)
             localStorage.setItem('selectedClass', childClass);
             if (isValidMobileNumber(mobileNumber)) {
                 localStorage.setItem('mobileNumber', mobileNumber);
@@ -1684,7 +1684,7 @@ ob_end_flush();
                 const selectedGrade = button.getAttribute('data-grade');
                 button.addEventListener('click', function() {
                     //  const selectedGrade = button.getAttribute('data-grade');
-                    console.log("selected grade is ", selectedGrade);
+                    //console.log("selected grade is ", selectedGrade);
                     showReservationPopup(selectedGrade);
                 });
                 //  button.addEventListener('click', showReservationPopup);

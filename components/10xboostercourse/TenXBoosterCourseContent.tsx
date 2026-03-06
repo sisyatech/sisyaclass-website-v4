@@ -118,7 +118,7 @@ export default function TenXBoosterCourseContent() {
     setShowLoader(true);
     
     try {
-      console.log("[PAYMENT] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[PAYMENT] Starting flow", { selectedClass, phoneNumber });
       // 1) Create registration lead (existing)
       const leadResponse = await fetch(
         "https://sisyaclass.xyz/student/new_reg_lead",
@@ -134,13 +134,13 @@ export default function TenXBoosterCourseContent() {
         }
       );
       const leadData = await leadResponse.json();
-      console.log("[PAYMENT] Lead response", leadData);
+      //console.log("[PAYMENT] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[PAYMENT] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[PAYMENT] Lead stored", { leadId: leadData.lead.id });
 
       // 2) Create Razorpay order via Next.js API
       const orderRes = await fetch("/api/razorpay/order", {
@@ -149,7 +149,7 @@ export default function TenXBoosterCourseContent() {
         body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "10x Booster Course Demo" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[PAYMENT] Order API response", orderJson);
+      //console.log("[PAYMENT] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -176,7 +176,7 @@ export default function TenXBoosterCourseContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: function (response: any) {
-          console.log("[PAYMENT] Success handler", response);
+          //console.log("[PAYMENT] Success handler", response);
           setShowReservationPopup(false);
           window.location.href = `/10xboostercourse/payment/success.php?transactionId=${encodeURIComponent(
             response.razorpay_payment_id || ""
@@ -184,7 +184,7 @@ export default function TenXBoosterCourseContent() {
         },
         modal: {
           ondismiss: function () {
-            console.warn("[PAYMENT] Checkout dismissed by user");
+            //console.warn("[PAYMENT] Checkout dismissed by user");
             window.location.href = `/10xboostercourse/payment/failed.php?transactionId=${encodeURIComponent(
               `DISMISSED_${Date.now()}`
             )}`;
@@ -194,14 +194,14 @@ export default function TenXBoosterCourseContent() {
 
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (error) {
-      console.error("Error:", error);
+      //console.error("Error:", error);
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);
-      console.log("[PAYMENT] Flow ended");
+      //console.log("[PAYMENT] Flow ended");
     }
   };
 

@@ -122,7 +122,7 @@ export default function HomeInquiryPopup({ isOpen, onClose }: HomeInquiryPopupPr
         setError("Something went wrong. Please try again.");
       }
     } catch (err) {
-      console.error("Error submitting inquiry:", err);
+      //console.error("Error submitting inquiry:", err);
       setError("Network error. Please try again.");
     } finally {
       setIsSubmitting(false);

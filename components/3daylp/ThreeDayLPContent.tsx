@@ -35,15 +35,15 @@ export default function ThreeDayLPContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log(data);
-        console.log("[3DAY] Lead status updated successfully");
+        //console.log(data);
+        //console.log("[3DAY] Lead status updated successfully");
         return true;
       }
 
-      console.warn("[3DAY] Failed to update lead status");
+      //console.warn("[3DAY] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[3DAY] Error updating lead status:", error);
+      //console.error("[3DAY] Error updating lead status:", error);
       return false;
     }
   };
@@ -61,7 +61,7 @@ export default function ThreeDayLPContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[3DAY] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[3DAY] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,13 +75,13 @@ export default function ThreeDayLPContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[3DAY] Lead response", leadData);
+      //console.log("[3DAY] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[3DAY] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[3DAY] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
@@ -89,7 +89,7 @@ export default function ThreeDayLPContent() {
         body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "3-Day LP Demo" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[3DAY] Order API response", orderJson);
+      //console.log("[3DAY] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -114,14 +114,14 @@ export default function ThreeDayLPContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[3DAY] Success handler", response);
+          //console.log("[3DAY] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
           window.location.href = `/3dayslp/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
-            console.warn("[3DAY] Checkout dismissed by user");
+            //console.warn("[3DAY] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
               window.location.href = `/3dayslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
             });
@@ -130,10 +130,10 @@ export default function ThreeDayLPContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[3DAY] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[3DAY] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[3DAY] Error", err);
+      //console.error("[3DAY] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {

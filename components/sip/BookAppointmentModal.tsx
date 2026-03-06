@@ -59,14 +59,14 @@ const BookAppointmentModal: React.FC<BookAppointmentModalProps> = ({
             }
           }
         } catch (error) {
-          console.warn("[BookAppointmentModal] reverse geocoding failed", error);
+          //console.warn("[BookAppointmentModal] reverse geocoding failed", error);
         } finally {
           setCity(label);
           setIsLocating(false);
         }
       },
       (error) => {
-        console.warn("[BookAppointmentModal] geolocation error", error);
+        //console.warn("[BookAppointmentModal] geolocation error", error);
         if (error.code === error.PERMISSION_DENIED) {
           setLocationError("Location permission denied. Please allow access or enter your city manually.");
         } else if (error.code === error.TIMEOUT) {

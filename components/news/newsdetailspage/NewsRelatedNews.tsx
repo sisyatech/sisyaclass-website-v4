@@ -15,7 +15,7 @@ const NewsRelatedNews = () => {
         const response = await getAllNews(1, 3); // Get first 3 news items
         setRelatedNews(response.news || []);
       } catch (error) {
-        console.error('Error fetching related news:', error);
+        //console.error('Error fetching related news:', error);
         setRelatedNews([]);
       } finally {
         setLoading(false);

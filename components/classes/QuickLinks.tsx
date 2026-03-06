@@ -27,15 +27,15 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
   const [mentorDetails, setMentorDetails] = useState<MentorDetail[]>([]);
   const [loading, setLoading] = useState(false);
   
-  console.log('QuickLinks rendered with mentorIds:', mentorIds);
+  //console.log('QuickLinks rendered with mentorIds:', mentorIds);
   
   useEffect(() => {
-    console.log('QuickLinks: mentorIds prop changed to:', mentorIds);
+    //console.log('QuickLinks: mentorIds prop changed to:', mentorIds);
   }, [mentorIds]);
 
   const fetchMentorDetails = async (mentorId: number): Promise<MentorDetail | null> => {
     try {
-      console.log('Fetching details for mentor ID:', mentorId);
+      //console.log('Fetching details for mentor ID:', mentorId);
       const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_MENTOR_DETAILS}`, {
         method: 'POST',
         headers: {
@@ -45,7 +45,7 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
       });
 
       if (!response.ok) {
-        console.warn(`Failed to fetch mentor details for ID ${mentorId}: ${response.status}`);
+        //console.warn(`Failed to fetch mentor details for ID ${mentorId}: ${response.status}`);
         // Return fallback data instead of throwing error
         return {
           id: mentorId,
@@ -57,7 +57,7 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
       }
 
       const result = await response.json();
-      console.log('Mentor details response:', result);
+      //console.log('Mentor details response:', result);
 
       if (result.success && result.mentor) {
         return {
@@ -70,7 +70,7 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
       }
       return null;
     } catch (error) {
-      console.error('Error fetching mentor details:', error);
+      //console.error('Error fetching mentor details:', error);
       return {
         id: mentorId,
         name: `Teacher ${mentorId}`,
@@ -86,14 +86,14 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
     
     setLoading(true);
     try {
-      console.log('Fetching details for all mentors:', mentorIds);
+      //console.log('Fetching details for all mentors:', mentorIds);
       const detailsPromises = mentorIds.map(id => fetchMentorDetails(id));
       const details = await Promise.all(detailsPromises);
       const validDetails = details.filter(detail => detail !== null) as MentorDetail[];
-      console.log('All mentor details fetched:', validDetails);
+      //console.log('All mentor details fetched:', validDetails);
       setMentorDetails(validDetails);
     } catch (error) {
-      console.error('Error fetching all mentor details:', error);
+      //console.error('Error fetching all mentor details:', error);
     } finally {
       setLoading(false);
     }
@@ -110,18 +110,18 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
   };
 
   const handleTeacherClick = async () => {
-    console.log('Teachers card clicked!');
-    console.log('Current mentorIds:', mentorIds);
-    console.log('mentorIds.length:', mentorIds.length);
-    console.log('mentorIds type:', typeof mentorIds);
+    //console.log('Teachers card clicked!');
+    //console.log('Current mentorIds:', mentorIds);
+    //console.log('mentorIds.length:', mentorIds.length);
+    //console.log('mentorIds type:', typeof mentorIds);
     
     if (mentorIds.length > 0) {
       // Fetch mentor details and show modal
-      console.log('Showing modal with all mentor IDs:', mentorIds);
+      //console.log('Showing modal with all mentor IDs:', mentorIds);
       await fetchAllMentorDetails();
       setShowMentorModal(true);
     } else {
-      console.log('No mentor IDs available, using fallback ID 23');
+      //console.log('No mentor IDs available, using fallback ID 23');
       // Use a fallback mentor ID for testing
       setSelectedMentorId(23);
       setShowMentorModal(true);
@@ -134,7 +134,7 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
   };
 
   const handleDemoClick = () => {
-    console.log('Demo card clicked!');
+    //console.log('Demo card clicked!');
     window.open('https://sisyaclass.com/10xboostercourse/', '_blank');
   };
 
@@ -283,7 +283,7 @@ const QuickLinks = ({ mentorIds = [] }: QuickLinksProps) => {
                       height={96}
                       className="mx-auto rounded-full"
                       onError={(e) => {
-                        console.log('Image failed to load for mentor ID:', mentor.id);
+                        //console.log('Image failed to load for mentor ID:', mentor.id);
                         // Show placeholder with mentor ID
                         e.currentTarget.style.display = 'none';
                         const parent = e.currentTarget.parentElement;

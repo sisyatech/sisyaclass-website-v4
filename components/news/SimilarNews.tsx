@@ -22,7 +22,7 @@ const SimilarNews = () => {
         const newsResponse = await getAllNews(1, 1000);
         setAllNews(newsResponse.news || []);
       } catch (error) {
-        console.error('Error fetching news:', error);
+        //console.error('Error fetching news:', error);
         setAllNews([]);
       } finally {
         setLoading(false);

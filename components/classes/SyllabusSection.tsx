@@ -177,7 +177,7 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
           }
         }
       } catch (error) {
-        console.error("Error fetching syllabus data:", error);
+        //console.error("Error fetching syllabus data:", error);
       } finally {
         setLoading(false);
       }

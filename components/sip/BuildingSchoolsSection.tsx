@@ -33,7 +33,7 @@ const BuildingSchoolsSection = () => {
           .sort((a, b) => a.order - b.order);
         setSlides(sorted);
       } catch (error) {
-        console.error("[SIP] Failed to load carousel 1", error);
+        //console.error("[SIP] Failed to load carousel 1", error);
       }
     };
     fetchCarousel();

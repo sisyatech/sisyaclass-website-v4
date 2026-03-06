@@ -15,7 +15,7 @@ const BlogDiscover = () => {
                 const tagsData = await getAllTags();
                 setTags(tagsData);
             } catch (error) {
-                console.error('Error fetching tags:', error);
+                //console.error('Error fetching tags:', error);
                 setTags([]);
             } finally {
                 setLoading(false);

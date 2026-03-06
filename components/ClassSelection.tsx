@@ -63,8 +63,8 @@ const ClassSelection = () => {
   useEffect(() => {
     const fetchClassData = async () => {
       try {
-        // console.log('🚀 Fetching class data from API...');
-        // console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
+        // //console.log('🚀 Fetching class data from API...');
+        // //console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_class_card');
         
         const response = await fetch('https://sisyaclass.xyz/student/get_class_card', {
           method: 'POST',
@@ -74,34 +74,34 @@ const ClassSelection = () => {
           mode: 'cors', // Explicitly request CORS
         });
         
-        // console.log('📊 API Response status:', response.status);
-        // console.log('📋 API Response headers:', {
+        // //console.log('📊 API Response status:', response.status);
+        // //console.log('📋 API Response headers:', {
         //   'Content-Type': response.headers.get('Content-Type'),
         //   'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
         // });
         
         if (response.ok) {
           const data = await response.json();
-          // console.log('✅ API Data received successfully!');
-          // console.log('📦 Number of classes:', data.length);
-          // console.log('📝 Sample data:', data[0]);
+          // //console.log('✅ API Data received successfully!');
+          // //console.log('📦 Number of classes:', data.length);
+          // //console.log('📝 Sample data:', data[0]);
           setClassData(data);
         } else {
-          // console.error('❌ Failed to fetch class data, status:', response.status);
+          // //console.error('❌ Failed to fetch class data, status:', response.status);
           const responseText = await response.text();
-          // console.error('📄 Response text:', responseText);
+          // //console.error('📄 Response text:', responseText);
           
           // Try alternative endpoints
-          // console.log('🔄 Trying alternative API endpoints...');
+          // //console.log('🔄 Trying alternative API endpoints...');
           await tryAlternativeEndpoints();
         }
       } catch (error) {
-        // console.error('❌ Error fetching class data:', error);
-        // console.log('🔄 Network error - trying alternative endpoints...');
+        // //console.error('❌ Error fetching class data:', error);
+        // //console.log('🔄 Network error - trying alternative endpoints...');
         await tryAlternativeEndpoints();
       } finally {
         setLoading(false);
-        // console.log('✅ Loading completed');
+        // //console.log('✅ Loading completed');
       }
     };
 
@@ -114,7 +114,7 @@ const ClassSelection = () => {
 
       // for (const url of alternativeUrls) {
       //   try {
-      //     console.log(`🔍 Trying alternative URL: ${url}`);
+      //     //console.log(`🔍 Trying alternative URL: ${url}`);
       //     const response = await fetch(url, {
       //       method: 'GET',
       //       headers: { 'Content-Type': 'application/json' },
@@ -122,35 +122,35 @@ const ClassSelection = () => {
       //     });
       //     if (response.ok) {
       //       const data = await response.json();
-      //       console.log('✅ Alternative API Data received successfully!');
-      //       console.log('📦 Data:', data);
+      //       //console.log('✅ Alternative API Data received successfully!');
+      //       //console.log('📦 Data:', data);
       //       setClassData(data);
       //       return;
       //     } else {
-      //       console.log(`❌ ${url} returned status: ${response.status}`);
+      //       //console.log(`❌ ${url} returned status: ${response.status}`);
       //     }
       //   } catch (error) {
-      //     console.log(`❌ Alternative URL ${url} failed:`, error);
+      //     //console.log(`❌ Alternative URL ${url} failed:`, error);
       //   }
       // }
       
-      // console.error('❌ ALL API ENDPOINTS FAILED!');
-      // console.error('');
-      // console.error('🚨 BACKEND SETUP REQUIRED:');
-      // console.error('1. Make sure your backend server is running');
-      // console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_class_card');
-      // console.error('3. Enable CORS headers in your backend:');
-      // console.error('   - Access-Control-Allow-Origin: *');
-      // console.error('   - Access-Control-Allow-Methods: GET, POST');
-      // console.error('   - Access-Control-Allow-Headers: Content-Type');
-      // console.error('');
-      // console.error('📝 Expected API Response Format:');
-      // console.error('[');
-      // console.error('  { id: 1, class: 1, educatorImage: "url", demoPrice: 19 },');
-      // console.error('  { id: 2, class: 2, educatorImage: "url", demoPrice: 19 },');
-      // console.error('  ... (all 10 classes)');
-      // console.error(']');
-      // console.error('');
+      // //console.error('❌ ALL API ENDPOINTS FAILED!');
+      // //console.error('');
+      // //console.error('🚨 BACKEND SETUP REQUIRED:');
+      // //console.error('1. Make sure your backend server is running');
+      // //console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_class_card');
+      // //console.error('3. Enable CORS headers in your backend:');
+      // //console.error('   - Access-Control-Allow-Origin: *');
+      // //console.error('   - Access-Control-Allow-Methods: GET, POST');
+      // //console.error('   - Access-Control-Allow-Headers: Content-Type');
+      // //console.error('');
+      // //console.error('📝 Expected API Response Format:');
+      // //console.error('[');
+      // //console.error('  { id: 1, class: 1, educatorImage: "url", demoPrice: 19 },');
+      // //console.error('  { id: 2, class: 2, educatorImage: "url", demoPrice: 19 },');
+      // //console.error('  ... (all 10 classes)');
+      // //console.error(']');
+      // //console.error('');
     };
 
     fetchClassData();
@@ -176,7 +176,7 @@ const ClassSelection = () => {
   // Helper function to get API data for a specific class
   const getClassApiData = (classNumber: number) => {
     const data = classData.find(data => data.class === classNumber);
-    // console.log(`Getting API data for Class ${classNumber}:`, data);
+    // //console.log(`Getting API data for Class ${classNumber}:`, data);
     return data;
   };
 
@@ -184,7 +184,7 @@ const ClassSelection = () => {
   const getDemoPrice = (classNumber: number) => {
     const apiData = getClassApiData(classNumber);
     const price = apiData?.demoPrice || 19;
-    // console.log(`Demo price for Class ${classNumber}: ₹${price}`);
+    // //console.log(`Demo price for Class ${classNumber}: ₹${price}`);
     return price; // Default to 19 if no data
   };
 
@@ -192,7 +192,7 @@ const ClassSelection = () => {
   const getEducatorImage = (classNumber: number) => {
     const apiData = getClassApiData(classNumber);
     const imageUrl = apiData?.educatorImage || "/teacher.svg";
-    // console.log(`Educator image for Class ${classNumber}:`, imageUrl);
+    // //console.log(`Educator image for Class ${classNumber}:`, imageUrl);
     return imageUrl; // Default to local image if no data
   };
 
@@ -200,11 +200,11 @@ const ClassSelection = () => {
   const handlePaymentClick = (classNumber: number) => {
     if (isLoggedIn && user) {
       // User is already logged in, proceed to payment directly
-      console.log(`User ${user.name} is already logged in, proceeding directly to payment for Class ${classNumber}`);
+      //console.log(`User ${user.name} is already logged in, proceeding directly to payment for Class ${classNumber}`);
       handlePayment(classNumber);
     } else {
       // User not logged in, show login modal
-      console.log('User not logged in, showing login modal for Class', classNumber);
+      //console.log('User not logged in, showing login modal for Class', classNumber);
       setSelectedClassForPayment(classNumber);
       setShowLoginModal(true);
     }
@@ -218,7 +218,7 @@ const ClassSelection = () => {
       const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
       const contact = contactFromUser || contactFromStorage;
 
-      console.log("[PAYMENT] Starting flow", { classNumber, contact });
+      //console.log("[PAYMENT] Starting flow", { classNumber, contact });
       // 1) Create registration lead similar to TenX
       try {
         const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
@@ -232,15 +232,15 @@ const ClassSelection = () => {
           }),
         });
         const leadJson = await leadRes.json();
-        console.log("[PAYMENT] Lead response", leadJson);
+        //console.log("[PAYMENT] Lead response", leadJson);
         if (leadJson?.success && leadJson?.lead?.id) {
           localStorage.setItem("leadId", leadJson.lead.id);
-          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+          //console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
         } else {
-          console.warn("[PAYMENT] Lead creation failed", leadJson);
+          //console.warn("[PAYMENT] Lead creation failed", leadJson);
         }
       } catch (e) {
-        console.warn("[PAYMENT] Lead request error", e);
+        //console.warn("[PAYMENT] Lead request error", e);
       }
 
       // Create Razorpay order via Next.js API (amount in INR)
@@ -250,7 +250,7 @@ const ClassSelection = () => {
         body: JSON.stringify({ amount: price, currency: "INR", description: `Demo for Class ${classNumber}` , contact }),
       });
       const orderJson = await orderRes.json();
-      console.log("[PAYMENT] Order API response", orderJson);
+      //console.log("[PAYMENT] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -292,25 +292,25 @@ const ClassSelection = () => {
 
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[ClassSelection] Payment error", err);
+      //console.error("[ClassSelection] Payment error", err);
       alert("Network error. Please try again.");
     } finally {
-      console.log("[PAYMENT] Flow ended");
+      //console.log("[PAYMENT] Flow ended");
     }
   };
 
   // Handle successful login
   const handleLoginSuccess = (userData: any) => {
-    console.log('ClassSelection: Login successful, user data:', userData);
-    console.log('ClassSelection: User is now logged in:', isLoggedIn);
+    //console.log('ClassSelection: Login successful, user data:', userData);
+    //console.log('ClassSelection: User is now logged in:', isLoggedIn);
     
     // User is now logged in via context, proceed with payment if there was a selected class
     // Note: We use userData directly since context state might not be updated immediately
     if (selectedClassForPayment && userData) {
-      console.log('ClassSelection: Proceeding with payment for class:', selectedClassForPayment);
+      //console.log('ClassSelection: Proceeding with payment for class:', selectedClassForPayment);
       setTimeout(() => {
         handlePayment(selectedClassForPayment);
         setSelectedClassForPayment(null);

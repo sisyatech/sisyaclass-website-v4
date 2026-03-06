@@ -64,7 +64,7 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
           }
         }
       } catch (error) {
-        console.error("Error fetching payment data:", error);
+        //console.error("Error fetching payment data:", error);
       } finally {
         setLoading(false);
       }
@@ -74,22 +74,22 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
   }, [gradeNumber, searchParams]);
 
   const handleMakePayment = () => {
-    console.log("Make Payment clicked for grade:", gradeNumber, "Payment method:", paymentMethod);
+    //console.log("Make Payment clicked for grade:", gradeNumber, "Payment method:", paymentMethod);
 
     if (isLoggedIn && user) {
       // User is logged in, proceed with actual payment
-      console.log("User is logged in, proceeding with payment:", user.name);
+      //console.log("User is logged in, proceeding with payment:", user.name);
       processPayment();
     } else {
       // User is not logged in, show login modal
-      console.log("User not logged in, showing login modal");
+      //console.log("User not logged in, showing login modal");
       setShowLoginModal(true);
     }
   };
 
   const processPayment = async () => {
     try {
-      console.log("[PAYMENT] Starting flow (Course Payment)", { gradeNumber, selectedPrice });
+      //console.log("[PAYMENT] Starting flow (Course Payment)", { gradeNumber, selectedPrice });
       const contactFromUser = (user as any)?.phone || (user as any)?.mobile || "";
       const contactFromStorage = typeof window !== 'undefined' ? (localStorage.getItem("mobileNumber") || "") : "";
       const contact = contactFromUser || contactFromStorage;
@@ -107,15 +107,15 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
           }),
         });
       const leadJson = await leadRes.json();
-      console.log("[PAYMENT] Lead response", leadJson);
+      //console.log("[PAYMENT] Lead response", leadJson);
         if (leadJson?.success && leadJson?.lead?.id) {
           localStorage.setItem("leadId", leadJson.lead.id);
-        console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+        //console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
         } else {
-          console.warn("[Course Payment] Lead creation failed", leadJson);
+          //console.warn("[Course Payment] Lead creation failed", leadJson);
         }
       } catch (e) {
-        console.warn("[Course Payment] Lead request error", e);
+        //console.warn("[Course Payment] Lead request error", e);
       }
 
       const orderRes = await fetch("/api/razorpay/order", {
@@ -124,7 +124,7 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
         body: JSON.stringify({ amount: selectedPrice, currency: "INR", description: `Course Payment - Class ${gradeNumber} (${paymentMethod})`, contact }),
       });
       const orderJson = await orderRes.json();
-      console.log("[PAYMENT] Order API response", orderJson);
+      //console.log("[PAYMENT] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -165,18 +165,18 @@ const NewSection = ({ gradeNumber }: NewSectionProps) => {
 
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[Course Payment] Payment error", err);
+      //console.error("[Course Payment] Payment error", err);
       alert("Network error. Please try again.");
     } finally {
-      console.log("[PAYMENT] Flow ended");
+      //console.log("[PAYMENT] Flow ended");
     }
   };
 
   const handleLoginSuccess = (userData: any) => {
-    console.log("Payment: Login successful, user data:", userData);
+    //console.log("Payment: Login successful, user data:", userData);
     setShowLoginModal(false);
     // Proceed with payment after successful login
     setTimeout(() => {

@@ -11,7 +11,7 @@ export default function PaymentSuccessPage() {
 
   useEffect(() => {
     setCurrentDateTime(new Date().toLocaleString());
-    console.log("[PAYMENT] Success page params", { transactionId, amount });
+    //console.log("[PAYMENT] Success page params", { transactionId, amount });
   }, []);
 
   return (

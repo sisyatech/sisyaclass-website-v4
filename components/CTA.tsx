@@ -57,15 +57,15 @@ const CTA = () => {
   }, [hasReachedCTA]);
 
   const handleBookDemo = () => {
-    console.log('Book a Demo clicked');
+    //console.log('Book a Demo clicked');
     
     if (isLoggedIn && user) {
       // User is logged in, proceed with payment/demo booking
-      console.log('User is logged in, proceeding with demo booking:', user.name);
+      //console.log('User is logged in, proceeding with demo booking:', user.name);
       handlePayment();
     } else {
       // User is not logged in, show login modal
-      console.log('User not logged in, showing login modal');
+      //console.log('User not logged in, showing login modal');
       setShowLoginModal(true);
     }
   };
@@ -79,7 +79,7 @@ const CTA = () => {
       // Default ₹19 demo
       const amount = 19;
 
-      console.log("[PAYMENT] Starting flow (CTA)", { contact, amount });
+      //console.log("[PAYMENT] Starting flow (CTA)", { contact, amount });
       // 1) Create lead
       try {
         const leadRes = await fetch("https://sisyaclass.xyz/student/new_reg_lead", {
@@ -93,15 +93,15 @@ const CTA = () => {
           }),
         });
         const leadJson = await leadRes.json();
-        console.log("[PAYMENT] Lead response", leadJson);
+        //console.log("[PAYMENT] Lead response", leadJson);
         if (leadJson?.success && leadJson?.lead?.id) {
           localStorage.setItem("leadId", leadJson.lead.id);
-          console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
+          //console.log("[PAYMENT] Lead stored", { leadId: leadJson.lead.id });
         } else {
-          console.warn("[CTA] Lead creation failed", leadJson);
+          //console.warn("[CTA] Lead creation failed", leadJson);
         }
       } catch (e) {
-        console.warn("[CTA] Lead request error", e);
+        //console.warn("[CTA] Lead request error", e);
       }
 
       const orderRes = await fetch("/api/razorpay/order", {
@@ -110,7 +110,7 @@ const CTA = () => {
         body: JSON.stringify({ amount, currency: "INR", description: "Homepage CTA Demo", contact }),
       });
       const orderJson = await orderRes.json();
-      console.log("[PAYMENT] Order API response", orderJson);
+      //console.log("[PAYMENT] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -151,18 +151,18 @@ const CTA = () => {
 
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[PAYMENT] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[CTA] Payment error", err);
+      //console.error("[CTA] Payment error", err);
       alert("Network error. Please try again.");
     } finally {
-      console.log("[PAYMENT] Flow ended");
+      //console.log("[PAYMENT] Flow ended");
     }
   };
 
   const handleLoginSuccess = (userData: any) => {
-    console.log('CTA: Login successful, user data:', userData);
+    //console.log('CTA: Login successful, user data:', userData);
     setShowLoginModal(false);
     // Proceed with payment after successful login
     setTimeout(() => {

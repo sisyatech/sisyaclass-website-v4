@@ -39,14 +39,14 @@ export default function LtcContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log("[LTC] Lead status updated successfully");
+        //console.log("[LTC] Lead status updated successfully");
         return true;
       }
 
-      console.warn("[LTC] Failed to update lead status");
+      //console.warn("[LTC] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[LTC] Error updating lead status:", error);
+      //console.error("[LTC] Error updating lead status:", error);
       return false;
     }
   };
@@ -64,7 +64,7 @@ export default function LtcContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[LTC] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[LTC] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -78,13 +78,13 @@ export default function LtcContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[LTC] Lead response", leadData);
+      //console.log("[LTC] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[LTC] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[LTC] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
@@ -92,7 +92,7 @@ export default function LtcContent() {
         body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "LTC Demo" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[LTC] Order API response", orderJson);
+      //console.log("[LTC] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -119,7 +119,7 @@ export default function LtcContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[LTC] Success handler", response);
+          //console.log("[LTC] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
           window.location.href = `/ltc/payment/success.php?transactionId=${encodeURIComponent(
@@ -128,7 +128,7 @@ export default function LtcContent() {
         },
         modal: {
           ondismiss: function () {
-            console.warn("[LTC] Checkout dismissed by user");
+            //console.warn("[LTC] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
               window.location.href = `/ltc/payment/failed.php?transactionId=${encodeURIComponent(
                 `DISMISSED_${Date.now()}`
@@ -139,10 +139,10 @@ export default function LtcContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[LTC] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[LTC] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[LTC] Error", err);
+      //console.error("[LTC] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {

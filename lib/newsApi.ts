@@ -62,7 +62,7 @@ export const fixProfileImageUrl = (url: string | undefined): string => {
     // Fix sisyaclass.xyz profile URLs by adding /student/ path if missing
     if (url.includes('sisyaclass.xyz') && !url.includes('/student/')) {
       const fixedUrl = url.replace('sisyaclass.xyz', 'sisyaclass.xyz/student');
-      console.log('🔧 Fixed profile URL:', url, '->', fixedUrl);
+      //console.log('🔧 Fixed profile URL:', url, '->', fixedUrl);
       return fixedUrl;
     }
     return url;
@@ -75,7 +75,7 @@ export const fixProfileImageUrl = (url: string | undefined): string => {
 // API Functions
 export const getAllNews = async (page: number = 1, limit: number = 10) => {
   try {
-    console.log('📰 getAllNews: Fetching news...', { page, limit });
+    //console.log('📰 getAllNews: Fetching news...', { page, limit });
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_NEWS}`, {
       method: 'POST',
@@ -90,8 +90,8 @@ export const getAllNews = async (page: number = 1, limit: number = 10) => {
     }
 
     const data = await response.json();
-    console.log('📰 getAllNews: Received response:', data);
-    console.log('📰 getAllNews: Sample news data:', data.newsList?.[0]);
+    //console.log('📰 getAllNews: Received response:', data);
+    //console.log('📰 getAllNews: Sample news data:', data.newsList?.[0]);
     
     // Transform the response to match expected structure
     return {
@@ -101,15 +101,15 @@ export const getAllNews = async (page: number = 1, limit: number = 10) => {
       news: data.newsList || []
     };
   } catch (error) {
-    console.error('❌ getAllNews: Error fetching news:', error);
+    //console.error('❌ getAllNews: Error fetching news:', error);
     throw error;
   }
 };
 
 export const getNewsById = async (id: string) => {
   try {
-    console.log('📰 getNewsById: Fetching news by ID:', id);
-    console.log('📰 getNewsById: API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_NEWS_BY_ID}`);
+    //console.log('📰 getNewsById: Fetching news by ID:', id);
+    //console.log('📰 getNewsById: API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_NEWS_BY_ID}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_NEWS_BY_ID}`, {
       method: 'POST',
@@ -119,12 +119,12 @@ export const getNewsById = async (id: string) => {
       body: JSON.stringify({ id }),
     });
 
-    console.log('📰 getNewsById: Response status:', response.status);
-    console.log('📰 getNewsById: Response headers:', response.headers.get('content-type'));
+    //console.log('📰 getNewsById: Response status:', response.status);
+    //console.log('📰 getNewsById: Response headers:', response.headers.get('content-type'));
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('📰 getNewsById: Error response:', errorText);
+      //console.error('📰 getNewsById: Error response:', errorText);
       
       if (response.status === 404) {
         throw new Error('News not found');
@@ -136,23 +136,23 @@ export const getNewsById = async (id: string) => {
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
       const responseText = await response.text();
-      console.error('📰 getNewsById: Non-JSON response:', responseText.substring(0, 200));
+      //console.error('📰 getNewsById: Non-JSON response:', responseText.substring(0, 200));
       throw new Error('Server returned non-JSON response');
     }
 
     const data = await response.json();
-    console.log('📰 getNewsById: Received response:', data);
+    //console.log('📰 getNewsById: Received response:', data);
     
     return data;
   } catch (error) {
-    console.error('❌ getNewsById: Error fetching news:', error);
+    //console.error('❌ getNewsById: Error fetching news:', error);
     throw error;
   }
 };
 
 export const getAllTags = async () => {
   try {
-    console.log('📰 getAllTags: Fetching tags...');
+    //console.log('📰 getAllTags: Fetching tags...');
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`, {
       method: 'POST',
@@ -166,19 +166,19 @@ export const getAllTags = async () => {
     }
 
     const data = await response.json();
-    console.log('📰 getAllTags: Received response:', data);
-    console.log('📰 getAllTags: Sample tags:', data.slice(0, 3));
+    //console.log('📰 getAllTags: Received response:', data);
+    //console.log('📰 getAllTags: Sample tags:', data.slice(0, 3));
     
     return data;
   } catch (error) {
-    console.error('❌ getAllTags: Error fetching tags:', error);
+    //console.error('❌ getAllTags: Error fetching tags:', error);
     throw error;
   }
 };
 
 export const getTrendingNews = async () => {
   try {
-    console.log('📰 getTrendingNews: Fetching trending news...');
+    //console.log('📰 getTrendingNews: Fetching trending news...');
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_TRENDING_NEWS}`, {
       method: 'POST',
@@ -192,18 +192,18 @@ export const getTrendingNews = async () => {
     }
 
     const data = await response.json();
-    console.log('📰 getTrendingNews: Received response:', data);
+    //console.log('📰 getTrendingNews: Received response:', data);
     
     // Ensure trending is an array
     if (data && data.trending && Array.isArray(data.trending)) {
-      console.log('📰 getTrendingNews: Found trending news:', data.trending.length);
+      //console.log('📰 getTrendingNews: Found trending news:', data.trending.length);
       return data;
     } else {
-      console.log('📰 getTrendingNews: No trending news found or invalid format');
+      //console.log('📰 getTrendingNews: No trending news found or invalid format');
       return { trending: [] };
     }
   } catch (error) {
-    console.error('❌ getTrendingNews: Error fetching trending news:', error);
+    //console.error('❌ getTrendingNews: Error fetching trending news:', error);
     // Return empty array on error
     return { trending: [] };
   }

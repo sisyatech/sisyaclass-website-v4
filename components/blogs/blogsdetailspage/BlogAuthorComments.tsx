@@ -33,7 +33,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
         setBlogData(blog);
         setComments(commentsResponse.comments);
       } catch (error) {
-        console.error('Error fetching blog and comments:', error);
+        //console.error('Error fetching blog and comments:', error);
       } finally {
         setLoading(false);
       }
@@ -92,7 +92,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
       setReplyingTo(null);
       
     } catch (error) {
-      console.error('Error submitting comment:', error);
+      //console.error('Error submitting comment:', error);
       alert('Failed to submit comment. Please try again.');
     } finally {
       setSubmitting(false);
@@ -254,7 +254,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
           <div className="text-center text-gray-500">No comments yet. Be the first to comment!</div>
         ) : (
           comments.map((comment, index) => {
-            // console.log("[BlogAuthorComments] Rendering comment", comment);
+            // //console.log("[BlogAuthorComments] Rendering comment", comment);
             return (
             <div key={comment.id}>
               <div className="flex items-start gap-2 sm:gap-3">

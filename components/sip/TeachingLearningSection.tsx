@@ -57,7 +57,7 @@ const TeachingLearningSection = () => {
           .sort((a, b) => a.order - b.order);
         setSlides(sorted);
       } catch (error) {
-        console.error("[SIP] Failed to load carousel 2", error);
+        //console.error("[SIP] Failed to load carousel 2", error);
       }
     };
     fetchSlides();

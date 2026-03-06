@@ -37,7 +37,7 @@ const NewsSideImage = () => {
           }
         }
       } catch (error) {
-        console.error("Error fetching blog ad banner:", error);
+        //console.error("Error fetching blog ad banner:", error);
       } finally {
         setLoading(false);
       }

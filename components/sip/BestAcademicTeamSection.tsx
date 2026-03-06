@@ -31,7 +31,7 @@ const BestAcademicTeamSection = () => {
           .sort((a, b) => a.order - b.order);
         setMentors(sorted);
       } catch (error) {
-        console.error("[SIP] Failed to load mentors", error);
+        //console.error("[SIP] Failed to load mentors", error);
       }
     };
     fetchMentors();

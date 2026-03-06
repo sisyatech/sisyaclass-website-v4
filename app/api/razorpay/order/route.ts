@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const currency = (body?.currency as string) || "INR";
     const receipt = (body?.receipt as string) || `rcpt_${Date.now()}`;
     const contact = (body?.contact as string) || "";
-    console.log("[API] Create order request", { amount, currency, receipt, hasContact: Boolean(contact) });
+    //console.log("[API] Create order request", { amount, currency, receipt, hasContact: Boolean(contact) });
 
     if (!amount || amount <= 0) {
       return NextResponse.json({ success: false, message: "Invalid amount" }, { status: 400 });
@@ -39,12 +39,12 @@ export async function POST(request: Request) {
 
     if (!res.ok) {
       const text = await res.text();
-      console.error("[API] Create order failed", text);
+      //console.error("[API] Create order failed", text);
       return NextResponse.json({ success: false, message: text || "Failed to create order" }, { status: 500 });
     }
 
     const data = await res.json();
-    console.log("[API] Order created", { id: data?.id, amount: data?.amount, currency: data?.currency });
+    //console.log("[API] Order created", { id: data?.id, amount: data?.amount, currency: data?.currency });
 
     // Mirror PHP shape from trialPayment.php for easier client reuse
     const responseData = {
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json(responseData);
   } catch (err: any) {
-    console.error("[API] Unexpected error", err);
+    //console.error("[API] Unexpected error", err);
     return NextResponse.json({ success: false, message: err?.message || "Unknown error" }, { status: 500 });
   }
 }

@@ -53,8 +53,8 @@ const AIEcosystem = () => {
     useEffect(() => {
         const fetchSectionData = async () => {
             try {
-                // console.log('🚀 Fetching AI Ecosystem section data from API...');
-                // console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_all_feature_showcase_section');
+                // //console.log('🚀 Fetching AI Ecosystem section data from API...');
+                // //console.log('📡 API URL:', 'https://sisyaclass.xyz/student/get_all_feature_showcase_section');
                 
                 const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_FEATURE_SHOWCASE_SECTION}`, {
                     method: 'POST',
@@ -64,38 +64,38 @@ const AIEcosystem = () => {
                     mode: 'cors',
                 });
                 
-                // console.log('📊 API Response status:', response.status);
+                // //console.log('📊 API Response status:', response.status);
                 
                 if (response.ok) {
                     const data = await response.json();
-                    // console.log('✅ API Data received successfully!');
-                    // console.log('📦 Number of sections:', data.length);
-                    // console.log('📝 Section data:', data[0]);
-                    console.log("data fo the ai ecosystem", data);
+                    // //console.log('✅ API Data received successfully!');
+                    // //console.log('📦 Number of sections:', data.length);
+                    // //console.log('📝 Section data:', data[0]);
+                    //console.log("data fo the ai ecosystem", data);
                     // Get the first active section (order 1)
                     const activeSection = data.find((section: SectionData) => section.isActive && section.order === 1);
                     if (activeSection) {
                         setSectionData(activeSection);
-                        // console.log('✅ Active section set:', activeSection);
+                        // //console.log('✅ Active section set:', activeSection);
                     } else {
-                        // console.warn('⚠️ No active section found, using first section');
+                        // //console.warn('⚠️ No active section found, using first section');
                         setSectionData(data[0]);
                     }
                 } else {
-                    // console.error('❌ Failed to fetch section data, status:', response.status);
+                    // //console.error('❌ Failed to fetch section data, status:', response.status);
                     const responseText = await response.text();
-                    // console.error('📄 Response text:', responseText);
+                    // //console.error('📄 Response text:', responseText);
                 }
             } catch (error) {
-                // console.error('❌ Error fetching section data:', error);
-                // console.error('');
-                // console.error('🚨 BACKEND SETUP REQUIRED:');
-                // console.error('1. Make sure your backend server is running');
-                // console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_all_feature_showcase_section');
-                // console.error('3. Enable CORS headers in your backend');
+                // //console.error('❌ Error fetching section data:', error);
+                // //console.error('');
+                // //console.error('🚨 BACKEND SETUP REQUIRED:');
+                // //console.error('1. Make sure your backend server is running');
+                // //console.error('2. Verify the endpoint: https://sisyaclass.xyz/student/get_all_feature_showcase_section');
+                // //console.error('3. Enable CORS headers in your backend');
             } finally {
                 setLoading(false);
-                // console.log('✅ Loading completed');
+                // //console.log('✅ Loading completed');
             }
         };
 

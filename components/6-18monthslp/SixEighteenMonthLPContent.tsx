@@ -35,14 +35,14 @@ export default function SixEighteenMonthLPContent() {
 
       const data = await response.json();
       if (data.success) {
-        console.log("[REVISION] Lead status updated successfully");
+        //console.log("[REVISION] Lead status updated successfully");
         return true;
       }
 
-      console.warn("[REVISION] Failed to update lead status");
+      //console.warn("[REVISION] Failed to update lead status");
       return false;
     } catch (error) {
-      console.error("[REVISION] Error updating lead status:", error);
+      //console.error("[REVISION] Error updating lead status:", error);
       return false;
     }
   };
@@ -60,7 +60,7 @@ export default function SixEighteenMonthLPContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      console.log("[REVISION] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[REVISION] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -74,13 +74,13 @@ export default function SixEighteenMonthLPContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      console.log("[REVISION] Lead response", leadData);
+      //console.log("[REVISION] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      console.log("[REVISION] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[REVISION] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
@@ -88,7 +88,7 @@ export default function SixEighteenMonthLPContent() {
         body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "4-Month Revision Batch" }),
       });
       const orderJson = await orderRes.json();
-      console.log("[REVISION] Order API response", orderJson);
+      //console.log("[REVISION] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -113,14 +113,14 @@ export default function SixEighteenMonthLPContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          console.log("[REVISION] Success handler", response);
+          //console.log("[REVISION] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
           window.location.href = `/6-18monthslp/payment/success.php?transactionId=${encodeURIComponent(response.razorpay_payment_id || "")}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
-            console.warn("[REVISION] Checkout dismissed by user");
+            //console.warn("[REVISION] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
               window.location.href = `/6-18monthslp/payment/failed.php?transactionId=${encodeURIComponent(`DISMISSED_${Date.now()}`)}`;
             });
@@ -129,10 +129,10 @@ export default function SixEighteenMonthLPContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      console.log("[REVISION] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[REVISION] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      console.error("[REVISION] Error", err);
+      //console.error("[REVISION] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {

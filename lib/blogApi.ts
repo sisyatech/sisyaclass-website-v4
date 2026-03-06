@@ -25,29 +25,29 @@ export const extractTextContent = (content: any): string => {
 export const fixProfileImageUrl = (url: string | undefined): string => {
   if (!url) return "/girl.svg"; // Default fallback
   
-  console.log('🔍 Original profile URL:', url);
+  //console.log('🔍 Original profile URL:', url);
   
   // If it's already a full URL with /student, return as is
   if (url.includes('/student/')) {
-    console.log('✅ URL already has /student, returning as-is');
+    //console.log('✅ URL already has /student, returning as-is');
     return url;
   }
   
   // If it's a full URL without /student, add /student
   if (url.startsWith('https://sisyaclass.xyz/') && !url.includes('/student/')) {
     const fixedUrl = url.replace('https://sisyaclass.xyz/', 'https://sisyaclass.xyz/student/');
-    console.log('🔧 Fixed URL:', fixedUrl);
+    //console.log('🔧 Fixed URL:', fixedUrl);
     return fixedUrl;
   }
   
   // If it's a relative path, assume it's already correct
   if (url.startsWith('/')) {
-    console.log('📁 Relative path, returning as-is');
+    //console.log('📁 Relative path, returning as-is');
     return url;
   }
   
   // For any other case, return as is
-  console.log('❓ Unknown URL format, returning as-is');
+  //console.log('❓ Unknown URL format, returning as-is');
   return url;
 };
 
@@ -144,8 +144,8 @@ export interface Comment {
 // Get all blogs with pagination
 export const getAllBlogs = async (page: number = 1, limit: number = 10): Promise<BlogListResponse> => {
   try {
-    console.log('🔍 Fetching blogs - Page:', page, 'Limit:', limit);
-    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_BLOGS}`);
+    //console.log('🔍 Fetching blogs - Page:', page, 'Limit:', limit);
+    //console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_BLOGS}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_BLOGS}`, {
       method: 'POST',
@@ -155,25 +155,25 @@ export const getAllBlogs = async (page: number = 1, limit: number = 10): Promise
       body: JSON.stringify({ page, limit }),
     });
 
-    console.log('📊 Response status:', response.status);
-    console.log('✅ Response ok:', response.ok);
+    //console.log('📊 Response status:', response.status);
+    //console.log('✅ Response ok:', response.ok);
 
     if (!response.ok) {
       throw new Error('Failed to fetch blogs');
     }
 
     const data = await response.json();
-    console.log('📝 Blogs API Response:', data);
-    console.log('📈 Total blogs:', data.total);
-    console.log('📄 Blogs count:', data.blogs?.length || 0);
+    //console.log('📝 Blogs API Response:', data);
+    //console.log('📈 Total blogs:', data.total);
+    //console.log('📄 Blogs count:', data.blogs?.length || 0);
     
     if (data.blogs && data.blogs.length > 0) {
-      console.log('📋 Sample blog data:', data.blogs[0]);
+      //console.log('📋 Sample blog data:', data.blogs[0]);
     }
 
     return data;
   } catch (error) {
-    console.error('❌ Error fetching blogs:', error);
+    //console.error('❌ Error fetching blogs:', error);
     throw error;
   }
 };
@@ -181,8 +181,8 @@ export const getAllBlogs = async (page: number = 1, limit: number = 10): Promise
 // Get blog by ID
 export const getBlogById = async (id: string): Promise<Blog> => {
   try {
-    console.log('🔍 Fetching blog by ID:', id);
-    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`);
+    //console.log('🔍 Fetching blog by ID:', id);
+    //console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`, {
       method: 'POST',
@@ -192,8 +192,8 @@ export const getBlogById = async (id: string): Promise<Blog> => {
       body: JSON.stringify({ id }),
     });
 
-    console.log('📊 Response status:', response.status);
-    console.log('✅ Response ok:', response.ok);
+    //console.log('📊 Response status:', response.status);
+    //console.log('✅ Response ok:', response.ok);
 
     if (!response.ok) {
       if (response.status === 404) {
@@ -203,10 +203,10 @@ export const getBlogById = async (id: string): Promise<Blog> => {
     }
 
     const data = await response.json();
-    console.log('📝 Blog by ID API Response:', data);
-    console.log('📋 Blog title:', data.title);
-    console.log('👤 Blog author:', data.authorName);
-    console.log('🏷️ Blog tags:', data.tags?.length || 0);
+    //console.log('📝 Blog by ID API Response:', data);
+    //console.log('📋 Blog title:', data.title);
+    //console.log('👤 Blog author:', data.authorName);
+    //console.log('🏷️ Blog tags:', data.tags?.length || 0);
     
     // Check if the response contains an error
     if (data.error) {
@@ -215,7 +215,7 @@ export const getBlogById = async (id: string): Promise<Blog> => {
 
     return data;
   } catch (error) {
-    console.error('❌ Error fetching blog:', error);
+    //console.error('❌ Error fetching blog:', error);
     throw error;
   }
 };
@@ -237,7 +237,7 @@ export const toggleLikeBlog = async (blogId: string, userId: string): Promise<{ 
 
     return await response.json();
   } catch (error) {
-    console.error('Error toggling like:', error);
+    //console.error('Error toggling like:', error);
     throw error;
   }
 };
@@ -264,7 +264,7 @@ export const addComment = async (
 
     return await response.json();
   } catch (error) {
-    console.error('Error adding comment:', error);
+    //console.error('Error adding comment:', error);
     throw error;
   }
 };
@@ -286,7 +286,7 @@ export const updateBlogReadCount = async (blogId: string): Promise<{ success: bo
 
     return await response.json();
   } catch (error) {
-    console.error('Error updating read count:', error);
+    //console.error('Error updating read count:', error);
     throw error;
   }
 };
@@ -294,8 +294,8 @@ export const updateBlogReadCount = async (blogId: string): Promise<{ success: bo
 // Get all tags
 export const getAllTags = async (): Promise<Tag[]> => {
   try {
-    console.log('🔍 Fetching all tags');
-    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`);
+    //console.log('🔍 Fetching all tags');
+    //console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_ALL_TAGS}`, {
       method: 'POST',
@@ -304,24 +304,24 @@ export const getAllTags = async (): Promise<Tag[]> => {
       },
     });
 
-    console.log('📊 Response status:', response.status);
-    console.log('✅ Response ok:', response.ok);
+    //console.log('📊 Response status:', response.status);
+    //console.log('✅ Response ok:', response.ok);
 
     if (!response.ok) {
       throw new Error('Failed to fetch tags');
     }
 
     const data = await response.json();
-    console.log('📝 Tags API Response:', data);
-    console.log('🏷️ Total tags:', data.length);
+    //console.log('📝 Tags API Response:', data);
+    //console.log('🏷️ Total tags:', data.length);
     
     if (data.length > 0) {
-      console.log('📋 Sample tags:', data.slice(0, 3));
+      //console.log('📋 Sample tags:', data.slice(0, 3));
     }
 
     return data;
   } catch (error) {
-    console.error('❌ Error fetching tags:', error);
+    //console.error('❌ Error fetching tags:', error);
     throw error;
   }
 };
@@ -343,7 +343,7 @@ export const getNestedComments = async (blogId: string): Promise<{ blogId: strin
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching comments:', error);
+    //console.error('Error fetching comments:', error);
     throw error;
   }
 };
@@ -351,8 +351,8 @@ export const getNestedComments = async (blogId: string): Promise<{ blogId: strin
 // Get trending blogs
 export const getTrendingBlogs = async (): Promise<{ trending: Blog[]; cached?: boolean }> => {
   try {
-    console.log('🔍 Fetching trending blogs');
-    console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_TRENDING_BLOGS}`);
+    //console.log('🔍 Fetching trending blogs');
+    //console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_TRENDING_BLOGS}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_TRENDING_BLOGS}`, {
       method: 'POST',
@@ -361,19 +361,19 @@ export const getTrendingBlogs = async (): Promise<{ trending: Blog[]; cached?: b
       },
     });
 
-    console.log('📊 Response status:', response.status);
-    console.log('✅ Response ok:', response.ok);
+    //console.log('📊 Response status:', response.status);
+    //console.log('✅ Response ok:', response.ok);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch trending blogs: ${response.status} ${response.statusText}`);
     }
 
     const data = await response.json();
-    console.log('📝 Trending blogs API response:', data);
-    console.log('🔥 Trending blogs count:', data.trending?.length || 0);
+    //console.log('📝 Trending blogs API response:', data);
+    //console.log('🔥 Trending blogs count:', data.trending?.length || 0);
     
     if (data.trending && data.trending.length > 0) {
-      console.log('📋 Sample trending blog:', data.trending[0]);
+      //console.log('📋 Sample trending blog:', data.trending[0]);
     }
     
     // Check if the response contains an error
@@ -383,13 +383,13 @@ export const getTrendingBlogs = async (): Promise<{ trending: Blog[]; cached?: b
 
     // Ensure the response has the expected structure
     if (!data.trending || !Array.isArray(data.trending)) {
-      console.warn('⚠️ Unexpected trending blogs response structure:', data);
+      //console.warn('⚠️ Unexpected trending blogs response structure:', data);
       return { trending: [] };
     }
 
     return data;
   } catch (error) {
-    console.error('❌ Error fetching trending blogs:', error);
+    //console.error('❌ Error fetching trending blogs:', error);
     throw error;
   }
 };
@@ -399,7 +399,7 @@ export const getBlogsByTag = async (tagId: string): Promise<BlogsByTagResponse> 
   try {
     if (!tagId) throw new Error('tagId is required');
     const url = `${API_BASE_URL}${API_ENDPOINTS.GET_BLOGS_BY_TAG}`;
-    console.log('🔎 Fetching blogs by tag:', { url, tagId });
+    //console.log('🔎 Fetching blogs by tag:', { url, tagId });
     const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -411,7 +411,7 @@ export const getBlogsByTag = async (tagId: string): Promise<BlogsByTagResponse> 
     }
     return await response.json();
   } catch (error) {
-    console.error('❌ Error fetching blogs by tag:', error);
+    //console.error('❌ Error fetching blogs by tag:', error);
     throw error;
   }
 };
@@ -432,7 +432,7 @@ export const generateBlogAssetUploadUrl = async (): Promise<{ uploadUrl: string;
 
     return await response.json();
   } catch (error) {
-    console.error('Error generating upload URL:', error);
+    //console.error('Error generating upload URL:', error);
     throw error;
   }
 };

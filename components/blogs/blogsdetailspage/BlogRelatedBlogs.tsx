@@ -20,7 +20,7 @@ const BlogRelatedBlogs = () => {
       try {
         setLoading(true);
         if (tagId) {
-          console.log(`🔄 Fetching blogs by tag ${tagId} (attempt ${retryAttempt + 1})`);
+          //console.log(`🔄 Fetching blogs by tag ${tagId} (attempt ${retryAttempt + 1})`);
           const byTag = await getBlogsByTag(tagId);
           const list = Array.isArray(byTag.blogs) ? byTag.blogs : [];
           if (list.length > 0) {
@@ -30,7 +30,7 @@ const BlogRelatedBlogs = () => {
             setTrendingBlogs([]);
           }
         } else {
-          console.log(`🔄 Fetching trending blogs (attempt ${retryAttempt + 1})`);
+          //console.log(`🔄 Fetching trending blogs (attempt ${retryAttempt + 1})`);
           const response = await getTrendingBlogs();
           if (response && response.trending && Array.isArray(response.trending) && response.trending.length > 0) {
             setTrendingBlogs(response.trending.slice(0, 3));
@@ -48,13 +48,13 @@ const BlogRelatedBlogs = () => {
           }
         }
       } catch (error) {
-        console.error('❌ Error fetching trending blogs:', error);
+        //console.error('❌ Error fetching trending blogs:', error);
         setTrendingBlogs([]);
         
         // Retry on error if we haven't exceeded max retries
         if (retryAttempt < 4) {
           const delay = retryAttempt < 2 ? 2000 : 3000; // Longer delay for errors
-          console.log(`🔄 Retrying after error in ${delay/1000} seconds... (attempt ${retryAttempt + 2})`);
+          //console.log(`🔄 Retrying after error in ${delay/1000} seconds... (attempt ${retryAttempt + 2})`);
           setTimeout(() => {
             setRetryCount(retryAttempt + 1);
             fetchTrendingBlogs(retryAttempt + 1);

@@ -81,11 +81,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const [blogs, news] = await Promise.all([
     getAllBlogs(1, 50).catch((e) => {
-      console.error("[sitemap] Blog error:", e);
+      //console.error("[sitemap] Blog error:", e);
       return { blogs: [] };
     }),
     getAllNews(1, 50).catch((e) => {
-      console.error("[sitemap] News error:", e);
+      //console.error("[sitemap] News error:", e);
       return { news: [] };
     }),
   ]);

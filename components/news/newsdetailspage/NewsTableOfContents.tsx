@@ -22,7 +22,7 @@ const NewsTableOfContents = ({ newsId }: NewsTableOfContentsProps) => {
         const extractedHeadings = extractHeadingsFromContent(news.content);
         setHeadings(extractedHeadings);
       } catch (error) {
-        console.error('Error fetching news:', error);
+        //console.error('Error fetching news:', error);
         setNewsData(null);
         setHeadings([]);
       } finally {

@@ -42,7 +42,7 @@ export default function PricingSection() {
                 });
 
                 if (!res.ok) {
-                    console.error("Failed to fetch doubt packages. Status:", res.status);
+                    //console.error("Failed to fetch doubt packages. Status:", res.status);
                     return;
                 }
 
@@ -51,10 +51,10 @@ export default function PricingSection() {
                 if (json?.success && Array.isArray(json.data)) {
                     setPackages(json.data);
                 } else {
-                    console.error("Unexpected response from getDoubtPackages:", json);
+                    //console.error("Unexpected response from getDoubtPackages:", json);
                 }
             } catch (err) {
-                console.error("Error fetching doubt packages:", err);
+                //console.error("Error fetching doubt packages:", err);
             } finally {
                 setLoading(false);
             }
@@ -92,11 +92,11 @@ export default function PricingSection() {
                 localStorage.setItem("doubtLeadId", leadJson.data.id.toString());
                 return leadJson.data.id;
             } else {
-                console.error("[DoubtLead] Failed to create doubt lead:", leadJson);
+                //console.error("[DoubtLead] Failed to create doubt lead:", leadJson);
                 return null;
             }
         } catch (err) {
-            console.error("[DoubtLead] Error creating doubt lead:", err);
+            //console.error("[DoubtLead] Error creating doubt lead:", err);
             return null;
         }
     };
@@ -124,10 +124,10 @@ export default function PricingSection() {
 
             const updateJson = await updateRes.json();
             if (!updateRes.ok || !updateJson?.success) {
-                console.error("[DoubtLead] Failed to update doubt lead:", updateJson);
+                //console.error("[DoubtLead] Failed to update doubt lead:", updateJson);
             }
         } catch (err) {
-            console.error("[DoubtLead] Error updating doubt lead:", err);
+            //console.error("[DoubtLead] Error updating doubt lead:", err);
         } finally {
             // Clear leadId from localStorage after update
             localStorage.removeItem("doubtLeadId");
@@ -167,7 +167,7 @@ export default function PricingSection() {
 
             const orderJson = await orderRes.json();
             if (!orderJson?.success) {
-                console.error("[DoubtPayment] Failed to initialize payment:", orderJson);
+                //console.error("[DoubtPayment] Failed to initialize payment:", orderJson);
                 setStatusPopup({
                     type: "error",
                     message: "Failed to start payment. Please try again.",
@@ -198,9 +198,9 @@ export default function PricingSection() {
                 handler: async function (response: any) {
                     try {
                         const token = (currentUser as any)?.token;
-                        console.log("[DoubtPayment] Using auth token for purchase_doubt_package:", token);
+                        //console.log("[DoubtPayment] Using auth token for purchase_doubt_package:", token);
                         if (!currentUser || !currentUser.id) {
-                            console.error("[DoubtPayment] Missing user data for purchaseDoubtPackage");
+                            //console.error("[DoubtPayment] Missing user data for purchaseDoubtPackage");
                             // Update lead status to FAILED
                             if (doubtLeadId) {
                                 await updateDoubtLead(doubtLeadId, "FAILED", "Missing user data");
@@ -237,7 +237,7 @@ export default function PricingSection() {
                             }
                             router.push(`/askme/payment/success.php?transactionId=${response.razorpay_payment_id}&amount=₹${amountNumber}`);
                         } else {
-                            console.error(
+                            //console.error(
                                 "[DoubtPayment] purchase_doubt_package failed",
                                 purchaseJson
                             );
@@ -248,7 +248,7 @@ export default function PricingSection() {
                             router.push(`/askme/payment/failed.php?transactionId=${response.razorpay_payment_id || payload.order_id || 'N/A'}&amount=₹${amountNumber}`);
                         }
                     } catch (err) {
-                        console.error("[DoubtPayment] Error completing purchase:", err);
+                        //console.error("[DoubtPayment] Error completing purchase:", err);
                         // Update lead status to FAILED
                         if (doubtLeadId) {
                             await updateDoubtLead(doubtLeadId, "FAILED", "Error completing purchase");
@@ -260,7 +260,7 @@ export default function PricingSection() {
                 },
                 modal: {
                     ondismiss: async function () {
-                        console.warn("[DoubtPayment] Payment modal dismissed by user");
+                        //console.warn("[DoubtPayment] Payment modal dismissed by user");
                         // Update lead status to FAILED
                         if (doubtLeadId) {
                             await updateDoubtLead(doubtLeadId, "FAILED", "Payment cancelled by user");
@@ -275,7 +275,7 @@ export default function PricingSection() {
             const rzp = new (window as any).Razorpay(options);
             rzp.open();
         } catch (err) {
-            console.error("[DoubtPayment] Payment error:", err);
+            //console.error("[DoubtPayment] Payment error:", err);
             // Update lead status to FAILED
             if (doubtLeadId) {
                 await updateDoubtLead(doubtLeadId, "FAILED", "Payment processing error");
