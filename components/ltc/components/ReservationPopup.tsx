@@ -37,7 +37,7 @@ export default function ReservationPopup({
           ×
         </button>
         <h2 className="text-2xl font-bold text-[#01317a] mb-4 text-center">
-          See the Difference in Just One Class
+          See the Difference in Just 3 Class
         </h2>
         <p className="text-center text-base text-[#415252] mb-4">
           Get Live Class, Recorded Sessions, Doubt-Solving &amp; Performance Reports
@@ -102,7 +102,7 @@ export default function ReservationPopup({
             type="submit"
             className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]"
           >
-            Try 5 Classes @ ₹19 Only
+            Try 3 Classes @ ₹19 Only
           </button>
         </form>
       </div>
