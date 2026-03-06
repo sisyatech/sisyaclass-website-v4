@@ -54,13 +54,13 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   const selectedSubjectFromUrl = subjectFromPath || searchParams?.get('subject') || '';
   
   // Debug: Log component render
-  //console.log('[CHAPTERS] Component rendered:', { 
-    gradeNumber, 
-    pathname,
-    subjectFromPath,
-    selectedSubjectFromUrl,
-    decoded: selectedSubjectFromUrl.toLowerCase()
-  });
+  // //console.log('[CHAPTERS] Component rendered:', { 
+  //   gradeNumber, 
+  //   pathname,
+  //   subjectFromPath,
+  //   selectedSubjectFromUrl,
+  //   decoded: selectedSubjectFromUrl.toLowerCase()
+  // });
   const scrollContainer = (ref: { current: HTMLDivElement | null }, direction: -1 | 1) => {
     const container = ref.current;
     if (!container) return;
@@ -176,13 +176,13 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
       const subjectNameLower = subject.name.toLowerCase().trim();
       const filterLower = selectedSubject.toLowerCase().trim();
       
-      //console.log('[CHAPTERS] Checking match:', { 
-        subjectName: subject.name,
-        subjectNameLower,
-        filterLower,
-        selectedSubject,
-        chaptersCount: subject.chapters?.length || 0
-      });
+      // //console.log('[CHAPTERS] Checking match:', { 
+      //   subjectName: subject.name,
+      //   subjectNameLower,
+      //   filterLower,
+      //   selectedSubject,
+      //   chaptersCount: subject.chapters?.length || 0
+      // });
       
       // Direct exact match (case-insensitive)
       if (subjectNameLower === filterLower) {
@@ -218,11 +218,11 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
       return false;
     })
     .flatMap(subject => {
-      //console.log('[CHAPTERS] Processing subject:', { 
-        name: subject.name, 
-        chaptersCount: subject.chapters?.length || 0,
-        chapters: subject.chapters 
-      });
+      // //console.log('[CHAPTERS] Processing subject:', { 
+      //   name: subject.name, 
+      //   chaptersCount: subject.chapters?.length || 0,
+      //   chapters: subject.chapters 
+      // });
       return subject.chapters.map(chapter => ({
       ...chapter,
       subjectName: subject.name,
@@ -232,31 +232,31 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
     }) || [];
 
   // Debug: Log final chapters count
-  //console.log('[CHAPTERS] Final allChapters:', {
-    selectedSubject,
-    totalChapters: allChapters.length,
-    chapters: allChapters.map(ch => ({ id: ch.id, title: ch.title, subjectName: ch.subjectName }))
-  });
+  // //console.log('[CHAPTERS] Final allChapters:', {
+  //   selectedSubject,
+  //   totalChapters: allChapters.length,
+  //   chapters: allChapters.map(ch => ({ id: ch.id, title: ch.title, subjectName: ch.subjectName }))
+  // });
 
   const showMobileArrows = allChapters.length > 1;
   const showDesktopArrows = allChapters.length > 3;
 
   useEffect(() => {
     if (courseData && selectedSubject) {
-      //console.log('[CHAPTERS] Final result:', {
-        selectedSubject,
-        totalChapters: allChapters.length,
-        courseLabel: courseData.webLabel,
-        subjectsWithChapters: courseData.subjects
-          .filter(s => {
-            const sLower = s.name.toLowerCase();
-            const filterLower = selectedSubject.toLowerCase();
-            return sLower.includes(filterLower) || filterLower.includes(sLower) || 
-                   sLower.includes('sciens') && filterLower.includes('science') ||
-                   sLower.includes('science') && filterLower.includes('sciens');
-          })
-          .map(s => ({ name: s.name, chaptersCount: s.chapters?.length || 0 }))
-      });
+      // console.log('[CHAPTERS] Final result:', {
+      //   selectedSubject,
+      //   totalChapters: allChapters.length,
+      //   courseLabel: courseData.webLabel,
+      //   subjectsWithChapters: courseData.subjects
+      //     .filter(s => {
+      //       const sLower = s.name.toLowerCase();
+      //       const filterLower = selectedSubject.toLowerCase();
+      //       return sLower.includes(filterLower) || filterLower.includes(sLower) || 
+      //              sLower.includes('sciens') && filterLower.includes('science') ||
+      //              sLower.includes('science') && filterLower.includes('sciens');
+      //     })
+      //     .map(s => ({ name: s.name, chaptersCount: s.chapters?.length || 0 }))
+      // });
     }
   }, [allChapters.length, selectedSubject, courseData]);
 

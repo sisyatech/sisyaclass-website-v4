@@ -238,9 +238,9 @@ export default function PricingSection() {
                             router.push(`/askme/payment/success.php?transactionId=${response.razorpay_payment_id}&amount=₹${amountNumber}`);
                         } else {
                             //console.error(
-                                "[DoubtPayment] purchase_doubt_package failed",
-                                purchaseJson
-                            );
+                            //     "[DoubtPayment] purchase_doubt_package failed",
+                            //     purchaseJson
+                            // );
                             // Update lead status to FAILED
                             if (doubtLeadId) {
                                 await updateDoubtLead(doubtLeadId, "FAILED", purchaseJson?.error || "Purchase failed");

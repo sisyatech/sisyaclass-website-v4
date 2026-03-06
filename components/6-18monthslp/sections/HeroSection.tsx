@@ -30,8 +30,8 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
   const handleSubmitCallback = async () => {
     setError(null);
-    if (!name.trim()) { //console.log('[CALLBACK][VALIDATION] Missing name'); setError("Please enter your name"); return; }
-    if (!isValidMobile(phone)) { //console.log('[CALLBACK][VALIDATION] Invalid phone:', phone); setError("Enter a valid 10-digit mobile number"); return; }
+    if (!name.trim()) {  return; }
+    if (!isValidMobile(phone)) {  return; }
     setSubmitting(true);
     try {
       const email = `${phone}@gmail.com`;

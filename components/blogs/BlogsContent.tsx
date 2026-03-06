@@ -59,15 +59,15 @@ const BlogsContent = () => {
   // Log current blog data when it changes
   useEffect(() => {
     if (currentBlog) {
-      //console.log("📋 BlogsContent: Current blog data:", {
-        id: currentBlog.id,
-        title: currentBlog.title,
-        author: currentBlog.authorName,
-        authorProfile: currentBlog.authorProfile,
-        banner: currentBlog.banner,
-        reads: currentBlog.activityReads,
-        tags: currentBlog.tags?.length || 0,
-      });
+      // //console.log("📋 BlogsContent: Current blog data:", {
+      //   id: currentBlog.id,
+      //   title: currentBlog.title,
+      //   author: currentBlog.authorName,
+      //   authorProfile: currentBlog.authorProfile,
+      //   banner: currentBlog.banner,
+      //   reads: currentBlog.activityReads,
+      //   tags: currentBlog.tags?.length || 0,
+      // });
       //console.log("🔧 Fixed profile URL:", fixProfileImageUrl(currentBlog.authorProfile));
     }
   }, [currentBlog]);
