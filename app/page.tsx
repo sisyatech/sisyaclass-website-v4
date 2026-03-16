@@ -17,6 +17,7 @@ const Banner = dynamic(() => import("@/components/Banner"), { ssr: true, loading
 const Testimonials = dynamic(() => import("@/components/Testimonials"), { ssr: true, loading: () => null });
 const CTA = dynamic(() => import("@/components/CTA"), { ssr: true, loading: () => null });
 const Reviews = dynamic(() => import("@/components/Reviews"), { ssr: true, loading: () => null });
+const PartnerSchools = dynamic(() => import("@/components/PartnerSchools"), { ssr: true, loading: () => null });
 const BlogsContent = dynamic(() => import("@/components/blogs/BlogsContent"), { ssr: true, loading: () => null });
 const NewsContent = dynamic(() => import("@/components/news/NewsContent"), { ssr: true, loading: () => null });
 const FAQ = dynamic(() => import("@/components/FAQ"), { ssr: true, loading: () => null });
@@ -55,6 +56,7 @@ function HomeContent() {
       <Testimonials />
       <CTA />
       <Reviews />
+      <PartnerSchools />
       <BlogsContent />
       <NewsContent />
       <FAQ isHomePage={true} />

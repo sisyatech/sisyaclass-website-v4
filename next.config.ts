@@ -36,6 +36,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+    domains: [
+      "api.microlink.io",
+    ],
   },
   async redirects() {
     return [
