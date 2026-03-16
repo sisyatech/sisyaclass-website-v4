@@ -22,11 +22,6 @@ const FAQ = ({ isHomePage = false }: FAQProps) => {
       question: "Who would be the instructor for enrolled course?",
       answer: "Our instructors are highly qualified educators with extensive experience in their respective subjects. Most of our teachers are IIT/NIT graduates with years of teaching experience. You'll receive detailed instructor profiles when you enroll, and you can meet them during the demo class."
     },
-    {
-      id: 4,
-      question: "What kind of placement support will be given post completion of program?",
-      answer: "We provide comprehensive placement support including resume building, interview preparation, mock interviews, and connections with our industry partners. Our career guidance team helps students identify career paths and provides ongoing support even after course completion."
-    }
   ];
 
   // Only one question can be open at a time
