@@ -48,7 +48,7 @@ export default function WhyStartEarly({ onEnroll }: WhyStartEarlyProps) {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.1 }}
               viewport={{ once: true }}
-              className="w-full max-w-[165px] h-[180px] md:w-[200px] md:h-[200px] bg-[#E8F1FF] rounded-[24px] shadow-sm flex flex-col items-center justify-center p-3 hover:shadow-md transition-shadow shrink-0"
+              className="w-full h-[180px] md:w-[200px] md:h-[200px] bg-[#E8F1FF] rounded-[24px] shadow-sm flex flex-col items-center justify-center p-3 hover:shadow-md transition-shadow shrink-0"
             >
               <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] mb-2 relative overflow-hidden rounded-[12px]">
                 <Image

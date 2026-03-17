@@ -122,7 +122,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
               className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-[#ffd500] text-black whitespace-nowrap"
               onClick={onRegister}
             >
-              Get 3 Days Demos @19
+              Get 3 Demos @19
             </button>
             <button
               className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
