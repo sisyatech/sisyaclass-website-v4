@@ -60,6 +60,14 @@ const nextConfig: NextConfig = {
         destination: '/10xboostercourse/payment/failed',
       },
       {
+        source: '/jee_foundation/payment/success.php',
+        destination: '/jee_foundation/payment/success',
+      },
+      {
+        source: '/jee_foundation/payment/failed.php',
+        destination: '/jee_foundation/payment/failed',
+      },
+      {
         source: '/3dayslp/payment/success.php',
         destination: '/3dayslp/payment/success',
       },
