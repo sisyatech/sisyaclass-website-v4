@@ -140,7 +140,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           className="flex-1 md:absolute md:right-[-20px] md:bottom-[-20px] md:w-[60%] lg:w-[55%] flex justify-center items-center md:items-end pointer-events-none mt-10 md:mt-0"
         >
           <Image
-            src="/jee_foundation/hero_image.svg"
+            src="/jee_foundation/hero_pic.png"
             alt="JEE Foundation Team"
             width={900}
             height={600}
