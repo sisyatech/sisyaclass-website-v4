@@ -1,0 +1,745 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  AlarmClock,
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Copy,
+  Trophy,
+  XCircle,
+} from "lucide-react";
+
+import Navbar, {
+  MobileMenu,
+  MobileMenuProvider,
+  useMobileMenu,
+} from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import { scholarshipExamData, scholarshipGrades } from "@/lib/scholarshipExamData";
+import { cn } from "@/lib/utils";
+
+const EXAM_DURATION_SECONDS = 30 * 60;
+
+const formatTime = (s: number) => {
+  const m = Math.floor(s / 60).toString().padStart(2, "0");
+  const sec = (s % 60).toString().padStart(2, "0");
+  return `${m}:${sec}`;
+};
+
+const getGrade = (param: string | null) => {
+  const n = Number(param);
+  return scholarshipGrades.includes(n) ? n : 1;
+};
+
+const scoreBand = (score: number) => {
+  if (score >= 9)
+    return {
+      label: "Outstanding",
+      color: "emerald",
+      description:
+        "Excellent scholarship readiness. Command across all subjects is commendable.",
+    };
+  if (score >= 7)
+    return {
+      label: "Promising",
+      color: "sky",
+      description:
+        "A strong attempt. Focused revision in weaker subjects will push this into the top bracket.",
+    };
+  if (score >= 5)
+    return {
+      label: "Developing",
+      color: "amber",
+      description:
+        "The foundation is visible. Consistent practice across all subjects is the next step.",
+    };
+  return {
+    label: "Practice More",
+    color: "rose",
+    description:
+      "Use this mock as a baseline and strengthen subject fundamentals before the next attempt.",
+  };
+};
+
+type SubmissionState = { score: number; mode: "manual" | "timer" };
+
+function ExamSessionInner() {
+  const { setCurrentPage, setSelectedGrade } = useMobileMenu();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const grade = getGrade(searchParams.get("grade"));
+  const exam = scholarshipExamData[grade];
+  const questions = exam.questions;
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
+  const [remainingSeconds, setRemainingSeconds] = useState(EXAM_DURATION_SECONDS);
+  const [mobileVerified, setMobileVerified] = useState(false);
+  const [mobile, setMobile] = useState("");
+  const [showMobileModal, setShowMobileModal] = useState(false);
+  const [mobileError, setMobileError] = useState("");
+  const [submission, setSubmission] = useState<SubmissionState | null>(null);
+  const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [couponCode, setCouponCode] = useState("");
+
+  const answeredCount = Object.keys(selectedAnswers).length;
+  const currentQuestion = questions[currentIndex];
+  const timerUrgent = remainingSeconds < 5 * 60;
+
+  useEffect(() => {
+    setCurrentPage("scholarship-exam");
+    setSelectedGrade(null);
+  }, [setCurrentPage, setSelectedGrade]);
+
+  // On mount, check sessionStorage for mobile and generate/restore coupon code.
+  useEffect(() => {
+    try {
+      const stored = sessionStorage.getItem("scholarshipMobile");
+      if (stored && /^[6-9]\d{9}$/.test(stored)) {
+        setMobile(stored);
+        setMobileVerified(true);
+      } else {
+        setShowMobileModal(true);
+      }
+    } catch (e) {
+      setShowMobileModal(true);
+    }
+
+    // Restore or generate a unique coupon code for this session
+    try {
+      const existingCode = sessionStorage.getItem("scholarshipCoupon");
+      if (existingCode) {
+        setCouponCode(existingCode);
+      } else {
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const rand = Array.from(crypto.getRandomValues(new Uint8Array(7)))
+          .map((b) => chars[b % chars.length])
+          .join("");
+        const code = `SISYA${rand}`;
+        sessionStorage.setItem("scholarshipCoupon", code);
+        setCouponCode(code);
+      }
+    } catch {
+      setCouponCode("SISYASCHOLAR");
+    }
+  }, []);
+
+  // Countdown timer
+  useEffect(() => {
+    if (submission) return;
+    if (!mobileVerified) return; // don't start until mobile verified
+
+    if (remainingSeconds <= 0) {
+      const score = questions.reduce(
+        (t, q) => t + (selectedAnswers[q.id] === q.answerIndex ? 1 : 0),
+        0
+      );
+      setSubmission({ score, mode: "timer" });
+      return;
+    }
+
+    const id = window.setInterval(
+      () => setRemainingSeconds((s) => s - 1),
+      1000
+    );
+    return () => window.clearInterval(id);
+  }, [remainingSeconds, submission, questions, selectedAnswers, mobileVerified]);
+
+  const handleMobileSubmit = () => {
+    const trimmed = mobile.trim();
+    if (!/^[6-9]\d{9}$/.test(trimmed)) {
+      setMobileError("Please enter a valid 10-digit Indian mobile number.");
+      return;
+    }
+    try {
+      sessionStorage.setItem("scholarshipMobile", trimmed);
+    } catch (e) {}
+    setMobileVerified(true);
+    setShowMobileModal(false);
+  };
+
+  // Block accidental tab close until submitted
+  useEffect(() => {
+    if (submission) return;
+    const handle = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", handle);
+    return () => window.removeEventListener("beforeunload", handle);
+  }, [submission]);
+
+  const handleAnswer = (qId: string, idx: number) => {
+    if (!mobileVerified) {
+      setShowMobileModal(true);
+      return;
+    }
+    if (submission) return;
+    setSelectedAnswers((prev) => ({ ...prev, [qId]: idx }));
+  };
+
+  const submitNow = (mode: SubmissionState["mode"]) => {
+    const score = questions.reduce(
+      (t, q) => t + (selectedAnswers[q.id] === q.answerIndex ? 1 : 0),
+      0
+    );
+    setSubmission({ score, mode });
+    setShowSubmitConfirm(false);
+  };
+
+  const handleSubmit = () => {
+    if (!mobileVerified) {
+      setShowMobileModal(true);
+      return;
+    }
+    if (submission) return;
+    const unanswered = questions.length - answeredCount;
+    if (unanswered > 0) {
+      setShowSubmitConfirm(true);
+      return;
+    }
+    submitNow("manual");
+  };
+
+  // Note: retry/reset removed by design — users cannot retry from the result screen
+
+  // ── Result screen ────────────────────────────────────────────────────────────
+  if (submission) {
+    const band = scoreBand(submission.score);
+    const discountPercent = submission.score >= 9 ? 80 : submission.score >= 7 ? 60 : submission.score >= 5 ? 40 : 20;
+
+    return (
+      <>
+        <div className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/95 shadow-sm backdrop-blur">
+          <Navbar />
+        </div>
+
+        <main className="min-h-screen bg-white">
+
+          {/* ── Dark hero ── */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 px-4 pb-28 pt-12 text-center sm:px-6 lg:px-8">
+            {/* Decorative rings */}
+            <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="h-[520px] w-[520px] rounded-full border border-white/[0.04]" />
+              <div className="absolute inset-[70px] rounded-full border border-white/[0.06]" />
+              <div className="absolute inset-[140px] rounded-full border border-white/[0.08]" />
+            </div>
+
+            {/* Trophy icon */}
+            <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-[22px] bg-gradient-to-br from-amber-400 to-orange-500 shadow-[0_20px_48px_rgba(251,146,60,0.45)]">
+              <Trophy className="h-10 w-10 text-white" />
+            </div>
+
+            {/* Subtitle */}
+            <p className="relative mt-5 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+              Grade {grade}&nbsp;·&nbsp;{submission.mode === "timer" ? "Time expired" : "Scholarship Exam"}
+            </p>
+
+            {/* Headline */}
+            <h1 className="relative mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              {submission.score >= 9 ? "Absolutely Brilliant!"
+               : submission.score >= 7 ? "Great Job!"
+               : submission.score >= 5 ? "Well Done!"
+               : "Keep Going!"}
+            </h1>
+            <p className="relative mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-400">
+              {band.description}
+            </p>
+
+            {/* Score + Discount pill */}
+            <div className="relative mt-8 inline-flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+              <div className="px-8 py-5 text-center">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Your Score</div>
+                <div className="mt-1 tabular-nums text-white">
+                  <span className="text-5xl font-bold">{submission.score}</span>
+                  <span className="text-2xl font-semibold text-slate-500">/{questions.length}</span>
+                </div>
+              </div>
+              <div className="h-14 w-px bg-white/10" />
+              <div className="px-8 py-5 text-center">
+                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Scholarship</div>
+                <div className="mt-1 text-5xl font-bold tabular-nums text-emerald-400">{discountPercent}%</div>
+              </div>
+            </div>
+
+            {/* Band badge */}
+            <div className="relative mt-4">
+              <span
+                className={cn(
+                  "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold",
+                  band.color === "emerald" && "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
+                  band.color === "sky" && "border-sky-500/30 bg-sky-500/10 text-sky-300",
+                  band.color === "amber" && "border-amber-500/30 bg-amber-500/10 text-amber-300",
+                  band.color === "rose" && "border-rose-500/30 bg-rose-500/10 text-rose-300",
+                )}
+              >
+                <Trophy className="h-3.5 w-3.5" />
+                {band.label}
+              </span>
+            </div>
+          </div>
+
+          {/* ── Content card (overlaps dark hero) ── */}
+          <div className="relative z-10 mx-auto -mt-14 max-w-2xl px-4 pb-16 sm:px-6 lg:px-8">
+            <div className="overflow-hidden rounded-[28px] bg-white shadow-[0_32px_80px_rgba(2,6,23,0.14)]">
+
+              {/* Coupon section */}
+              <div className="px-6 py-7 sm:px-8">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Your Scholarship Award</p>
+                <h2 className="mt-1 text-xl font-bold text-slate-900">You've earned a discount!</h2>
+                <p className="mt-1.5 text-sm leading-6 text-slate-600">
+                  Share the coupon code with your mentor when enrolling in a course to redeem your{" "}
+                  <span className="font-semibold text-slate-900">{discountPercent}% scholarship discount</span>.
+                </p>
+
+                {/* Ticket */}
+                <div className="mt-5 flex items-stretch overflow-hidden rounded-2xl border-2 border-dashed border-emerald-300 bg-gradient-to-r from-emerald-50 via-white to-sky-50">
+                  <div className="flex flex-1 items-center justify-center px-6 py-5">
+                    <span className="font-mono text-2xl font-bold tracking-[0.18em] text-slate-900 sm:text-3xl">
+                      {couponCode}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard?.writeText(couponCode);
+                      setCopied(true);
+                      window.setTimeout(() => setCopied(false), 2200);
+                    }}
+                    className="flex min-w-[76px] flex-col items-center justify-center gap-1.5 border-l-2 border-dashed border-emerald-300 bg-white px-4 transition-colors hover:bg-emerald-50 focus-visible:outline-none"
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                        <span className="text-xs font-bold text-emerald-600">Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-5 w-5 text-sky-600" />
+                        <span className="text-xs font-bold text-sky-600">Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <p className="mt-3 text-xs text-slate-500">
+                  ⏳ Valid for a limited time — connect with a mentor soon to claim it.
+                </p>
+              </div>
+
+              {/* How to redeem */}
+              <div className="grid grid-cols-3 divide-x divide-slate-100 border-t border-slate-100">
+                {([
+                  { n: "1", title: "Save code", desc: "Copy & note down your scholarship code." },
+                  { n: "2", title: "Talk to mentor", desc: "Reach out to a SisyaClass mentor." },
+                  { n: "3", title: "Get discount", desc: "Share code during enrolment." },
+                ] as const).map((s) => (
+                  <div key={s.n} className="px-4 py-5 text-center">
+                    <div className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-sky-100 text-sm font-bold text-sky-700">
+                      {s.n}
+                    </div>
+                    <p className="mt-2.5 text-xs font-semibold text-slate-800">{s.title}</p>
+                    <p className="mt-1 text-xs leading-5 text-slate-500">{s.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTAs */}
+              <div className="flex flex-col gap-3 border-t border-slate-100 px-6 py-5 sm:flex-row sm:px-8">
+                <Button
+                  className="h-12 flex-1 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-sm font-bold text-white shadow-[0_8px_20px_rgba(16,185,129,0.35)] transition-all hover:shadow-[0_12px_28px_rgba(16,185,129,0.45)]"
+                  onClick={() => router.push('/askme')}
+                >
+                  Connect with a mentor
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-12 flex-1 rounded-full text-sm font-semibold"
+                  onClick={() => router.push(`/scholarship-exam?grade=${grade}`)}
+                >
+                  Back to overview
+                </Button>
+              </div>
+            </div>
+          </div>
+        </main>
+
+        {/* Mobile collection modal (if accessed directly without mobile) */}
+        {showMobileModal && (
+          <div
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm"
+            onClick={(e) => { if (e.target === e.currentTarget) setShowMobileModal(false); }}
+          >
+            <div className="w-full max-w-sm rounded-[32px] bg-white p-8 shadow-[0_40px_100px_rgba(0,0,0,0.3)]">
+              <div className="mb-6 flex items-start justify-between">
+                <div>
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100">
+                    <svg className="h-6 w-6 text-sky-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12 1.05.37 2.07.73 3.03a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.05-1.05a2 2 0 0 1 2.11-.45c.96.36 1.98.61 3.03.73A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  </div>
+                  <h3 className="mt-4 text-xl font-bold text-slate-900">Enter your mobile number</h3>
+                  <p className="mt-1 text-sm text-slate-500">Required to start the scholarship exam and receive your discount code.</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowMobileModal(false)}
+                  className="-mr-2 -mt-2 flex h-9 w-9 items-center justify-center rounded-full hover:bg-slate-100"
+                >
+                  <XCircle className="h-5 w-5 text-slate-400" />
+                </button>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Mobile Number</label>
+                <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
+                  <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">+91</span>
+                  <input
+                    type="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    placeholder="10-digit mobile number"
+                    value={mobile}
+                    onChange={(e) => { setMobile(e.target.value.replace(/\D/g, "")); setMobileError(""); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleMobileSubmit(); }}
+                    className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                    autoFocus
+                  />
+                </div>
+                {mobileError && (
+                  <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+                )}
+              </div>
+
+              <Button
+                type="button"
+                className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
+                onClick={handleMobileSubmit}
+              >
+                Start Scholarship Exam
+              </Button>
+
+              <p className="mt-3 text-center text-xs text-slate-400">Your number will only be used to share your scholarship discount.</p>
+            </div>
+          </div>
+        )}
+
+        <MobileMenu />
+      </>
+    );
+  }
+
+  // (submit confirmation modal is rendered inside the main active return below)
+
+  // If mobile not verified, block with a modal immediately (prevents interaction)
+  if (showMobileModal && !mobileVerified) {
+    return (
+      <>
+        <div className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/95 shadow-sm backdrop-blur">
+          <Navbar />
+        </div>
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50 flex items-center justify-center px-4 py-8">
+          <div className="w-full max-w-sm rounded-[32px] bg-white p-8 shadow-[0_40px_100px_rgba(0,0,0,0.3)]">
+            <div className="mb-6 flex items-start justify-between">
+              <div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100">
+                  <svg className="h-6 w-6 text-sky-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12 1.05.37 2.07.73 3.03a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.05-1.05a2 2 0 0 1 2.11-.45c.96.36 1.98.61 3.03.73A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+                <h3 className="mt-4 text-xl font-bold text-slate-900">Enter your mobile number</h3>
+                <p className="mt-1 text-sm text-slate-500">Required to start the scholarship exam and receive your discount code.</p>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Mobile Number</label>
+              <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
+                <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">+91</span>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  placeholder="10-digit mobile number"
+                  value={mobile}
+                  onChange={(e) => { setMobile(e.target.value.replace(/\D/g, "")); setMobileError(""); }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleMobileSubmit(); }}
+                  className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                  autoFocus
+                />
+              </div>
+              {mobileError && (
+                <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+              )}
+            </div>
+
+            <Button
+              type="button"
+              className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
+              onClick={handleMobileSubmit}
+            >
+              Start Scholarship Exam
+            </Button>
+
+            <p className="mt-3 text-center text-xs text-slate-400">Your number will only be used to share your scholarship discount.</p>
+          </div>
+        </div>
+        <MobileMenu />
+      </>
+    );
+  }
+
+  // ── Active exam screen ───────────────────────────────────────────────────────
+  const progress = ((currentIndex + 1) / questions.length) * 100;
+
+  const unansweredCount = questions.length - answeredCount;
+
+  return (
+    <>
+      <div className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/95 shadow-sm backdrop-blur">
+        <Navbar />
+        {/* Thin progress bar directly beneath navbar */}
+        <div className="h-1 bg-slate-100">
+          <div
+            className="h-full bg-sky-500 transition-all duration-500 ease-out"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+
+      <main className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50">
+        <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:px-8 lg:py-10">
+
+          {/* ── Question area ── */}
+          <div className="space-y-4">
+            {/* Question meta */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-semibold text-slate-500">
+                  Question {currentIndex + 1}
+                  <span className="font-normal text-slate-400"> / {questions.length}</span>
+                </span>
+                <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
+                  {currentQuestion.subject}
+                </span>
+              </div>
+              <span className="text-xs text-slate-400 tabular-nums">
+                Grade {grade}
+              </span>
+            </div>
+
+            {/* Question card */}
+            <div className="overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.07)]">
+              {/* Question text */}
+              <div className="border-b border-slate-100 bg-slate-50/60 px-6 py-7">
+                <h2 className="text-xl font-semibold leading-snug text-slate-900 sm:text-2xl">
+                  {currentQuestion.question}
+                </h2>
+              </div>
+
+              {/* Options */}
+              <div className="grid gap-3 p-6">
+                {currentQuestion.options.map((option, idx) => {
+                  const isSelected = selectedAnswers[currentQuestion.id] === idx;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => handleAnswer(currentQuestion.id, idx)}
+                      className={cn(
+                        "flex w-full items-center gap-4 rounded-2xl border px-5 py-4 text-left transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400",
+                        isSelected
+                          ? "border-sky-500 bg-sky-50 shadow-sm"
+                          : "border-slate-200 bg-white hover:border-sky-200 hover:bg-slate-50"
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-colors",
+                          isSelected
+                            ? "border-sky-500 bg-sky-500 text-white"
+                            : "border-slate-300 bg-white text-slate-500"
+                        )}
+                      >
+                        {String.fromCharCode(65 + idx)}
+                      </span>
+                      <span className="text-sm font-medium leading-6 text-slate-800">
+                        {option}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Prev / Next navigation */}
+              <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={currentIndex === 0}
+                  onClick={() => setCurrentIndex((i) => i - 1)}
+                  className="rounded-full gap-2 disabled:opacity-40"
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  Previous
+                </Button>
+
+                {currentIndex < questions.length - 1 ? (
+                  <Button
+                    type="button"
+                    className="rounded-full gap-2 bg-sky-500 text-white hover:bg-sky-600"
+                    onClick={() => setCurrentIndex((i) => i + 1)}
+                  >
+                    Next
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    className="rounded-full gap-2 bg-emerald-500 text-white hover:bg-emerald-600"
+                    onClick={handleSubmit}
+                  >
+                    Submit test
+                    <CheckCircle2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* ── Sidebar ── */}
+          <aside className="space-y-4 lg:sticky lg:top-24">
+            {/* Timer */}
+            <div
+              className={cn(
+                "rounded-[24px] p-5 text-white transition-colors duration-500",
+                timerUrgent ? "bg-rose-600" : "bg-slate-950"
+              )}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-xs uppercase tracking-[0.22em] text-white/60">
+                    Time remaining
+                  </div>
+                  <div className="mt-1 text-3xl font-semibold tabular-nums">
+                    {formatTime(remainingSeconds)}
+                  </div>
+                </div>
+                <AlarmClock
+                  className={cn(
+                    "h-9 w-9",
+                    timerUrgent ? "text-rose-200" : "text-cyan-300"
+                  )}
+                />
+              </div>
+              <p className="mt-3 text-xs leading-5 text-white/50">
+                Auto-submits when time runs out
+              </p>
+            </div>
+
+            {/* Answered / Remaining */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="text-xs uppercase tracking-widest text-slate-500">
+                  Answered
+                </div>
+                <div className="mt-2 text-2xl font-semibold text-slate-900">
+                  {answeredCount}
+                </div>
+              </div>
+              <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                <div className="text-xs uppercase tracking-widest text-slate-500">
+                  Remaining
+                </div>
+                <div className="mt-2 text-2xl font-semibold text-slate-900">
+                  {questions.length - answeredCount}
+                </div>
+              </div>
+            </div>
+
+            {/* Question navigator */}
+            <div className="rounded-[20px] border border-slate-200 bg-white p-4">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-slate-500">
+                Jump to question
+              </p>
+              <div className="grid grid-cols-5 gap-2">
+                {questions.map((q, i) => {
+                  const isAnswered = selectedAnswers[q.id] !== undefined;
+                  const isCurrent = i === currentIndex;
+
+                  return (
+                    <button
+                      key={q.id}
+                      type="button"
+                      onClick={() => setCurrentIndex(i)}
+                      className={cn(
+                        "flex h-10 w-full items-center justify-center rounded-xl text-sm font-semibold transition-all focus-visible:outline-none",
+                        isCurrent
+                          ? "bg-sky-500 text-white shadow"
+                          : isAnswered
+                          ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                          : "border border-slate-200 text-slate-600 hover:border-sky-300 hover:bg-sky-50"
+                      )}
+                    >
+                      {i + 1}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-3 flex items-center gap-4 text-xs text-slate-500">
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-3 w-3 rounded-full bg-sky-500" />
+                  Current
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-3 w-3 rounded-full bg-emerald-200" />
+                  Answered
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="inline-block h-3 w-3 rounded-full border border-slate-300 bg-white" />
+                  Skipped
+                </span>
+              </div>
+            </div>
+
+            {/* Submit */}
+            <Button
+              type="button"
+              className="h-12 w-full rounded-full bg-slate-950 text-sm font-semibold text-white hover:bg-slate-800"
+              onClick={handleSubmit}
+            >
+              Submit test
+              <CheckCircle2 className="h-4 w-4" />
+            </Button>
+          </aside>
+        </div>
+      </main>
+
+      <MobileMenu />
+      {/* Submit confirmation modal */}
+      {showSubmitConfirm && (
+        <div className="fixed inset-0 z-[240] flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
+            <h3 className="text-lg font-semibold text-slate-900">Submit test?</h3>
+            <p className="mt-2 text-sm text-slate-600">
+              You have <span className="font-medium text-slate-900">{unansweredCount}</span> unanswered question{unansweredCount > 1 ? "s" : ""}. Are you sure you want to submit?
+            </p>
+            <div className="mt-5 flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setShowSubmitConfirm(false)}>Continue test</Button>
+              <Button onClick={() => submitNow("manual")} className="bg-emerald-500 text-white">Submit anyway</Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default function ScholarshipExamSession() {
+  return (
+    <MobileMenuProvider>
+      <ExamSessionInner />
+    </MobileMenuProvider>
+  );
+}

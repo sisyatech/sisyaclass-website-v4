@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://sisyaclass.xyz';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://staging.sisyaclass.net';
 
 // API Endpoints
 export const API_ENDPOINTS = {

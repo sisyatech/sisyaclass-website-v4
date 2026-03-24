@@ -364,6 +364,19 @@ export const MobileMenu = () => {
                 </button>
 
                 <Link
+                  href="/scholarship-exam"
+                  onClick={handleCloseMenu}
+                  className="flex items-center justify-between w-full rounded-2xl bg-[linear-gradient(135deg,#0f172a_0%,#0c5896_52%,#02bdfe_100%)] px-4 py-4 text-left text-lg font-semibold text-white shadow-lg shadow-sky-200 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">
+                    Scholarship Exam
+                  </span>
+                  <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-white/90">
+                    30 Min
+                  </span>
+                </Link>
+
+                <Link
                   href="/about"
                   onClick={handleCloseMenu}
                   className="flex items-center justify-between w-full text-left py-4 text-lg font-medium text-gray-900 hover:text-gray-700 transition-all duration-300 hover:scale-[1.02] hover:shadow-md bg-gray-50 rounded-lg px-4 group"
@@ -688,6 +701,7 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const isSipPage = pathname?.startsWith("/sip");
+  const isScholarshipExamPage = pathname?.startsWith("/scholarship-exam");
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const userDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -790,6 +804,18 @@ const Navbar = () => {
               <span className="relative z-10">SIP</span>
               <span className="pointer-events-none absolute top-0 left-[-80%] h-full w-[70%] -skew-x-12 bg-white/35 opacity-0 transition-all duration-700 ease-out group-hover:left-[130%] group-hover:opacity-100" />
             </button>
+
+            <Link
+              href="/scholarship-exam"
+              className={cn(
+                "hidden lg:inline-flex items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all duration-300",
+                isScholarshipExamPage
+                  ? "border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-200"
+                  : "border-slate-900 bg-slate-950 text-white hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-200"
+              )}
+            >
+              Scholarship Exam
+            </Link>
 
             {/* contact */}
             <a
