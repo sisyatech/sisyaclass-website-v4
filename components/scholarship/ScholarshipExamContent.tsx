@@ -58,6 +58,7 @@ function ScholarshipLandingInner() {
   const [showMobileModal, setShowMobileModal] = useState(false);
   const [mobile, setMobile] = useState("");
   const [mobileError, setMobileError] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const handleStartClick = () => {
     setMobile("");
@@ -65,20 +66,67 @@ function ScholarshipLandingInner() {
     setShowMobileModal(true);
   };
 
-  const handleMobileSubmit = () => {
+  const handleMobileSubmit = async () => {
     const trimmed = mobile.trim();
     if (!/^[6-9]\d{9}$/.test(trimmed)) {
       setMobileError("Please enter a valid 10-digit Indian mobile number.");
       return;
     }
-    // Save mobile in sessionStorage (do not expose in URL)
+
+    setIsVerifying(true);
+    setMobileError("");
+
+    let verifiedGrade = grade;
+
+    try {
+      const response = await fetch("https://staging.sisyaclass.net/student/verify-existing-student", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: trimmed }),
+      });
+
+      const data = await response.json();
+      const canAttempt = Boolean(data?.success && data?.exists && data?.enrolledInActiveCourse);
+
+      if (!canAttempt) {
+        setMobileError("Only existing students enrolled in an active course can attempt this scholarship exam.");
+        setIsVerifying(false);
+        return;
+      }
+
+      const parsedGrade = Number(data?.grade);
+      if (!scholarshipGrades.includes(parsedGrade)) {
+        setMobileError("Your profile grade is currently not eligible for this exam.");
+        setIsVerifying(false);
+        return;
+      }
+
+      verifiedGrade = parsedGrade;
+
+      try {
+        sessionStorage.setItem("scholarshipUserId", String(data?.userId ?? ""));
+        sessionStorage.setItem("scholarshipVerifiedGrade", String(parsedGrade));
+      } catch (e) {
+        // ignore storage errors
+      }
+    } catch (e) {
+      setMobileError("Unable to verify your number right now. Please try again.");
+      setIsVerifying(false);
+      return;
+    }
+
+    // Save verified mobile in sessionStorage (do not expose in URL)
     try {
       sessionStorage.setItem("scholarshipMobile", trimmed);
     } catch (e) {
       // ignore storage errors
     }
+
+    setIsVerifying(false);
     setShowMobileModal(false);
-    router.push(`/scholarship-exam/exam?grade=${grade}`);
+    router.push(`/scholarship-exam/exam?grade=${verifiedGrade}`);
   };
 
   useEffect(() => {
@@ -441,6 +489,7 @@ function ScholarshipLandingInner() {
                     type="button"
                     onClick={() => setShowMobileModal(false)}
                     className="-mr-2 -mt-2 flex h-9 w-9 items-center justify-center rounded-full hover:bg-slate-100"
+                    disabled={isVerifying}
                   >
                     <X className="h-5 w-5 text-slate-400" />
                   </button>
@@ -464,9 +513,10 @@ function ScholarshipLandingInner() {
                         setMobile(e.target.value.replace(/\D/g, ""));
                         setMobileError("");
                       }}
-                      onKeyDown={(e) => { if (e.key === "Enter") handleMobileSubmit(); }}
+                      onKeyDown={(e) => { if (e.key === "Enter" && !isVerifying) handleMobileSubmit(); }}
                       className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
                       autoFocus
+                      disabled={isVerifying}
                     />
                   </div>
                   {mobileError && (
@@ -478,8 +528,9 @@ function ScholarshipLandingInner() {
                   type="button"
                   className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
                   onClick={handleMobileSubmit}
+                  disabled={isVerifying}
                 >
-                  Start Scholarship Exam
+                  {isVerifying ? "Verifying..." : "Start Scholarship Exam"}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
 

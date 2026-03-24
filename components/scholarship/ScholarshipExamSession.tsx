@@ -86,6 +86,7 @@ function ExamSessionInner() {
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false);
   const [copied, setCopied] = useState(false);
   const [couponCode, setCouponCode] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
 
   const answeredCount = Object.keys(selectedAnswers).length;
   const currentQuestion = questions[currentIndex];
@@ -96,13 +97,19 @@ function ExamSessionInner() {
     setSelectedGrade(null);
   }, [setCurrentPage, setSelectedGrade]);
 
-  // On mount, check sessionStorage for mobile and generate/restore coupon code.
+  // On mount, check sessionStorage for verification details and generate/restore coupon code.
   useEffect(() => {
     try {
       const stored = sessionStorage.getItem("scholarshipMobile");
-      if (stored && /^[6-9]\d{9}$/.test(stored)) {
+      const storedGrade = Number(sessionStorage.getItem("scholarshipVerifiedGrade"));
+      const hasVerifiedGrade = scholarshipGrades.includes(storedGrade);
+
+      if (stored && /^[6-9]\d{9}$/.test(stored) && hasVerifiedGrade) {
         setMobile(stored);
         setMobileVerified(true);
+        if (storedGrade !== grade) {
+          router.replace(`/scholarship-exam/exam?grade=${storedGrade}`);
+        }
       } else {
         setShowMobileModal(true);
       }
@@ -150,17 +157,68 @@ function ExamSessionInner() {
     return () => window.clearInterval(id);
   }, [remainingSeconds, submission, questions, selectedAnswers, mobileVerified]);
 
-  const handleMobileSubmit = () => {
+  const handleMobileSubmit = async () => {
     const trimmed = mobile.trim();
     if (!/^[6-9]\d{9}$/.test(trimmed)) {
       setMobileError("Please enter a valid 10-digit Indian mobile number.");
       return;
     }
+
+    setIsVerifying(true);
+    setMobileError("");
+
+    let verifiedGrade = grade;
+
+    try {
+      const response = await fetch("https://staging.sisyaclass.net/student/verify-existing-student", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone: trimmed }),
+      });
+
+      const data = await response.json();
+      const canAttempt = Boolean(data?.success && data?.exists && data?.enrolledInActiveCourse);
+
+      if (!canAttempt) {
+        setMobileError("Only existing students enrolled in an active course can attempt this scholarship exam.");
+        setIsVerifying(false);
+        return;
+      }
+
+      const parsedGrade = Number(data?.grade);
+      if (!scholarshipGrades.includes(parsedGrade)) {
+        setMobileError("Your profile grade is currently not eligible for this exam.");
+        setIsVerifying(false);
+        return;
+      }
+
+      verifiedGrade = parsedGrade;
+
+      try {
+        sessionStorage.setItem("scholarshipUserId", String(data?.userId ?? ""));
+        sessionStorage.setItem("scholarshipVerifiedGrade", String(parsedGrade));
+      } catch (e) {
+        // ignore storage errors
+      }
+    } catch (e) {
+      setMobileError("Unable to verify your number right now. Please try again.");
+      setIsVerifying(false);
+      return;
+    }
+
     try {
       sessionStorage.setItem("scholarshipMobile", trimmed);
     } catch (e) {}
+
+    setIsVerifying(false);
     setMobileVerified(true);
     setShowMobileModal(false);
+
+    if (verifiedGrade !== grade) {
+      router.replace(`/scholarship-exam/exam?grade=${verifiedGrade}`);
+    }
   };
 
   // Block accidental tab close until submitted
@@ -464,9 +522,10 @@ function ExamSessionInner() {
                   placeholder="10-digit mobile number"
                   value={mobile}
                   onChange={(e) => { setMobile(e.target.value.replace(/\D/g, "")); setMobileError(""); }}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleMobileSubmit(); }}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && !isVerifying) handleMobileSubmit(); }}
                   className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
                   autoFocus
+                  disabled={isVerifying}
                 />
               </div>
               {mobileError && (
@@ -478,8 +537,9 @@ function ExamSessionInner() {
               type="button"
               className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
               onClick={handleMobileSubmit}
+              disabled={isVerifying}
             >
-              Start Scholarship Exam
+              {isVerifying ? "Verifying..." : "Start Scholarship Exam"}
             </Button>
 
             <p className="mt-3 text-center text-xs text-slate-400">Your number will only be used to share your scholarship discount.</p>
