@@ -209,7 +209,7 @@ function ExamSessionInner() {
 
         for (let attempt = 0; attempt < 4 && collected.length < 10; attempt += 1) {
           const response = await fetch(
-            `https://staging.sisyaclass.net/student/scholarship/exam/questions?grade=${grade}&_t=${Date.now()}-${attempt}`,
+            `https://sisyaclass.xyz/student/scholarship/exam/questions?grade=${grade}&_t=${Date.now()}-${attempt}`,
             {
               method: "GET",
               headers: { "Content-Type": "application/json" },
@@ -293,7 +293,7 @@ function ExamSessionInner() {
 
         if (stored && /^[6-9]\d{9}$/.test(stored) && hasVerifiedGrade && hasUserId) {
           const eligibilityResponse = await fetch(
-            `https://staging.sisyaclass.net/student/scholarship/exam/eligibility?mobile=${stored}`,
+            `https://sisyaclass.xyz/student/scholarship/exam/eligibility?mobile=${stored}`,
             {
               method: "GET",
               headers: {
@@ -403,7 +403,7 @@ function ExamSessionInner() {
     let verifiedGrade = grade;
 
     try {
-      const response = await fetch("https://staging.sisyaclass.net/student/verify-existing-student", {
+      const response = await fetch("https://sisyaclass.xyz/student/verify-existing-student", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -430,7 +430,7 @@ function ExamSessionInner() {
       }
 
       const eligibilityResponse = await fetch(
-        `https://staging.sisyaclass.net/student/scholarship/exam/eligibility?mobile=${trimmed}`,
+        `https://sisyaclass.xyz/student/scholarship/exam/eligibility?mobile=${trimmed}`,
         {
           method: "GET",
           headers: {
@@ -481,7 +481,7 @@ function ExamSessionInner() {
 
     try {
       sessionStorage.setItem("scholarshipMobile", trimmed);
-    } catch (e) {}
+    } catch (e) { }
 
     setIsVerifying(false);
     setMobileVerified(true);
@@ -510,7 +510,7 @@ function ExamSessionInner() {
     const handleUnload = () => {
       const { submission: currentSub, mobile: curMobile, questions: curQs, selectedAnswers: curAns, remainingSeconds: curSec } = latestStateRef.current;
       if (currentSub) return;
-      
+
       const storedMobile = sessionStorage.getItem("scholarshipMobile") || curMobile;
       const storedUserId = Number(sessionStorage.getItem("scholarshipUserId"));
       const storedGrade = Number(sessionStorage.getItem("scholarshipVerifiedGrade"));
@@ -527,12 +527,12 @@ function ExamSessionInner() {
           }))
         };
 
-        fetch("https://staging.sisyaclass.net/student/scholarship/exam/submit", {
+        fetch("https://sisyaclass.xyz/student/scholarship/exam/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
           keepalive: true,
-        }).catch(() => {});
+        }).catch(() => { });
       }
     };
 
@@ -551,7 +551,7 @@ function ExamSessionInner() {
 
     const handlePopState = async () => {
       const msg = "You are currently taking the scholarship exam. If you leave, refresh, or close this tab, your test will be submitted as-is, and you will not be able to attempt it again. Are you sure you want to leave?";
-      
+
       if (window.confirm(msg)) {
         try {
           // Attempt to submit before leaving
@@ -574,7 +574,7 @@ function ExamSessionInner() {
       window.removeEventListener("popstate", handlePopState);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submission, mobileVerified, router]); 
+  }, [submission, mobileVerified, router]);
   // stable dependencies to avoid history push loops
 
   const handleAnswer = (qId: string, idx: number) => {
@@ -648,7 +648,7 @@ function ExamSessionInner() {
         answers: validQuestionAnswers,
       };
 
-      const response = await fetch("https://staging.sisyaclass.net/student/scholarship/exam/submit", {
+      const response = await fetch("https://sisyaclass.xyz/student/scholarship/exam/submit", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -669,7 +669,7 @@ function ExamSessionInner() {
               errorMessage = `${errorMessage}: ${issueMsg}`;
             }
           }
-        } catch {}
+        } catch { }
         throw new Error(errorMessage);
       }
 
@@ -757,9 +757,9 @@ function ExamSessionInner() {
             {/* Headline */}
             <h1 className="relative mt-3 text-3xl font-bold tracking-tight text-white sm:text-4xl">
               {submission.score >= 9 ? "Absolutely Brilliant!"
-               : submission.score >= 7 ? "Great Job!"
-               : submission.score >= 5 ? "Well Done!"
-               : "Keep Going!"}
+                : submission.score >= 7 ? "Great Job!"
+                  : submission.score >= 5 ? "Well Done!"
+                    : "Keep Going!"}
             </h1>
             <p className="relative mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-400">
               {band.description}
@@ -893,7 +893,7 @@ function ExamSessionInner() {
               <div className="mb-6 flex items-start justify-between">
                 <div>
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100">
-                    <svg className="h-6 w-6 text-sky-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12 1.05.37 2.07.73 3.03a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.05-1.05a2 2 0 0 1 2.11-.45c.96.36 1.98.61 3.03.73A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                    <svg className="h-6 w-6 text-sky-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12 1.05.37 2.07.73 3.03a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.05-1.05a2 2 0 0 1 2.11-.45c.96.36 1.98.61 3.03.73A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                   </div>
                   <h3 className="mt-4 text-xl font-bold text-slate-900">Enter your mobile number</h3>
                   <p className="mt-1 text-sm text-slate-500">Required to start the scholarship exam and receive your discount code.</p>
@@ -960,7 +960,7 @@ function ExamSessionInner() {
             <div className="mb-6 flex items-start justify-between">
               <div>
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100">
-                  <svg className="h-6 w-6 text-sky-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12 1.05.37 2.07.73 3.03a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.05-1.05a2 2 0 0 1 2.11-.45c.96.36 1.98.61 3.03.73A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <svg className="h-6 w-6 text-sky-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.86 19.86 0 0 1 2.09 4.18 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.72c.12 1.05.37 2.07.73 3.03a2 2 0 0 1-.45 2.11L8.91 10.91a16 16 0 0 0 6 6l1.05-1.05a2 2 0 0 1 2.11-.45c.96.36 1.98.61 3.03.73A2 2 0 0 1 22 16.92z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                 </div>
                 <h3 className="mt-4 text-xl font-bold text-slate-900">Enter your mobile number</h3>
                 <p className="mt-1 text-sm text-slate-500">Required to start the scholarship exam and receive your discount code.</p>
@@ -1230,8 +1230,8 @@ function ExamSessionInner() {
                         isCurrent
                           ? "bg-sky-500 text-white shadow"
                           : isAnswered
-                          ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                          : "border border-slate-200 text-slate-600 hover:border-sky-300 hover:bg-sky-50"
+                            ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                            : "border border-slate-200 text-slate-600 hover:border-sky-300 hover:bg-sky-50"
                       )}
                     >
                       {i + 1}

@@ -88,7 +88,7 @@ function ScholarshipLandingInner() {
     let verifiedGrade = grade;
 
     try {
-      const response = await fetch("https://staging.sisyaclass.net/student/verify-existing-student", {
+      const response = await fetch("https://sisyaclass.xyz/student/verify-existing-student", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -277,10 +277,10 @@ function ScholarshipLandingInner() {
                   <div className="flex items-center gap-4">
                     {TEACHERS.slice(0, 3).map((t, i) => {
                       const roleParts = t.role.split(" ");
-                      const abbreviatedRole = roleParts.length > 1 
-                        ? `${roleParts[0]} ${roleParts[1][0]}` 
+                      const abbreviatedRole = roleParts.length > 1
+                        ? `${roleParts[0]} ${roleParts[1][0]}`
                         : t.role;
-                      
+
                       return (
                         <div key={i} className="flex items-center gap-2">
                           <div className="relative h-11 w-11 overflow-hidden rounded-full border-2 border-cyan-400/60 shadow-lg">
@@ -495,78 +495,78 @@ function ScholarshipLandingInner() {
 
       <MobileMenu />
 
-          {/* ── MOBILE NUMBER MODAL ── */}
-          {showMobileModal && (
-            <div
-              className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm"
-              onClick={(e) => { if (e.target === e.currentTarget) setShowMobileModal(false); }}
-            >
-              <div className="w-full max-w-sm rounded-[32px] bg-white p-8 shadow-[0_40px_100px_rgba(0,0,0,0.3)]">
-                <div className="mb-6 flex items-start justify-between">
-                  <div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100">
-                      <Phone className="h-6 w-6 text-sky-600" />
-                    </div>
-                    <h3 className="mt-4 text-xl font-bold text-slate-900">Enter your mobile number</h3>
-                    <p className="mt-1 text-sm text-slate-500">
-                      Required to start the exam and receive your scholarship discount code.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowMobileModal(false)}
-                    className="-mr-2 -mt-2 flex h-9 w-9 items-center justify-center rounded-full hover:bg-slate-100"
-                    disabled={isVerifying}
-                  >
-                    <X className="h-5 w-5 text-slate-400" />
-                  </button>
+      {/* ── MOBILE NUMBER MODAL ── */}
+      {showMobileModal && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-slate-950/70 px-4 backdrop-blur-sm"
+          onClick={(e) => { if (e.target === e.currentTarget) setShowMobileModal(false); }}
+        >
+          <div className="w-full max-w-sm rounded-[32px] bg-white p-8 shadow-[0_40px_100px_rgba(0,0,0,0.3)]">
+            <div className="mb-6 flex items-start justify-between">
+              <div>
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100">
+                  <Phone className="h-6 w-6 text-sky-600" />
                 </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                    Mobile Number
-                  </label>
-                  <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
-                    <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">
-                      +91
-                    </span>
-                    <input
-                      type="tel"
-                      inputMode="numeric"
-                      maxLength={10}
-                      placeholder="10-digit mobile number"
-                      value={mobile}
-                      onChange={(e) => {
-                        setMobile(e.target.value.replace(/\D/g, ""));
-                        setMobileError("");
-                      }}
-                      onKeyDown={(e) => { if (e.key === "Enter" && !isVerifying) handleMobileSubmit(); }}
-                      className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
-                      autoFocus
-                      disabled={isVerifying}
-                    />
-                  </div>
-                  {mobileError && (
-                    <p className="text-xs font-medium text-rose-600">{mobileError}</p>
-                  )}
-                </div>
-
-                <Button
-                  type="button"
-                  className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
-                  onClick={handleMobileSubmit}
-                  disabled={isVerifying}
-                >
-                  {isVerifying ? "Verifying..." : "Start Scholarship Exam"}
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-
-                <p className="mt-3 text-center text-xs text-slate-400">
-                  Your number will only be used to share your scholarship discount.
+                <h3 className="mt-4 text-xl font-bold text-slate-900">Enter your mobile number</h3>
+                <p className="mt-1 text-sm text-slate-500">
+                  Required to start the exam and receive your scholarship discount code.
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={() => setShowMobileModal(false)}
+                className="-mr-2 -mt-2 flex h-9 w-9 items-center justify-center rounded-full hover:bg-slate-100"
+                disabled={isVerifying}
+              >
+                <X className="h-5 w-5 text-slate-400" />
+              </button>
             </div>
-          )}
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                Mobile Number
+              </label>
+              <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
+                <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">
+                  +91
+                </span>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  placeholder="10-digit mobile number"
+                  value={mobile}
+                  onChange={(e) => {
+                    setMobile(e.target.value.replace(/\D/g, ""));
+                    setMobileError("");
+                  }}
+                  onKeyDown={(e) => { if (e.key === "Enter" && !isVerifying) handleMobileSubmit(); }}
+                  className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                  autoFocus
+                  disabled={isVerifying}
+                />
+              </div>
+              {mobileError && (
+                <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+              )}
+            </div>
+
+            <Button
+              type="button"
+              className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
+              onClick={handleMobileSubmit}
+              disabled={isVerifying}
+            >
+              {isVerifying ? "Verifying..." : "Start Scholarship Exam"}
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+
+            <p className="mt-3 text-center text-xs text-slate-400">
+              Your number will only be used to share your scholarship discount.
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 }
