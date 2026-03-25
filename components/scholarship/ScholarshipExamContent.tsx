@@ -106,64 +106,41 @@ function ScholarshipLandingInner() {
         setMobileError("Debug: verify response JSON parse failed");
         throw err;
       }
-      console.log("verify-existing-student response:", data);
+      console.log("verify-existing-student response [VER_V5_CLEAN]:", data);
 
-      // Require the user to exist and be enrolled in an active course.
+      // Require the user to exist, be enrolled in an active course, and not have already attempted.
       const isVerifiedStudent = Boolean(
         data?.success && data?.exists && data?.enrolledInActiveCourse
       );
+      console.log("isVerifiedStudent:", isVerifiedStudent);
 
       if (!isVerifiedStudent) {
+        console.log("FAIL: student not verified/enrolled");
         setMobileError("Only existing students enrolled in an active course can attempt this scholarship exam.");
         setIsVerifying(false);
         return;
       }
 
+      // Check alreadyAttempted flag from the response
+      console.log("data.alreadyAttempted:", data?.alreadyAttempted);
+      if (data?.alreadyAttempted) {
+        console.log("FAIL: already attempted");
+        setMobileError(getEligibilityErrorMessage("already_attempted"));
+        setIsVerifying(false);
+        return;
+      }
+
       const parsedGrade = Number(data?.grade);
+      console.log("parsedGrade:", parsedGrade, "available grades:", scholarshipGrades);
       if (!scholarshipGrades.includes(parsedGrade)) {
+        console.log("FAIL: grade not eligible");
         setMobileError("Your profile grade is currently not eligible for this exam.");
         setIsVerifying(false);
         return;
       }
 
-      setMobileError("Debug: calling eligibility API...");
-      console.log("calling eligibility API for:", trimmed);
-
-      const eligibilityResponse = await fetch(
-        `https://staging.sisyaclass.net/student/scholarship/exam/eligibility?mobile=${trimmed}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-        }
-      );
-
-      if (!eligibilityResponse.ok) {
-        throw new Error(`Eligibility API failed with status ${eligibilityResponse.status}.`);
-      }
-
-      let eligibilityJson: any;
-      try {
-        eligibilityJson = await eligibilityResponse.json();
-      } catch (err) {
-        throw new Error(`Eligibility API returned invalid JSON (status ${eligibilityResponse.status}).`);
-      }
-
-      if (!eligibilityJson?.success) {
-        throw new Error("Eligibility API returned unsuccessful response.");
-      }
-
-      // require explicit true
-      if (eligibilityJson?.canAttempt !== true) {
-        // show the server-provided reason if available
-        setMobileError(getEligibilityErrorMessage(eligibilityJson?.reason));
-        setIsVerifying(false);
-        return;
-      }
-
       verifiedGrade = parsedGrade;
+      console.log("SUCCESS: redirecting to grade", verifiedGrade);
 
       try {
         sessionStorage.setItem("scholarshipUserId", String(data?.userId ?? ""));
