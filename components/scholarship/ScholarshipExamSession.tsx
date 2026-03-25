@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   AlarmClock,
@@ -149,14 +149,10 @@ function ExamSessionInner() {
   const router = useRouter();
 
   const grade = getGrade(searchParams.get("grade"));
-  // Keep static data only as local type compatibility source; submission uses API UUID questions only.
-  const fallbackQuestions: ExamQuestion[] = dedupeQuestions(scholarshipExamData[grade].questions.map((q) => ({
-    grade,
-    ...q,
-  })));
+  // Questions will be fetched from API; fallbackQuestions removed to ensure API-only contract.
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [questions, setQuestions] = useState<ExamQuestion[]>(fallbackQuestions);
+  const [questions, setQuestions] = useState<ExamQuestion[]>([]);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, number>>({});
   const [remainingSeconds, setRemainingSeconds] = useState(EXAM_DURATION_SECONDS);
   const [mobileVerified, setMobileVerified] = useState(false);
@@ -496,16 +492,90 @@ function ExamSessionInner() {
     }
   };
 
-  // Block accidental tab close until submitted
+  // Use ref for latest state values in navigation/unload listeners to avoid re-adding listeners every second
+  const latestStateRef = useRef({ questions, selectedAnswers, remainingSeconds, mobile, submission });
   useEffect(() => {
-    if (submission) return;
-    const handle = (e: BeforeUnloadEvent) => {
+    latestStateRef.current = { questions, selectedAnswers, remainingSeconds, mobile, submission };
+  }, [questions, selectedAnswers, remainingSeconds, mobile, submission]);
+
+  // Block accidental tab close and submit on exit
+  useEffect(() => {
+    if (submission || !mobileVerified) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = "";
+      e.returnValue = "You are currently taking the scholarship exam. If you leave, refresh, or close this tab, your test will be submitted as-is, and you will not be able to attempt it again. Are you sure you want to leave?";
     };
-    window.addEventListener("beforeunload", handle);
-    return () => window.removeEventListener("beforeunload", handle);
-  }, [submission]);
+
+    const handleUnload = () => {
+      const { submission: currentSub, mobile: curMobile, questions: curQs, selectedAnswers: curAns, remainingSeconds: curSec } = latestStateRef.current;
+      if (currentSub) return;
+      
+      const storedMobile = sessionStorage.getItem("scholarshipMobile") || curMobile;
+      const storedUserId = Number(sessionStorage.getItem("scholarshipUserId"));
+      const storedGrade = Number(sessionStorage.getItem("scholarshipVerifiedGrade"));
+
+      if (storedMobile && storedUserId && scholarshipGrades.includes(storedGrade) && curQs.length > 0) {
+        const payload = {
+          userId: storedUserId,
+          mobileNumber: storedMobile,
+          grade: storedGrade,
+          durationInSeconds: Math.max(0, EXAM_DURATION_SECONDS - curSec),
+          answers: curQs.map((q: ExamQuestion) => ({
+            questionId: q.id,
+            selectedIndex: curAns[q.id] ?? null
+          }))
+        };
+
+        fetch("https://staging.sisyaclass.net/student/scholarship/exam/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+          keepalive: true,
+        }).catch(() => {});
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("unload", handleUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("unload", handleUnload);
+    };
+  }, [submission, mobileVerified]);
+
+  // Prevent accidental navigation via browser back button
+  useEffect(() => {
+    if (submission || !mobileVerified) return;
+
+    const handlePopState = async () => {
+      const msg = "You are currently taking the scholarship exam. If you leave, refresh, or close this tab, your test will be submitted as-is, and you will not be able to attempt it again. Are you sure you want to leave?";
+      
+      if (window.confirm(msg)) {
+        try {
+          // Attempt to submit before leaving
+          await submitNow("manual");
+        } catch (err) {
+          // Continue with navigation even if submit fails
+        }
+        router.push("/scholarship-exam");
+      } else {
+        // user cancelled - push state again to keep the guard active
+        window.history.pushState(null, "", window.location.href);
+      }
+    };
+
+    // Push initial dummy state to enable back button interception
+    window.history.pushState(null, "", window.location.href);
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submission, mobileVerified, router]); 
+  // stable dependencies to avoid history push loops
 
   const handleAnswer = (qId: string, idx: number) => {
     if (!mobileVerified) {
@@ -971,9 +1041,11 @@ function ExamSessionInner() {
                   Question {currentIndex + 1}
                   <span className="font-normal text-slate-400"> / {questions.length}</span>
                 </span>
-                <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
-                  {currentQuestion.subject}
-                </span>
+                {currentQuestion && (
+                  <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
+                    {currentQuestion.subject}
+                  </span>
+                )}
               </div>
               <span className="text-xs text-slate-400 tabular-nums">
                 Grade {grade}
@@ -987,46 +1059,69 @@ function ExamSessionInner() {
 
             {/* Question card */}
             <div className="overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.07)]">
-              {/* Question text */}
-              <div className="border-b border-slate-100 bg-slate-50/60 px-6 py-7">
-                <h2 className="text-xl font-semibold leading-snug text-slate-900 sm:text-2xl">
-                  {currentQuestion.question}
-                </h2>
-              </div>
+              {currentQuestion ? (
+                <>
+                  {/* Question text */}
+                  <div className="border-b border-slate-100 bg-slate-50/60 px-6 py-7">
+                    <h2 className="text-xl font-semibold leading-snug text-slate-900 sm:text-2xl">
+                      {currentQuestion.question}
+                    </h2>
+                  </div>
 
-              {/* Options */}
-              <div className="grid gap-3 p-6">
-                {currentQuestion.options.map((option, idx) => {
-                  const isSelected = selectedAnswers[currentQuestion.id] === idx;
-                  return (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => handleAnswer(currentQuestion.id, idx)}
-                      className={cn(
-                        "flex w-full items-center gap-4 rounded-2xl border px-5 py-4 text-left transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400",
-                        isSelected
-                          ? "border-sky-500 bg-sky-50 shadow-sm"
-                          : "border-slate-200 bg-white hover:border-sky-200 hover:bg-slate-50"
-                      )}
-                    >
-                      <span
-                        className={cn(
-                          "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-colors",
-                          isSelected
-                            ? "border-sky-500 bg-sky-500 text-white"
-                            : "border-slate-300 bg-white text-slate-500"
-                        )}
-                      >
-                        {String.fromCharCode(65 + idx)}
-                      </span>
-                      <span className="text-sm font-medium leading-6 text-slate-800">
-                        {option}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
+                  {/* Options */}
+                  <div className="grid gap-3 p-6">
+                    {currentQuestion.options.map((option, idx) => {
+                      const isSelected = selectedAnswers[currentQuestion.id] === idx;
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => handleAnswer(currentQuestion.id, idx)}
+                          className={cn(
+                            "flex w-full items-center gap-4 rounded-2xl border px-5 py-4 text-left transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400",
+                            isSelected
+                              ? "border-sky-500 bg-sky-50 shadow-sm"
+                              : "border-slate-200 bg-white hover:border-sky-200 hover:bg-slate-50"
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              "flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border text-sm font-semibold transition-colors",
+                              isSelected
+                                ? "border-sky-500 bg-sky-500 text-white"
+                                : "border-slate-300 bg-white text-slate-500"
+                            )}
+                          >
+                            {String.fromCharCode(65 + idx)}
+                          </span>
+                          <span className="text-sm font-medium leading-6 text-slate-800">
+                            {option}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center gap-4 px-6 py-20 text-center">
+                  {questionsLoading ? (
+                    <>
+                      <div className="h-10 w-10 animate-spin rounded-full border-4 border-sky-500 border-t-transparent" />
+                      <p className="text-sm font-medium text-slate-500">Loading your personalized exam...</p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-rose-100 text-rose-600">
+                        <XCircle className="h-6 w-6" />
+                      </div>
+                      <p className="text-sm font-medium text-rose-600">Failed to load questions. Please check your connection and refresh.</p>
+                      <Button variant="outline" onClick={() => window.location.reload()} className="rounded-full">
+                        Retry Refresh
+                      </Button>
+                    </>
+                  )}
+                </div>
+              )}
 
               {/* Prev / Next navigation */}
               <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4">

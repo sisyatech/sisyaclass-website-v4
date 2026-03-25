@@ -167,6 +167,12 @@ export const scholarshipExamData: Record<number, ScholarshipExamGrade> = {
       { id: "g9-q10", subject: "Social Studies", question: "Which of the following is a fundamental right?", options: ["Right to Property", "Right to Constitutional Remedies", "Right to Vote", "Right to Work"], answerIndex: 1 },
     ],
   },
+  10: {
+    grade: 10,
+    title: "Grade 10 Scholarship Mock Test",
+    description: "A comprehensive scholarship round covering class 10 standard subjects and logical reasoning.",
+    questions: [], // Questions will be fetched from API
+  },
 };
 
 export const scholarshipGrades = Object.keys(scholarshipExamData)

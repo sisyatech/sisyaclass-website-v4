@@ -31,9 +31,11 @@ const getGrade = (param: string | null) => {
 };
 
 const TEACHERS = [
-  { img: "/sippics/teacher1.png", name: "Expert Faculty", role: "Mathematics" },
-  { img: "/sippics/teacher2.png", name: "Expert Faculty", role: "Science & EVS" },
-  { img: "/sippics/teacher3.png", name: "Expert Faculty", role: "English & Hindi" },
+  { img: "/sippics/teacher1.png", name: "Expert Faculty", role: "IIT Gandhinagar" },
+  { img: "/sippics/teacher2.png", name: "Expert Faculty", role: "IIT Madras" },
+  { img: "/sippics/teacher3.png", name: "Expert Faculty", role: "IIT Bhubaneshwar" },
+  { img: "/sippics/teacher4.png", name: "Expert Faculty", role: "IIT Palakkad" },
+  { img: "/sippics/teacher5.png", name: "Expert Faculty", role: "BITS" },
 ];
 
 const SUBJECTS = [
@@ -86,7 +88,7 @@ function ScholarshipLandingInner() {
     let verifiedGrade = grade;
 
     try {
-      const response = await fetch("https://staging.sisyaclass.net/verify-existing-student", {
+      const response = await fetch("https://staging.sisyaclass.net/student/verify-existing-student", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -106,9 +108,13 @@ function ScholarshipLandingInner() {
       }
       console.log("verify-existing-student response:", data);
 
-      // Require the user to exist; if they exist, check eligibility.
-      if (!(data?.success && data?.exists)) {
-        setMobileError("Only existing students can attempt this scholarship exam.");
+      // Require the user to exist and be enrolled in an active course.
+      const isVerifiedStudent = Boolean(
+        data?.success && data?.exists && data?.enrolledInActiveCourse
+      );
+
+      if (!isVerifiedStudent) {
+        setMobileError("Only existing students enrolled in an active course can attempt this scholarship exam.");
         setIsVerifying(false);
         return;
       }
@@ -292,17 +298,24 @@ function ScholarshipLandingInner() {
                     Questions curated by expert faculty
                   </p>
                   <div className="flex items-center gap-4">
-                    {TEACHERS.map((t, i) => (
-                      <div key={i} className="flex items-center gap-2">
-                        <div className="relative h-11 w-11 overflow-hidden rounded-full border-2 border-cyan-400/60 shadow-lg">
-                          <Image src={t.img} alt={t.name} fill className="object-cover object-top" />
+                    {TEACHERS.slice(0, 3).map((t, i) => {
+                      const roleParts = t.role.split(" ");
+                      const abbreviatedRole = roleParts.length > 1 
+                        ? `${roleParts[0]} ${roleParts[1][0]}` 
+                        : t.role;
+                      
+                      return (
+                        <div key={i} className="flex items-center gap-2">
+                          <div className="relative h-11 w-11 overflow-hidden rounded-full border-2 border-cyan-400/60 shadow-lg">
+                            <Image src={t.img} alt={t.name} fill className="object-cover object-top" />
+                          </div>
+                          <div className="hidden sm:block">
+                            <p className="text-xs font-semibold text-white">{t.name}</p>
+                            <p className="text-xs text-white/50">{abbreviatedRole}</p>
+                          </div>
                         </div>
-                        <div className="hidden sm:block">
-                          <p className="text-xs font-semibold text-white">{t.name}</p>
-                          <p className="text-xs text-white/50">{t.role}</p>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     <div className="ml-1 flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-xs text-white/70">
                       <GraduationCap className="h-3.5 w-3.5 text-cyan-300" />
                       IIT &amp; NEET qualified
@@ -354,7 +367,7 @@ function ScholarshipLandingInner() {
                 <div className="mt-5 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4">
                   <ShieldAlert className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600" />
                   <p className="text-xs leading-5 text-amber-800">
-                    If you close or refresh this tab before submitting, the browser will ask for confirmation.
+                    If you close, refresh, or navigate away from this tab before submitting, your test will be automatically submitted as-is, and you will not be able to attempt it again.
                   </p>
                 </div>
 
@@ -463,25 +476,6 @@ function ScholarshipLandingInner() {
                   </div>
                 </div>
               ))}
-              {/* Additional teacher illustrations */}
-              <div className="flex flex-col items-center gap-3">
-                <div className="relative h-28 w-28 overflow-hidden rounded-[20px] border-2 border-sky-500/50 bg-slate-800 shadow-[0_0_30px_rgba(2,189,254,0.25)]">
-                  <Image src="/sippics/vamsisir.svg" alt="Faculty" fill className="object-contain p-2" />
-                </div>
-                <div className="text-center">
-                  <p className="font-semibold text-white">Expert Faculty</p>
-                  <p className="text-sm text-sky-400">Hindi & GK</p>
-                </div>
-              </div>
-              <div className="flex flex-col items-center gap-3">
-                <div className="relative h-28 w-28 overflow-hidden rounded-[20px] border-2 border-sky-500/50 bg-slate-800 shadow-[0_0_30px_rgba(2,189,254,0.25)]">
-                  <Image src="/sippics/ramkisir.svg" alt="Faculty" fill className="object-contain p-2" />
-                </div>
-                <div className="text-center">
-                  <p className="font-semibold text-white">Expert Faculty</p>
-                  <p className="text-sm text-sky-400">Social Studies</p>
-                </div>
-              </div>
             </div>
           </div>
         </section>

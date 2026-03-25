@@ -369,7 +369,7 @@ export const MobileMenu = () => {
                   className="flex items-center justify-between w-full rounded-2xl bg-[linear-gradient(135deg,#0f172a_0%,#0c5896_52%,#02bdfe_100%)] px-4 py-4 text-left text-lg font-semibold text-white shadow-lg shadow-sky-200 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group"
                 >
                   <span className="group-hover:translate-x-1 transition-transform duration-300">
-                    Scholarship Exam
+                    Scholarship
                   </span>
                   <span className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-white/90">
                     30 Min
@@ -814,7 +814,7 @@ const Navbar = () => {
                   : "border-slate-900 bg-slate-950 text-white hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-200"
               )}
             >
-              Scholarship Exam
+              Scholarship
             </Link>
 
             {/* contact */}
