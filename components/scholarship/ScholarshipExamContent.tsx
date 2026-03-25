@@ -48,6 +48,13 @@ const STATS = [
   { value: "Grades 1–10", label: "All Classes Covered" },
 ];
 
+const getEligibilityErrorMessage = (reason?: string) => {
+  if (reason === "already_attempted") {
+    return "You have already attempted this scholarship exam.";
+  }
+  return "You are currently not eligible for the scholarship exam.";
+};
+
 function ScholarshipLandingInner() {
   const { setCurrentPage, setSelectedGrade } = useMobileMenu();
   const searchParams = useSearchParams();
@@ -79,7 +86,7 @@ function ScholarshipLandingInner() {
     let verifiedGrade = grade;
 
     try {
-      const response = await fetch("https://staging.sisyaclass.net/student/verify-existing-student", {
+      const response = await fetch("https://staging.sisyaclass.net/verify-existing-student", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -87,11 +94,21 @@ function ScholarshipLandingInner() {
         body: JSON.stringify({ phone: trimmed }),
       });
 
-      const data = await response.json();
-      const canAttempt = Boolean(data?.success && data?.exists && data?.enrolledInActiveCourse);
+      setMobileError("Debug: sent verify request...");
+      console.log("verify-existing-student status:", response.status);
+      let data: any;
+      try {
+        data = await response.json();
+      } catch (err) {
+        console.log("verify-existing-student json error:", err);
+        setMobileError("Debug: verify response JSON parse failed");
+        throw err;
+      }
+      console.log("verify-existing-student response:", data);
 
-      if (!canAttempt) {
-        setMobileError("Only existing students enrolled in an active course can attempt this scholarship exam.");
+      // Require the user to exist; if they exist, check eligibility.
+      if (!(data?.success && data?.exists)) {
+        setMobileError("Only existing students can attempt this scholarship exam.");
         setIsVerifying(false);
         return;
       }
@@ -103,30 +120,69 @@ function ScholarshipLandingInner() {
         return;
       }
 
+      setMobileError("Debug: calling eligibility API...");
+      console.log("calling eligibility API for:", trimmed);
+
+      const eligibilityResponse = await fetch(
+        `https://staging.sisyaclass.net/student/scholarship/exam/eligibility?mobile=${trimmed}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          cache: "no-store",
+        }
+      );
+
+      if (!eligibilityResponse.ok) {
+        throw new Error(`Eligibility API failed with status ${eligibilityResponse.status}.`);
+      }
+
+      let eligibilityJson: any;
+      try {
+        eligibilityJson = await eligibilityResponse.json();
+      } catch (err) {
+        throw new Error(`Eligibility API returned invalid JSON (status ${eligibilityResponse.status}).`);
+      }
+
+      if (!eligibilityJson?.success) {
+        throw new Error("Eligibility API returned unsuccessful response.");
+      }
+
+      // require explicit true
+      if (eligibilityJson?.canAttempt !== true) {
+        // show the server-provided reason if available
+        setMobileError(getEligibilityErrorMessage(eligibilityJson?.reason));
+        setIsVerifying(false);
+        return;
+      }
+
       verifiedGrade = parsedGrade;
 
       try {
         sessionStorage.setItem("scholarshipUserId", String(data?.userId ?? ""));
         sessionStorage.setItem("scholarshipVerifiedGrade", String(parsedGrade));
+        sessionStorage.setItem("scholarshipMobile", trimmed);
       } catch (e) {
         // ignore storage errors
       }
+
+      // Close modal and immediately redirect to exam page
+      setIsVerifying(false);
+      setShowMobileModal(false);
+      router.push(`/scholarship-exam/exam?grade=${verifiedGrade}`);
+      return;
     } catch (e) {
-      setMobileError("Unable to verify your number right now. Please try again.");
+      const message =
+        e instanceof Error && e.message
+          ? e.message
+          : "Unable to verify your number right now. Please try again.";
+      setMobileError(message);
       setIsVerifying(false);
       return;
     }
 
-    // Save verified mobile in sessionStorage (do not expose in URL)
-    try {
-      sessionStorage.setItem("scholarshipMobile", trimmed);
-    } catch (e) {
-      // ignore storage errors
-    }
-
-    setIsVerifying(false);
-    setShowMobileModal(false);
-    router.push(`/scholarship-exam/exam?grade=${verifiedGrade}`);
+    // (previous logic handles storage and redirect on success)
   };
 
   useEffect(() => {
