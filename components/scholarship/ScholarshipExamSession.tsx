@@ -20,8 +20,15 @@ import Navbar, {
 import { Button } from "@/components/ui/button";
 import { scholarshipExamData, scholarshipGrades } from "@/lib/scholarshipExamData";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const EXAM_DURATION_SECONDS = 30 * 60;
+const EXAM_DURATION_SECONDS = 20 * 60;
 
 const formatTime = (s: number) => {
   const m = Math.floor(s / 60).toString().padStart(2, "0");
@@ -136,12 +143,7 @@ const dedupeQuestions = (items: ExamQuestion[]) => {
 const isUuid = (value: string) =>
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
 
-const getEligibilityErrorMessage = (reason?: string) => {
-  if (reason === "already_attempted") {
-    return "You have already attempted this scholarship exam.";
-  }
-  return "You are currently not eligible for the scholarship exam.";
-};
+
 
 function ExamSessionInner() {
   const { setCurrentPage, setSelectedGrade } = useMobileMenu();
@@ -165,9 +167,127 @@ function ExamSessionInner() {
   const [copied, setCopied] = useState(false);
   const [couponCode, setCouponCode] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [selectedEnrollmentIndex, setSelectedEnrollmentIndex] = useState<number>(-1);
+  const [verificationStep, setVerificationStep] = useState<"phone" | "selection">("phone");
   const [questionsLoading, setQuestionsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAutoSubmitting, setIsAutoSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  const submitNow = async (
+    mode: SubmissionState["mode"], 
+    overrideQs?: ExamQuestion[], 
+    overrideAns?: Record<string, number>
+  ) => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      const curQs = overrideQs || questions;
+      const curAns = overrideAns || selectedAnswers;
+      
+      const storedMobile =
+        typeof window !== "undefined"
+          ? sessionStorage.getItem("scholarshipMobile") || mobile.trim()
+          : mobile.trim();
+
+      const storedUserIdRaw =
+        typeof window !== "undefined"
+          ? sessionStorage.getItem("scholarshipUserId")
+          : null;
+      const storedGradeRaw =
+        typeof window !== "undefined"
+          ? sessionStorage.getItem("scholarshipVerifiedGrade")
+          : null;
+
+      const parsedUserId = Number(storedUserIdRaw);
+      const parsedVerifiedGrade = Number(storedGradeRaw);
+
+      if (!Number.isInteger(parsedUserId) || parsedUserId <= 0) {
+        setSubmitError("Student verification is missing. Please verify mobile number again.");
+        setShowMobileModal(true);
+        return;
+      }
+
+      if (!scholarshipGrades.includes(parsedVerifiedGrade)) {
+        setSubmitError("Verified grade is missing. Please verify mobile number again.");
+        setShowMobileModal(true);
+        return;
+      }
+
+      if (!/^[6-9]\d{9}$/.test(storedMobile)) {
+        setSubmitError("Valid mobile number not found. Please verify mobile number again.");
+        setShowMobileModal(true);
+        return;
+      }
+
+      const validQuestionAnswers = curQs
+        .filter((q) => isUuid(q.id))
+        .map((q) => ({
+          questionId: q.id,
+          selectedIndex: curAns[q.id] ?? null,
+        }));
+
+      if (validQuestionAnswers.length !== 10) {
+        setSubmitError("Exactly 10 valid questions are required. Please refresh and try again.");
+        return;
+      }
+
+      const payload: SubmitExamPayload = {
+        userId: parsedUserId,
+        mobileNumber: storedMobile,
+        grade: parsedVerifiedGrade,
+        durationInSeconds: Math.max(0, EXAM_DURATION_SECONDS - remainingSeconds),
+        answers: validQuestionAnswers,
+      };
+
+      const response = await fetch("https://sisyaclass.xyz/student/scholarship/exam/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        let errorMessage = `Submission failed with status ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData?.message) {
+            errorMessage = String(errorData.message);
+          }
+          if (Array.isArray(errorData?.issues) && errorData.issues.length > 0) {
+            const issueMsg = errorData.issues[0]?.message;
+            if (issueMsg) {
+              errorMessage = `${errorMessage}: ${issueMsg}`;
+            }
+          }
+        } catch { }
+        throw new Error(errorMessage);
+      }
+
+      const data: SubmitExamResponse = await response.json();
+      const score = typeof data?.score === "number" ? data.score : calculateScore();
+
+      try {
+        sessionStorage.setItem(`scholarshipScore_${parsedVerifiedGrade}_${storedMobile}`, String(score));
+        sessionStorage.removeItem("scholarshipQuestions");
+        sessionStorage.removeItem("scholarshipAnswers");
+        sessionStorage.removeItem("scholarshipExamInProgress");
+      } catch (e) { }
+
+      setSubmission({ score, mode });
+      setShowSubmitConfirm(false);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Could not submit your test right now. Please try again.";
+      setSubmitError(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const answeredCount = Object.keys(selectedAnswers).length;
   const currentQuestion = questions[currentIndex];
@@ -199,6 +319,31 @@ function ExamSessionInner() {
     let cancelled = false;
 
     const loadQuestions = async () => {
+      // 1. If we already have questions in current state, just ensure flag is set if verified
+      if (questions.length === 10) {
+        if (mobileVerified) {
+          sessionStorage.setItem("scholarshipExamInProgress", "true");
+        }
+        setQuestionsLoading(false);
+        return;
+      }
+
+      // 2. Check storage for questions (useful for normal refresh)
+      const savedQsRaw = sessionStorage.getItem("scholarshipQuestions");
+      if (savedQsRaw) {
+        try {
+          const savedQs = JSON.parse(savedQsRaw);
+          if (savedQs.length === 10) {
+            setQuestions(savedQs);
+            if (mobileVerified) {
+              sessionStorage.setItem("scholarshipExamInProgress", "true");
+            }
+            setQuestionsLoading(false);
+            return;
+          }
+        } catch (e) { }
+      }
+
       setQuestionsLoading(true);
       setSubmitError("");
 
@@ -245,6 +390,12 @@ function ExamSessionInner() {
           const prepared = collected.slice(0, 10);
           if (prepared.length === 10) {
             setQuestions(prepared);
+            try {
+              sessionStorage.setItem("scholarshipQuestions", JSON.stringify(prepared));
+              if (mobileVerified) {
+                sessionStorage.setItem("scholarshipExamInProgress", "true");
+              }
+            } catch (e) { }
           } else {
             // Keep API-only contract for submit endpoint requiring UUIDs.
             setQuestions(prepared);
@@ -270,7 +421,7 @@ function ExamSessionInner() {
     return () => {
       cancelled = true;
     };
-  }, [grade]);
+  }, [grade, mobileVerified]);
 
   useEffect(() => {
     if (questions.length === 0) return;
@@ -292,36 +443,71 @@ function ExamSessionInner() {
         const hasUserId = Number.isInteger(storedUserId) && storedUserId > 0;
 
         if (stored && /^[6-9]\d{9}$/.test(stored) && hasVerifiedGrade && hasUserId) {
-          const eligibilityResponse = await fetch(
-            `https://sisyaclass.xyz/student/scholarship/exam/eligibility?mobile=${stored}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              cache: "no-store",
+          // Check if we were in the middle of an exam (auto-submit on refresh/back)
+          const inProgress = sessionStorage.getItem("scholarshipExamInProgress") === "true";
+          if (inProgress) {
+            // Restore context from storage for the submission
+            const savedQsRaw = sessionStorage.getItem("scholarshipQuestions");
+            const savedAnsRaw = sessionStorage.getItem("scholarshipAnswers");
+            if (savedQsRaw && !cancelled) {
+              try {
+                const savedQs = JSON.parse(savedQsRaw);
+                const savedAns = savedAnsRaw ? JSON.parse(savedAnsRaw) : {};
+                setQuestions(savedQs);
+                setSelectedAnswers(savedAns);
+                setMobile(stored);
+                setMobileVerified(true);
+                setIsAutoSubmitting(true);
+                sessionStorage.removeItem("scholarshipExamInProgress");
+                
+                await submitNow("manual", savedQs, savedAns);
+                setIsAutoSubmitting(false);
+                setIsAccessCheckComplete(true);
+                return;
+              } catch (e) { }
             }
-          );
-
-          let eligibilityData: { success?: boolean; canAttempt?: boolean; reason?: string } | null = null;
-          try {
-            eligibilityData = await eligibilityResponse.json();
-          } catch {
-            throw new Error(`Eligibility API returned invalid response (status ${eligibilityResponse.status}).`);
           }
 
-          const canAttemptScholarshipExam = Boolean(
-            eligibilityResponse.ok && eligibilityData?.success === true && eligibilityData?.canAttempt === true
-          );
+          // Use the more granular verification API to check the specific grade's attempt status
+          const response = await fetch("https://sisyaclass.xyz/student/verify-existing-student", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ phone: stored }),
+          });
 
-          if (!canAttemptScholarshipExam) {
+          if (!response.ok) {
+            throw new Error(`Verification API failed with status ${response.status}.`);
+          }
+
+          const data = await response.json();
+          const enrollmentStatus = (data?.enrollmentStatus || [])
+            .filter((e: any) => scholarshipGrades.includes(Number(e.grade)));
+
+          // Check if the specific grade that was verified is still unattempted
+          const currentEnrollment = enrollmentStatus.find((e: any) => Number(e.grade) === storedGrade);
+          const alreadyAttempted = currentEnrollment ? currentEnrollment.alreadyAttempted : (data?.success && data?.exists && data?.alreadyAttempted);
+
+          if (alreadyAttempted) {
+            // If already attempted, check if we have the result in this session to show it
+            const storedScore = sessionStorage.getItem(`scholarshipScore_${storedGrade}_${stored}`);
+            if (storedScore !== null && !cancelled) {
+              setMobile(stored);
+              setMobileVerified(true);
+              setSubmission({ score: Number(storedScore), mode: "manual" });
+              setIsAccessCheckComplete(true);
+              return;
+            }
+
+            // Fallback to error modal if no score found in session
             sessionStorage.removeItem("scholarshipMobile");
             sessionStorage.removeItem("scholarshipUserId");
             sessionStorage.removeItem("scholarshipVerifiedGrade");
             if (!cancelled) {
               setMobile("");
               setMobileVerified(false);
-              setMobileError(getEligibilityErrorMessage(eligibilityData?.reason));
+              setMobileError("You have already attempted the exam for this grade.");
               setShowMobileModal(true);
             }
             return;
@@ -330,6 +516,9 @@ function ExamSessionInner() {
           if (!cancelled) {
             setMobile(stored);
             setMobileVerified(true);
+            try {
+              sessionStorage.setItem("scholarshipExamInProgress", "true");
+            } catch (e) { }
             if (storedGrade !== grade) {
               router.replace(`/scholarship-exam/exam?grade=${storedGrade}`);
             }
@@ -422,6 +611,22 @@ function ExamSessionInner() {
         return;
       }
 
+      const enrollmentStatus = (data?.enrollmentStatus || [])
+        .filter((e: any) => scholarshipGrades.includes(Number(e.grade)));
+
+      if (enrollmentStatus.length > 0) {
+        try {
+          sessionStorage.setItem("scholarshipUserId", String(data?.userId ?? ""));
+        } catch (e) { }
+
+        setEnrollments(enrollmentStatus);
+        const initIndex = enrollmentStatus.findIndex((e: any) => Number(e.grade) === grade);
+        setSelectedEnrollmentIndex(initIndex !== -1 ? initIndex : 0);
+        setVerificationStep("selection");
+        setIsVerifying(false);
+        return;
+      }
+
       const parsedGrade = Number(data?.grade);
       if (!scholarshipGrades.includes(parsedGrade)) {
         setMobileError("Your profile grade is currently not eligible for this exam.");
@@ -429,34 +634,10 @@ function ExamSessionInner() {
         return;
       }
 
-      const eligibilityResponse = await fetch(
-        `https://sisyaclass.xyz/student/scholarship/exam/eligibility?mobile=${trimmed}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          cache: "no-store",
-        }
-      );
+      const canAttempt = data?.alreadyAttempted === false || (enrollmentStatus.length > 0 && enrollmentStatus.some((e: any) => !e.alreadyAttempted));
 
-      let eligibilityData: { success?: boolean; canAttempt?: boolean; reason?: string } | null = null;
-      try {
-        eligibilityData = await eligibilityResponse.json();
-      } catch {
-        throw new Error(`Eligibility API returned invalid response (status ${eligibilityResponse.status}).`);
-      }
-
-      if (!eligibilityResponse.ok) {
-        throw new Error(`Eligibility API failed with status ${eligibilityResponse.status}.`);
-      }
-
-      const canAttemptScholarshipExam = Boolean(
-        eligibilityResponse.ok && eligibilityData?.success === true && eligibilityData?.canAttempt === true
-      );
-
-      if (!canAttemptScholarshipExam) {
-        setMobileError(getEligibilityErrorMessage(eligibilityData?.reason));
+      if (!canAttempt) {
+        setMobileError("You have already attempted the scholarship exam.");
         setIsVerifying(false);
         return;
       }
@@ -492,6 +673,27 @@ function ExamSessionInner() {
     }
   };
 
+  const handleProceedWithGrade = () => {
+    if (selectedEnrollmentIndex < 0 || !enrollments[selectedEnrollmentIndex]) return;
+    const selected = enrollments[selectedEnrollmentIndex];
+    if (selected.alreadyAttempted) return;
+
+    try {
+      sessionStorage.setItem("scholarshipUserId", String(sessionStorage.getItem("scholarshipUserId") || ""));
+      sessionStorage.setItem("scholarshipVerifiedGrade", String(selected.grade));
+      sessionStorage.setItem("scholarshipMobile", mobile.trim());
+      sessionStorage.setItem("scholarshipExamInProgress", "true");
+    } catch (e) { }
+
+    setIsVerifying(false);
+    setMobileVerified(true);
+    setShowMobileModal(false);
+
+    if (Number(selected.grade) !== grade) {
+      router.replace(`/scholarship-exam/exam?grade=${selected.grade}`);
+    }
+  };
+
   // Use ref for latest state values in navigation/unload listeners to avoid re-adding listeners every second
   const latestStateRef = useRef({ questions, selectedAnswers, remainingSeconds, mobile, submission });
   useEffect(() => {
@@ -502,9 +704,9 @@ function ExamSessionInner() {
   useEffect(() => {
     if (submission || !mobileVerified) return;
 
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.preventDefault();
-      e.returnValue = "You are currently taking the scholarship exam. If you leave, refresh, or close this tab, your test will be submitted as-is, and you will not be able to attempt it again. Are you sure you want to leave?";
+    const handleBeforeUnload = () => {
+      // Just a trigger for potential browser-level cleanup if needed, 
+      // but the main work is in unload and popstate.
     };
 
     const handleUnload = () => {
@@ -516,7 +718,19 @@ function ExamSessionInner() {
       const storedGrade = Number(sessionStorage.getItem("scholarshipVerifiedGrade"));
 
       if (storedMobile && storedUserId && scholarshipGrades.includes(storedGrade) && curQs.length > 0) {
-        const payload = {
+        // Calculate score for local persistence before unload
+        const hasCorrectAnswers = curQs.some((q: ExamQuestion) => typeof q.answerIndex === "number");
+        const score = hasCorrectAnswers 
+          ? curQs.reduce((t: number, q: ExamQuestion) => {
+              if (typeof q.answerIndex !== "number") return t;
+              return t + (curAns[q.id] === q.answerIndex ? 1 : 0);
+            }, 0)
+          : Object.keys(curAns).length; // Fallback to answered count
+        try {
+          sessionStorage.setItem(`scholarshipScore_${storedGrade}_${storedMobile}`, String(score));
+        } catch (e) { }
+
+        const payload = JSON.stringify({
           userId: storedUserId,
           mobileNumber: storedMobile,
           grade: storedGrade,
@@ -525,14 +739,19 @@ function ExamSessionInner() {
             questionId: q.id,
             selectedIndex: curAns[q.id] ?? null
           }))
-        };
+        });
 
-        fetch("https://sisyaclass.xyz/student/scholarship/exam/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          keepalive: true,
-        }).catch(() => { });
+        if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+          const blob = new Blob([payload], { type: "application/json" });
+          navigator.sendBeacon("https://sisyaclass.xyz/student/scholarship/exam/submit", blob);
+        } else {
+          fetch("https://sisyaclass.xyz/student/scholarship/exam/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+            keepalive: true,
+          }).catch(() => { });
+        }
       }
     };
 
@@ -550,20 +769,10 @@ function ExamSessionInner() {
     if (submission || !mobileVerified) return;
 
     const handlePopState = async () => {
-      const msg = "You are currently taking the scholarship exam. If you leave, refresh, or close this tab, your test will be submitted as-is, and you will not be able to attempt it again. Are you sure you want to leave?";
-
-      if (window.confirm(msg)) {
-        try {
-          // Attempt to submit before leaving
-          await submitNow("manual");
-        } catch (err) {
-          // Continue with navigation even if submit fails
-        }
-        router.push("/scholarship-exam");
-      } else {
-        // user cancelled - push state again to keep the guard active
-        window.history.pushState(null, "", window.location.href);
-      }
+      // Auto-submit and stay on page to show results
+      await submitNow("manual");
+      // Keep them on this page to see the results
+      window.history.pushState(null, "", window.location.href);
     };
 
     // Push initial dummy state to enable back button interception
@@ -583,108 +792,16 @@ function ExamSessionInner() {
       return;
     }
     if (submission) return;
-    setSelectedAnswers((prev) => ({ ...prev, [qId]: idx }));
+    setSelectedAnswers((prev) => {
+      const next = { ...prev, [qId]: idx };
+      try {
+        sessionStorage.setItem("scholarshipAnswers", JSON.stringify(next));
+      } catch (e) { }
+      return next;
+    });
   };
 
-  const submitNow = async (mode: SubmissionState["mode"]) => {
-    if (isSubmitting) return;
 
-    setIsSubmitting(true);
-    setSubmitError("");
-
-    try {
-      const storedMobile =
-        typeof window !== "undefined"
-          ? sessionStorage.getItem("scholarshipMobile") || mobile.trim()
-          : mobile.trim();
-
-      const storedUserIdRaw =
-        typeof window !== "undefined"
-          ? sessionStorage.getItem("scholarshipUserId")
-          : null;
-      const storedGradeRaw =
-        typeof window !== "undefined"
-          ? sessionStorage.getItem("scholarshipVerifiedGrade")
-          : null;
-
-      const parsedUserId = Number(storedUserIdRaw);
-      const parsedVerifiedGrade = Number(storedGradeRaw);
-
-      if (!Number.isInteger(parsedUserId) || parsedUserId <= 0) {
-        setSubmitError("Student verification is missing. Please verify mobile number again.");
-        setShowMobileModal(true);
-        return;
-      }
-
-      if (!scholarshipGrades.includes(parsedVerifiedGrade)) {
-        setSubmitError("Verified grade is missing. Please verify mobile number again.");
-        setShowMobileModal(true);
-        return;
-      }
-
-      if (!/^[6-9]\d{9}$/.test(storedMobile)) {
-        setSubmitError("Valid mobile number not found. Please verify mobile number again.");
-        setShowMobileModal(true);
-        return;
-      }
-
-      const validQuestionAnswers = questions
-        .filter((q) => isUuid(q.id))
-        .map((q) => ({
-          questionId: q.id,
-          selectedIndex: selectedAnswers[q.id] ?? null,
-        }));
-
-      if (validQuestionAnswers.length !== 10) {
-        setSubmitError("Exactly 10 valid questions are required. Please refresh and try again.");
-        return;
-      }
-
-      const payload: SubmitExamPayload = {
-        userId: parsedUserId,
-        mobileNumber: storedMobile,
-        grade: parsedVerifiedGrade,
-        durationInSeconds: Math.max(0, EXAM_DURATION_SECONDS - remainingSeconds),
-        answers: validQuestionAnswers,
-      };
-
-      const response = await fetch("https://sisyaclass.xyz/student/scholarship/exam/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) {
-        let errorMessage = `Submission failed with status ${response.status}`;
-        try {
-          const errorData = await response.json();
-          if (errorData?.message) {
-            errorMessage = String(errorData.message);
-          }
-          if (Array.isArray(errorData?.issues) && errorData.issues.length > 0) {
-            const issueMsg = errorData.issues[0]?.message;
-            if (issueMsg) {
-              errorMessage = `${errorMessage}: ${issueMsg}`;
-            }
-          }
-        } catch { }
-        throw new Error(errorMessage);
-      }
-
-      const data: SubmitExamResponse = await response.json();
-      const score = typeof data?.score === "number" ? data.score : calculateScore();
-
-      setSubmission({ score, mode });
-      setShowSubmitConfirm(false);
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : "Could not submit your test right now. Please try again.";
-      setSubmitError(msg);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   const handleSubmit = () => {
     if (!mobileVerified) {
@@ -706,15 +823,18 @@ function ExamSessionInner() {
 
   // Note: retry/reset removed by design — users cannot retry from the result screen
 
-  if (!isAccessCheckComplete) {
+  if (!isAccessCheckComplete || isAutoSubmitting) {
     return (
       <>
         <div className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/95 shadow-sm backdrop-blur">
           <Navbar />
         </div>
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50 flex items-center justify-center px-4 py-8">
-          <div className="rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm font-medium text-slate-600 shadow-sm">
-            Checking eligibility...
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-sky-500 border-t-transparent" />
+            <div className="rounded-2xl border border-slate-200 bg-white px-6 py-4 text-sm font-medium text-slate-600 shadow-sm">
+              {isAutoSubmitting ? "Finalizing and submitting your exam..." : "Checking eligibility..."}
+            </div>
           </div>
         </div>
         <MobileMenu />
@@ -761,41 +881,6 @@ function ExamSessionInner() {
                   : submission.score >= 5 ? "Well Done!"
                     : "Keep Going!"}
             </h1>
-            <p className="relative mx-auto mt-3 max-w-sm text-sm leading-6 text-slate-400">
-              {band.description}
-            </p>
-
-            {/* Score + Discount pill */}
-            <div className="relative mt-8 inline-flex items-center overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-              <div className="px-8 py-5 text-center">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Your Score</div>
-                <div className="mt-1 tabular-nums text-white">
-                  <span className="text-5xl font-bold">{submission.score}</span>
-                  <span className="text-2xl font-semibold text-slate-500">/{questions.length}</span>
-                </div>
-              </div>
-              <div className="h-14 w-px bg-white/10" />
-              <div className="px-8 py-5 text-center">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">Scholarship</div>
-                <div className="mt-1 text-5xl font-bold tabular-nums text-emerald-400">{discountPercent}%</div>
-              </div>
-            </div>
-
-            {/* Band badge */}
-            <div className="relative mt-4">
-              <span
-                className={cn(
-                  "inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-semibold",
-                  band.color === "emerald" && "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
-                  band.color === "sky" && "border-sky-500/30 bg-sky-500/10 text-sky-300",
-                  band.color === "amber" && "border-amber-500/30 bg-amber-500/10 text-amber-300",
-                  band.color === "rose" && "border-rose-500/30 bg-rose-500/10 text-rose-300",
-                )}
-              >
-                <Trophy className="h-3.5 w-3.5" />
-                {band.label}
-              </span>
-            </div>
           </div>
 
           {/* ── Content card (overlaps dark hero) ── */}
@@ -808,7 +893,7 @@ function ExamSessionInner() {
                 <h2 className="mt-1 text-xl font-bold text-slate-900">You've earned a discount!</h2>
                 <p className="mt-1.5 text-sm leading-6 text-slate-600">
                   Share the coupon code with your mentor when enrolling in a course to redeem your{" "}
-                  <span className="font-semibold text-slate-900">{discountPercent}% scholarship discount</span>.
+                  <span className="font-semibold text-slate-900">scholarship discount</span>.
                 </p>
 
                 {/* Ticket */}
@@ -867,16 +952,9 @@ function ExamSessionInner() {
               <div className="flex flex-col gap-3 border-t border-slate-100 px-6 py-5 sm:flex-row sm:px-8">
                 <Button
                   className="h-12 flex-1 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-sm font-bold text-white shadow-[0_8px_20px_rgba(16,185,129,0.35)] transition-all hover:shadow-[0_12px_28px_rgba(16,185,129,0.45)]"
-                  onClick={() => router.push('/askme')}
+                  onClick={() => window.open("https://wa.me/917330897291", "_blank")}
                 >
                   Connect with a mentor
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-12 flex-1 rounded-full text-sm font-semibold"
-                  onClick={() => router.push(`/scholarship-exam?grade=${grade}`)}
-                >
-                  Back to overview
                 </Button>
               </div>
             </div>
@@ -967,36 +1045,104 @@ function ExamSessionInner() {
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">Mobile Number</label>
-              <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
-                <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">+91</span>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  placeholder="10-digit mobile number"
-                  value={mobile}
-                  onChange={(e) => { setMobile(e.target.value.replace(/\D/g, "")); setMobileError(""); }}
-                  onKeyDown={(e) => { if (e.key === 'Enter' && !isVerifying) handleMobileSubmit(); }}
-                  className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
-                  autoFocus
-                  disabled={isVerifying}
-                />
-              </div>
-              {mobileError && (
-                <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+            <div className="space-y-6">
+              {verificationStep === "phone" ? (
+                <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Mobile Number
+                    </label>
+                    <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
+                      <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">
+                        +91
+                      </span>
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        maxLength={10}
+                        placeholder="10-digit mobile number"
+                        value={mobile}
+                        onChange={(e) => {
+                          setMobile(e.target.value.replace(/\D/g, ""));
+                          setMobileError("");
+                          setEnrollments([]);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !isVerifying) handleMobileSubmit();
+                        }}
+                        className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                        autoFocus
+                        disabled={isVerifying}
+                      />
+                    </div>
+                    {mobileError && (
+                      <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+                    )}
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)] transition-all"
+                    onClick={handleMobileSubmit}
+                    disabled={isVerifying}
+                  >
+                    {isVerifying ? "Verifying..." : "Verify Mobile Number"}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Select Your Enrolled Grade
+                    </label>
+                    <Select
+                      value={String(selectedEnrollmentIndex)}
+                      onValueChange={(val) => setSelectedEnrollmentIndex(Number(val))}
+                    >
+                      <SelectTrigger className="w-full h-12 rounded-2xl border-slate-200 bg-white font-semibold text-slate-900 focus:ring-sky-100 transition-all">
+                        <SelectValue placeholder="Select a grade" />
+                      </SelectTrigger>
+                      <SelectContent position="popper" sideOffset={8} className="rounded-2xl border-slate-200 z-[9999] w-[var(--radix-select-trigger-width)]">
+                        {enrollments.map((en, idx) => (
+                          <SelectItem
+                            key={en.grade}
+                            value={String(idx)}
+                            disabled={en.alreadyAttempted}
+                            className={cn(
+                              "rounded-xl",
+                              en.alreadyAttempted && "opacity-50 grayscale cursor-not-allowed"
+                            )}
+                          >
+                            Grade {en.grade} {en.alreadyAttempted ? " (Already Attempted)" : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-12 flex-1 rounded-full border-slate-200 text-slate-600 font-semibold"
+                      onClick={() => setVerificationStep("phone")}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      type="button"
+                      className="h-12 flex-[2] rounded-full bg-[linear-gradient(135deg,#10b981,#059669)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_32px_rgba(16,185,129,0.45)] disabled:opacity-50 disabled:grayscale transition-all"
+                      onClick={handleProceedWithGrade}
+                      disabled={selectedEnrollmentIndex < 0 || enrollments[selectedEnrollmentIndex]?.alreadyAttempted}
+                    >
+                      Start Exam
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               )}
             </div>
-
-            <Button
-              type="button"
-              className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
-              onClick={handleMobileSubmit}
-              disabled={isVerifying}
-            >
-              {isVerifying ? "Verifying..." : "Start Scholarship Exam"}
-            </Button>
 
             <p className="mt-3 text-center text-xs text-slate-400">Your number will only be used to share your scholarship discount.</p>
           </div>

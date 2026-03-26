@@ -24,6 +24,14 @@ import Navbar, {
 } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { scholarshipExamData, scholarshipGrades } from "@/lib/scholarshipExamData";
+import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const getGrade = (param: string | null) => {
   const n = Number(param);
@@ -68,6 +76,9 @@ function ScholarshipLandingInner() {
   const [mobile, setMobile] = useState("");
   const [mobileError, setMobileError] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
+  const [enrollments, setEnrollments] = useState<any[]>([]);
+  const [selectedEnrollmentIndex, setSelectedEnrollmentIndex] = useState<number>(-1);
+  const [verificationStep, setVerificationStep] = useState<"phone" | "selection">("phone");
 
   const handleStartClick = () => {
     setMobile("");
@@ -96,7 +107,6 @@ function ScholarshipLandingInner() {
         body: JSON.stringify({ phone: trimmed }),
       });
 
-      setMobileError("Debug: sent verify request...");
       console.log("verify-existing-student status:", response.status);
       let data: any;
       try {
@@ -121,20 +131,31 @@ function ScholarshipLandingInner() {
         return;
       }
 
-      // Check alreadyAttempted flag from the response
-      console.log("data.alreadyAttempted:", data?.alreadyAttempted);
-      if (data?.alreadyAttempted) {
-        console.log("FAIL: already attempted");
-        setMobileError(getEligibilityErrorMessage("already_attempted"));
+      const enrollmentStatus = (data?.enrollmentStatus || [])
+        .filter((e: any) => scholarshipGrades.includes(Number(e.grade)));
+
+      if (enrollmentStatus.length > 0) {
+        try {
+          sessionStorage.setItem("scholarshipUserId", String(data?.userId ?? ""));
+        } catch (e) { }
+
+        setEnrollments(enrollmentStatus);
+        const initIndex = enrollmentStatus.findIndex((e: any) => Number(e.grade) === grade);
+        setSelectedEnrollmentIndex(initIndex !== -1 ? initIndex : 0);
+        setVerificationStep("selection");
         setIsVerifying(false);
         return;
       }
 
       const parsedGrade = Number(data?.grade);
-      console.log("parsedGrade:", parsedGrade, "available grades:", scholarshipGrades);
       if (!scholarshipGrades.includes(parsedGrade)) {
-        console.log("FAIL: grade not eligible");
         setMobileError("Your profile grade is currently not eligible for this exam.");
+        setIsVerifying(false);
+        return;
+      }
+
+      if (data?.alreadyAttempted === true) {
+        setMobileError("You have already attempted the scholarship exam for this grade.");
         setIsVerifying(false);
         return;
       }
@@ -164,8 +185,21 @@ function ScholarshipLandingInner() {
       setIsVerifying(false);
       return;
     }
+  };
 
-    // (previous logic handles storage and redirect on success)
+  const handleProceedWithGrade = () => {
+    if (selectedEnrollmentIndex < 0 || !enrollments[selectedEnrollmentIndex]) return;
+    const selected = enrollments[selectedEnrollmentIndex];
+    if (selected.alreadyAttempted) return;
+
+    try {
+      sessionStorage.setItem("scholarshipUserId", String(sessionStorage.getItem("scholarshipUserId") || ""));
+      sessionStorage.setItem("scholarshipVerifiedGrade", String(selected.grade));
+      sessionStorage.setItem("scholarshipMobile", mobile.trim());
+    } catch (e) { }
+
+    setShowMobileModal(false);
+    router.push(`/scholarship-exam/exam?grade=${selected.grade}`);
   };
 
   useEffect(() => {
@@ -205,7 +239,7 @@ function ScholarshipLandingInner() {
                 {/* Pill */}
                 <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200">
                   <Sparkles className="h-4 w-4" />
-                  Scholarship Entrance Practice Portal
+                  SISYA Scholarship Exam
                 </div>
 
                 {/* Grade badge */}
@@ -326,7 +360,7 @@ function ScholarshipLandingInner() {
                 <ol className="mt-5 space-y-3.5">
                   {[
                     "One question at a time. Use Previous &amp; Next to navigate freely.",
-                    "30-minute countdown timer — auto-submits when it hits zero.",
+                    "20-minute countdown timer — auto-submits when it hits zero.",
                     "Jump to any question via the question navigator grid.",
                   ].map((rule, i) => (
                     <li key={i} className="flex items-start gap-3">
@@ -378,7 +412,7 @@ function ScholarshipLandingInner() {
                 <div className="mt-4 flex justify-center gap-3 text-xs">
                   <span className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-slate-600">
                     <Clock3 className="h-3.5 w-3.5 text-sky-500" />
-                    30 minutes
+                    20 minutes
                   </span>
                   <span className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-slate-600">
                     <Sparkles className="h-3.5 w-3.5 text-sky-500" />
@@ -473,7 +507,7 @@ function ScholarshipLandingInner() {
               Ready to test your knowledge?
             </h2>
             <p className="mt-4 text-base text-white/70">
-              Attempt the full scholarship exam for Grades 1 to 10 — 10 questions, 30 minutes, all subjects.
+              Attempt the full scholarship exam for Grades 1 to 10 — 10 questions, 20 minutes, all subjects.
               Your score unlocks your scholarship discount automatically.
             </p>
             <Button
@@ -522,44 +556,104 @@ function ScholarshipLandingInner() {
               </button>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Mobile Number
-              </label>
-              <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
-                <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">
-                  +91
-                </span>
-                <input
-                  type="tel"
-                  inputMode="numeric"
-                  maxLength={10}
-                  placeholder="10-digit mobile number"
-                  value={mobile}
-                  onChange={(e) => {
-                    setMobile(e.target.value.replace(/\D/g, ""));
-                    setMobileError("");
-                  }}
-                  onKeyDown={(e) => { if (e.key === "Enter" && !isVerifying) handleMobileSubmit(); }}
-                  className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
-                  autoFocus
-                  disabled={isVerifying}
-                />
-              </div>
-              {mobileError && (
-                <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+            <div className="space-y-6">
+              {verificationStep === "phone" ? (
+                <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Mobile Number
+                    </label>
+                    <div className="flex overflow-hidden rounded-2xl border border-slate-200 focus-within:border-sky-500 focus-within:ring-2 focus-within:ring-sky-200 transition-all">
+                      <span className="flex items-center border-r border-slate-200 bg-slate-50 px-4 text-sm font-semibold text-slate-600">
+                        +91
+                      </span>
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        maxLength={10}
+                        placeholder="10-digit mobile number"
+                        value={mobile}
+                        onChange={(e) => {
+                          setMobile(e.target.value.replace(/\D/g, ""));
+                          setMobileError("");
+                          setEnrollments([]);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" && !isVerifying) handleMobileSubmit();
+                        }}
+                        className="w-full bg-white px-4 py-3.5 text-sm text-slate-900 outline-none placeholder:text-slate-400"
+                        autoFocus
+                        disabled={isVerifying}
+                      />
+                    </div>
+                    {mobileError && (
+                      <p className="text-xs font-medium text-rose-600">{mobileError}</p>
+                    )}
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)] transition-all"
+                    onClick={handleMobileSubmit}
+                    disabled={isVerifying}
+                  >
+                    {isVerifying ? "Verifying..." : "Verify Mobile Number"}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                      Select Your Enrolled Grade
+                    </label>
+                    <Select
+                      value={String(selectedEnrollmentIndex)}
+                      onValueChange={(val) => setSelectedEnrollmentIndex(Number(val))}
+                    >
+                      <SelectTrigger className="w-full h-12 rounded-2xl border-slate-200 bg-white font-semibold text-slate-900 focus:ring-sky-100 transition-all">
+                        <SelectValue placeholder="Select a grade" />
+                      </SelectTrigger>
+                      <SelectContent position="popper" sideOffset={8} className="rounded-2xl border-slate-200 z-[9999] w-[var(--radix-select-trigger-width)]">
+                        {enrollments.map((en, idx) => (
+                          <SelectItem
+                            key={en.grade}
+                            value={String(idx)}
+                            disabled={en.alreadyAttempted}
+                            className={cn(
+                              "rounded-xl",
+                              en.alreadyAttempted && "opacity-50 grayscale cursor-not-allowed"
+                            )}
+                          >
+                            Grade {en.grade} {en.alreadyAttempted ? " (Already Attempted)" : ""}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-12 flex-1 rounded-full border-slate-200 text-slate-600 font-semibold"
+                      onClick={() => setVerificationStep("phone")}
+                    >
+                      Back
+                    </Button>
+                    <Button
+                      type="button"
+                      className="h-12 flex-[2] rounded-full bg-[linear-gradient(135deg,#10b981,#059669)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(16,185,129,0.35)] hover:shadow-[0_12px_32px_rgba(16,185,129,0.45)] disabled:opacity-50 disabled:grayscale transition-all"
+                      onClick={handleProceedWithGrade}
+                      disabled={selectedEnrollmentIndex < 0 || enrollments[selectedEnrollmentIndex]?.alreadyAttempted}
+                    >
+                      Start Exam
+                      <ArrowRight className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
               )}
             </div>
-
-            <Button
-              type="button"
-              className="mt-6 h-12 w-full rounded-full bg-[linear-gradient(135deg,#0284c7,#0ea5e9)] text-sm font-bold text-white shadow-[0_8px_24px_rgba(2,132,199,0.35)] hover:shadow-[0_12px_32px_rgba(2,132,199,0.45)]"
-              onClick={handleMobileSubmit}
-              disabled={isVerifying}
-            >
-              {isVerifying ? "Verifying..." : "Start Scholarship Exam"}
-              <ArrowRight className="h-4 w-4" />
-            </Button>
 
             <p className="mt-3 text-center text-xs text-slate-400">
               Your number will only be used to share your scholarship discount.
