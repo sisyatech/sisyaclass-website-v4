@@ -808,13 +808,14 @@ const Navbar = () => {
             <Link
               href="/scholarship-exam"
               className={cn(
-                "hidden lg:inline-flex items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all duration-300",
+                "hidden lg:inline-flex group relative overflow-hidden items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition-all duration-300",
                 isScholarshipExamPage
                   ? "border-amber-300 bg-amber-300 text-slate-950 shadow-lg shadow-amber-200"
-                  : "border-slate-900 bg-slate-950 text-white hover:-translate-y-0.5 hover:border-sky-400 hover:bg-sky-500 hover:shadow-lg hover:shadow-sky-200"
+                  : "border-[#02bdfe] bg-[#02bdfe] text-white hover:-translate-y-0.5 hover:bg-[#02bdfe]/80 hover:shadow-lg hover:shadow-[#02bdfe]/30"
               )}
             >
-              Scholarship
+              <span className="relative z-10">Scholarship</span>
+              <div className="absolute top-0 -left-[100%] h-full w-[120%] -skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent transition-all duration-700 ease-in-out group-hover:left-[100%]" />
             </Link>
 
             {/* contact */}

@@ -9,7 +9,7 @@ const FooterBottom = () => {
           {/* Copyright */}
           <div className="text-center lg:text-left w-full lg:w-auto order-1 lg:order-1">
             <p className="font-roboto font-normal text-[13px] sm:text-[13px] md:text-[13px] lg:text-[14px] text-[#1A2439] leading-relaxed">
-              Copyright © 2025 SISYA Class. All rights reserved.
+              Copyright © 2026 SISYA Class. All rights reserved.
             </p>
           </div>
 
