@@ -238,27 +238,37 @@ const Footer = () => {
               {/* Contact Information */}
               {/* Adjusted negative margin */}
               <div className={`${message ? '-mt-4' : '-mt-4 sm:-mt-5 md:-mt-6'} space-y-2.5 sm:space-y-3`}>
-                <div className="flex items-center gap-2 sm:gap-3">
+                <a 
+                  href="https://wa.me/917330897291"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 sm:gap-3 group cursor-pointer"
+                >
                   <div className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" className="stroke-[#6B7280] group-hover:stroke-[#25D366] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
-                  <span className="text-[13px] font-medium text-gray-700 sm:text-[14px] md:text-[15px]">
+                  <span className="text-[13px] font-medium text-gray-700 sm:text-[14px] md:text-[15px] group-hover:text-[#25D366] transition-colors">
                     +91 7330897291
                   </span>
-                </div>
-                <div className="flex items-center gap-2 sm:gap-3">
+                </a>
+                <a 
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=contactus@sisyaclass.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 sm:gap-3 group cursor-pointer"
+                >
                   <div className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5">
                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                       <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                       <polyline points="22,6 12,13 2,6" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                       <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" className="stroke-[#6B7280] group-hover:stroke-[#0595CE] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                       <polyline points="22,6 12,13 2,6" className="stroke-[#6B7280] group-hover:stroke-[#0595CE] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                      </svg>
                   </div>
-                  <span className="text-[13px] font-medium break-all text-gray-700 sm:text-[14px] md:text-[15px]">
+                  <span className="text-[13px] font-medium break-all text-gray-700 sm:text-[14px] md:text-[15px] group-hover:text-[#0595CE] transition-colors">
                     contactus@sisyaclass.com
                   </span>
-                </div>
+                </a>
               </div>
             </div>
           </div>
