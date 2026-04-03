@@ -6,15 +6,15 @@ import { motion } from "framer-motion";
 import { LinkPreview } from "./ui/link-preview";
 
 const SCHOOL_LOGOS = [
-  { name: "AHPS", src: "/school_logos/AHPS.jpg", previewImage: "/preview_image/ah.jpg" },
-  { name: "Creative Minds", src: "/school_logos/Creative Minds.jpg", previewImage: "/preview_image/creative.jpg" },
-  { name: "Globe School", src: "/school_logos/Globe School.jpg", previewImage: "/preview_image/globe.jpg" },
-  { name: "Kidzee", src: "/school_logos/Kidzee.jpg", previewImage: "/preview_image/kidzee.jpg" },
-  { name: "SSR-1", src: "/school_logos/SSR-1.jpg", previewImage: "/preview_image/ssr.jpg" },
-  { name: "SSR-2", src: "/school_logos/SSR-2.jpg", previewImage: "/preview_image/ssr.jpg" },
-  { name: "SSR", src: "/school_logos/SSR.jpg", previewImage: "/preview_image/ssr.jpg" },
-  { name: "Silver Oaks", src: "/school_logos/Silver Oaks.jpg", previewImage: "/preview_image/silver_oak.jpg" },
-  { name: "Smart Kidz", src: "/school_logos/Smart Kidz.jpg", previewImage: "/preview_image/smart.jpg" },
+  { name: "AHPS", src: "/school_logos/AHPS.jpg", previewImage: "/preview_image/ah.jpg",url:"https://ahpsvisakhapatnam.com/" },
+  { name: "Creative Minds", src: "/school_logos/Creative Minds.jpg", previewImage: "/preview_image/creative.jpg",url:"#" },
+  { name: "Globe School", src: "/school_logos/Globe School.jpg", previewImage: "/preview_image/globe.jpg",url:"https://theglobeschool.in/" },
+  { name: "Kidzee", src: "/school_logos/Kidzee.jpg", previewImage: "/preview_image/kidzee.jpg",url:"https://www.kidzee.com/best-preschool-in-visakhapatnam/vizag-kes-yendada-andhra-pradesh" },
+  { name: "SSR-1", src: "/school_logos/SSR-1.jpg", previewImage: "/preview_image/ssr.jpg",url:"#" },
+  { name: "SSR-2", src: "/school_logos/SSR-2.jpg", previewImage: "/preview_image/ssr.jpg",url:"https://ssrgreenfieldschool.com/" },
+  { name: "SSR", src: "/school_logos/SSR.jpg", previewImage: "/preview_image/ssr.jpg",url:" https://ssrdiscoveryschool.com/" },
+  { name: "Silver Oaks", src: "/school_logos/Silver Oaks.jpg", previewImage: "/preview_image/silver_oak.jpg",url:"https://silveroaksinternationalpreschool.com/" },
+  { name: "Smart Kidz", src: "/school_logos/Smart Kidz.jpg", previewImage: "/preview_image/smart.jpg",url:"https://smartkidzglobal.org/our-branches/" },
 ];
 
 const PartnerSchools = () => {
@@ -55,7 +55,7 @@ const PartnerSchools = () => {
             >
               <div className="relative w-32 h-20 sm:w-40 sm:h-24 md:w-48 md:h-28">
                 <LinkPreview
-                  url="#"
+                  url={logo.url}
                   width={200}
                   height={125}
                   isStatic={true}
