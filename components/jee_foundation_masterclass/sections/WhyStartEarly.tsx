@@ -10,19 +10,19 @@ type WhyStartEarlyProps = {
 
 const cards = [
   {
-    title: "Strong Exposure to STEM Learning",
+    title: "Feels overwhelmed by JEE-level maths",
     icon: "/jee_foundation/gifs/gif-1.gif",
   },
   {
-    title: "Critical Thinking Development",
+    title: "Struggles with algebra and equations",
     icon: "/jee_foundation/gifs/gif-2.gif",
   },
   {
-    title: "Builds Confidence for Olympiads & NTSE",
+    title: "Wants to compete in IIT-JEE",
     icon: "/jee_foundation/gifs/gif-3.gif",
   },
   {
-    title: "Better JEE Rank with Early Prep",
+    title: "Loses marks due to careless mistakes",
     icon: "/jee_foundation/gifs/gif-4.gif",
   },
 ];
@@ -35,45 +35,45 @@ export default function WhyStartEarly({ onEnroll }: WhyStartEarlyProps) {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-[28px] md:text-[45px] font-bold text-[#002B71] mb-8 md:mb-12 tracking-[0.45px] leading-tight"
+          className="text-[28px] md:text-[40px] font-bold text-[#1a1a1a] mb-8 md:mb-12 tracking-tight leading-tight"
         >
-          Why Start Early for JEE?
+          Is Your Child Facing These Challenges?
         </motion.h2>
 
-        <div className="grid grid-cols-2 lg:flex lg:flex-wrap justify-items-center justify-center gap-4 md:gap-6 mb-12 md:mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 justify-items-center justify-center gap-6 mb-12 md:mb-16">
           {cards.map((card, idx) => (
             <motion.div
               key={idx}
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.1 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.15 }}
               viewport={{ once: true }}
-              className="w-full h-[180px] md:w-[200px] md:h-[200px] bg-[#E8F1FF] rounded-[24px] shadow-sm flex flex-col items-center justify-center p-3 hover:shadow-md transition-shadow shrink-0"
+              className="w-full max-w-[280px] min-h-[220px] bg-[#E8F1FF] rounded-[24px] shadow-sm flex flex-col items-center justify-center p-6 hover:shadow-lg transition-all group"
             >
-              <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] mb-2 relative overflow-hidden rounded-[12px]">
+              <div className="w-[100px] h-[100px] mb-4 relative overflow-hidden rounded-2xl bg-white p-2 shadow-sm group-hover:scale-110 transition-transform">
                 <Image
                   src={card.icon}
                   alt={card.title}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                 />
               </div>
-              <h3 className="text-[14px] md:text-[18px] font-normal text-black leading-[1.2] max-w-[190px]">
+              <h3 className="text-[16px] md:text-[18px] font-medium text-[#2d2d2d] leading-[1.3]">
                 {card.title}
               </h3>
             </motion.div>
           ))}
         </div>
 
-        <div className="flex flex-col items-center gap-6">
-          <p className="italic font-bold text-[#002B71] text-[18px] md:text-[24px] tracking-[0.24px] leading-tight px-4">
-            Start now to be 2 steps ahead by of your friends
+        <div className="flex flex-col items-center gap-8 max-w-3xl mx-auto">
+          <p className="italic font-bold text-[#2d2d2d] text-lg md:text-xl tracking-tight leading-relaxed px-4 opacity-90">
+            Most students don't fall behind in JEE prep due to intelligence — but due to a lack of speed, clarity, and the right mentor.
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={onEnroll}
-            className="w-[216px] h-[44px] bg-[#FFE100] text-black font-bold rounded-[11px] shadow hover:bg-[#F2D600] transition-colors text-[16px]"
+            className="bg-[#ffd500] hover:bg-[#e6c100] text-black font-bold py-3 px-12 rounded-xl text-lg md:text-xl shadow-lg transition-all"
           >
             Enroll Now
           </motion.button>

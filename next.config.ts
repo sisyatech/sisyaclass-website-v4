@@ -68,6 +68,14 @@ const nextConfig: NextConfig = {
         destination: '/jee_foundation/payment/failed',
       },
       {
+        source: '/jee_foundation_masterclass/payment/success.php',
+        destination: '/jee_foundation_masterclass/payment/success',
+      },
+      {
+        source: '/jee_foundation_masterclass/payment/failed.php',
+        destination: '/jee_foundation_masterclass/payment/failed',
+      },
+      {
         source: '/3dayslp/payment/success.php',
         destination: '/3dayslp/payment/success',
       },

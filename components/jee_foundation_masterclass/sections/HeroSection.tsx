@@ -90,90 +90,97 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   };
 
   return (
-    <section className="bg-[#01317a] text-white relative overflow-hidden pt-8 pb-0 md:py-10 min-h-[420px] md:min-h-[500px]">
-      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-stretch gap-0 md:gap-6 min-h-[380px] relative px-4">
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex-1 p-0 md:p-4 flex flex-col justify-center text-center md:text-left"
-        >
-          <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base font-semibold tracking-wide mb-2 uppercase">
-            Trusted by 10K Parents • 4.8 ⭐ On Google
-          </p>
+    <section className="bg-[#002b70] text-white relative overflow-hidden pt-12 pb-16 md:py-20 min-h-[500px]">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
 
-          <h1 className="text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[3rem] lg:leading-[3.5rem] font-bold mb-4 whitespace-nowrap">
-            <span className="block">JEE Foundation Course for</span>
-            <span className="block">Grades 6–10</span>
-          </h1>
-          <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
-            Give your child the IIT edge — built by IITians
-          </p>
-          <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
-            <li>✅ 250+ Live Structured PCM Sessions by IITians</li>
-            <li>✅ 1:1 Mentor Support + 24x7 Quad Core Doubt Clarification</li>
-            <li>✅ Mock Tests, PYQs, DPPs, HOTs & Performance Tracking</li>
-            <li>✅ Study Material, Community, and Motivation — All Set</li>
-          </ul>
+          {/* Left Content */}
+          <div className="flex-1 flex flex-col md:flex-row items-center md:items-start gap-8 md:relative md:-left-12">
+            <motion.div
+              initial={{ y: 0 }}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+              className="hidden md:block flex-shrink-0 mt-32"
+            >
+              <Image
+                src="/10x/book-icon.png"
+                alt="JEE Book Icon"
+                width={100}
+                height={100}
+                className="object-contain"
+              />
+            </motion.div>
+            <div className="flex-1 text-center md:text-left">
+              <p className="italic text-gray-300 text-xs md:text-sm font-medium mb-2 tracking-wide uppercase">
+                Start Early. Build Strong. Crack JEE!
+              </p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold mb-3 leading-tight md:whitespace-nowrap">
+                JEE Foundation Masterclass
+              </h1>
+              <p className="text-gray-300 text-xs md:text-base font-medium mb-6">
+                Classes 8–10 | July 2 | 8 PM
+              </p>
 
-          {/* Buttons: always side by side (flex-row), unchanged for laptop */}
-          <div className="mt-6 mb-2 flex flex-row gap-2 sm:gap-3 md:gap-4 justify-center md:justify-start">
-            <button
-              className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-[#ffd500] text-black whitespace-nowrap"
-              onClick={onRegister}
-            >
-              Get 3 Demos @19
-            </button>
-            <button
-              className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
-              onClick={handleOpenCallback}
-            >
-              Talk To A Counselor
-            </button>
+              <ul className="space-y-3 mb-8 text-left">
+                {[
+                  "Algebra Shortcuts & Smart Equations",
+                  "Visual, Concept-Based Trigonometry",
+                  "IIT Foundation Concepts Made Simple",
+                  "Real-World Applications & Board Boosters",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <div className="flex-shrink-0 w-4 h-4 md:w-5 md:h-5 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-2.5 h-2.5 md:w-3 md:h-3 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={4}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-sm md:text-base font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={onRegister}
+                className="bg-[#ffd500] hover:bg-[#e6c100] text-black font-bold py-3 px-8 md:py-3 md:px-10 rounded-xl text-base md:text-lg shadow-lg transform transition active:scale-95"
+              >
+                Enroll For Rs 19 Only
+              </button>
+            </div>
           </div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="flex-1 md:absolute md:right-[-20px] md:bottom-[-20px] md:w-[60%] lg:w-[55%] flex justify-center items-center md:items-end pointer-events-none mt-10 md:mt-0"
-        >
-          <Image
-            src="/jee_foundation/hero_pic.png"
-            alt="JEE Foundation Team"
-            width={900}
-            height={600}
-            className="object-contain drop-shadow-2xl [mask-image:radial-gradient(circle,black_80%,transparent_100%)]"
-            priority
-          />
-          <motion.div
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
-            className="hidden md:block absolute top-[10%] left-[-10%] z-20"
-          >
-            <Image
-              src="/ltc/cube.png"
-              alt="cube"
-              width={80}
-              height={80}
-              className="pointer-events-none opacity-80"
-            />
-          </motion.div>
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="hidden md:block absolute top-[10%] right-[3%] z-20"
-          >
-            <Image
-              src="/ltc/funcion1.svg"
-              alt="function"
-              width={70}
-              height={70}
-              className="pointer-events-none opacity-80"
-            />
-          </motion.div>
-        </motion.div>
+          {/* Right Content - Video Frame */}
+          <div className="flex-1 w-full max-w-2xl md:ml-12">
+            <div className="text-center mb-6">
+              <p className="text-sm md:text-lg font-medium text-gray-300 tracking-wide uppercase">
+                Trusted By Parents, Loved By Students
+              </p>
+            </div>
+
+            <div className="relative aspect-video rounded-[24px] overflow-hidden shadow-2xl">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/oqxw-V4ChKM?autoplay=1&mute=1&loop=1&playlist=oqxw-V4ChKM&controls=0&modestbranding=1"
+                title="Why Parents Trust SISYA CLASS"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Callback Popup */}

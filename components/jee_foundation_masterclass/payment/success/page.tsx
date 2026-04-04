@@ -91,7 +91,7 @@ export default function PaymentSuccessPage() {
               </div>
             </div>
             <Link
-              href="/jee_foundation"
+              href="/jee_foundation_masterclass"
               className="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors"
             >
               ← Back to JEE Foundation

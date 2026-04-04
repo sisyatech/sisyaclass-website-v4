@@ -4,14 +4,19 @@ import React, { useState } from "react";
 import Script from "next/script";
 import HeroSection from "./sections/HeroSection";
 import StatsSection from "./sections/StatsSection";
+import TrustBanner from "./sections/TrustBanner";
 import WhyStartEarly from "./sections/WhyStartEarly";
 import AdvantagesGrid from "./sections/AdvantagesGrid";
+import QuadCoreMethod from "./sections/QuadCoreMethod";
+import TransformationJourney from "./sections/TransformationJourney";
 import ReviewsSection from "./sections/ReviewsSection";
-import Testimonials from "../Testimonials";
+import AIIntegration from "./sections/AIIntegration";
+import ComparisonSection from "./sections/ComparisonSection";
+import TeachersGroup from "./sections/TeachersGroup";
+import OurTeam from "./sections/OurTeam";
 import ReservationPopup from "./components/ReservationPopup";
 import WhatsAppFab from "./components/WhatsAppFab";
 import SocialFab from "./components/SocialFab";
-import Teachers from "./sections/Teachers";
 
 export default function JeeFoundationContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
@@ -119,7 +124,7 @@ export default function JeeFoundationContent() {
           //console.log("[JEE Foundation] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
-          window.location.href = `/jee_foundation/payment/success.php?transactionId=${encodeURIComponent(
+          window.location.href = `/jee_foundation_masterclass/payment/success.php?transactionId=${encodeURIComponent(
             response.razorpay_payment_id || ""
           )}&amount=${encodeURIComponent("₹19")}`;
         },
@@ -127,7 +132,7 @@ export default function JeeFoundationContent() {
           ondismiss: function () {
             //console.warn("[JEE Foundation] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
-              window.location.href = `/jee_foundation/payment/failed.php?transactionId=${encodeURIComponent(
+              window.location.href = `/jee_foundation_masterclass/payment/failed.php?transactionId=${encodeURIComponent(
                 `DISMISSED_${Date.now()}`
               )}`;
             });
@@ -152,12 +157,16 @@ export default function JeeFoundationContent() {
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
       <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <StatsSection onChooseClass={handleChooseClass} />
+      <TrustBanner />
       <WhyStartEarly onEnroll={() => setShowReservationPopup(true)} />
       <AdvantagesGrid onStartJourney={() => setShowReservationPopup(true)} />
-      
       <ReviewsSection />
-      <Teachers />
-      <Testimonials />
+      <AIIntegration onTryAI={() => setShowReservationPopup(true)} />
+      <ComparisonSection onEnroll={() => setShowReservationPopup(true)} />
+      <TransformationJourney />
+      <QuadCoreMethod />
+      <TeachersGroup />
+      <OurTeam />
       <WhatsAppFab />
       <SocialFab />
       <ReservationPopup

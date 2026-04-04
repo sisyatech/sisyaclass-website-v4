@@ -79,7 +79,7 @@ export default function PaymentFailedPage() {
               Contact Us on WhatsApp
             </a>
             <Link
-              href="/jee_foundation"
+              href="/jee_foundation_masterclass"
               className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors"
             >
               ← Back to JEE Foundation

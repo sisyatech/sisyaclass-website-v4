@@ -16,107 +16,81 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
       viewport={{ once: true }}
       className="relative bg-white py-12 px-8 rounded-[26px] max-w-[1150px] mx-auto mt-10 border border-[#e0e7ff] min-h-[180px] z-0 shadow-sm"
     >
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="w-full md:basis-[36%] md:w-auto">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
+        <div className="w-full lg:w-[30%] flex flex-col items-center lg:items-start">
           <motion.h2
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="font-bold text-[1.75rem] leading-tight md:text-[2.0rem] md:leading-[2.4rem] text-[#000000] text-center md:text-left"
+            className="font-bold text-xl md:text-2xl lg:text-[1.65rem] text-[#01317a] text-center lg:text-left mb-4 flex items-center gap-2"
           >
-            <span className="inline-flex items-center justify-center md:justify-start md:whitespace-nowrap">
-              Become 10X Smarter
-              <motion.div
-                animate={{ rotate: [0, 10, -10, 10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <Image
-                  src="/10x/brain.svg"
-                  alt="Brain Icon"
-                  className="ml-1 h-6 w-6 md:h-8 md:w-8 align-middle"
-                  width={32}
-                  height={32}
-                />
-              </motion.div>
-            </span>
+            Know How To Prepare For IIT!
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="flex-shrink-0"
+            >
+              <Image
+                src="/10x/brain.svg"
+                alt="Brain Icon"
+                width={28}
+                height={28}
+                className="w-7 h-7"
+              />
+            </motion.div>
           </motion.h2>
-          <p className="mt-1 text-center md:text-left text-base md:text-lg font-medium text-black">
-            New Batches Every Monday
-          </p>
+
           <motion.div
             whileHover={{ x: 5 }}
-            className="flex items-center gap-2 mt-4"
+            className="flex items-center gap-3 group"
           >
-            <span className="bg-[#ffd500] text-black font-semibold px-4 py-2 rounded-md shadow whitespace-nowrap">
-              Choose a Class to Enroll Now
-            </span>
+            <button className="bg-[#ffd500] hover:bg-yellow-400 text-[#01317a] font-bold px-6 py-2 rounded-xl shadow-md transition-all text-sm md:text-base whitespace-nowrap">
+              Choose Your Grade
+            </button>
             <Image
               src="/10x/point.svg"
               alt="Pointer Icon"
-              className="w-14 rotate-90 md:rotate-0"
-              width={56}
-              height={56}
+              width={40}
+              height={40}
+              className="w-10 transition-transform group-hover:translate-x-1 grayscale"
             />
           </motion.div>
         </div>
-        <div className="w-full md:basis-[60%] grid grid-cols-3 gap-3 md:grid-cols-4">
-          {[1, 2, 3, 4, 5].map((grade, idx) => (
+
+        <div className="w-full lg:w-[65%] grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {[
+            { grade: 1, status: "Sold Out", type: "soldout" },
+            { grade: 2, status: "Sold Out", type: "soldout" },
+            { grade: 3, status: "Sold Out", type: "soldout" },
+            { grade: 4, status: "Sold Out", type: "soldout" },
+            { grade: 5, status: "Sold Out", type: "soldout" },
+            { grade: 6, status: "77% Sold", type: "available" },
+            { grade: 7, status: "77% Sold", type: "available" },
+            { grade: 8, status: "77% Sold", type: "available" },
+            { grade: 9, status: "86% Sold", type: "available" },
+            { grade: 10, status: "75% Sold", type: "available" },
+            { grade: 11, status: "Sold Out", type: "soldout" },
+            { grade: 12, status: "Sold Out", type: "soldout" },
+          ].map((item, idx) => (
             <motion.button
-              key={grade}
+              key={item.grade}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.55 }}
-              className="text-white font-medium mt-0 py-1.5 px-2 rounded-[10px] min-h-[42px] w-full flex flex-col justify-center items-center text-center md:py-2 md:min-h-[48px] opacity-60 grayscale cursor-not-allowed"
-              style={{ background: "linear-gradient(135deg, #d2d2d2, #ada29f)" }}
+              transition={{ delay: idx * 0.02 }}
+              whileHover={item.type === "available" ? { scale: 1.05 } : {}}
+              onClick={() => item.type === "available" && onChooseClass(item.grade.toString())}
+              className={`
+                flex flex-col items-center justify-center py-2 px-1 rounded-xl transition-all border border-gray-100 shadow-sm
+                ${item.type === "soldout"
+                  ? "bg-[#dadada] text-white opacity-70 cursor-not-allowed grayscale"
+                  : "bg-[#6b5ae0] text-white hover:bg-[#5a49c9] cursor-pointer"}
+              `}
             >
-              <div className="text-xs md:text-sm">Class {grade}</div>
-              <span className="text-[9px] md:text-[10px]">
-                <span>(Sold Out)</span>
-              </span>
+              <h3 className="font-bold text-sm md:text-base">Class {item.grade}</h3>
+              <p className="text-[8px] md:text-[10px] font-medium uppercase opacity-90">({item.status})</p>
             </motion.button>
           ))}
-          {[6, 7, 8, 9, 10].map((grade, idx) => (
-            <motion.button
-              key={grade}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.05 }}
-              whileHover={{ scale: 1.1, backgroundColor: "#685edb" }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-[#685edb] text-white border-0 py-1.5 px-2 font-semibold rounded-[10px] cursor-pointer text-sm min-h-[42px] w-full flex flex-col justify-center items-center text-center leading-[1.2] transition-colors md:py-2 md:text-[0.9rem] md:min-h-[48px]"
-              onClick={() => onChooseClass(grade.toString())}
-            >
-              Class {grade}
-            </motion.button>
-          ))}
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.55 }}
-            className="text-white font-medium mt-0 py-1.5 px-2 rounded-[10px] min-h-[42px] w-full flex flex-col justify-center items-center text-center md:py-2 md:min-h-[48px] opacity-60 grayscale cursor-not-allowed"
-            style={{ background: "linear-gradient(135deg, #d2d2d2, #ada29f)" }}
-          >
-            <div className="text-xs md:text-sm">Class 11</div>
-            <span className="text-[9px] md:text-[10px]">
-              <span>(Sold Out)</span>
-            </span>
-          </motion.button>
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.6 }}
-            className="text-white font-medium mt-0 py-1.5 px-2 rounded-[10px] min-h-[42px] w-full flex flex-col justify-center items-center text-center md:py-2 md:min-h-[48px] opacity-60 grayscale cursor-not-allowed"
-            style={{ background: "linear-gradient(135deg, #d2d2d2, #ada29f)" }}
-          >
-            <div className="text-xs md:text-sm">Class 12</div>
-            <span className="text-[9px] md:text-[10px]">
-              <span>(Sold Out)</span>
-            </span>
-          </motion.button>
         </div>
       </div>
     </motion.section>
