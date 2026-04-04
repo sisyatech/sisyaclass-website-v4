@@ -117,9 +117,9 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
               <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold mb-3 leading-tight md:whitespace-nowrap">
                 JEE Foundation Masterclass
               </h1>
-              <p className="text-gray-300 text-xs md:text-base font-medium mb-6">
+              {/* <p className="text-gray-300 text-xs md:text-base font-medium mb-6">
                 Classes 8–10 | July 2 | 8 PM
-              </p>
+              </p> */}
 
               <ul className="space-y-3 mb-8 text-left">
                 {[
