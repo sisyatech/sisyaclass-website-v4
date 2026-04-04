@@ -13,7 +13,6 @@ import ReviewsSection from "./sections/ReviewsSection";
 import AIIntegration from "./sections/AIIntegration";
 import ComparisonSection from "./sections/ComparisonSection";
 import TeachersGroup from "./sections/TeachersGroup";
-import OurTeam from "./sections/OurTeam";
 import ReservationPopup from "./components/ReservationPopup";
 import WhatsAppFab from "./components/WhatsAppFab";
 import SocialFab from "./components/SocialFab";
@@ -166,7 +165,6 @@ export default function JeeFoundationContent() {
       <TransformationJourney />
       <QuadCoreMethod />
       <TeachersGroup />
-      <OurTeam />
       <WhatsAppFab />
       <SocialFab />
       <ReservationPopup
