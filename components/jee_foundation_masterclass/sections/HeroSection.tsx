@@ -95,7 +95,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
 
           {/* Left Content */}
-          <div className="flex-1 flex flex-col md:flex-row items-center md:items-start gap-8 md:relative md:-left-12">
+          <div className="flex-[1.4] flex flex-col md:flex-row items-center md:items-start gap-8">
             <motion.div
               initial={{ y: 0 }}
               animate={{ y: [0, -10, 0] }}
@@ -112,14 +112,14 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             </motion.div>
             <div className="flex-1 text-center md:text-left">
               <p className="italic text-gray-300 text-xs md:text-sm font-medium mb-2 tracking-wide uppercase">
-                Start Early. Build Strong. Crack JEE!
+                Book Your Seat For The Masterclass
               </p>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-bold mb-3 leading-tight md:whitespace-nowrap">
-                JEE Foundation Masterclass
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.25rem] font-bold mb-3 leading-tight">
+                Get complete clarity regarding JEE Preparation <br className="hidden lg:block" /> from India&apos;s Top IITians
               </h1>
-              {/* <p className="text-gray-300 text-xs md:text-base font-medium mb-6">
-                Classes 8–10 | July 2 | 8 PM
-              </p> */}
+              <p className="text-gray-300 text-xs md:text-base font-medium mb-6">
+                Classes 6–10 | April 11 | 8 PM
+              </p>
 
               <ul className="space-y-3 mb-8 text-left">
                 {[
@@ -153,13 +153,13 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
                 onClick={onRegister}
                 className="bg-[#ffd500] hover:bg-[#e6c100] text-black font-bold py-3 px-8 md:py-3 md:px-10 rounded-xl text-base md:text-lg shadow-lg transform transition active:scale-95"
               >
-                Enroll For Rs 19 Only
+                Reserve Seat For Just ₹19
               </button>
             </div>
           </div>
 
           {/* Right Content - Video Frame */}
-          <div className="flex-1 w-full max-w-2xl md:ml-12">
+          <div className="flex-1 w-full max-w-xl md:ml-8">
             <div className="text-center mb-6">
               <p className="text-sm md:text-lg font-medium text-gray-300 tracking-wide uppercase">
                 Trusted By Parents, Loved By Students
