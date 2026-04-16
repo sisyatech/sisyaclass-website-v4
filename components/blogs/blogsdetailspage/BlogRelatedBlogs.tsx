@@ -114,7 +114,7 @@ const BlogRelatedBlogs = () => {
           trendingBlogs.map((blog) => (
             <Link
               key={blog.id}
-              href={`/blogs/${blog.id}`}
+              href={`/blogs/${blog.slug}`}
               className="flex gap-2 group hover:bg-white p-1.5 rounded-lg transition-all"
             >
               <div className="relative w-16 sm:w-20 md:w-24 lg:w-28 aspect-[16/9] flex-shrink-0 rounded-lg overflow-hidden">

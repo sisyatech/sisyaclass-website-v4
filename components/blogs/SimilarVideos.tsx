@@ -172,7 +172,7 @@ const SimilarVideos = () => {
                 durationMs={800}
                 delayMs={index * 100}
               >
-                <Link href={`/blogs/${blog.id}`} className="block h-full">
+                <Link href={`/blogs/${blog.slug}`} className="block h-full">
                   <div className="transition-all duration-300 overflow-hidden group cursor-pointer w-[280px] sm:w-[320px] md:w-[340px] lg:w-[320px] xl:w-[362px] bg-white rounded-lg hover:shadow-xl flex flex-col h-full">
                     {/* Blog Image */}
                     <div className="relative w-full h-[180px] sm:h-[200px] md:h-[210px] lg:h-[205px] xl:h-[231px] flex-shrink-0 overflow-hidden">

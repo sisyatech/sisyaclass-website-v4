@@ -9,12 +9,12 @@ import FooterBottom from "@/components/FooterBottom";
 import { BlogBreadcrumb } from "@/components/blogs/BlogBreadcrumb";
 import BlogDetailContent from "@/components/blogs/blogsdetailspage/BlogDetailContent";
 import BlogAuthorComments from "@/components/blogs/blogsdetailspage/BlogAuthorComments";
-import { getBlogById } from "@/lib/blogApi";
+import { getBlogBySlug } from "@/lib/blogApi";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 interface BlogDetailPageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   const unwrappedParams = await params;
   
   try {
-    const blog = await getBlogById(unwrappedParams.id);
+    const blog = await getBlogBySlug(unwrappedParams.slug);
 
     const imageUrl = blog.banner?.startsWith("http")
   ? blog.banner
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
       openGraph: {
         title: blog.title,
         description: blog.des || "Check out this amazing blog post on Sisya Class",
-        url: `https://sisyaclass-website-v4.vercel.app/blogs/${unwrappedParams.id}`,
+        url: `https://sisyaclass-website-v4.vercel.app/blogs/${unwrappedParams.slug}`,
         images: [
           {
             url: imageUrl,
@@ -64,18 +64,20 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   }
 }
 
-function BlogDetailPageContent({ id, blogData }: { id: string; blogData: any }) {
+function BlogDetailPageContent({ slug, blogData }: { slug: string; blogData: any }) {
+  const actualBlogId = slug; 
+
   return (
     <Container>
       <Navbar />
       <BlogBreadcrumb blogTitle={blogData?.title || "Blog Post Title"} />
       <div className="w-full">
-        <BlogDetailContent blogId={id} blogData={blogData} />
+        <BlogDetailContent blogId={actualBlogId} blogData={blogData} />
       </div>
       
       {/* Author & Comments Section - Separate from BlogDetailContent */}
       <div className="w-full py-6 sm:py-8 md:py-10">
-        <BlogAuthorComments blogId={id} />
+        <BlogAuthorComments blogId={actualBlogId} />
       </div>
       
       <AppDownload />
@@ -96,14 +98,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   // Fetch blog data on the server side
   let blogData = null;
   try {
-    blogData = await getBlogById(unwrappedParams.id);
+    blogData = await getBlogBySlug(unwrappedParams.slug);
   } catch (error) {
     //console.error('Error fetching blog data:', error);
   }
   
   return (
     <MobileMenuProvider>
-      <BlogDetailPageContent id={unwrappedParams.id} blogData={blogData} />
+      <BlogDetailPageContent slug={unwrappedParams.slug} blogData={blogData} />
     </MobileMenuProvider>
   );
 }

@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { getBlogById, updateBlogReadCount, toggleLikeBlog, calculateReadTime, fixProfileImageUrl, type Blog } from "../../../lib/blogApi";
+import { getBlogBySlug, updateBlogReadCount, toggleLikeBlog, calculateReadTime, fixProfileImageUrl, type Blog } from "../../../lib/blogApi";
 import { useUser } from "../../UserContext";
 import LoginModal from "../../LoginModal";
 import { Heart, MessageCircle, Eye, Calendar, Clock, User } from "lucide-react";
@@ -24,7 +24,7 @@ const BlogMainContent = ({ blogId }: BlogMainContentProps) => {
     const fetchBlogData = async () => {
       try {
         setLoading(true);
-        const blog = await getBlogById(blogId);
+        const blog = await getBlogBySlug(blogId);
         setBlogData(blog);
         setLikeCount(blog.activityLikes);
         

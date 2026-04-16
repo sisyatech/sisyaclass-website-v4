@@ -64,6 +64,7 @@ export const calculateReadTime = (content: any): string => {
 
 export interface Blog {
   id: string;
+  slug: string;
   title: string;
   banner: string;
   des: string;
@@ -178,10 +179,10 @@ export const getAllBlogs = async (page: number = 1, limit: number = 10): Promise
   }
 };
 
-// Get blog by ID
-export const getBlogById = async (id: string): Promise<Blog> => {
+// Get blog by slug
+export const getBlogBySlug = async (slug: string): Promise<Blog> => {
   try {
-    //console.log('🔍 Fetching blog by ID:', id);
+    //console.log('🔍 Fetching blog by slug:', slug);
     //console.log('📡 API URL:', `${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`);
     
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_BLOG_BY_ID}`, {
@@ -189,7 +190,7 @@ export const getBlogById = async (id: string): Promise<Blog> => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ slug }),
     });
 
     //console.log('📊 Response status:', response.status);
@@ -221,14 +222,14 @@ export const getBlogById = async (id: string): Promise<Blog> => {
 };
 
 // Toggle like on blog
-export const toggleLikeBlog = async (blogId: string, userId: string): Promise<{ success: boolean }> => {
+export const toggleLikeBlog = async (slug: string, userId: string): Promise<{ success: boolean }> => {
   try {
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.TOGGLE_LIKE_BLOG}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ blogId, userId }),
+      body: JSON.stringify({ slug, userId }),
     });
 
     if (!response.ok) {
@@ -244,7 +245,7 @@ export const toggleLikeBlog = async (blogId: string, userId: string): Promise<{ 
 
 // Add comment to blog
 export const addComment = async (
-  blogId: string,
+  slug: string,
   comment: string,
   commentedById: string,
   parentId?: string
@@ -255,7 +256,7 @@ export const addComment = async (
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ blogId, comment, commentedById, parentId }),
+      body: JSON.stringify({ slug, comment, commentedById, parentId }),
     });
 
     if (!response.ok) {
@@ -270,14 +271,14 @@ export const addComment = async (
 };
 
 // Update blog read count
-export const updateBlogReadCount = async (blogId: string): Promise<{ success: boolean; updatedReads: number }> => {
+export const updateBlogReadCount = async (slug: string): Promise<{ success: boolean; updatedReads: number }> => {
   try {
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.UPDATE_BLOG_READ_COUNT}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ blogId }),
+      body: JSON.stringify({ slug }),
     });
 
     if (!response.ok) {
@@ -327,14 +328,14 @@ export const getAllTags = async (): Promise<Tag[]> => {
 };
 
 // Get nested comments
-export const getNestedComments = async (blogId: string): Promise<{ blogId: string; comments: Comment[]; cached?: boolean }> => {
+export const getNestedComments = async (slug: string): Promise<{ blogId: string; comments: Comment[]; cached?: boolean }> => {
   try {
     const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.GET_NESTED_COMMENTS}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ blogId }),
+      body: JSON.stringify({ slug }),
     });
 
     if (!response.ok) {

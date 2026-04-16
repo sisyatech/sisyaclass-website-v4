@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Facebook, Twitter, Linkedin, Link as LinkIcon, MessageCircle } from "lucide-react";
-import { getBlogById, type Blog } from "../../../lib/blogApi";
+import { getBlogBySlug, type Blog } from "../../../lib/blogApi";
 
 interface BlogSocialShareProps {
   blogId: string;
@@ -19,7 +19,7 @@ const BlogSocialShare = ({ blogId, blogData: serverBlogData }: BlogSocialSharePr
       const fetchBlogData = async () => {
         try {
           setLoading(true);
-          const blog = await getBlogById(blogId);
+          const blog = await getBlogBySlug(blogId);
           setBlogData(blog);
           //console.log("Blog data loaded for sharing:", blog);
         } catch (error) {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getBlogById, type Blog } from "../../../lib/blogApi";
+import { getBlogBySlug, type Blog } from "../../../lib/blogApi";
 
 interface BlogTableOfContentsProps {
   blogId: string;
@@ -21,7 +21,7 @@ const BlogTableOfContents = ({ blogId }: BlogTableOfContentsProps) => {
     const fetchBlogAndGenerateTOC = async () => {
       try {
         setLoading(true);
-        const blog = await getBlogById(blogId);
+        const blog = await getBlogBySlug(blogId);
         
         if (blog && blog.content) {
           const headings = extractHeadingsFromContent(blog.content);

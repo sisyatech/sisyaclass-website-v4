@@ -163,7 +163,7 @@ const BlogsContent = () => {
             {/* Main Blog Section */}
             <div className="w-full lg:max-w-3xl lg:flex-1">
               <RevealOnView from="left" durationMs={800} delayMs={200}>
-                <Link href={`/blogs/${currentBlog.id}`}>
+                <Link href={`/blogs/${currentBlog.slug}`}>
                   <div className="cursor-pointer overflow-hidden rounded-lg bg-white shadow-lg transition-shadow duration-300 hover:shadow-xl sm:rounded-xl">
                     {/* Blog Image Area */}
                     <div className="relative h-[240px] bg-black sm:h-[280px] md:h-[320px] lg:h-[360px]">
@@ -240,7 +240,7 @@ const BlogsContent = () => {
                     .map((blog, index) => (
                       <Link
                         key={blog.id}
-                        href={`/blogs/${blog.id}`}
+                        href={`/blogs/${blog.slug}`}
                         className="group flex flex-shrink-0 cursor-pointer gap-2 rounded-lg p-2 transition-all duration-300 hover:bg-white hover:shadow-md"
                       >
                         {/* Thumbnail */}

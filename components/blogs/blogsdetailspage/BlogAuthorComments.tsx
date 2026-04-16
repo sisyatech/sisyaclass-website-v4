@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { MessageSquare, Reply } from "lucide-react";
-import { getBlogById, getNestedComments, addComment, fixProfileImageUrl, type Blog, type Comment } from "../../../lib/blogApi";
+import { getBlogBySlug, getNestedComments, addComment, fixProfileImageUrl, type Blog, type Comment } from "../../../lib/blogApi";
 import { useUser } from "../../UserContext";
 import LoginModal from "../../LoginModal";
 
@@ -26,7 +26,7 @@ const BlogAuthorComments = ({ blogId }: BlogAuthorCommentsProps) => {
       try {
         setLoading(true);
         const [blog, commentsResponse] = await Promise.all([
-          getBlogById(blogId),
+          getBlogBySlug(blogId),
           getNestedComments(blogId)
         ]);
         
