@@ -20,94 +20,56 @@ type AdvantageZone = {
 
 const advantageZones: AdvantageZone[] = [
   {
-    name: "Classroom Zone",
-    tagline: "Where the journey begins – the right way.",
+    name: "Where concepts become confidence — fast",
+    tagline: "",
     bgColor: "bg-[#E9F2FE]",
     titleColor: "text-[#01317A]",
     cards: [
       {
-        title: "Structured PCM Curriculum",
-        description: "Learn Physics, Chemistry & Maths with clarity, depth & a roadmap to IIT.",
-        icon: "/jee_foundation/grid/grid-1.svg",
+        title: "Smart Algebra Tricks",
+        description: "",
+        icon: "/jee_foundation/a+b.png",
       },
       {
-        title: "Live Classes by IITians",
-        description: "Train with the best — every concept taught by those who've cracked IIT-JEE themselves.",
-        icon: "/jee_foundation/grid/grid-2.svg",
-      },
-      {
-        title: "Recorded Access Anytime",
-        description: "Never miss a class. Learn, revise, and re-learn on your own schedule.",
-        icon: "/jee_foundation/grid/grid-3.svg",
+        title: "Visual Trigonometry",
+        description: "",
+        icon: "/jee_foundation/sin.png",
       },
     ],
   },
   {
-    name: "Mastery Zone",
-    tagline: "Practice isn't optional. It's everything.",
+    name: "Build IIT + Olympiad Strength, Brick by Brick",
+    tagline: "",
     bgColor: "bg-[#D4F7DC]",
     titleColor: "text-[#1C4031]",
     cards: [
       {
-        title: "Mock Tests + PYQs",
-        description: "Solve real exam-level problems. Track where you stand, and how to level up.",
-        icon: "/jee_foundation/grid/grid-4.svg",
+        title: "Board + JEE Foundation",
+        description: "",
+        icon: "/jee_foundation/list.png",
       },
       {
-        title: "Live Quizzes & HOTs Discussions",
-        description: "Boost retention & problem-solving with concept-challenging practice sessions.",
-        icon: "/jee_foundation/grid/grid-5.svg",
-      },
-      {
-        title: "DPPs, Olympiad & NTSE Edge",
-        description: "Practice daily. Improve consistently. Go beyond JEE. Strengthen your base for national-level excellence.",
-        icon: "/jee_foundation/grid/grid-6.svg",
+        title: "Olympiad-Ready Thinking",
+        description: "",
+        icon: "/jee_foundation/box.png",
       },
     ],
   },
   {
-    name: "Support Zone",
-    tagline: "Because no one should face JEE prep alone.",
+    name: "Smart Learning = Sharp Competition",
+    tagline: "",
     bgColor: "bg-[#FFE5D0]",
     titleColor: "text-[#5A2F1F]",
     cards: [
       {
-        title: "1:1 Mentor Guidance",
-        description: "Every question matters. Get answers from real mentors and AI – instantly.",
-        icon: "/jee_foundation/grid/grid-7.svg",
+        title: "Learn how toppers save 20+ mins in exams — and score higher",
+        description: "",
+        icon: "/jee_foundation/cup.png",
       },
       {
-        title: "SISYA IIT-JEE Learning Community",
-        description: "Never study alone. Be part of a driven, supportive peer group.",
-        icon: "/jee_foundation/grid/grid-8.svg",
-      },
-      {
-        title: "Digital Study Material",
-        description: "All notes, formulas, and resources available in one tap — wherever you go.",
-        icon: "/jee_foundation/grid/grid-9.svg",
-      },
-    ],
-  },
-  {
-    name: "Success Zone",
-    tagline: "Because results speak louder than intent.",
-    bgColor: "bg-[#FFE5D0]",
-    titleColor: "text-[#6B009E]",
-    cards: [
-      {
-        title: "Performance Tracking",
-        description: "See your progress. Fix your weaknesses. Accelerate your journey to IIT.",
-        icon: "/jee_foundation/grid/grid-10.svg",
-      },
-      {
-        title: "All India Test Series",
-        description: "Compete nationwide. Know where you stand before JEE does.",
-        icon: "/jee_foundation/grid/grid-11.svg",
-      },
-      {
-        title: "Starter Kit + Exclusive SISYA Goodies",
-        description: "Your motivation booster — delivered at your doorstep to kickstart your IIT journey.",
-        icon: "/jee_foundation/grid/grid-12.svg",
+        title: "This isn't tuition. This is the first step to cracking JEE early.",
+        description: "",
+        icon: "/jee_foundation/star2.png",
       },
     ],
   },
@@ -120,83 +82,60 @@ type AdvantagesGridProps = {
 export default function AdvantagesGrid({ onStartJourney }: AdvantagesGridProps) {
   return (
     <section className="bg-white py-16 px-4 font-roboto">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center text-2xl md:text-3xl lg:text-[45px] font-bold text-[#002B71] mb-8 md:mb-16 leading-tight max-w-[800px] mx-auto px-4"
+          className="text-center text-3xl md:text-5xl font-bold text-[#1a1a1a] mb-16 leading-tight max-w-[800px] mx-auto px-4"
         >
-          12 Advantages That You Get With SISYA Online JEE Classes
+          What Your Child Will Learn In 1 Hour Masterclass
         </motion.h2>
 
-        <div className="space-y-16">
+        <div className="space-y-12 md:space-y-16">
           {advantageZones.map((zone, zIdx) => (
-            <div key={zIdx} className="flex flex-col lg:flex-row gap-6 md:gap-10 items-start justify-center">
+            <div key={zIdx} className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-center justify-center">
               {/* Zone Info */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="w-full lg:w-[200px] pt-4 shrink-0"
+                className="w-full lg:w-[350px] shrink-0"
               >
-                <h3 className={`text-xl md:text-2xl lg:text-[40px] font-black ${zone.titleColor} mb-1 lg:mb-2 leading-tight text-center lg:text-right whitespace-nowrap lg:whitespace-normal`}>
-                  {zone.name.split(' ')[0]}{" "}
-                  <span className="lg:block">{zone.name.split(' ')[1]}</span>
+                <h3 className={`text-2xl md:text-3xl lg:text-[28px] font-bold ${zone.titleColor} leading-tight text-center lg:text-right`}>
+                  {zone.name}
                 </h3>
-                <p className={`italic ${zone.titleColor} opacity-70 text-xs sm:text-sm md:text-base lg:text-[16px] font-medium leading-normal text-center lg:text-right`}>
-                  {zone.tagline}
-                </p>
               </motion.div>
 
-              {/* Cards Grid */}
-              <div className="flex flex-wrap gap-3 justify-center md:justify-start lg:max-w-[700px]">
+              {/* Cards Grid - Forced 2 columns */}
+              <div className="grid grid-cols-2 gap-4 md:gap-6 w-full max-w-[460px] lg:max-w-[480px]">
                 {zone.cards.map((card, cIdx) => (
                   <motion.div
                     key={cIdx}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ delay: cIdx * 0.1 }}
                     viewport={{ once: true }}
-                    className={`${zone.bgColor} p-4 rounded-[22px] flex flex-col items-center text-center min-h-[210px] w-[210px] group hover:shadow-md transition-shadow shrink-0 justify-between py-5`}
+                    className={`${zone.bgColor} p-4 md:p-6 rounded-[32px] flex flex-col items-center text-center min-h-[220px] md:min-h-[250px] w-full group hover:shadow-xl transition-all duration-300 justify-center`}
                   >
-                    <div className="flex flex-col items-center">
-                      <div className="w-12 h-12 mb-2 flex items-center justify-center">
-                        <Image
-                          src={card.icon}
-                          alt={card.title}
-                          width={48}
-                          height={48}
-                          className="object-contain"
-                        />
-                      </div>
-                      <h4 className="text-[15px] font-bold text-[#002B71] mb-1.5 leading-tight px-1">
-                        {card.title}
-                      </h4>
+                    <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] mb-4 flex items-center justify-center relative bg-white/50 rounded-2xl p-2 group-hover:scale-110 transition-transform">
+                      <Image
+                        src={card.icon}
+                        alt={card.title}
+                        width={80}
+                        height={80}
+                        className="object-contain"
+                      />
                     </div>
-                    <p className="text-[11px] text-black leading-[1.3] opacity-90 group-hover:opacity-100 transition-opacity flex-1 flex items-center">
-                      {card.description}
-                    </p>
+                    <h4 className={`text-[13px] md:text-[15px] font-bold ${zone.titleColor === 'text-[#5A2F1F]' ? 'text-[#854d0e]' : zone.titleColor} leading-tight px-1`}>
+                      {card.title}
+                    </h4>
                   </motion.div>
                 ))}
               </div>
             </div>
           ))}
         </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="flex justify-center mt-16"
-        >
-          <button
-            onClick={onStartJourney}
-            className="bg-[#FFE100] hover:bg-[#F2D600] text-black font-extrabold py-3.5 px-10 rounded-xl text-base md:text-lg lg:text-[18px] transition-transform active:scale-95 shadow-lg shadow-black/10"
-          >
-            Start Your JEE Journey Today
-          </button>
-        </motion.div>
       </div>
     </section>
   );
