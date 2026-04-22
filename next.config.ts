@@ -100,6 +100,18 @@ const nextConfig: NextConfig = {
         destination: '/ltc/payment/success',
       },
       {
+        source: '/mathltc/payment/success.php',
+        destination: '/mathltc/payment/success',
+      },
+      {
+        source: '/mathltc/payment/failed.php',
+        destination: '/mathltc/payment/failed',
+      },
+      {
+        source: '/mathltc/success.php',
+        destination: '/mathltc/payment/success',
+      },
+      {
         source: '/askme/payment/success.php',
         destination: '/askme/payment/success',
       },
