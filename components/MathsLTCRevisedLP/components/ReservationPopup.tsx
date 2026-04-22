@@ -63,7 +63,7 @@ export default function ReservationPopup({
               onChange={(e) => onChangeClass(e.target.value)}
               className="w-full p-3 pr-10 border border-[#c3d3ea] rounded-lg text-base bg-white appearance-none"
             >
-              {[6, 7, 8].map((grade) => (
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((grade) => (
                 <option key={grade} value={grade.toString()}>
                   Class {grade}
                 </option>
@@ -102,7 +102,7 @@ export default function ReservationPopup({
             type="submit"
             className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]"
           >
-            Get Demo @ ₹19 Only
+            Try 3 Classes @ ₹19 Only
           </button>
         </form>
       </div>

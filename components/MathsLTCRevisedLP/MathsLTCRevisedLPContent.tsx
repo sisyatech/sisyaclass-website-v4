@@ -9,7 +9,6 @@ import WeeklyPlanSection from "./sections/WeeklyPlanSection";
 import ReviewsSection from "./sections/ReviewsSection";
 import BlueStatsSection from "./sections/BlueStatsSection";
 import Testimonials from "../Testimonials";
-import ReadyToSeeSection from "./sections/ReadyToSeeSection";
 import ReservationPopup from "./components/ReservationPopup";
 import WhatsAppFab from "./components/WhatsAppFab";
 import SocialFab from "./components/SocialFab";
@@ -158,7 +157,6 @@ export default function MathsLTCRevisedLPContent() {
       <ReviewsSection />
       <BlueStatsSection />
       <Testimonials />
-      <ReadyToSeeSection onBookDemo={() => setShowReservationPopup(true)} />
       <WhatsAppFab />
       <SocialFab />
       <ReservationPopup

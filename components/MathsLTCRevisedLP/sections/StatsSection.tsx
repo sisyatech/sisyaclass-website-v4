@@ -9,7 +9,7 @@ type StatsSectionProps = {
 
 export default function StatsSection({ onChooseClass }: StatsSectionProps) {
   return (
-    <section className="relative bg-white py-8 px-8 rounded-[26px] max-w-[1150px] mx-auto mt-10 border border-[#e0e7ff] min-h-[180px] z-0">
+    <section className="relative bg-white py-12 px-8 rounded-[26px] max-w-[1150px] mx-auto mt-10 border border-[#e0e7ff] min-h-[180px] z-0">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="w-full md:basis-[36%] md:w-auto">
           <h2 className="font-bold text-[1.75rem] leading-tight md:text-[2.0rem] md:leading-[2.4rem] text-[#6f57e4] text-center md:text-left">
@@ -38,19 +38,7 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
           </div>
         </div>
         <div className="w-full md:basis-[60%] grid grid-cols-3 gap-3 md:grid-cols-4">
-          {[1, 2, 3, 4, 5].map((grade) => (
-            <button
-            key={grade}
-            className="text-white font-medium mt-0 py-1.5 px-2 rounded-[10px] min-h-[42px] w-full flex flex-col justify-center items-center text-center md:py-2 md:min-h-[48px]"
-            style={{ background: "linear-gradient(135deg, #d2d2d2, #ada29f)" }}
-          >
-            <div className="text-xs md:text-sm">Class {grade}</div>
-            <span className="text-[9px] md:text-[10px]">
-              <span>(Sold Out)</span>
-            </span>
-          </button>
-          ))}
-          {[6, 7, 8].map((grade) => (
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((grade) => (
             <button
               key={grade}
               className="bg-[#685edb] text-white border-0 py-1.5 px-2 font-semibold rounded-[10px] cursor-pointer text-sm min-h-[42px] w-full flex flex-col justify-center items-center text-center leading-[1.2] transition ease-in-out hover:scale-105 md:py-2 md:text-[0.9rem] md:min-h-[48px]"
@@ -59,18 +47,24 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
               Class {grade}
             </button>
           ))}
-          {[9,10,11,12].map((grade) => (
-            <button
-            key={grade}
+          <button
             className="text-white font-medium mt-0 py-1.5 px-2 rounded-[10px] min-h-[42px] w-full flex flex-col justify-center items-center text-center md:py-2 md:min-h-[48px]"
             style={{ background: "linear-gradient(135deg, #d2d2d2, #ada29f)" }}
           >
-            <div className="text-xs md:text-sm">Class {grade}</div>
+            <div className="text-xs md:text-sm">Class 11</div>
             <span className="text-[9px] md:text-[10px]">
               <span>(Sold Out)</span>
             </span>
           </button>
-          ))}
+          <button
+            className="text-white font-medium mt-0 py-1.5 px-2 rounded-[10px] min-h-[42px] w-full flex flex-col justify-center items-center text-center md:py-2 md:min-h-[48px]"
+            style={{ background: "linear-gradient(135deg, #d2d2d2, #ada29f)" }}
+          >
+            <div className="text-xs md:text-sm">Class 12</div>
+            <span className="text-[9px] md:text-[10px]">
+              <span>(Sold Out)</span>
+            </span>
+          </button>
         </div>
       </div>
     </section>

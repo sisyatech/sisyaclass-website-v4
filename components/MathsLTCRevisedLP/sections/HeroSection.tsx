@@ -88,30 +88,31 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   };
 
   return (
-    <section className="bg-[#01317a] text-white relative overflow-hidden py-8 md:py-10 min-h-[380px] md:min-h-[460px]">
+    <section className="bg-[#01317a] text-white relative overflow-hidden py-8 md:py-10 min-h-[420px] md:min-h-[500px]">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-stretch gap-6 min-h-[380px] relative px-4">
         <div className="flex-1 p-0 md:p-4 flex flex-col justify-center text-center md:text-left">
           <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base font-semibold tracking-wide mb-2 uppercase text-[#ffd500]">
             90% Marks In Final Exams, Or Get Your Money Back!*
           </p>
           <h1 className="text-3xl md:text-[3rem] md:leading-[3.5rem] font-bold mb-4">
-            1-Year Live Math Course
+            1-On-1 Maths
+            <br className="hidden md:block" /> Improvement Program
           </h1>
           <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
             30K Kids aren&apos;t afraid of Maths, Anymore!
           </p>
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
-            <li>✅ For Grades 6 - 8 Only</li>
-            <li>✅ 300 Hours of Live Classes</li>
-            <li>✅ Taught & Mentored By IIT/NIT Teachers</li>
-            <li>✅ Designed for CBSE, ICSE & State Boards</li>
+            <li>✅ 300 Hrs Live + Class Recordings Available Anytime</li>
+            <li>✅ Taught &amp; Mentored By IIT/NIT Teachers</li>
+            <li>✅ Designed for CBSE, ICSE &amp; State Boards</li>
+            <li>✅ AI Assisted Doubt Solving - Learn Anytime, Anywhere</li>
           </ul>
           <div className="mt-6 mb-2 flex flex-wrap gap-4 justify-center md:justify-start">
             <button
               className="inline-flex items-center justify-center font-semibold text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-[#ffd500] text-black"
               onClick={onRegister}
             >
-              Get Demo @ ₹19
+              Start Just @ ₹19
             </button>
             <button
               className="inline-flex items-center justify-center font-semibold text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 w-[230px] h-[52px] px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
@@ -124,7 +125,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
         <div className="flex-1 md:absolute md:right-4 md:bottom-[-40px] md:w-1/2 flex justify-center items-center md:items-end pointer-events-none mt-6 md:mt-0">
           <Image
-            src="/mathlp/hero.png"
+            src="/mathlp/heropic1.png"
             alt="1-On-1 Maths Improvement Program"
             width={560}
             height={380}
