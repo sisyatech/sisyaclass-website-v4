@@ -16,11 +16,11 @@ import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 interface NewsDetailPageProps {
   params: Promise<{
-    id: string;
+    slug: string;
   }>;
 }
 
-function NewsDetailPageContent({ id }: { id: string }) {
+function NewsDetailPageContent({ slug }: { slug: string }) {
   // You can fetch the news title here based on the id
   // For now, using a placeholder
   const newsTitle = "News Article Title";
@@ -30,7 +30,7 @@ function NewsDetailPageContent({ id }: { id: string }) {
       <Navbar />
       <NewsBreadcrumb newsTitle={newsTitle} />
       <div className="w-full">
-        <NewsDetailContent newsId={id} />
+        <NewsDetailContent newsId={slug} />
       </div>
       
       <AppDownload />
@@ -50,7 +50,7 @@ export default function NewsDetailPage({ params }: NewsDetailPageProps) {
   
   return (
     <MobileMenuProvider>
-      <NewsDetailPageContent id={unwrappedParams.id} />
+      <NewsDetailPageContent slug={unwrappedParams.slug} />
     </MobileMenuProvider>
   );
 }
@@ -59,7 +59,7 @@ export default function NewsDetailPage({ params }: NewsDetailPageProps) {
 export async function generateMetadata({ params }: NewsDetailPageProps): Promise<Metadata> {
   const unwrappedParams = await params;
   try {
-    const news = await getNewsById(unwrappedParams.id);
+    const news = await getNewsById(unwrappedParams.slug);
     const imageUrl = news.banner?.startsWith("http") ? news.banner : `https://sisyaclass-website-v4.vercel.app/blogs/blogimage.svg`;
     return {
       title: `${news.title} - Sisya Class News`,
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
       openGraph: {
         title: news.title,
         description: news.des || "Latest update from Sisya Class",
-        url: `https://sisyaclass-website-v4.vercel.app/news/${unwrappedParams.id}`,
+        url: `https://sisyaclass-website-v4.vercel.app/news/${unwrappedParams.slug}`,
         images: [{ url: imageUrl, width: 1200, height: 630, alt: news.title }],
         type: "article",
         siteName: "Sisya Class",

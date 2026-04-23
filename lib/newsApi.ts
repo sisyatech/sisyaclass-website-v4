@@ -4,6 +4,7 @@ import { API_BASE_URL, API_ENDPOINTS } from './config';
 // Types
 export interface News {
   id: string;
+  slug?: string;
   title: string;
   des: string; // description field from API
   content: any;
@@ -116,7 +117,7 @@ export const getNewsById = async (id: string) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ slug:id }),
     });
 
     //console.log('📰 getNewsById: Response status:', response.status);

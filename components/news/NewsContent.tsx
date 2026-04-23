@@ -161,7 +161,7 @@ const NewsContent = () => {
             {/* Featured News (Takes 2/3 width on lg screens) */}
             <div className="w-full lg:w-2/3"> 
               <RevealOnView from="bottom" durationMs={800} delayMs={200}>
-                <Link href={`/news/${featuredNews.id}`} className="block h-full"> {/* Make link block and h-full */}
+                <Link href={`/news/${featuredNews.slug}`} className="block h-full"> {/* Make link block and h-full */}
                   <div className="group relative transform overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:-translate-y-1 hover:shadow-lg h-full">
                     {/* Featured Image */}
                     <div className="relative h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px]">
@@ -303,7 +303,7 @@ const NewsContent = () => {
                   // Adjust delay based on original index (index + 1 because we skipped the first)
                   delayMs={(index + 1) * 100 + 400} 
                 >
-                  <Link href={`/news/${newsItem.id}`} className="block h-full"> {/* Make link block and h-full */}
+                  <Link href={`/news/${newsItem.slug}`} className="block h-full"> {/* Make link block and h-full */}
                     <div className="group flex h-full transform flex-col overflow-hidden rounded-lg bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
                       {/* Card Image */}
                       <div className="relative h-32 overflow-hidden sm:h-36">
