@@ -25,34 +25,49 @@ export async function generateMetadata({ params }: BlogDetailPageProps): Promise
   try {
     const blog = await getBlogBySlug(unwrappedParams.slug);
 
+    const fallbackTitle = `${blog.title} - Sisya Class`;
+    const fallbackDes = blog.des || "Check out this amazing blog post on Sisya Class";
+    
     const imageUrl = blog.banner?.startsWith("http")
-  ? blog.banner
-  : `https://sisyaclass-website-v4.vercel.app/blogs/blogimage.svg`;
+      ? blog.banner
+      : `https://sisyaclass-website-v4.vercel.app/blogs/blogimage.svg`;
+    
+    const title = blog.metaTitle || fallbackTitle;
+    const description = blog.metaDescription || fallbackDes;
+    
+    const ogTitle = blog.openGraph?.title || title;
+    const ogDescription = blog.openGraph?.description || description;
+    const ogImage = blog.openGraph?.image || imageUrl;
     
     return {
-      title: `${blog.title} - Sisya Class`,
-      description: blog.des || "Check out this amazing blog post on Sisya Class",
+      title,
+      description,
       openGraph: {
-        title: blog.title,
-        description: blog.des || "Check out this amazing blog post on Sisya Class",
+        title: ogTitle,
+        description: ogDescription,
         url: `https://sisyaclass-website-v4.vercel.app/blogs/${unwrappedParams.slug}`,
         images: [
           {
-            url: imageUrl,
+            url: ogImage,
             width: 1200,
             height: 630,
-            alt: blog.title,
+            alt: blog.bannerAlt || blog.title,
           },
         ],
         type: "article",
-        siteName: "Sisya Class",
+        siteName: blog.openGraph?.site_name || "Sisya Class",
       },
       twitter: {
         card: "summary_large_image",
-        title: blog.title,
-        description: blog.des || "Check out this amazing blog post on Sisya Class",
-        images: [imageUrl],
+        title: ogTitle,
+        description: ogDescription,
+        images: [ogImage],
       },
+      ...(blog.canonicalUrl ? { alternates: { canonical: blog.canonicalUrl } } : {}),
+      robots: {
+        index: blog.isIndexable !== false,
+        follow: blog.robotsTag ? blog.robotsTag.includes('follow') : true,
+      }
     };
   } catch (error) {
     //console.error('Error generating metadata:', error);

@@ -179,7 +179,7 @@ const SimilarVideos = () => {
                       {blog.banner ? (
                         <Image
                           src={blog.banner}
-                          alt={blog.title}
+                          alt={blog.bannerAlt || blog.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
                         />

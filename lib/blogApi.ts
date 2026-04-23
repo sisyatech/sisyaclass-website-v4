@@ -76,6 +76,18 @@ export interface Blog {
   activityComments: number;
   activityReads: number;
   activityParentComments: number;
+  metaTitle?: string;
+  metaDescription?: string;
+  bannerAlt?: string;
+  canonicalUrl?: string;
+  isIndexable?: boolean;
+  robotsTag?: string;
+  openGraph?: {
+    image?: string;
+    title?: string;
+    site_name?: string;
+    description?: string;
+  };
   tags: Array<{
     tag: {
       id: string;
