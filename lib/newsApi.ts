@@ -17,6 +17,15 @@ export interface News {
   featured?: boolean;
   activityReads?: number;
   tags?: { tag: { id: string; name: string } }[];
+  
+  // SEO fields
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  bannerAlt?: string | null;
+  canonicalUrl?: string | null;
+  isIndexable?: boolean;
+  robotsTag?: string | null;
+  openGraph?: any | null;
 }
 
 export interface Tag {

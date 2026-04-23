@@ -444,7 +444,7 @@ const NewsMainContent = ({ newsId }: NewsMainContentProps) => {
       <div className="relative aspect-[16/9] bg-black">
         <Image
           src={newsData.banner}
-          alt={newsData.title}
+          alt={newsData.bannerAlt || newsData.title}
           fill
           className="object-contain"
           priority

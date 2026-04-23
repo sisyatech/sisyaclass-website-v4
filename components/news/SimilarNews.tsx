@@ -182,7 +182,7 @@ const SimilarNews = () => {
                 <div className="relative w-full h-[160px] sm:h-[180px] md:h-[190px] lg:h-[180px] xl:h-[200px] flex-shrink-0 overflow-hidden rounded-t-xl">
                   <Image
                     src={news.banner || "/blogs/blogimage.svg"}
-                    alt={news.title}
+                    alt={news.bannerAlt || news.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />

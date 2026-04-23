@@ -167,7 +167,7 @@ const NewsContent = () => {
                     <div className="relative h-[200px] sm:h-[240px] md:h-[280px] lg:h-[320px]">
                       <Image
                         src={featuredNews.banner || "https://placehold.co/800x320/cccccc/333333?text=Featured+News"} // Placeholder
-                        alt={featuredNews.title}
+                        alt={featuredNews.bannerAlt || featuredNews.title}
                         fill
                         className="object-cover transition-transform duration-500 group-hover:scale-105" 
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 66vw, 800px"
@@ -233,7 +233,7 @@ const NewsContent = () => {
                       <div className="relative h-40 overflow-hidden sm:h-44 md:h-48 lg:h-56">
                         <Image
                           src={firstRegularNews.banner || "https://placehold.co/400x150/cccccc/333333?text=News+Item"} // Placeholder
-                          alt={firstRegularNews.title}
+                          alt={firstRegularNews.bannerAlt || firstRegularNews.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 400px"
@@ -309,7 +309,7 @@ const NewsContent = () => {
                       <div className="relative h-32 overflow-hidden sm:h-36">
                         <Image
                           src={newsItem.banner || "https://placehold.co/400x150/cccccc/333333?text=News+Item"} // Placeholder
-                          alt={newsItem.title}
+                          alt={newsItem.bannerAlt || newsItem.title}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"

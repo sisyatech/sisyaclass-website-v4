@@ -61,21 +61,37 @@ export async function generateMetadata({ params }: NewsDetailPageProps): Promise
   try {
     const news = await getNewsById(unwrappedParams.slug);
     const imageUrl = news.banner?.startsWith("http") ? news.banner : `https://sisyaclass-website-v4.vercel.app/blogs/blogimage.svg`;
+    
+    // SEO fields from API with robust fallbacks
+    const metaTitle = news.metaTitle || `${news.title} - Sisya Class News`;
+    const metaDescription = news.metaDescription || news.des || "Latest update from Sisya Class";
+    const canonical = news.canonicalUrl || `https://sisyaclass-website-v4.vercel.app/news/${unwrappedParams.slug}`;
+    const robots = news.robotsTag || (news.isIndexable === false ? "noindex, nofollow" : "index, follow");
+
     return {
-      title: `${news.title} - Sisya Class News`,
-      description: news.des || "Latest update from Sisya Class",
+      title: metaTitle,
+      description: metaDescription,
+      alternates: {
+        canonical: canonical,
+      },
+      robots: robots,
       openGraph: {
-        title: news.title,
-        description: news.des || "Latest update from Sisya Class",
-        url: `https://sisyaclass-website-v4.vercel.app/news/${unwrappedParams.slug}`,
-        images: [{ url: imageUrl, width: 1200, height: 630, alt: news.title }],
+        title: news.openGraph?.title || news.title,
+        description: news.openGraph?.description || news.des || "Latest update from Sisya Class",
+        url: news.openGraph?.url || `https://sisyaclass-website-v4.vercel.app/news/${unwrappedParams.slug}`,
+        images: news.openGraph?.images || [{ 
+          url: imageUrl, 
+          width: 1200, 
+          height: 630, 
+          alt: news.bannerAlt || news.title 
+        }],
         type: "article",
         siteName: "Sisya Class",
       },
       twitter: {
         card: "summary_large_image",
-        title: news.title,
-        description: news.des || "Latest update from Sisya Class",
+        title: news.metaTitle || news.title,
+        description: news.metaDescription || news.des || "Latest update from Sisya Class",
         images: [imageUrl],
       },
     };
