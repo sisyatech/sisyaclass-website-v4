@@ -95,8 +95,8 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             90% Marks In Final Exams, Or Get Your Money Back!*
           </p>
           <h1 className="text-3xl md:text-[3rem] md:leading-[3.5rem] font-bold mb-4">
-            1-On-1 Maths
-            <br className="hidden md:block" /> Improvement Program
+            1 Year Maths Champ Program
+            <br className="hidden md:block" /> @ ₹9,999
           </h1>
           <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
             30K Kids aren&apos;t afraid of Maths, Anymore!
