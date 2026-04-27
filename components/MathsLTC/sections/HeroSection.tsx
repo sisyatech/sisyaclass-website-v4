@@ -102,8 +102,9 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           </p>
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
             <li>✅ For Grades 6 - 8 Only</li>
-            <li>✅ 300 Hours of Live Classes</li>
             <li>✅ Taught & Mentored By IIT/NIT Teachers</li>
+            <li>✅ Subjects - Maths, Physics, Chemistry, English, Coding</li>
+            <li>✅ 300 Hours of Live Classes</li>
             <li>✅ Designed for CBSE, ICSE & State Boards</li>
           </ul>
           <div className="mt-6 mb-2 flex flex-wrap gap-4 justify-center md:justify-start">
