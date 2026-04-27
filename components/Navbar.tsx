@@ -170,9 +170,8 @@ export const MobileMenu = () => {
       setIsMobileMenuOpen(false);
       setCurrentView("main");
       setExpandedGrade(null);
-      router.push(
-        `/grade${gradeNumber}?course=${encodeURIComponent(courseLabel)}`
-      );
+      const courseSlug = courseLabel.toLowerCase().replace(/\s+/g, '-');
+      router.push(`/grade${gradeNumber}/${courseSlug}`);
     }
   };
 

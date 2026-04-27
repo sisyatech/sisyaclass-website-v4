@@ -37,7 +37,12 @@ interface BigCourseData {
   subjects: SubjectData[];
 }
 
-const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
+interface ChaptersProps {
+  gradeNumber?: number;
+  courseName?: string;
+}
+
+const Chapters = ({ gradeNumber, courseName }: ChaptersProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -49,8 +54,15 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
   // Get subject from URL path (e.g., /grade8/mathematics -> "mathematics")
   // or fallback to query parameter for backward compatibility
   const pathParts = pathname?.split('/').filter(Boolean) || [];
-  // pathParts[0] = 'grade8', pathParts[1] = 'mathematics' (if subject page)
-  const subjectFromPath = pathParts.length > 1 ? decodeURIComponent(pathParts[1]).replace(/-/g, ' ') : '';
+  // For new routes /grade8/jee-foundation/mathematics, subject is at index 2
+  // For old routes /grade8/mathematics, subject is at index 1
+  let subjectFromPath = '';
+  if (pathParts.length > 2 && pathParts[0].startsWith('grade')) {
+    subjectFromPath = decodeURIComponent(pathParts[2]).replace(/-/g, ' ');
+  } else if (pathParts.length > 1) {
+    subjectFromPath = decodeURIComponent(pathParts[1]).replace(/-/g, ' ');
+  }
+
   const selectedSubjectFromUrl = subjectFromPath || searchParams?.get('subject') || '';
   
   // Debug: Log component render
@@ -100,7 +112,7 @@ const Chapters = ({ gradeNumber }: { gradeNumber?: number }) => {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
             // Get the course query parameter and filter the data
-            const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+            const desiredLabel = (courseName || searchParams?.get('course') || '').toLowerCase();
             let picked = data[0];
             
             if (desiredLabel) {

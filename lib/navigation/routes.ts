@@ -12,10 +12,42 @@ export const routes = {
   careers: '/careers',
   // Dynamic grade routes
   grade: (gradeNumber: number) => `/grade${gradeNumber}`,
-  
+
+  /**
+   * Course page URL:
+   *   /grade{N}/{courseSlug}
+   */
+  course: (gradeNumber: number, courseLabel: string) => {
+    const courseSlug = courseLabel.toLowerCase().replace(/\s+/g, '-');
+    return `/grade${gradeNumber}/${courseSlug}`;
+  },
+
+  /**
+   * Subject page URL using the new route-segment pattern:
+   *   /grade{N}/{courseSlug}/{subjectSlug}
+   *
+   * Both courseLabel and subjectLabel are lowercased and space-to-hyphen converted.
+   * Example: subject(8, "JEE Foundation", "Mathematics") → "/grade8/jee-foundation/mathematics"
+   */
+  subject: (gradeNumber: number, courseLabel: string, subjectLabel: string) => {
+    const courseSlug = courseLabel.toLowerCase().replace(/\s+/g, '-');
+    const subjectSlug = subjectLabel.toLowerCase().replace(/\s+/g, '-');
+    return `/grade${gradeNumber}/${courseSlug}/${subjectSlug}`;
+  },
+
+  /**
+   * Legacy subject page URL (query-param style, kept for backward-compat).
+   *   /grade{N}/{subjectSlug}?course={courseLabel}
+   */
+  subjectLegacy: (gradeNumber: number, subjectLabel: string, courseLabel?: string) => {
+    const subjectSlug = subjectLabel.toLowerCase().replace(/\s+/g, '-');
+    const courseParam = courseLabel ? `?course=${encodeURIComponent(courseLabel)}` : '';
+    return `/grade${gradeNumber}/${subjectSlug}${courseParam}`;
+  },
+
   // Grade validation
   isValidGrade: (grade: number) => grade >= 1 && grade <= 12,
-  
+
   // Extract grade number from URL param
   extractGradeNumber: (gradeParam: string): number | null => {
     const gradeNumber = parseInt(gradeParam.replace('grade', ''));

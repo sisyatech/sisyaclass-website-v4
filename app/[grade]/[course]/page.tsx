@@ -1,13 +1,18 @@
 "use client";
 
+import Container from "@/components/Container";
+import Course from "@/components/classes/Course";
+import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
+import QuickLinks from "@/components/classes/QuickLinks";
+import FAQ from "@/components/FAQ";
+import AppDownload from "@/components/AppDownload";
+import Footer from "@/components/Footer";
+import StudyMaterial from "@/components/StudyMaterial";
+import Moto from "@/components/moto";
+import FooterBottom from "@/components/FooterBottom";
 import { use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import Container from "@/components/Container";
-import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
 import { parseGradeFromParam } from "@/lib/navigation";
-import { SubjectBreadcrumb } from "@/components/classes/SubjectBreadcrumb";
-import Course from "@/components/classes/Course";
-import QuickLinks from "@/components/classes/QuickLinks";
 import Payment from "@/components/classes/payment";
 import Impact from "@/components/Impact";
 import AIEcosystem from "@/components/AIEcosystem";
@@ -17,25 +22,20 @@ import Banner from "@/components/Banner";
 import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Reviews from "@/components/Reviews";
-import FAQ from "@/components/FAQ";
-import AppDownload from "@/components/AppDownload";
-import Footer from "@/components/Footer";
-import StudyMaterial from "@/components/StudyMaterial";
-import Moto from "@/components/moto";
-import FooterBottom from "@/components/FooterBottom";
 import SyllabusSection from "@/components/classes/SyllabusSection";
-import Chapters from "@/components/classes/chapters";
-import BoosterCourseSection from "@/components/classes/BoosterCourseSection";
+
+import { GradeBreadcrumb } from "@/components/classes/GradeBreadcrumb";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
-interface SubjectPageProps {
+
+interface CoursePageProps {
   params: Promise<{
     grade: string;
-    subject: string;
+    course: string;
   }>;
 }
 
-function SubjectContent({ grade, subject }: { grade: string; subject: string }) {
+function CourseContent({ grade, course }: { grade: string; course: string }) {
   const { setSelectedGrade } = useMobileMenu();
   const [mentorIds, setMentorIds] = useState<number[]>([]);
   
@@ -47,35 +47,26 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
     notFound();
   }
   
-  // Normalize subject (accept any subject name from URL)
-  const normalizedSubject = subject.toLowerCase().replace(/-/g, ' ');
-  
+  // Decode the course slug back to a readable label for display
+  const courseLabel = decodeURIComponent(course).replace(/-/g, " ");
+
   useEffect(() => {
     setSelectedGrade(gradeNumber);
   }, [gradeNumber, setSelectedGrade]);
 
-  useEffect(() => {
-    //console.log('SubjectContent: mentorIds state changed to:', mentorIds);
-  }, [mentorIds]);
-
   const handleMentorIdsChange = (ids: number[]) => {
-    //console.log('SubjectContent: Received mentor IDs:', ids);
-    //console.log('SubjectContent: Setting mentorIds state to:', ids);
     setMentorIds(ids);
-    //console.log('SubjectContent: mentorIds state updated');
   };
-
-  //console.log('SubjectContent: handleMentorIdsChange function:', handleMentorIdsChange);
 
   return (
     <Container>
       <Navbar />
-      <SubjectBreadcrumb gradeNumber={gradeNumber} subject={subject} />
-      <Course gradeNumber={gradeNumber} onMentorIdsChange={handleMentorIdsChange} />
+      <GradeBreadcrumb gradeNumber={gradeNumber} course={courseLabel} />
+      <Course gradeNumber={gradeNumber} courseName={courseLabel} onMentorIdsChange={handleMentorIdsChange} />
       <QuickLinks mentorIds={mentorIds} />
       <Payment gradeNumber={gradeNumber} />
-      <Chapters gradeNumber={gradeNumber} />
-      <BoosterCourseSection gradeNumber={gradeNumber} />
+      <SyllabusSection gradeNumber={gradeNumber} courseName={courseLabel} />
+ 
       <Impact />
       <AIEcosystem />
       <InnovativeLearningTools />
@@ -97,13 +88,13 @@ function SubjectContent({ grade, subject }: { grade: string; subject: string }) 
   );
 }
 
-export default function SubjectPage({ params }: SubjectPageProps) {
+export default function CoursePage({ params }: CoursePageProps) {
   // Unwrap the params promise using React.use()
   const unwrappedParams = use(params);
   
   return (
     <MobileMenuProvider>
-      <SubjectContent grade={unwrappedParams.grade} subject={unwrappedParams.subject} />
+      <CourseContent grade={unwrappedParams.grade} course={unwrappedParams.course} />
     </MobileMenuProvider>
   );
 }

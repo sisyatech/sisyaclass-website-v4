@@ -33,7 +33,8 @@ const NavLinks = () => {
     const gradeNumber = extractGradeFromLabel(gradeLabel);
     if (gradeNumber) {
       setSelectedGrade(gradeNumber);
-      router.push(`/grade${gradeNumber}?course=${encodeURIComponent(courseLabel)}`);
+      const courseSlug = courseLabel.toLowerCase().replace(/\s+/g, '-');
+      router.push(`/grade${gradeNumber}/${courseSlug}`);
     }
   };
 

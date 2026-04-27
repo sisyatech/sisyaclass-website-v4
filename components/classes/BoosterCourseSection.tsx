@@ -126,9 +126,11 @@ const BoosterCourseSection = ({ gradeNumber }: { gradeNumber: number }) => {
             <div className="overflow-x-auto overflow-y-hidden pb-2 hide-scrollbar">
               <div className="flex gap-3 w-max snap-x snap-mandatory">
                 {courses.map((course, index) => {
-                  const href = course.webLabel 
-                    ? `/grade${gradeNumber}?course=${encodeURIComponent(course.webLabel)}`
-                    : `/grade${gradeNumber}`;
+                  let href = `/grade${gradeNumber}`;
+                  if (course.webLabel) {
+                    const courseSlug = course.webLabel.toLowerCase().replace(/\s+/g, '-');
+                    href = `/grade${gradeNumber}/${courseSlug}`;
+                  }
                   return (
                     <div key={`${course.id || course.title}-${index}`} className="snap-center shrink-0 px-1">
                       <RevealOnView from="bottom" durationMs={600} delayMs={index * 120}>

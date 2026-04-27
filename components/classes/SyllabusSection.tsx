@@ -37,7 +37,7 @@ interface BigCourseData {
   subjects: SubjectData[];
 }
 
-const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
+const SyllabusSection = ({ gradeNumber, courseName }: { gradeNumber?: number; courseName?: string }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -154,8 +154,8 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
         if (response.ok) {
           const data = await response.json();
           if (Array.isArray(data) && data.length > 0) {
-            // Get the course query parameter and filter the data
-            const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+            // Get the course query parameter or the prop and filter the data
+            const desiredLabel = (courseName || searchParams?.get('course') || '').toLowerCase();
             let picked = data[0];
             
             if (desiredLabel) {
@@ -220,14 +220,19 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   const showDesktopArrows = subjects.length > 3;
 
   const handleExploreClick = (subject: string) => {
-    // Get current course from URL or use the course's webLabel
-    const currentCourse = searchParams?.get('course') || courseData?.webLabel || '';
+    // Get current course from prop, URL query param, or use the fetched course's webLabel
+    const currentCourse = courseName || searchParams?.get('course') || courseData?.webLabel || '';
     // Convert subject name to URL-friendly slug (e.g., "Mathematics" -> "mathematics")
     const subjectSlug = subject.toLowerCase().replace(/\s+/g, '-');
-    // Build URL with course query parameter if available
-    const courseParam = currentCourse ? `?course=${encodeURIComponent(currentCourse)}` : '';
-    // Navigate to the subject page
-    router.push(`/grade${gradeNumber || 8}/${subjectSlug}${courseParam}`);
+
+    if (currentCourse) {
+      // Build a clean route-segment URL: /grade{N}/{courseSlug}/{subjectSlug}
+      const courseSlug = currentCourse.toLowerCase().replace(/\s+/g, '-');
+      router.push(`/grade${gradeNumber || 8}/${courseSlug}/${subjectSlug}`);
+    } else {
+      // Fallback: no course info — navigate to the legacy subject URL
+      router.push(`/grade${gradeNumber || 8}/${subjectSlug}`);
+    }
   };
 
   // Touch scrolling is handled natively by the browser since the carousel is now scrollable.
@@ -260,7 +265,10 @@ const SyllabusSection = ({ gradeNumber }: { gradeNumber?: number }) => {
   // Syllabus section only shows on the main grade page, not on subject pages
   // This check ensures we don't show it on subject routes
   const pathParts = pathname?.split('/').filter(Boolean) || [];
-  const isSubjectPage = pathname && pathname.includes('/grade') && pathParts.length > 1;
+  // For the new segment structure, a subject page is `/grade1/course/subject` (length > 2)
+  // For the legacy structure, a subject page was `/grade1/subject` (length > 1)
+  // Since we completely migrated to segment-based, we check for length > 2
+  const isSubjectPage = pathname && pathname.includes('/grade') && pathParts.length > 2;
   if (isSubjectPage) {
     return null;
   }

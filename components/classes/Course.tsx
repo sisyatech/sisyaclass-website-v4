@@ -11,6 +11,8 @@ import { API_BASE_URL, API_ENDPOINTS } from "@/lib/config";
 interface CourseProps {
   gradeNumber: number;
   onMentorIdsChange?: (mentorIds: number[]) => void;
+  /** Optional: the course name extracted from the route segment (if any) */
+  courseName?: string;
 }
 
 interface Subject {
@@ -39,7 +41,7 @@ interface BigCourseData {
   subjects: Subject[];
 }
 
-const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
+const Course = ({ gradeNumber, onMentorIdsChange, courseName }: CourseProps) => {
   const searchParams = useSearchParams();
   const { user, isLoggedIn } = useUser();
   const classTitle = `Class ${gradeNumber}`;
@@ -85,7 +87,8 @@ const Course = ({ gradeNumber, onMentorIdsChange }: CourseProps) => {
         //console.log('Data length:', data?.length);
         
         if (Array.isArray(data) && data.length > 0) {
-          const desiredLabel = (searchParams?.get('course') || '').toLowerCase();
+          // Use courseName prop if provided, else fallback to query param
+          const desiredLabel = (courseName || searchParams?.get('course') || '').toLowerCase();
           let picked = data[0];
           if (desiredLabel) {
             const exact = data.find((d:any)=>String(d?.webLabel||'').toLowerCase() === desiredLabel);
