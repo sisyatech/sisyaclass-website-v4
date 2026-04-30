@@ -184,6 +184,18 @@ const nextConfig: NextConfig = {
         destination: '/mathlp/payment/success',
       },
       {
+        source: '/mathlp2/payment/success.php',
+        destination: '/mathlp2/payment/success',
+      },
+      {
+        source: '/mathlp2/payment/failed.php',
+        destination: '/mathlp2/payment/failed',
+      },
+      {
+        source: '/mathlp2/success.php',
+        destination: '/mathlp2/payment/success',
+      },
+      {
         source: '/summercamp/payment/success.php',
         destination: '/summercamp/payment/success',
       },
