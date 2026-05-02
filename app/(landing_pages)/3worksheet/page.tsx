@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import Moto from "@/components/moto";
 import Script from "next/script";
 import ThreeWorksheetContent from "@/components/3worksheet/3worksheetContent";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function ThreeWorksheetPage() {
+export default async function ThreeWorksheetPage() {
+  const schemas = await getPageSchemas('landing', '3worksheet');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

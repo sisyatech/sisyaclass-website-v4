@@ -47,6 +47,9 @@ export const API_ENDPOINTS = {
   GET_ALL_WEB_VIDEOS: '/student/get_all_web_videos',
   GET_ALL_BLOG_AD_BANNERS: '/student/get_all_blog_ad_banners',
   GET_ALL_COURSE_PAGE_BANNERS: '/student/get_all_course_page_banners',
+
+  // Schema related
+  GET_PAGE_SCHEMA: '/student/get_page_schema',
 };
 
 // Image URLs

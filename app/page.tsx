@@ -1,6 +1,8 @@
-"use client";
+
 
 import dynamic from "next/dynamic";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 import { useState, useEffect } from "react";
 import Container from "@/components/Container";
 import Hero from "@/components/Hero";
@@ -30,6 +32,7 @@ const MobileMenu = dynamic(() => import("@/components/Navbar").then(m => m.Mobil
 const SocialFab = dynamic(() => import("@/components/10xboostercourse/components/SocialFab"), { ssr: false });
 const WhatsAppFab = dynamic(() => import("@/components/10xboostercourse/components/WhatsAppFab"), { ssr: false });
 
+"use client";
 function HomeContent() {
   const [showInquiryPopup, setShowInquiryPopup] = useState(false);
 
@@ -73,9 +76,12 @@ function HomeContent() {
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const schemas = await getPageSchemas('custom', 'home');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <HomeContent />
     </MobileMenuProvider>
   );

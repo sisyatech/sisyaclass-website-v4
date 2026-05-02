@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import SixEighteenMonthLPContent from "@/components/6-18monthslp/SixEighteenMonthLPContent";
 import Moto from "@/components/moto";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function SixEighteenMonthsLPPage() {
+export default async function SixEighteenMonthsLPPage() {
+  const schemas = await getPageSchemas('landing', '6-18monthslp');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

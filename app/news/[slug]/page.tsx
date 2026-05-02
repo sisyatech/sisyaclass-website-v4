@@ -1,6 +1,3 @@
-
-
-import { use } from "react";
 import type { Metadata } from "next";
 import { getNewsById } from "@/lib/newsApi";
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
@@ -14,6 +11,9 @@ import { NewsBreadcrumb } from "@/components/news/NewsBreadcrumb";
 import NewsDetailContent from "@/components/news/newsdetailspage/NewsDetailContent";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
+
 interface NewsDetailPageProps {
   params: Promise<{
     slug: string;
@@ -45,12 +45,14 @@ function NewsDetailPageContent({ slug }: { slug: string }) {
   );
 }
 
-export default function NewsDetailPage({ params }: NewsDetailPageProps) {
-  const unwrappedParams = use(params);
+export default async function NewsDetailPage({ params }: NewsDetailPageProps) {
+  const { slug } = await params;
+  const schemas = await getPageSchemas('news', slug);
   
   return (
     <MobileMenuProvider>
-      <NewsDetailPageContent slug={unwrappedParams.slug} />
+      <SchemaInjector schemas={schemas} />
+      <NewsDetailPageContent slug={slug} />
     </MobileMenuProvider>
   );
 }

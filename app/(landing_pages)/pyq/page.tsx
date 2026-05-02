@@ -6,11 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import PyqContent from "@/components/pyq/PyqContent";
 import Moto from "@/components/moto";
 import Script from "next/script";
-// import GTM script
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function BoardPage() {
-    return (
-        <MobileMenuProvider>
+export default async function BoardPage() {
+  const schemas = await getPageSchemas('landing', 'pyq');
+  
+  return (
+    <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
             <Script id="gtm-script" strategy="afterInteractive">
                 {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

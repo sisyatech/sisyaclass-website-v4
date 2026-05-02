@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect } from "react";
 import Container from "@/components/Container";
@@ -11,7 +10,9 @@ import AskMeNavbar from "@/components/askme/AskMeNavbar";
 import AskMeMobileMenu from "@/components/askme/AskMeMobileMenu";
 import HomeInquiryPopup from "@/components/HomeInquiryPopup";
 
-export default function AskMePage() {
+
+"use client";
+function AskMePageContent() {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [showInquiryPopup, setShowInquiryPopup] = useState(false);
 
@@ -72,5 +73,19 @@ export default function AskMePage() {
             </Container>
         </>
     );
+}
+
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
+
+export default async function AskMePage() {
+  const schemas = await getPageSchemas('landing', 'askme');
+  
+  return (
+    <>
+      <SchemaInjector schemas={schemas} />
+      <AskMePageContent />
+    </>
+  );
 }
 

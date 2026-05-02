@@ -12,6 +12,8 @@ import BlogAuthorComments from "@/components/blogs/blogsdetailspage/BlogAuthorCo
 import { getBlogBySlug } from "@/lib/blogApi";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 interface BlogDetailPageProps {
   params: Promise<{
     slug: string;
@@ -110,16 +112,15 @@ function BlogDetailPageContent({ slug, blogData }: { slug: string; blogData: any
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const unwrappedParams = await params;
   
-  // Fetch blog data on the server side
-  let blogData = null;
-  try {
-    blogData = await getBlogBySlug(unwrappedParams.slug);
-  } catch (error) {
-    //console.error('Error fetching blog data:', error);
-  }
+  // Parallel fetch for content + schemas
+  const [blogData, schemas] = await Promise.all([
+    getBlogBySlug(unwrappedParams.slug).catch(() => null),
+    getPageSchemas('blog', unwrappedParams.slug)
+  ]);
   
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <BlogDetailPageContent slug={unwrappedParams.slug} blogData={blogData} />
     </MobileMenuProvider>
   );

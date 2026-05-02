@@ -1,5 +1,3 @@
-"use client";
-
 import AboutUs from "@/components/aboutus/AboutUs";
 import Container from "@/components/Container";
 import Navbar, { MobileMenuProvider, MobileMenu, useMobileMenu } from "@/components/Navbar";
@@ -18,6 +16,7 @@ import { AboutBreadcrumb } from "@/components/aboutus/AboutBreadcrumb";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
+"use client";
 function AboutContent() {
     const { setCurrentPage, setSelectedGrade } = useMobileMenu();
 
@@ -27,7 +26,7 @@ function AboutContent() {
     }, [setCurrentPage, setSelectedGrade]);
 
     return (
-        <>
+        <Container>
             <div className="sticky top-0 z-50 shadow-sm">
                     <Navbar />
                     <AboutBreadcrumb />
@@ -66,15 +65,21 @@ function AboutContent() {
             <MobileMenu />
             <SocialFab />
             <WhatsAppFab />
-        </>
+        </Container>
     );
 }
 
-export default function AboutPage() {
-    return (
-        <MobileMenuProvider>
-            <AboutContent />
-        </MobileMenuProvider>
-    );
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
+
+export default async function AboutPage() {
+  const schemas = await getPageSchemas('custom', 'about');
+  
+  return (
+    <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
+      <AboutContent />
+    </MobileMenuProvider>
+  );
 }
 

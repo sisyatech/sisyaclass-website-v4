@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import DoubtSolvingContent from "@/components/doubt-solving/DoubtSolvingContent";
 import Moto from "@/components/moto";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function DoubtSolvingPage() {
+export default async function DoubtSolvingPage() {
+  const schemas = await getPageSchemas('landing', 'doubt-solving');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

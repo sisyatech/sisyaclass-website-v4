@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import Moto from "@/components/moto";
 import JeeFoundationContent from "@/components/jee_foundation/JeeFoundationContent";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function JeeFoundationPage() {
+export default async function JeeFoundationPage() {
+  const schemas = await getPageSchemas('landing', 'jee_foundation');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script-ltc" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

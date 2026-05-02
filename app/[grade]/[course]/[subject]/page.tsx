@@ -29,6 +29,9 @@ import BoosterCourseSection from "@/components/classes/BoosterCourseSection";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
+
 interface SubjectPageProps {
   params: Promise<{
     grade: string;
@@ -103,15 +106,17 @@ function SubjectContent({
   );
 }
 
-export default function SubjectWithCoursePage({ params }: SubjectPageProps) {
-  const unwrappedParams = use(params);
+export default async function SubjectWithCoursePage({ params }: SubjectPageProps) {
+  const { grade, course, subject } = await params;
+  const schemas = await getPageSchemas('grade', grade);
 
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <SubjectContent
-        grade={unwrappedParams.grade}
-        course={unwrappedParams.course}
-        subject={unwrappedParams.subject}
+        grade={grade}
+        course={course}
+        subject={subject}
       />
     </MobileMenuProvider>
   );

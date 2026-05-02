@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import Moto from "@/components/moto";
 import LtcContent from "@/components/ltc/LtcContent";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function LtcPage() {
+export default async function LtcPage() {
+  const schemas = await getPageSchemas('landing', 'ltc');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script-ltc" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

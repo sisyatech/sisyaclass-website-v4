@@ -5,6 +5,8 @@ import Footer from "@/components/Footer";
 import Moto from "@/components/moto";
 import FooterBottom from "@/components/FooterBottom";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
 function TenXBoosterCoursePageContent() {
   return (
@@ -48,9 +50,12 @@ function TenXBoosterCoursePageContent() {
   );
 }
 
-export default function TenXBoosterCoursePage() {
+export default async function TenXBoosterCoursePage() {
+  const schemas = await getPageSchemas('landing', '10xboostercourse');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <TenXBoosterCoursePageContent />
     </MobileMenuProvider>
   );

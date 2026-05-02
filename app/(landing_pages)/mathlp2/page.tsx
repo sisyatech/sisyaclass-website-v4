@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import Moto from "@/components/moto";
 import MathsLTCRevisedLPContent2 from "@/components/MathsLTCRevisedLP2/MathsLTCRevisedLPContent2";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function MathsLTCRevisedLPPage2() {
+export default async function MathsLTCRevisedLPPage2() {
+  const schemas = await getPageSchemas('landing', 'mathlp2');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script-mathlp2" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

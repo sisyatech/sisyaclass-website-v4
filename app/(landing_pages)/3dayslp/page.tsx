@@ -6,10 +6,15 @@ import FooterBottom from "@/components/FooterBottom";
 import ThreeDayLPContent from "@/components/3daylp/ThreeDayLPContent";
 import Moto from "@/components/moto";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
-export default function ThreeDaysLPPage() {
+export default async function ThreeDaysLPPage() {
+  const schemas = await getPageSchemas('landing', '3dayslp');
+  
   return (
     <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
       <Script id="gtm-script" strategy="afterInteractive">
         {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

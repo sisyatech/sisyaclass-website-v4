@@ -6,15 +6,20 @@ import Footer from "@/components/Footer";
 import FooterBottom from "@/components/FooterBottom";
 import Moto from "@/components/moto";
 import Script from "next/script";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
 export const metadata = {
     title: "Summer Camp 2026 | Sisya Class",
     description: "Join our Summer Camp 2026 for a fun and educational experience.",
 };
 
-export default function SummerCampPage() {
-    return (
-        <MobileMenuProvider>
+export default async function SummerCampPage() {
+  const schemas = await getPageSchemas('landing', 'summercamp');
+  
+  return (
+    <MobileMenuProvider>
+      <SchemaInjector schemas={schemas} />
             <Script id="gtm-script-summercamp" strategy="afterInteractive">
                 {`(function(w, d, s, l, i) {
             w[l] = w[l] || [];

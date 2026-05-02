@@ -1,4 +1,3 @@
-import { use } from "react";
 import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Container from "@/components/Container";
 import AppDownload from "@/components/AppDownload";
@@ -9,6 +8,8 @@ import FooterBottom from "@/components/FooterBottom";
 import WebPageDetail from "@/components/webpages/WebPageDetail";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
 
 interface WebPageProps {
   params: Promise<{
@@ -34,12 +35,14 @@ function WebPageContent({ type, slug }: { type: string; slug: string }) {
   );
 }
 
-export default function WebPage({ params }: WebPageProps) {
-  const unwrappedParams = use(params);
+export default async function WebPage({ params }: WebPageProps) {
+  const { type, slug } = await params;
+  const schemas = await getPageSchemas('webpage', slug);
   
   return (
     <MobileMenuProvider>
-      <WebPageContent type={unwrappedParams.type} slug={unwrappedParams.slug} />
+      <SchemaInjector schemas={schemas} />
+      <WebPageContent type={type} slug={slug} />
     </MobileMenuProvider>
   );
 }

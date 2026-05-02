@@ -28,6 +28,9 @@ import { GradeBreadcrumb } from "@/components/classes/GradeBreadcrumb";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
 import WhatsAppFab from "@/components/10xboostercourse/components/WhatsAppFab";
 
+import { getPageSchemas } from "@/lib/schemaApi";
+import SchemaInjector from "@/components/SchemaInjector";
+
 interface GradePageProps {
   params: Promise<{
     grade: string;
@@ -85,13 +88,14 @@ function GradeContent({ grade }: { grade: string }) {
   );
 }
 
-export default function GradePage({ params }: GradePageProps) {
-  // Unwrap the params promise using React.use()
-  const unwrappedParams = use(params);
+export default async function GradePage({ params }: GradePageProps) {
+  const { grade } = await params;
+  const schemas = await getPageSchemas('grade', grade);
   
   return (
     <MobileMenuProvider>
-      <GradeContent grade={unwrappedParams.grade} />
+      <SchemaInjector schemas={schemas} />
+      <GradeContent grade={grade} />
     </MobileMenuProvider>
   );
 }
