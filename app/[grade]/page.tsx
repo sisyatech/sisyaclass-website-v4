@@ -41,9 +41,14 @@ function GradeContent({ grade }: { grade: string }) {
   // Parse and validate grade number using navigation utilities
   const gradeNumber = parseGradeFromParam(grade);
   
-  // Show 404 if invalid grade
+  // If it's not a grade, it might be a web page type (syllabus, pyq, etc.)
+  // For now, we only support specific pages with slugs ([grade]/[course]).
+  // If no course is provided, we redirect to home.
   if (gradeNumber === null) {
-    notFound();
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
+    return null;
   }
   
   useEffect(() => {

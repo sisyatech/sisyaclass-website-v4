@@ -23,6 +23,8 @@ import Testimonials from "@/components/Testimonials";
 import CTA from "@/components/CTA";
 import Reviews from "@/components/Reviews";
 import SyllabusSection from "@/components/classes/SyllabusSection";
+import WebPageDetail from "@/components/webpages/WebPageDetail";
+
 
 import { GradeBreadcrumb } from "@/components/classes/GradeBreadcrumb";
 import SocialFab from "@/components/10xboostercourse/components/SocialFab";
@@ -42,9 +44,22 @@ function CourseContent({ grade, course }: { grade: string; course: string }) {
   // Parse and validate grade number using navigation utilities
   const gradeNumber = parseGradeFromParam(grade);
   
-  // Show 404 if invalid grade
+  // If it's not a grade, it might be a web page type (syllabus, pyq, etc.)
   if (gradeNumber === null) {
-    notFound();
+    return (
+      <Container>
+        <Navbar />
+        <WebPageDetail slug={course} />
+        <AppDownload />
+        <Footer />
+        <StudyMaterial />
+        <Moto />
+        <FooterBottom />
+        <MobileMenu />
+        <SocialFab />
+        <WhatsAppFab />
+      </Container>
+    );
   }
   
   // Decode the course slug back to a readable label for display
