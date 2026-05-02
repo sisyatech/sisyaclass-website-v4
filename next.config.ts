@@ -52,6 +52,10 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: '/:type(syllabus|pyq|sample-paper|course-detail|revision-notes)/:slug',
+        destination: '/web-pages/:type/:slug',
+      },
+      {
         source: '/10xboostercourse/payment/success.php',
         destination: '/10xboostercourse/payment/success',
       },
