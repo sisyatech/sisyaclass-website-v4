@@ -3,6 +3,8 @@ import SchemaInjector from "@/components/SchemaInjector";
 import { MobileMenuProvider } from "@/components/Navbar";
 import GradeContent from "./GradeContent";
 
+import { parseGradeFromParam } from "@/lib/navigation";
+
 interface GradePageProps {
   params: Promise<{
     grade: string;
@@ -11,7 +13,8 @@ interface GradePageProps {
 
 export default async function GradePage({ params }: GradePageProps) {
   const { grade } = await params;
-  const schemas = await getPageSchemas('grade', grade);
+  const gradeNumber = parseGradeFromParam(grade);
+  const schemas = await getPageSchemas('grade', gradeNumber?.toString() || grade);
   
   return (
     <MobileMenuProvider>

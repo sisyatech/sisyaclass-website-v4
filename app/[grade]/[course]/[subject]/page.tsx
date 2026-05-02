@@ -2,6 +2,7 @@ import { getPageSchemas } from "@/lib/schemaApi";
 import SchemaInjector from "@/components/SchemaInjector";
 import { MobileMenuProvider } from "@/components/Navbar";
 import SubjectContent from "./SubjectContent";
+import { parseGradeFromParam } from "@/lib/navigation";
 
 interface SubjectPageProps {
   params: Promise<{
@@ -13,7 +14,8 @@ interface SubjectPageProps {
 
 export default async function SubjectWithCoursePage({ params }: SubjectPageProps) {
   const { grade, course, subject } = await params;
-  const schemas = await getPageSchemas('grade', grade);
+  const gradeNumber = parseGradeFromParam(grade);
+  const schemas = await getPageSchemas('grade', gradeNumber?.toString() || grade);
 
   return (
     <MobileMenuProvider>
