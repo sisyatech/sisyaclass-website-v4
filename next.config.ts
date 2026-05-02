@@ -196,6 +196,18 @@ const nextConfig: NextConfig = {
         destination: '/mathlp2/payment/success',
       },
       {
+        source: '/ltc2/payment/success.php',
+        destination: '/ltc2/payment/success',
+      },
+      {
+        source: '/ltc2/payment/failed.php',
+        destination: '/ltc2/payment/failed',
+      },
+      {
+        source: '/ltc2/success.php',
+        destination: '/ltc2/payment/success',
+      },
+      {
         source: '/summercamp/payment/success.php',
         destination: '/summercamp/payment/success',
       },
