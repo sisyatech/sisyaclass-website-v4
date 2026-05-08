@@ -98,13 +98,13 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           transition={{ duration: 0.8 }}
           className="flex-1 p-0 md:p-4 flex flex-col justify-center text-center md:text-left"
         >
-          <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base font-semibold tracking-wide mb-2 uppercase">
-            Grades 1-10 | All Boards
+          <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base text-[#ffd500] font-semibold tracking-wide mb-2 uppercase">
+            90% Marks In Final Exams, Or Get Your Money Back!*
           </p>
 
-          <h1 className="text-[1.05rem] sm:text-[1.35rem] md:text-[2rem] lg:text-[3rem] lg:leading-[3.5rem] font-bold mb-4 whitespace-nowrap">
-            <span className="block">We Promise 90% in Finals*</span>
-            <span className="block">IIT/NIT Educators. 24/7 AI Support</span>
+          <h1 className="text-[0.85rem] sm:text-[1rem] md:text-[1.5rem] lg:text-[2.5rem] lg:leading-[3rem] font-bold mb-4 whitespace-nowrap">
+            <span className="block">1 Year All Subject Online Classes @ ₹14,999</span>
+            {/* <span className="block">IIT/NIT Educators. 24/7 AI Support</span> */}
           </h1>
 
           <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
@@ -115,6 +115,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             <li>✅ Free 2 Month Revision + Summer Camp</li>
             <li>✅ Triple Teacher Model ensures 3x the attention</li>
             <li>✅ AI + Teacher Doubt Solving, Anytime</li>
+            <li>✅ Designed for CBSE, ICSE & State Boards</li>
           </ul>
 
           {/* Buttons: always side by side (flex-row), unchanged for laptop */}
