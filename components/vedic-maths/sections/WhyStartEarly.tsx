@@ -11,19 +11,19 @@ type WhyStartEarlyProps = {
 const cards = [
   {
     title: "Makes silly calculation mistakes",
-    icon: "/vadic-maths/gifs/gif-1.gif",
+    icon: "/vedic-maths/gifs/gif-1.gif",
   },
   {
     title: "Has lost confidence in maths",
-    icon: "/vadic-maths/gifs/gif-2.gif",
+    icon: "/vedic-maths/gifs/gif-2.gif",
   },
   {
     title: "Builds Confidence for Olympiads & NTSE",
-    icon: "/vadic-maths/gifs/gif-3.gif",
+    icon: "/vedic-maths/gifs/gif-3.gif",
   },
   {
     title: "Takes too long to solve simple problems",
-    icon: "/vadic-maths/gifs/gif-4.gif",
+    icon: "/vedic-maths/gifs/gif-4.gif",
   },
 ];
 

@@ -4,13 +4,13 @@ import Navbar, { MobileMenuProvider, MobileMenu } from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FooterBottom from "@/components/FooterBottom";
 import Moto from "@/components/moto";
-import VadicMathsContent from "@/components/vadic-maths/VadicMathsContent";
+import VedicMathsContent from "@/components/vedic-maths/VedicMathsContent";
 import Script from "next/script";
 import { getPageSchemas } from "@/lib/schemaApi";
 import SchemaInjector from "@/components/SchemaInjector";
 
-export default async function VadicMathsPage() {
-  const schemas = await getPageSchemas('landing', 'vadic-maths');
+export default async function VedicMathsPage() {
+  const schemas = await getPageSchemas('landing', 'vedic-maths');
   
   return (
     <MobileMenuProvider>
@@ -41,7 +41,7 @@ export default async function VadicMathsPage() {
       </noscript>
       <Container>
         <Navbar />
-        <VadicMathsContent />
+        <VedicMathsContent />
         <Footer />
         <Moto />
         <FooterBottom />

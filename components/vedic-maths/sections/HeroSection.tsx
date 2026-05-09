@@ -22,23 +22,23 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
 
   const handleOpenCallback = () => {
     if (onGetCallback) {
-      //console.log("[Vadic Maths][CALLBACK] External onGetCallback handler invoked");
+      //console.log("[Vedic Maths][CALLBACK] External onGetCallback handler invoked");
       onGetCallback();
       return;
     }
-    //console.log("[Vadic Maths][CALLBACK] Opening internal callback modal");
+    //console.log("[Vedic Maths][CALLBACK] Opening internal callback modal");
     setShowCallback(true);
   };
 
   const handleSubmitCallback = async () => {
     setError(null);
     if (!name.trim()) {
-      //console.log("[Vadic Maths][CALLBACK][VALIDATION] Missing name");
+      //console.log("[Vedic Maths][CALLBACK][VALIDATION] Missing name");
       setError("Please enter your name");
       return;
     }
     if (!isValidMobile(phone)) {
-      //console.log("[Vadic Maths][CALLBACK][VALIDATION] Invalid phone:", phone);
+      //console.log("[Vedic Maths][CALLBACK][VALIDATION] Invalid phone:", phone);
       setError("Enter a valid 10-digit mobile number");
       return;
     }
@@ -55,36 +55,36 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
         medium: "web",
         campaign: "CALLBACK",
       };
-      //console.log("[Vadic Maths][CALLBACK][REQUEST] create_merrito_lead →", payload);
+      //console.log("[Vedic Maths][CALLBACK][REQUEST] create_merrito_lead →", payload);
       const res = await fetch("https://sisyaclass.xyz/student/create_merrito_lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      //console.log("[Vadic Maths][CALLBACK][RESPONSE] status:", res.status);
+      //console.log("[Vedic Maths][CALLBACK][RESPONSE] status:", res.status);
       const text = await res.text();
-      //console.log("[Vadic Maths][CALLBACK][RESPONSE] raw:", text);
+      //console.log("[Vedic Maths][CALLBACK][RESPONSE] raw:", text);
       let data: any = {};
       try {
         data = text ? JSON.parse(text) : {};
       } catch { }
-      //console.log("[Vadic Maths][CALLBACK][RESPONSE] parsed:", data);
+      //console.log("[Vedic Maths][CALLBACK][RESPONSE] parsed:", data);
       if (res.ok && (data?.success ?? true)) {
-        //console.log("[Vadic Maths][CALLBACK] Success - showing success state");
+        //console.log("[Vedic Maths][CALLBACK] Success - showing success state");
         setIsSuccess(true);
       } else {
         let msg = data?.message || data?.error || `Request failed (${res.status})`;
         if (res.status === 400 && typeof msg === "string" && msg.toLowerCase().includes("lead not created")) {
           msg = "Too many attempts, try again after some time";
         }
-        //console.warn("[Vadic Maths][CALLBACK] Failed:", msg);
+        //console.warn("[Vedic Maths][CALLBACK] Failed:", msg);
         setError(msg);
       }
     } catch (e) {
-      //console.error("[Vadic Maths][CALLBACK] Network error:", e);
+      //console.error("[Vedic Maths][CALLBACK] Network error:", e);
       setError("Network error. Please try again.");
     } finally {
-      //console.log("[Vadic Maths][CALLBACK] Submit finished");
+      //console.log("[Vedic Maths][CALLBACK] Submit finished");
       setSubmitting(false);
     }
   };
@@ -99,7 +99,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           className="hidden md:block absolute top-[35%] left-[-12%] z-20"
         >
           <Image
-            src="/vadic-maths/book.png"
+            src="/vedic-maths/book.png"
             alt="Floating Book"
             width={120}
             height={120}
@@ -148,7 +148,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           className="flex-1 md:absolute md:right-[-20px] md:bottom-[-20px] md:w-[60%] lg:w-[55%] flex justify-center items-center md:items-end pointer-events-none mt-10 md:mt-0"
         >
           <Image
-            src="/vadic-maths/vedicmaths.png"
+            src="/vedic-maths/vedicmaths.png"
             alt="Vedic Maths"
             width={900}
             height={600}

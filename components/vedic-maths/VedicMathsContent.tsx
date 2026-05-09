@@ -13,7 +13,7 @@ import WhatsAppFab from "./components/WhatsAppFab";
 import SocialFab from "./components/SocialFab";
 import Teachers from "./sections/Teachers";
 
-export default function VadicMathsContent() {
+export default function VedicMathsContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -36,14 +36,14 @@ export default function VadicMathsContent() {
 
       const data = await response.json();
       if (data.success) {
-        //console.log("[Vadic Maths] Lead status updated successfully");
+        //console.log("[Vedic Maths] Lead status updated successfully");
         return true;
       }
 
-      //console.warn("[Vadic Maths] Failed to update lead status");
+      //console.warn("[Vedic Maths] Failed to update lead status");
       return false;
     } catch (error) {
-      //console.error("[Vadic Maths] Error updating lead status:", error);
+      //console.error("[Vedic Maths] Error updating lead status:", error);
       return false;
     }
   };
@@ -61,12 +61,12 @@ export default function VadicMathsContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
     try {
-      //console.log("[Vadic Maths] Starting flow", { selectedClass, phoneNumber });
+      //console.log("[Vedic Maths] Starting flow", { selectedClass, phoneNumber });
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA Vadic Maths 2026",
+          name: "SISYA Vedic Maths 2026",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
@@ -75,21 +75,21 @@ export default function VadicMathsContent() {
         }),
       });
       const leadData = await leadResponse.json();
-      //console.log("[Vadic Maths] Lead response", leadData);
+      //console.log("[Vedic Maths] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      //console.log("[Vadic Maths] Lead stored", { leadId: leadData.lead.id });
+      //console.log("[Vedic Maths] Lead stored", { leadId: leadData.lead.id });
 
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "Vadic Maths Demo" }),
+        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "Vedic Maths Demo" }),
       });
       const orderJson = await orderRes.json();
-      //console.log("[Vadic Maths] Order API response", orderJson);
+      //console.log("[Vedic Maths] Order API response", orderJson);
       if (!orderJson?.success) {
         alert("Failed to initialize payment. Please try again.");
         return;
@@ -103,7 +103,7 @@ export default function VadicMathsContent() {
           currency: orderJson.order?.currency,
           key_id: orderJson.keyId,
           name: "Sisya Class",
-          description: "Vadic Maths Demo",
+          description: "Vedic Maths Demo",
           prefill: { contact: phoneNumber },
         };
 
@@ -116,18 +116,18 @@ export default function VadicMathsContent() {
         order_id: payload.order_id,
         prefill: payload.prefill,
         handler: async function (response: any) {
-          //console.log("[Vadic Maths] Success handler", response);
+          //console.log("[Vedic Maths] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
-          window.location.href = `/vadic-maths/payment/success.php?transactionId=${encodeURIComponent(
+          window.location.href = `/vedic-maths/payment/success?transactionId=${encodeURIComponent(
             response.razorpay_payment_id || ""
           )}&amount=${encodeURIComponent("₹19")}`;
         },
         modal: {
           ondismiss: function () {
-            //console.warn("[Vadic Maths] Checkout dismissed by user");
+            //console.warn("[Vedic Maths] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
-              window.location.href = `/vadic-maths/payment/failed.php?transactionId=${encodeURIComponent(
+              window.location.href = `/vedic-maths/payment/failed?transactionId=${encodeURIComponent(
                 `DISMISSED_${Date.now()}`
               )}`;
             });
@@ -136,10 +136,10 @@ export default function VadicMathsContent() {
       };
       // @ts-ignore
       const rzp = new (window as any).Razorpay(options);
-      //console.log("[Vadic Maths] Opening Razorpay checkout", { order_id: payload.order_id });
+      //console.log("[Vedic Maths] Opening Razorpay checkout", { order_id: payload.order_id });
       rzp.open();
     } catch (err) {
-      //console.error("[Vadic Maths] Error", err);
+      //console.error("[Vedic Maths] Error", err);
       updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {

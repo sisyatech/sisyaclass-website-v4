@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import PaymentFailedPage from "@/components/vadic-maths/payment/failed/page";
+import PaymentSuccessPage from "@/components/vedic-maths/payment/success/page";
 
 export const dynamic = "force-dynamic";
 
-export default function FailedPage() {
+export default function SuccessPage() {
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading…</div>}>
-      <PaymentFailedPage />
+      <PaymentSuccessPage />
     </Suspense>
   );
 }

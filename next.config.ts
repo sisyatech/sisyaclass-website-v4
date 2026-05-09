@@ -47,6 +47,11 @@ const nextConfig: NextConfig = {
         destination: '/3dayslp',
         statusCode: 302,
       },
+      {
+        source: '/vadic-maths',
+        destination: '/vedic-maths',
+        permanent: true,
+      },
     ];
   },
   async rewrites() {
@@ -72,12 +77,12 @@ const nextConfig: NextConfig = {
         destination: '/jee_foundation/payment/failed',
       },
       {
-        source: '/vadic-maths/payment/success.php',
-        destination: '/vadic-maths/payment/success',
+        source: '/vedic-maths/payment/success.php',
+        destination: '/vedic-maths/payment/success',
       },
       {
-        source: '/vadic-maths/payment/failed.php',
-        destination: '/vadic-maths/payment/failed',
+        source: '/vedic-maths/payment/failed.php',
+        destination: '/vedic-maths/payment/failed',
       },
       {
         source: '/jee_foundation_masterclass/payment/success.php',

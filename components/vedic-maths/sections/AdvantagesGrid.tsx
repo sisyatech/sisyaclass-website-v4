@@ -28,17 +28,17 @@ const advantageZones: AdvantageZone[] = [
       {
         title: "Square Tricks Made Simple",
         description: "Square 2, 3 & 4-digit numbers in seconds — no pen, no panic.",
-        icon: "/vadic-maths/grid/grid-1.svg",
+        icon: "/vedic-maths/grid/grid-1.svg",
       },
       {
         title: "Cube Any Number Quickly",
         description: "Learn the fastest way to cube any 2-digit number mentally.",
-        icon: "/vadic-maths/grid/grid-2.svg",
+        icon: "/vedic-maths/grid/grid-2.svg",
       },
       {
         title: "Smart Subtractions",
         description: "Tricks to subtract from 100, 1000, 10000 — with 100% accuracy.",
-        icon: "/vadic-maths/grid/grid-3.svg",
+        icon: "/vedic-maths/grid/grid-3.svg",
       },
     ],
   },
@@ -51,17 +51,17 @@ const advantageZones: AdvantageZone[] = [
       {
         title: "Multiply by 11, 99, 999",
         description: "Master the sandwich method and shortcut multipliers — no long steps.",
-        icon: "/vadic-maths/grid/grid-4.svg",
+        icon: "/vedic-maths/grid/grid-4.svg",
       },
       {
         title: "Nikhilam & Urdhva Tiryak",
         description: "Ancient Vedic methods to multiply faster than a calculator.",
-        icon: "/vadic-maths/grid/grid-5.svg",
+        icon: "/vedic-maths/grid/grid-5.svg",
       },
       {
         title: "Best Friend & Double Niner",
         description: "Fun tricks to play with 9s and speed up your calculations.",
-        icon: "/vadic-maths/grid/grid-6.svg",
+        icon: "/vedic-maths/grid/grid-6.svg",
       },
     ],
   },
@@ -74,17 +74,17 @@ const advantageZones: AdvantageZone[] = [
       {
         title: "Butterfly for Fractions",
         description: "Compare any fractions visually — no need for LCM.",
-        icon: "/vadic-maths/grid/grid-7.svg",
+        icon: "/vedic-maths/grid/grid-7.svg",
       },
       {
         title: "Divisibility Hacks",
         description: "2, 3, 4, 5... all the way to 19 — in just 5 minutes.",
-        icon: "/vadic-maths/grid/grid-8.svg",
+        icon: "/vedic-maths/grid/grid-8.svg",
       },
       {
         title: "Dice, Triangles & Squares",
         description: "Learn to count shapes and understand visual maths questions.",
-        icon: "/vadic-maths/grid/grid-9.svg",
+        icon: "/vedic-maths/grid/grid-9.svg",
       },
     ],
   },
@@ -97,17 +97,17 @@ const advantageZones: AdvantageZone[] = [
       {
         title: "Left-to-Right Addition",
         description: "A powerful way to solve sums faster than traditional right-to-left method.",
-        icon: "/vadic-maths/grid/grid-10.svg",
+        icon: "/vedic-maths/grid/grid-10.svg",
       },
       {
         title: "Zeroes in Factorials",
         description: "A trick to count how many zeroes end 100! — and beyond.",
-        icon: "/vadic-maths/grid/grid-11.svg",
+        icon: "/vedic-maths/grid/grid-11.svg",
       },
       {
         title: "Factors & Remainders Made Easy",
         description: "Understand how to find factors and remainders when dividing by 9.",
-        icon: "/vadic-maths/grid/grid-12.svg",
+        icon: "/vedic-maths/grid/grid-12.svg",
       },
     ],
   },
