@@ -63,9 +63,58 @@ export default function LtcContent() {
     localStorage.setItem("mobileNumber", phoneNumber);
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
+
+    let locationStr = "";
+    try {
+      if (typeof navigator !== "undefined" && navigator.geolocation) {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 6000,
+            enableHighAccuracy: false // Faster for general location
+          });
+        });
+        const { latitude, longitude } = position.coords;
+        locationStr = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+
+        try {
+          const geoRes = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const geoData = await geoRes.json();
+          console.log("[LTC] Raw Geo Data:", geoData);
+          if (geoData && geoData.address) {
+            const {
+              city,
+              town,
+              village,
+              suburb,
+              state,
+              country,
+              postcode,
+            } = geoData.address;
+
+            const fetchedCity = city || town || village;
+            const parts = [fetchedCity, suburb, state, country, postcode]
+              .filter((part: string | undefined) => Boolean(part))
+              .map((part: string) => part.trim());
+
+            if (parts.length) {
+              locationStr = [...new Set(parts)].slice(0, 5).join(" ");
+            }
+          }
+        } catch (e) {
+          // Reverse geocode failed, keep coordinates
+        }
+      }
+    } catch (e) {
+      // Geolocation failed or denied, proceed without it
+    }
+
+    console.log("[LTC] Final Location for Lead:", locationStr);
+
     try {
       //console.log("[LTC] Starting flow", { selectedClass, phoneNumber });
-      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
+      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -75,6 +124,7 @@ export default function LtcContent() {
           status: "initiated",
           source: "web",
           medium: "web",
+          cf_location: locationStr,
         }),
       });
       const leadData = await leadResponse.json();
