@@ -65,7 +65,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
       let data: any = {};
       try {
         data = text ? JSON.parse(text) : {};
-      } catch {}
+      } catch { }
       //console.log("[MATHS-LTC][CALLBACK][RESPONSE] parsed:", data);
       if (res.ok && (data?.success ?? true)) {
         //console.log("[MATHS-LTC][CALLBACK] Success - redirecting to success page");
@@ -98,7 +98,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             1-Year Live Online Course
           </h1>
           <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
-            At India's Lowest Price: ₹2,999
+            At India's Lowest Price: ₹7,999
           </p>
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
             <li>✅ For Grades 6 - 8 Only</li>
