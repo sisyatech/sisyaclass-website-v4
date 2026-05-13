@@ -169,7 +169,7 @@ export default function VedicMathsContent() {
           //console.log("[Vedic Maths] Success handler", response);
           setShowReservationPopup(false);
           await updatePaymentStatus("success");
-          window.location.href = `/vedic-maths/payment/success?transactionId=${encodeURIComponent(
+          window.location.href = `/vedic-maths/payment/success.php?transactionId=${encodeURIComponent(
             response.razorpay_payment_id || ""
           )}&amount=${encodeURIComponent("₹19")}`;
         },
@@ -177,7 +177,7 @@ export default function VedicMathsContent() {
           ondismiss: function () {
             //console.warn("[Vedic Maths] Checkout dismissed by user");
             updatePaymentStatus("fail").finally(() => {
-              window.location.href = `/vedic-maths/payment/failed?transactionId=${encodeURIComponent(
+              window.location.href = `/vedic-maths/payment/failed.php?transactionId=${encodeURIComponent(
                 `DISMISSED_${Date.now()}`
               )}`;
             });
