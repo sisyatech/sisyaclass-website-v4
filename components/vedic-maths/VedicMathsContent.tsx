@@ -111,6 +111,7 @@ export default function VedicMathsContent() {
 
     try {
       //console.log("[Vedic Maths] Starting flow", { selectedClass, phoneNumber });
+      const urlParams = new URLSearchParams(window.location.search);
       const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -119,8 +120,17 @@ export default function VedicMathsContent() {
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
-          source: "web",
-          medium: "web",
+          source: urlParams.get("utm_source") || "web",
+          medium: urlParams.get("utm_medium") || "web",
+          utm_campaign: urlParams.get("utm_campaign") || "",
+          utm_id: urlParams.get("utm_id") || "",
+          utm_term: urlParams.get("utm_term") || "",
+          utm_content: urlParams.get("utm_content") || "",
+          utm_adgroupid: urlParams.get("utm_adgroupid") || "",
+          utm_device: urlParams.get("utm_device") || "",
+          utm_network: urlParams.get("utm_network") || "",
+          utm_matchtype: urlParams.get("utm_matchtype") || "",
+          utm_placement: urlParams.get("utm_placement") || "",
           cf_location: locationStr,
         }),
       });
