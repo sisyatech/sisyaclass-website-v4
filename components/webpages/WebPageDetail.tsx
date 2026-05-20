@@ -7,13 +7,20 @@ import { Calendar, User } from "lucide-react";
 
 interface WebPageDetailProps {
   slug: string;
+  initialData?: WebPage | null;
 }
 
-const WebPageDetail = ({ slug }: WebPageDetailProps) => {
-  const [pageData, setPageData] = useState<WebPage | null>(null);
-  const [loading, setLoading] = useState(true);
+const WebPageDetail = ({ slug, initialData }: WebPageDetailProps) => {
+  const [pageData, setPageData] = useState<WebPage | null>(initialData || null);
+  const [loading, setLoading] = useState(!initialData);
 
   useEffect(() => {
+    if (initialData && initialData.slug === slug) {
+      setPageData(initialData);
+      setLoading(false);
+      return;
+    }
+
     const fetchPageData = async () => {
       try {
         setLoading(true);
@@ -30,7 +37,7 @@ const WebPageDetail = ({ slug }: WebPageDetailProps) => {
     if (slug) {
       fetchPageData();
     }
-  }, [slug]);
+  }, [slug, initialData]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
