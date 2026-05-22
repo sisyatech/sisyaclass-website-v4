@@ -6,6 +6,7 @@ import React, {
   useContext,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import Image from "next/image";
 import Logo from "@/public/nav/logo.svg";
@@ -132,7 +133,49 @@ export const MobileMenu = () => {
     "main" | "courses" | "resources"
   >("main");
   const [expandedGrade, setExpandedGrade] = useState<string | null>(null);
-  const [expandedResource, setExpandedResource] = useState<string | null>(null);
+
+  // ── Resources For Students (mobile) ──
+  type NavMobileLink = { id: string; title: string; link: string; newTab: boolean; order: number };
+  type NavMobileSubItem = { id: string; title: string; slug: string; isActive: boolean; links: NavMobileLink[] };
+  type NavMobileItem = { id: string; title: string; slug: string; isActive: boolean; subItems: NavMobileSubItem[] };
+  type NavMobileGroup = { id: string; title: string; slug: string; items: NavMobileItem[] };
+
+  const RESOURCES_GROUP_ID = "cmpgsimep0000b3ezezmcu99f";
+  const [resourceGroup, setResourceGroup] = useState<NavMobileGroup | null>(null);
+  const [isLoadingResources, setIsLoadingResources] = useState(false);
+  const [resourcesFetched, setResourcesFetched] = useState(false);
+  // accordion state for 3-level mobile hierarchy
+  const [expandedItemId, setExpandedItemId] = useState<string | null>(null);
+  const [expandedSubItemId, setExpandedSubItemId] = useState<string | null>(null);
+
+  const fetchResourcesGroup = useCallback(async () => {
+    if (resourcesFetched || isLoadingResources) return;
+    setIsLoadingResources(true);
+    try {
+      const res = await fetch("https://sisyaclass.xyz/student/nav_groups_get", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: RESOURCES_GROUP_ID }),
+      });
+      if (res.ok) {
+        const data: NavMobileGroup[] = await res.json();
+        if (Array.isArray(data) && data.length > 0) setResourceGroup(data[0]);
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setIsLoadingResources(false);
+      setResourcesFetched(true);
+    }
+  }, [resourcesFetched, isLoadingResources]);
+
+  useEffect(() => {
+    if (currentView === "resources") {
+      fetchResourcesGroup();
+      setExpandedItemId(null);
+      setExpandedSubItemId(null);
+    }
+  }, [currentView, fetchResourcesGroup]);
 
   type CourseLink = {
     label: string;
@@ -145,22 +188,12 @@ export const MobileMenu = () => {
 
   const fallbackCourses: never[] = [];
 
-  const resourceSubjects = [
-    { label: "Maths", value: "maths" },
-    { label: "Physics", value: "physics" },
-    { label: "Science", value: "science" },
-    { label: "English", value: "english" },
-    { label: "Hindi", value: "hindi" },
-  ];
-
   const handleGradeClick = (gradeLabel: string) => {
     setExpandedGrade((prev) => (prev === gradeLabel ? null : gradeLabel));
   };
 
   const handleResourceClick = (resourceLabel: string) => {
-    setExpandedResource((prev) =>
-      prev === resourceLabel ? null : resourceLabel
-    );
+    // kept for potential legacy use
   };
 
   const handleCourseClick = (gradeLabel: string, courseLabel: string) => {
@@ -231,14 +264,16 @@ export const MobileMenu = () => {
   const handleBackToMain = () => {
     setCurrentView("main");
     setExpandedGrade(null);
-    setExpandedResource(null);
+    setExpandedItemId(null);
+    setExpandedSubItemId(null);
   };
 
   const handleCloseMenu = () => {
     setIsMobileMenuOpen(false);
     setCurrentView("main");
     setExpandedGrade(null);
-    setExpandedResource(null);
+    setExpandedItemId(null);
+    setExpandedSubItemId(null);
   };
 
   return (
@@ -589,66 +624,120 @@ export const MobileMenu = () => {
             {/* RESOURCES VIEW */}
             {currentView === "resources" && (
               <div className="space-y-2">
-                {resourcesLinks.map((link, index) => (
-                  <div
-                    key={link.href}
-                    className="animate-in slide-in-from-right-4 fade-in"
-                    style={{
-                      animationDelay: `${index * 100}ms`,
-                      animationDuration: "400ms",
-                    }}
-                  >
-                    <button
-                      className={cn(
-                        "w-full flex items-center justify-between py-3 px-4 text-sm font-semibold rounded-lg border-2 transition-all duration-300",
-                        expandedResource === link.label
-                          ? "bg-[#02bdfe] text-white border-[#02bdfe] shadow-lg"
-                          : "bg-white text-gray-700 border-gray-300 hover:border-[#02bdfe] hover:text-[#02bdfe] hover:shadow-md"
-                      )}
-                      onClick={() => handleResourceClick(link.label)}
-                    >
-                      <span>{link.label}</span>
-                      <svg
-                        className={cn(
-                          "w-4 h-4 transition-transform duration-300",
-                          expandedResource === link.label ? "rotate-180" : ""
-                        )}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-
-                    {expandedResource === link.label && (
-                      <div className="mt-2 ml-4 space-y-2">
-                        {resourceSubjects.map((subject, subIndex) => (
-                          <button
-                            key={subject.value}
-                            className="w-full text-left py-2.5 px-4 text-sm font-medium text-gray-600 hover:text-white hover:bg-[#02bdfe] border border-gray-200 rounded-lg transition-all duration-300 hover:scale-[1.02] bg-gray-50 group animate-in slide-in-from-right-4 fade-in"
-                            onClick={() =>
-                              handleResourceSubClick(link.label, subject.value)
-                            }
-                            style={{
-                              animationDelay: `${subIndex * 100}ms`,
-                              animationDuration: "400ms",
-                            }}
-                          >
-                            <span className="group-hover:translate-x-1 transition-transform duration-300 inline-block">
-                              {subject.label}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                {isLoadingResources ? (
+                  <div className="flex items-center gap-3 px-4 py-6 text-sm text-gray-500">
+                    <svg className="h-5 w-5 animate-spin text-[#02bdfe]" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+                    Loading resources…
                   </div>
-                ))}
+                ) : resourceGroup ? (
+                  resourceGroup.items
+                    .filter((item) => item.isActive)
+                    .map((item, index) => (
+                      <div
+                        key={item.id}
+                        className="animate-in slide-in-from-right-4 fade-in"
+                        style={{ animationDelay: `${index * 80}ms`, animationDuration: "350ms" }}
+                      >
+                        {/* Level 1: Category button */}
+                        <button
+                          className={cn(
+                            "w-full flex items-center justify-between py-3 px-4 text-sm font-semibold rounded-lg border-2 transition-all duration-300 uppercase tracking-wider",
+                            expandedItemId === item.id
+                              ? "bg-[#02bdfe] text-white border-[#02bdfe] shadow-lg"
+                              : "bg-white text-gray-700 border-gray-200 hover:border-[#02bdfe] hover:text-[#02bdfe] hover:shadow-md"
+                          )}
+                          onClick={() => {
+                            setExpandedItemId((prev) => (prev === item.id ? null : item.id));
+                            setExpandedSubItemId(null);
+                          }}
+                        >
+                          <span>{item.title}</span>
+                          <svg
+                            className={cn(
+                              "w-4 h-4 transition-transform duration-300 flex-shrink-0",
+                              expandedItemId === item.id ? "rotate-180" : ""
+                            )}
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+
+                        {/* Level 2: SubItems (grades) */}
+                        {expandedItemId === item.id && (
+                          <div className="mt-2 ml-3 space-y-1.5">
+                            {item.subItems
+                              .filter((sub) => sub.isActive)
+                              .map((sub, subIdx) => (
+                                <div key={sub.id}>
+                                  <button
+                                    className={cn(
+                                      "w-full flex items-center justify-between py-2.5 px-4 text-sm rounded-lg border transition-all duration-300",
+                                      expandedSubItemId === sub.id
+                                        ? "bg-sky-50 text-[#02bdfe] border-[#02bdfe] font-semibold"
+                                        : "bg-gray-50 text-gray-600 border-gray-200 hover:border-[#02bdfe] hover:text-[#02bdfe]"
+                                    )}
+                                    style={{ animationDelay: `${subIdx * 60}ms` }}
+                                    onClick={() =>
+                                      setExpandedSubItemId((prev) =>
+                                        prev === sub.id ? null : sub.id
+                                      )
+                                    }
+                                  >
+                                    <span>{sub.title}</span>
+                                    {sub.links.length > 0 && (
+                                      <svg
+                                        className={cn(
+                                          "w-3.5 h-3.5 flex-shrink-0 transition-transform duration-300",
+                                          expandedSubItemId === sub.id ? "rotate-180" : ""
+                                        )}
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                      >
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                      </svg>
+                                    )}
+                                    {sub.links.length === 0 && (
+                                      <span className="text-xs text-gray-300">—</span>
+                                    )}
+                                  </button>
+
+                                  {/* Level 3: Links */}
+                                  {expandedSubItemId === sub.id && sub.links.length > 0 && (
+                                    <div className="mt-1.5 ml-3 space-y-1">
+                                      {sub.links
+                                        .sort((a, b) => a.order - b.order)
+                                        .map((lnk, lnkIdx) => (
+                                          <a
+                                            key={lnk.id}
+                                            href={lnk.link}
+                                            target={lnk.newTab ? "_blank" : "_self"}
+                                            rel={lnk.newTab ? "noopener noreferrer" : undefined}
+                                            onClick={handleCloseMenu}
+                                            className="flex items-center gap-2 py-2 px-3 text-sm text-gray-600 hover:text-[#02bdfe] hover:bg-blue-50 rounded-lg transition-colors animate-in slide-in-from-right-4 fade-in group"
+                                            style={{ animationDelay: `${lnkIdx * 50}ms`, animationDuration: "300ms" }}
+                                          >
+                                            <svg className="w-3 h-3 text-[#02bdfe] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                                            </svg>
+                                            <span className="group-hover:translate-x-1 transition-transform duration-200 inline-block">
+                                              {lnk.title}
+                                            </span>
+                                          </a>
+                                        ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                ) : (
+                  <div className="text-sm text-gray-400 px-4 py-6">No resources available</div>
+                )}
               </div>
             )}
           </div>
