@@ -91,9 +91,9 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
     <section className="bg-[#01317a] text-white relative overflow-hidden py-8 md:py-10 min-h-[420px] md:min-h-[500px]">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-stretch gap-6 min-h-[380px] relative px-4">
         <div className="flex-1 p-0 md:p-4 flex flex-col justify-center text-center md:text-left">
-          <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base font-semibold tracking-wide mb-2 uppercase text-[#ffd500]">
+          {/* <p className="text-[0.6rem] sm:text-[0.7rem] md:text-base font-semibold tracking-wide mb-2 uppercase text-[#ffd500]">
             90% Marks In Final Exams, Or Get Your Money Back!*
-          </p>
+          </p> */}
           <h1 className="text-3xl md:text-[3rem] md:leading-[3.5rem] font-bold mb-4">
             1 Year Maths Champ Program
             <br className="hidden md:block" /> @ ₹9,999
