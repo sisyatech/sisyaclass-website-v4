@@ -5,8 +5,8 @@ import React from "react";
 const rows = [
   {
     title: "Every Week",
-    highlight: "5 Classes (Monday - Friday)",
-    text: "Choose From 4 PM to 9 PM",
+    highlight: "3 Classes (Monday - Friday)",
+    text: "",
   },
   {
     title: "Every 2 Weeks",
