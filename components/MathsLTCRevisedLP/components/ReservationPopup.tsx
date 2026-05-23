@@ -102,7 +102,7 @@ export default function ReservationPopup({
             type="submit"
             className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]"
           >
-            Try a Class @ ₹19 Only
+            Try a Class @ ₹9 Only
           </button>
         </form>
       </div>

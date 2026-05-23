@@ -142,7 +142,7 @@ export default function MathsLTCRevisedLPContent() {
       const orderRes = await fetch("/api/razorpay/order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "Maths LTC Demo" }),
+        body: JSON.stringify({ amount: 9, currency: "INR", contact: phoneNumber, description: "Maths LTC Demo" }),
       });
       const orderJson = await orderRes.json();
       //console.log("[MATHS-LTC] Order API response", orderJson);
@@ -177,7 +177,7 @@ export default function MathsLTCRevisedLPContent() {
           await updatePaymentStatus("success");
           window.location.href = `/mathlp/payment/success.php?transactionId=${encodeURIComponent(
             response.razorpay_payment_id || ""
-          )}&amount=${encodeURIComponent("₹19")}`;
+          )}&amount=${encodeURIComponent("₹9")}`;
         },
         modal: {
           ondismiss: function () {
