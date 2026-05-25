@@ -67,6 +67,7 @@ export default function SummerCampContent() {
     setShowLoader(true);
 
     let locationStr = "";
+    let stateStr = "";
     try {
       if (typeof navigator !== "undefined" && navigator.geolocation) {
         const position = await new Promise<GeolocationPosition>((resolve, reject) => {
@@ -94,6 +95,8 @@ export default function SummerCampContent() {
               country,
               postcode,
             } = geoData.address;
+
+            if (state) stateStr = state.trim();
 
             const fetchedCity = city || town || village;
             const parts = [fetchedCity, suburb, state, country, postcode]
@@ -133,6 +136,7 @@ export default function SummerCampContent() {
           utm_matchtype: urlParams.get("utm_matchtype") || "",
           utm_placement: urlParams.get("utm_placement") || "",
           cf_location: locationStr,
+          cf_state: stateStr,
         }),
       });
       const leadData = await leadResponse.json();
