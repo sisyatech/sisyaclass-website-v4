@@ -56,11 +56,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const logout = () => {
-    //console.log('UserContext: User logged out');
     setUser(null);
     setIsLoggedIn(false);
-    localStorage.removeItem('sisya_user');
-    //console.log('UserContext: User state cleared and removed from localStorage');
+    // Clear all app-related localStorage keys
+    const keysToRemove = [
+      'sisya_user',
+      'mobileNumber',
+      'selectedClass',
+      'leadId',
+      'doubtLeadId',
+      'token',
+      'authToken',
+      'sisya_token',
+    ];
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
   };
 
   return (

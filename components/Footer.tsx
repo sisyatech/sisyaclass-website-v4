@@ -31,7 +31,7 @@ const Footer = () => {
     setIsLoading(true);
     setMessage(null);
 
-      const apiUrl = `${API_BASE_URL}/student/send_msg_x`; // <-- API URL
+    const apiUrl = `${API_BASE_URL}/student/send_msg_x`; // <-- API URL
     const payload = {
       phone: phoneNumber,
       template: "67923b29d6fc050bf8495373" // Hardcoded template ID
@@ -56,25 +56,25 @@ const Footer = () => {
       if (response.ok) {
         // Try parsing JSON only if response is OK
         try {
-            const successData = JSON.parse(responseBody); // Assuming responseBody is defined from above
-            setMessage("Link sent successfully!");
-            setPhoneNumber(''); // Clear input
-            // //console.log("API call successful:", successData);
+          const successData = JSON.parse(responseBody); // Assuming responseBody is defined from above
+          setMessage("Link sent successfully!");
+          setPhoneNumber(''); // Clear input
+          // //console.log("API call successful:", successData);
         } catch (jsonError) {
-             // Handle cases where OK response is not JSON (or empty)
-             // //console.log("API call successful but response was not valid JSON:", responseBody);
-             setMessage("Link sent successfully! (Check SMS)"); // Provide generic success
-             setPhoneNumber('');
+          // Handle cases where OK response is not JSON (or empty)
+          // //console.log("API call successful but response was not valid JSON:", responseBody);
+          setMessage("Link sent successfully! (Check SMS)"); // Provide generic success
+          setPhoneNumber('');
         }
 
       } else {
         // Handle error response (Try parsing as JSON, fallback to text)
         let errorMessage = 'Failed to send link.';
         try {
-            const errorData = JSON.parse(responseBody); // Assuming responseBody is defined from above
-            errorMessage = errorData.message || `Server error (${response.status})`;
+          const errorData = JSON.parse(responseBody); // Assuming responseBody is defined from above
+          errorMessage = errorData.message || `Server error (${response.status})`;
         } catch (jsonError) {
-             errorMessage = `Server error (${response.status}): ${responseBody}`; // Use raw text if not JSON
+          errorMessage = `Server error (${response.status}): ${responseBody}`; // Use raw text if not JSON
         }
         setMessage(`Error: ${errorMessage}`);
         //console.error("API call failed:", response.status, responseBody);
@@ -115,12 +115,12 @@ const Footer = () => {
     e.preventDefault();
     // Check if on homepage before scrolling, otherwise navigate to home + hash
     if (window.location.pathname === '/') {
-        const faqElement = document.getElementById('faqs');
-        if (faqElement) {
-            faqElement.scrollIntoView({ behavior: 'smooth' });
-        }
+      const faqElement = document.getElementById('faqs');
+      if (faqElement) {
+        faqElement.scrollIntoView({ behavior: 'smooth' });
+      }
     } else {
-        router.push('/#faqs'); // Navigate to home page and then scroll (browser handles hash scroll)
+      router.push('/#faqs'); // Navigate to home page and then scroll (browser handles hash scroll)
     }
   };
 
@@ -143,7 +143,7 @@ const Footer = () => {
     e.preventDefault();
     router.push(routes.careers);
   };
-   // --- End: Existing Navigation Handlers ---
+  // --- End: Existing Navigation Handlers ---
 
 
   return (
@@ -175,7 +175,7 @@ const Footer = () => {
                       className="h-[44px] w-44 rounded-none border border-l-0 border-r-0 border-[#E0E0E0] bg-[#FFFDFD] px-2 font-['Nunito'] text-[12px] leading-[18.87px] font-normal text-[#1A2439] outline-none placeholder:text-xs min-[375px]:h-[46px] min-[375px]:w-52 sm:h-[50px] sm:w-56 sm:px-3 sm:text-[13px] sm:placeholder:text-sm md:h-[53px] md:px-4 md:text-[14.15px] lg:h-[50px] lg:w-48 lg:px-3 lg:text-[12px] lg:placeholder:text-xs xl:h-[53px] xl:w-56 xl:px-4 xl:text-[14.15px] xl:placeholder:text-sm focus:z-10 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 relative" // Added focus styles, rounded-none, border-r-0, focus:z-10, relative
                     />
                   </div>
-                   {/* Button with onClick, disabled state, and loading text */}
+                  {/* Button with onClick, disabled state, and loading text */}
                   <button
                     onClick={handleGetLinkClick}
                     disabled={isLoading}
@@ -186,13 +186,13 @@ const Footer = () => {
                 </div>
               </div>
               {/* Display Message Area */}
-               {message && (
-                 // Added mb-6 etc. to restore original spacing below this element
+              {message && (
+                // Added mb-6 etc. to restore original spacing below this element
                 <p className={`mb-6 text-sm sm:mb-7 md:mb-8 ${message.startsWith('Error') || message.startsWith('An error') || message.startsWith('A network') ? 'text-red-600' : 'text-green-600'}`}> {/* Improved error check */}
                   {message}
                 </p>
               )}
-               {/* --- End: Updated Phone Input Form --- */}
+              {/* --- End: Updated Phone Input Form --- */}
 
               {/* Google Play Button */}
               {/* Adjusted margins to account for message potentially pushing it down */}
@@ -221,10 +221,15 @@ const Footer = () => {
                   Book a demo class
                 </h3>
                 <div className="-mt-2 flex items-center justify-between sm:-mt-4 md:-mt-6">
-                   {/* Consider adding onClick to this button */}
-                  <button className="cursor-pointer h-[24px] w-[130px] flex-shrink-0 rounded-[5px] bg-[#0595CE] font-['Rubik'] text-[12px] leading-none font-normal text-white min-[375px]:w-[140px] sm:h-[25px] sm:w-[150px] sm:rounded-[6px] sm:text-[13px] md:h-[26.79px] md:w-[156px] md:rounded-[6.3px] md:text-[14.18px] hover:bg-blue-700 transition-colors">
+                  {/* Consider adding onClick to this button */}
+                  <a
+                    href="https://wa.me/917330897291"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer h-[24px] w-[130px] flex-shrink-0 rounded-[5px] bg-[#0595CE] font-['Rubik'] text-[12px] leading-none font-normal text-white min-[375px]:w-[140px] sm:h-[25px] sm:w-[150px] sm:rounded-[6px] sm:text-[13px] md:h-[26.79px] md:w-[156px] md:rounded-[6.3px] md:text-[14.18px] hover:bg-blue-700 transition-colors flex items-center justify-center"
+                  >
                     Speak to an expert
-                  </button>
+                  </a>
                   <Image
                     src="/person.svg"
                     alt="Expert person"
@@ -238,7 +243,7 @@ const Footer = () => {
               {/* Contact Information */}
               {/* Adjusted negative margin */}
               <div className={`${message ? '-mt-4' : '-mt-4 sm:-mt-5 md:-mt-6'} space-y-2.5 sm:space-y-3`}>
-                <a 
+                <a
                   href="https://wa.me/917330897291"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -246,24 +251,24 @@ const Footer = () => {
                 >
                   <div className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5">
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" className="stroke-[#6B7280] group-hover:stroke-[#25D366] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" className="stroke-[#6B7280] group-hover:stroke-[#25D366] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </div>
                   <span className="text-[13px] font-medium text-gray-700 sm:text-[14px] md:text-[15px] group-hover:text-[#25D366] transition-colors">
                     +91 7330897291
                   </span>
                 </a>
-                <a 
+                <a
                   href="https://mail.google.com/mail/?view=cm&fs=1&to=contactus@sisyaclass.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 sm:gap-3 group cursor-pointer"
                 >
                   <div className="h-4 w-4 flex-shrink-0 sm:h-5 sm:w-5">
-                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                       <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" className="stroke-[#6B7280] group-hover:stroke-[#0595CE] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                       <polyline points="22,6 12,13 2,6" className="stroke-[#6B7280] group-hover:stroke-[#0595CE] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                     </svg>
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" className="stroke-[#6B7280] group-hover:stroke-[#0595CE] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="22,6 12,13 2,6" className="stroke-[#6B7280] group-hover:stroke-[#0595CE] transition-colors" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                   </div>
                   <span className="text-[13px] font-medium break-all text-gray-700 sm:text-[14px] md:text-[15px] group-hover:text-[#0595CE] transition-colors">
                     contactus@sisyaclass.com

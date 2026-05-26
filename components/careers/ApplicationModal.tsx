@@ -25,7 +25,6 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({ job, onClose
     fullName: '',
     email: '',
     contactNumber: '',
-    cv: null as File | null,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,17 +32,12 @@ export const ApplicationModal: React.FC<ApplicationModalProps> = ({ job, onClose
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, cv: file }));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Create email subject and body with all the details
     const subject = `Job Application: ${job.title}`;
-    const cvInfo = formData.cv ? `\nCV File: ${formData.cv.name} (Please note the file you uploaded)` : '';
     const body = `
 Job Application Details
 
@@ -51,36 +45,33 @@ Position Applied For: ${job.title}
 Full Name: ${formData.fullName}
 Email: ${formData.email}
 Contact Number: ${formData.contactNumber}
-${cvInfo}
+
+📎 Please attach your CV/Resume to this email before sending.
 
 Best regards,
 ${formData.fullName}
     `.trim();
-    
+
     // Create mailto link
     const mailtoLink = `mailto:sisyaclass@gmail.com.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    
+
     // Open email directly
     window.location.href = mailtoLink;
-    
+
     // Show instructions after email opens
     setTimeout(() => {
-      if (formData.cv) {
-        alert(`✓ Email opened to sisyaclass@gmail.com\n\n📎 Please attach your CV file ("${formData.cv.name}") manually and click SEND.`);
-      } else {
-        alert('✓ Email opened to sisyaclass@gmail.com\n\nYou can attach your CV if needed.');
-      }
+      alert('✓ Email opened!\n\n📎 Please attach your CV/Resume to the email before sending.');
       onClose();
     }, 300);
   };
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-white rounded-xl shadow-2xl max-w-lg w-full"
         onClick={(e) => e.stopPropagation()}
       >
@@ -157,39 +148,14 @@ ${formData.fullName}
             />
           </div>
 
-          {/* CV Upload */}
-          <div>
-            <label htmlFor="cv" className="block text-sm font-medium text-gray-700 mb-1.5">
-              Your CV/Resume (Optional - attach in email)
-            </label>
-            <div className="flex items-center justify-center w-full">
-              <label className="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
-                <div className="flex flex-col items-center justify-center">
-                  <svg className="w-8 h-8 mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p className="text-xs text-gray-500 text-center">
-                    <span className="font-semibold">Click to upload</span> - PDF, DOC, DOCX
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">
-                    Attach this file in the email
-                  </p>
-                </div>
-                <input
-                  type="file"
-                  id="cv"
-                  name="cv"
-                  onChange={handleFileChange}
-                  accept=".pdf,.doc,.docx"
-                  className="hidden"
-                />
-              </label>
-            </div>
-            {formData.cv && (
-              <p className="mt-1.5 text-xs text-gray-600">
-                ✓ Selected: {formData.cv.name}
-              </p>
-            )}
+          {/* CV Info Note */}
+          <div className="flex items-start gap-2.5 bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <svg className="w-4 h-4 mt-0.5 flex-shrink-0 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+            </svg>
+            <p className="text-xs text-amber-700 leading-relaxed">
+              <span className="font-semibold">Attach your CV/Resume</span> in the email that opens after you click Submit.
+            </p>
           </div>
 
           {/* Submit Button */}
@@ -205,7 +171,7 @@ ${formData.fullName}
               type="submit"
               className="flex-1 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              {formData.cv ? '📧 Open Email with CV' : '📧 Open Email'}
+              📧 Open Email
             </button>
           </div>
         </form>

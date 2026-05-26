@@ -133,6 +133,7 @@ export const MobileMenu = () => {
     "main" | "courses" | "resources"
   >("main");
   const [expandedGrade, setExpandedGrade] = useState<string | null>(null);
+  const [expandedResource, setExpandedResource] = useState<string | null>(null);
 
   // ── Resources For Students (mobile) ──
   type NavMobileLink = { id: string; title: string; link: string; newTab: boolean; order: number };

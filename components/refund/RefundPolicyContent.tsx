@@ -80,7 +80,7 @@ const RefundPolicyContent = () => {
               <strong>Email:</strong> sisyaclass@gmail.com
             </li>
             <li className="font-roboto font-medium text-[12px] leading-[14px] tracking-[0.03em] text-[#161A38]">
-              <strong>Website Contact Form:</strong> https://sisyaclass.com/contact-us
+              <strong>Website Contact Form:</strong> https://sisyaclass.com/contact
             </li>
           </ul>
         </section>
