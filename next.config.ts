@@ -57,7 +57,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:type(syllabus|pyq|sample-paper|course-detail|revision-notes)/:slug',
+        source: '/:type(syllabus|pyq|sample-paper|course-detail|revision-notes|important-questions|worksheet|textbook-solution)/:slug',
         destination: '/web-pages/:type/:slug',
       },
       {
