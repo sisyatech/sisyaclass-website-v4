@@ -5,11 +5,11 @@ const Moto = () => {
     <div className="relative py-5 sm:py-6 px-4 sm:px-8 lg:px-12 mt-6 mb-6 w-full bg-[#DADADA66]">
       <div className="max-w-7xl mx-auto text-left"> 
         {/* Main Title */}
-        <h1 
+        <h2 
           className="mb-6 sm:mb-8 font-roboto font-medium text-[14px] leading-[30px] sm:text-[20px] sm:leading-[24px] tracking-[0.03em] text-[#1A2439] break-words"
         >
           SISYA Class: Revolutionizing Learning for Classes 1 to 10 with IIT/NIT Expert Educators
-        </h1>
+        </h2>
 
         {/* Introduction */}
         <div className="mb-8">
