@@ -103,10 +103,9 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           </p>
 
           <h1 className="text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[3rem] lg:leading-[3.5rem] font-bold mb-4 whitespace-nowrap">
-            <span className="block">JEE Foundation Course for</span>
-            <span className="block">Grades 6–10</span>
+          <span className="block">JEE Foundation Masterclass</span>
           </h1>
-          <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0">
+          <p className="text-[0.9rem] sm:text-base md:text-xl mb-4 font-medium max-w-md mx-auto md:mx-0 italic">
             Give your child the IIT edge — built by IITians
           </p>
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
@@ -122,7 +121,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
               className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-[#ffd500] text-black whitespace-nowrap"
               onClick={onRegister}
             >
-              Get 3 Demos @19
+              Book A Free Demo Class
             </button>
             <button
               className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
@@ -137,13 +136,13 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           initial={{ opacity: 0, scale: 0.9, y: 50 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex-1 md:absolute md:right-[-20px] md:bottom-[-20px] md:w-[60%] lg:w-[55%] flex justify-center items-center md:items-end pointer-events-none mt-10 md:mt-0"
+          className="flex-1 md:absolute md:right-[-50px] md:bottom-[-60px] md:w-[50%] lg:w-[55%] flex justify-center items-center md:items-end pointer-events-none mt-10 md:mt-0"
         >
           <Image
-            src="/jee_foundation/hero_pic.png"
-            alt="JEE Foundation Team"
-            width={900}
-            height={600}
+            src="/jee_foundation/srikesh sir 2.png"
+            alt="Srikesh Sir"
+            width={320}
+            height={320}
             className="object-contain drop-shadow-2xl [mask-image:radial-gradient(circle,black_80%,transparent_100%)]"
             priority
           />

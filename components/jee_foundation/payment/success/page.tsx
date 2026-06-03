@@ -6,6 +6,9 @@ import Link from "next/link";
 
 export default function PaymentSuccessPage() {
   const params = useSearchParams();
+  const isDemoBooking = params.get("type") === "demo";
+  const selectedClass = params.get("class") || "";
+  const phoneNumber = params.get("phone") || "";
   const transactionId = params.get("transactionId") || "";
   const amount = params.get("amount") || "₹19";
   const [currentDateTime, setCurrentDateTime] = useState<string>("");
@@ -46,28 +49,55 @@ export default function PaymentSuccessPage() {
             <div className="w-[120px] h-[120px] rounded-full bg-gradient-to-br from-[#10A4FC] to-[#4317FB] flex items-center justify-center mb-6 shadow-[0_10px_20px_rgba(16,164,252,0.3)]">
               <span className="text-white text-6xl">✔</span>
             </div>
-            <h1 className="text-[24px] font-bold text-[#0033FF] mb-3">Payment Successful!</h1>
-            <p className="text-[16px] text-[#555] leading-relaxed mb-6">Thank you for enrolling in our Demo Class.</p>
+            <h1 className="text-[24px] font-bold text-[#0033FF] mb-3">
+              {isDemoBooking ? "Demo Booked Successfully" : "Payment Successful!"}
+            </h1>
+            <p className="text-[16px] text-[#555] leading-relaxed mb-6">
+              {isDemoBooking
+                ? "Your free demo class has been booked. Our team will contact you shortly."
+                : "Thank you for enrolling in our Demo Class."}
+            </p>
 
             <div className="w-full max-w-[320px] sm:max-w-[350px] bg-[#f8f9ff] rounded-xl p-4 sm:p-5 shadow-[0_4px_15px_rgba(0,0,0,0.05)] mb-5 sm:mb-6">
-              <div className="flex items-center justify-between text-[14px] mb-3">
-                <span className="text-[#777] flex items-center gap-2">Transaction ID</span>
-                <span className="font-medium text-[#333] break-all">{transactionId}</span>
-              </div>
-              <div className="flex items-center justify-between text-[14px] mb-3">
-                <span className="text-[#777] flex items-center gap-2">Date &amp; Time</span>
-                <span className="font-medium text-[#333]" suppressHydrationWarning>{currentDateTime}</span>
-              </div>
-              <div className="h-px bg-[#eee] my-3" />
-              <div className="flex items-center justify-between text-[16px] font-bold text-[#0033FF]">
-                <span>Amount Paid</span>
-                <span>{amount}</span>
-              </div>
+              {isDemoBooking ? (
+                <>
+                  <div className="flex items-center justify-between text-[14px] mb-3">
+                    <span className="text-[#777] flex items-center gap-2">Class</span>
+                    <span className="font-medium text-[#333]">Class {selectedClass}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[14px] mb-3">
+                    <span className="text-[#777] flex items-center gap-2">Phone</span>
+                    <span className="font-medium text-[#333]">+91 {phoneNumber}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[14px]">
+                    <span className="text-[#777] flex items-center gap-2">Date &amp; Time</span>
+                    <span className="font-medium text-[#333]" suppressHydrationWarning>{currentDateTime}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between text-[14px] mb-3">
+                    <span className="text-[#777] flex items-center gap-2">Transaction ID</span>
+                    <span className="font-medium text-[#333] break-all">{transactionId}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-[14px] mb-3">
+                    <span className="text-[#777] flex items-center gap-2">Date &amp; Time</span>
+                    <span className="font-medium text-[#333]" suppressHydrationWarning>{currentDateTime}</span>
+                  </div>
+                  <div className="h-px bg-[#eee] my-3" />
+                  <div className="flex items-center justify-between text-[16px] font-bold text-[#0033FF]">
+                    <span>Amount Paid</span>
+                    <span>{amount}</span>
+                  </div>
+                </>
+              )}
             </div>
 
             <a
               href={`https://wa.me/919100312034?text=${encodeURIComponent(
-                `Hi, I just enrolled in the Summer Camp. My transaction ID is ${transactionId}`
+                isDemoBooking
+                  ? `Hi, I just booked a free JEE Foundation demo for Class ${selectedClass}. My phone number is +91 ${phoneNumber}.`
+                  : `Hi, I just enrolled in the Summer Camp. My transaction ID is ${transactionId}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"

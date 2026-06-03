@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Script from "next/script";
 import HeroSection from "./sections/HeroSection";
 import StatsSection from "./sections/StatsSection";
 import WhyStartEarly from "./sections/WhyStartEarly";
@@ -15,7 +14,7 @@ import Teachers from "./sections/Teachers";
 
 export default function JeeFoundationContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
-  const [selectedClass, setSelectedClass] = useState("1");
+  const [selectedClass, setSelectedClass] = useState("6");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [showLoader, setShowLoader] = useState(false);
 
@@ -81,66 +80,13 @@ export default function JeeFoundationContent() {
         return;
       }
       localStorage.setItem("leadId", leadData.lead.id);
-      //console.log("[JEE Foundation] Lead stored", { leadId: leadData.lead.id });
-
-      const orderRes = await fetch("/api/razorpay/order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: 19, currency: "INR", contact: phoneNumber, description: "JEE Foundation Demo" }),
-      });
-      const orderJson = await orderRes.json();
-      //console.log("[JEE Foundation] Order API response", orderJson);
-      if (!orderJson?.success) {
-        alert("Failed to initialize payment. Please try again.");
-        return;
-      }
-
-      const payload = orderJson.data
-        ? orderJson.data
-        : {
-          order_id: orderJson.order?.id,
-          amount: orderJson.order?.amount,
-          currency: orderJson.order?.currency,
-          key_id: orderJson.keyId,
-          name: "Sisya Class",
-          description: "JEE Foundation Demo",
-          prefill: { contact: phoneNumber },
-        };
-
-      const options: any = {
-        key: payload.key_id,
-        amount: payload.amount,
-        currency: payload.currency,
-        name: payload.name,
-        description: payload.description,
-        order_id: payload.order_id,
-        prefill: payload.prefill,
-        handler: async function (response: any) {
-          //console.log("[JEE Foundation] Success handler", response);
-          setShowReservationPopup(false);
-          await updatePaymentStatus("success");
-          window.location.href = `/jee_foundation/payment/success.php?transactionId=${encodeURIComponent(
-            response.razorpay_payment_id || ""
-          )}&amount=${encodeURIComponent("₹19")}`;
-        },
-        modal: {
-          ondismiss: function () {
-            //console.warn("[JEE Foundation] Checkout dismissed by user");
-            updatePaymentStatus("fail").finally(() => {
-              window.location.href = `/jee_foundation/payment/failed.php?transactionId=${encodeURIComponent(
-                `DISMISSED_${Date.now()}`
-              )}`;
-            });
-          },
-        },
-      };
-      // @ts-ignore
-      const rzp = new (window as any).Razorpay(options);
-      //console.log("[JEE Foundation] Opening Razorpay checkout", { order_id: payload.order_id });
-      rzp.open();
+      await updatePaymentStatus("success");
+      setShowReservationPopup(false);
+      window.location.href = `/jee_foundation/payment/success.php?type=demo&class=${encodeURIComponent(
+        selectedClass
+      )}&phone=${encodeURIComponent(phoneNumber)}`;
     } catch (err) {
       //console.error("[JEE Foundation] Error", err);
-      updatePaymentStatus("fail");
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);
@@ -149,7 +95,6 @@ export default function JeeFoundationContent() {
 
   return (
     <main className="min-h-screen bg-white">
-      <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
       <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <StatsSection onChooseClass={handleChooseClass} />
       <WhyStartEarly onEnroll={() => setShowReservationPopup(true)} />

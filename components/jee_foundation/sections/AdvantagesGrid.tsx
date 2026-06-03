@@ -95,18 +95,18 @@ const advantageZones: AdvantageZone[] = [
     titleColor: "text-[#6B009E]",
     cards: [
       {
-        title: "Performance Tracking",
-        description: "See your progress. Fix your weaknesses. Accelerate your journey to IIT.",
+        title: "Bi-Weekly/Monthly Test",
+        description: "Regular Tests will be conducted to assess students understanding and progress.",
         icon: "/jee_foundation/grid/grid-10.svg",
+      },
+      {
+        title: "Performance Tracking",
+        description: "See your progress. Fix your weakness. Accelerate your journey to IIT.",
+        icon: "/jee_foundation/grid/grid-11.svg",
       },
       {
         title: "All India Test Series",
         description: "Compete nationwide. Know where you stand before JEE does.",
-        icon: "/jee_foundation/grid/grid-11.svg",
-      },
-      {
-        title: "Starter Kit + Exclusive SISYA Goodies",
-        description: "Your motivation booster — delivered at your doorstep to kickstart your IIT journey.",
         icon: "/jee_foundation/grid/grid-12.svg",
       },
     ],

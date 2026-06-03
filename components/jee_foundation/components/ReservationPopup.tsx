@@ -102,12 +102,10 @@ export default function ReservationPopup({
             type="submit"
             className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]"
           >
-            Try 3 Classes @ ₹19 Only
+            Book A Free Demo Class
           </button>
         </form>
       </div>
     </div>
   );
 }
-
-

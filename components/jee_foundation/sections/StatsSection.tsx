@@ -40,9 +40,6 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
               </motion.div>
             </span>
           </motion.h2>
-          <p className="mt-1 text-center md:text-left text-base md:text-lg font-medium text-black">
-            New Batches Every Monday
-          </p>
           <motion.div
             whileHover={{ x: 5 }}
             className="flex items-center gap-2 mt-4"
@@ -76,7 +73,15 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
               </span>
             </motion.button>
           ))}
-          {[6, 7, 8, 9, 10].map((grade, idx) => (
+          {(
+            [
+              { grade: 6, sold: "70%" },
+              { grade: 7, sold: "54%" },
+              { grade: 8, sold: "77%" },
+              { grade: 9, sold: "86%" },
+              { grade: 10, sold: "75%" },
+            ] as const
+          ).map(({ grade, sold }, idx) => (
             <motion.button
               key={grade}
               initial={{ opacity: 0, scale: 0.8 }}
@@ -88,7 +93,8 @@ export default function StatsSection({ onChooseClass }: StatsSectionProps) {
               className="bg-[#685edb] text-white border-0 py-1.5 px-2 font-semibold rounded-[10px] cursor-pointer text-sm min-h-[42px] w-full flex flex-col justify-center items-center text-center leading-[1.2] transition-colors md:py-2 md:text-[0.9rem] md:min-h-[48px]"
               onClick={() => onChooseClass(grade.toString())}
             >
-              Class {grade}
+              <div className="text-xs md:text-sm">Class {grade}</div>
+              <span className="text-[9px] md:text-[10px] font-normal">{sold} Sold</span>
             </motion.button>
           ))}
           <motion.button
