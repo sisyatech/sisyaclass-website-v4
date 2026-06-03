@@ -101,7 +101,7 @@ export default function JeeFoundationContent() {
       <AdvantagesGrid onStartJourney={() => setShowReservationPopup(true)} />
       
       <ReviewsSection />
-      <Teachers />
+      {/* <Teachers /> */}
       <Testimonials />
       <WhatsAppFab />
       <SocialFab />
