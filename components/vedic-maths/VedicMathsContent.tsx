@@ -119,7 +119,7 @@ export default function VedicMathsContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA Vedic Maths 2026",
+          name: "SISYA Vedic Maths",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",

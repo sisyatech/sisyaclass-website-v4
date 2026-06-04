@@ -186,7 +186,7 @@ export default function LtcContent2() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA LTC 2026",
+          name: "SISYA LTC TWO",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",

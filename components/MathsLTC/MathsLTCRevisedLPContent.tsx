@@ -67,7 +67,7 @@ export default function MathsLTCRevisedLPContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA Maths LTC 2026",
+          name: "SISYA Maths LTC",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
@@ -99,14 +99,14 @@ export default function MathsLTCRevisedLPContent() {
       const payload = orderJson.data
         ? orderJson.data
         : {
-            order_id: orderJson.order?.id,
-            amount: orderJson.order?.amount,
-            currency: orderJson.order?.currency,
-            key_id: orderJson.keyId,
-            name: "Sisya Class",
-            description: "Maths LTC Demo 2026",
-            prefill: { contact: phoneNumber },
-          };
+          order_id: orderJson.order?.id,
+          amount: orderJson.order?.amount,
+          currency: orderJson.order?.currency,
+          key_id: orderJson.keyId,
+          name: "Sisya Class",
+          description: "Maths LTC Demo 2026",
+          prefill: { contact: phoneNumber },
+        };
 
       const options: any = {
         key: payload.key_id,

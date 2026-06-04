@@ -107,9 +107,9 @@ export default function SummerCampContent() {
               locationStr = [...new Set(parts)].slice(0, 5).join(" ");
             }
           }
-        } catch (e) {}
+        } catch (e) { }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     console.log("[SummerCamp] Final Location for Lead:", locationStr);
 
@@ -120,7 +120,7 @@ export default function SummerCampContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA Summer Camp 2026",
+          name: "SISYA Summer Camp",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",

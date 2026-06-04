@@ -59,22 +59,77 @@ export default function JeeFoundationContent() {
     localStorage.setItem("mobileNumber", phoneNumber);
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
+
+    let locationStr = "";
+    let stateStr = "";
     try {
-      //console.log("[JEE Foundation] Starting flow", { selectedClass, phoneNumber });
-      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead2", {
+      if (typeof navigator !== "undefined" && navigator.geolocation) {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 6000,
+            enableHighAccuracy: false
+          });
+        });
+        const { latitude, longitude } = position.coords;
+        locationStr = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+
+        try {
+          const geoRes = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const geoData = await geoRes.json();
+          if (geoData && geoData.address) {
+            const {
+              city,
+              town,
+              village,
+              suburb,
+              state,
+              country,
+              postcode,
+            } = geoData.address;
+
+            if (state) stateStr = state.trim();
+
+            const fetchedCity = city || town || village;
+            const parts = [fetchedCity, suburb, state, country, postcode]
+              .filter((part: string | undefined) => Boolean(part))
+              .map((part: string) => part.trim());
+
+            if (parts.length) {
+              locationStr = [...new Set(parts)].slice(0, 5).join(" ");
+            }
+          }
+        } catch (e) { }
+      }
+    } catch (e) { }
+
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const leadResponse = await fetch("https://sisyaclass.xyz/student/new_reg_lead3", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA JEE Foundation 2026",
+          name: "JEE FOUNDATION",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
-          source: "web",
-          medium: "web",
+          source: urlParams.get("utm_source") || "web",
+          medium: urlParams.get("utm_medium") || "web",
+          utm_campaign: urlParams.get("utm_campaign") || "",
+          utm_id: urlParams.get("utm_id") || "",
+          utm_term: urlParams.get("utm_term") || "",
+          utm_content: urlParams.get("utm_content") || "",
+          utm_adgroupid: urlParams.get("utm_adgroupid") || "",
+          utm_device: urlParams.get("utm_device") || "",
+          utm_network: urlParams.get("utm_network") || "",
+          utm_matchtype: urlParams.get("utm_matchtype") || "",
+          utm_placement: urlParams.get("utm_placement") || "",
+          cf_location: locationStr,
+          cf_state: stateStr,
         }),
       });
       const leadData = await leadResponse.json();
-      //console.log("[JEE Foundation] Lead response", leadData);
       if (!leadData?.success) {
         alert("Something went wrong. Please try again.");
         return;
@@ -86,7 +141,6 @@ export default function JeeFoundationContent() {
         selectedClass
       )}&phone=${encodeURIComponent(phoneNumber)}`;
     } catch (err) {
-      //console.error("[JEE Foundation] Error", err);
       alert("Network error. Please try again.");
     } finally {
       setShowLoader(false);
@@ -99,7 +153,7 @@ export default function JeeFoundationContent() {
       <StatsSection onChooseClass={handleChooseClass} />
       <WhyStartEarly onEnroll={() => setShowReservationPopup(true)} />
       <AdvantagesGrid onStartJourney={() => setShowReservationPopup(true)} />
-      
+
       <ReviewsSection />
       {/* <Teachers /> */}
       <Testimonials />

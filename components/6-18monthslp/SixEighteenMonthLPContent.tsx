@@ -65,12 +65,12 @@ export default function SixEighteenMonthLPContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA 4-Month Revision Batch",
+          name: "SISYA Four Month Revision Batch",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
-          source:"web",
-          medium:"web",
+          source: "web",
+          medium: "web",
         }),
       });
       const leadData = await leadResponse.json();
@@ -143,7 +143,7 @@ export default function SixEighteenMonthLPContent() {
   return (
     <main className="min-h-screen bg-white">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-      <HeroSection onRegister={() => setShowReservationPopup(true)}/>
+      <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <StatsSection onChooseClass={handleChooseClass} />
       <ReviewsSection />
       <UniqueCourseSection />

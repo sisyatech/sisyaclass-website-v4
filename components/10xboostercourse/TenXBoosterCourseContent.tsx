@@ -126,7 +126,7 @@ export default function TenXBoosterCourseContent() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: "SISYA Rank Booster - 10X Smarter Learning by IITians",
+            name: "SISYA Rank Booster - TENX Smarter Learning by IITians",
             phone: phoneNumber,
             class: selectedClass,
             status: "initiated",

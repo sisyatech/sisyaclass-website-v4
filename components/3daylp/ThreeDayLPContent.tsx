@@ -66,12 +66,12 @@ export default function ThreeDayLPContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA 3-Day Demo",
+          name: "SISYA Three Day Demo",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
-          source:"web",
-          medium:"web",
+          source: "web",
+          medium: "web",
         }),
       });
       const leadData = await leadResponse.json();
@@ -144,7 +144,7 @@ export default function ThreeDayLPContent() {
   return (
     <main className="min-h-screen bg-white">
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
-      <HeroSection onRegister={() => setShowReservationPopup(true)}/>
+      <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <StatsSection onChooseClass={handleChooseClass} />
       <ReviewsSection />
       <UniqueCourseSection />

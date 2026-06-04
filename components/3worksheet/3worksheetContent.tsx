@@ -64,7 +64,7 @@ export default function ThreeWorksheetContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: "SISYA 5-Worksheet Bundle",
+          name: "SISYA Five Worksheet Bundle",
           phone: phoneNumber,
           cf_class: selectedClass,
           status: "initiated",
@@ -121,14 +121,14 @@ export default function ThreeWorksheetContent() {
       const payload = orderJson.data
         ? orderJson.data
         : {
-            order_id: orderJson.order?.id,
-            amount: orderJson.order?.amount,
-            currency: orderJson.order?.currency,
-            key_id: orderJson.keyId,
-            name: "Sisya Class",
-            description: "5 Worksheet Bundle",
-            prefill: { contact: phoneNumber },
-          };
+          order_id: orderJson.order?.id,
+          amount: orderJson.order?.amount,
+          currency: orderJson.order?.currency,
+          key_id: orderJson.keyId,
+          name: "Sisya Class",
+          description: "5 Worksheet Bundle",
+          prefill: { contact: phoneNumber },
+        };
 
       const options: any = {
         key: payload.key_id,
@@ -172,7 +172,7 @@ export default function ThreeWorksheetContent() {
       <HeroSection onRegister={() => setShowReservationPopup(true)} />
       <HowItWorksSection />
       <ReviewsSection />
-      
+
       <Testimonials />
 
       <section className="bg-white py-16">

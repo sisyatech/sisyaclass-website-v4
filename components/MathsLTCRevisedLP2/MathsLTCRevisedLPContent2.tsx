@@ -161,9 +161,9 @@ export default function MathsLTCRevisedLPContent2() {
               locationStr = [...new Set(parts)].slice(0, 5).join(" ");
             }
           }
-        } catch (e) {}
+        } catch (e) { }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     console.log("[MATHS-LTC2] Final Location for Lead:", locationStr);
 
