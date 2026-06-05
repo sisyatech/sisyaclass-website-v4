@@ -77,6 +77,14 @@ const nextConfig: NextConfig = {
         destination: '/jee_foundation/payment/failed',
       },
       {
+        source: '/individualsubjectLP/payment/success.php',
+        destination: '/individualsubjectLP/payment/success',
+      },
+      {
+        source: '/individualsubjectLP/payment/failed.php',
+        destination: '/individualsubjectLP/payment/failed',
+      },
+      {
         source: '/vedic-maths/payment/success.php',
         destination: '/vedic-maths/payment/success',
       },
