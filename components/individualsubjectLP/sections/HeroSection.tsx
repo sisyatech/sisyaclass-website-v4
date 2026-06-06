@@ -91,7 +91,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
             <span className="block">Master Any Subject with</span>
           </h1>
           <h1 className="text-[1.5rem] sm:text-[1.75rem] md:text-[2rem] lg:text-[3rem] lg:leading-[3.5rem] font-bold mb-4 whitespace-nowrap text-yellow-300">
-            IIT / NIT Mentors.
+            Top IIT / NIT Teachers.
           </h1>
 
           <ul className="mt-1 space-y-[0.3rem] text-left mx-auto md:mx-0 max-w-xl text-[0.8rem] sm:text-[0.9rem] md:text-lg">
