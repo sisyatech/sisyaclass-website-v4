@@ -19,20 +19,6 @@ type StatsSectionProps = {
 
 const subjects = [
   {
-    name: "Spoken English",
-    icon: Lightbulb,
-    price: "₹6,999/year",
-    grades: "Grades 1–10",
-    frequency: "2 Classes/Week",
-    quote: `"For the child who scores well in English but hesitates to speak."`,
-    bullets: [
-      "Weekly 1-to-1 speaking session",
-      "Real conversation practice — not grammar drills",
-      "Confidence you can hear in 30 days"
-    ],
-    defaultClass: "6",
-  },
-  {
     name: "Maths",
     icon: Calculator,
     price: "₹9,999/year",
@@ -43,20 +29,6 @@ const subjects = [
       "Daily & weekly tests + homework support",
       "Class recordings included",
       "Study materials - no extra cost"
-    ],
-    defaultClass: "6",
-  },
-  {
-    name: "Science",
-    icon: Microscope,
-    price: "₹4,999/year",
-    grades: "Grades 1–5",
-    frequency: "2 Classes/Week",
-    quote: `"For the curious child whose questions deserve real answers."`,
-    bullets: [
-      "Weekly 1-to-1 special class",
-      "Curiosity-led concept teaching",
-      "CBSE & ICSE aligned"
     ],
     defaultClass: "6",
   },
@@ -87,6 +59,34 @@ const subjects = [
       "Test performance tracking"
     ],
     defaultClass: "8",
+  },
+  {
+    name: "Science",
+    icon: Microscope,
+    price: "₹4,999/year",
+    grades: "Grades 1–5",
+    frequency: "2 Classes/Week",
+    quote: `"For the curious child whose questions deserve real answers."`,
+    bullets: [
+      "Weekly 1-to-1 special class",
+      "Curiosity-led concept teaching",
+      "CBSE & ICSE aligned"
+    ],
+    defaultClass: "6",
+  },
+  {
+    name: "Spoken English",
+    icon: Lightbulb,
+    price: "₹6,999/year",
+    grades: "Grades 1–10",
+    frequency: "2 Classes/Week",
+    quote: `"For the child who scores well in English but hesitates to speak."`,
+    bullets: [
+      "Weekly 1-to-1 speaking session",
+      "Real conversation practice — not grammar drills",
+      "Confidence you can hear in 30 days"
+    ],
+    defaultClass: "6",
   },
   {
     name: "Coding & Robotics",

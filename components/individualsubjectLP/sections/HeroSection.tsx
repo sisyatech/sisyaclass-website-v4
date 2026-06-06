@@ -83,7 +83,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
           transition={{ duration: 0.8 }}
           className="flex-1 p-0 md:p-4 flex flex-col justify-center text-center md:text-left"
         >
-          <div className="inline-flex items-center justify-center w-[140px] h-[34px] border border-white rounded-full bg-yellow-300 text-black text-[13px] font-medium mb-6 mx-auto lg:mx-0">
+          <div className="inline-flex items-center justify-center w-[140px] h-[34px] border border-white rounded-full bg-yellow-300 text-black text-[13px] font-bold mb-6 mx-auto lg:mx-0">
             Toppers Program
           </div>
 
