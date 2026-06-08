@@ -50,7 +50,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
       });
       const text = await res.text();
       let data: any = {};
-      try { data = text ? JSON.parse(text) : {}; } catch { }
+      try { data = text ? JSON.parse(text) : {}; } catch {}
       if (res.ok && (data?.success ?? true)) {
         setIsSuccess(true);
       } else {
@@ -68,12 +68,12 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
   };
 
   return (
-    <section
-      className="text-white relative overflow-hidden pt-8 pb-0 md:py-10 min-h-[420px] md:min-h-[500px] bg-cover bg-center"
-      style={{
-        backgroundImage: "url('/individualsubjectLP/Backgroundinherosection.png')",
-      }}
-    >
+        <section
+        className="text-white relative overflow-hidden pt-8 pb-0 md:py-10 min-h-[420px] md:min-h-[500px] bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/individualsubjectLP/Backgroundinherosection.png')",
+        }}
+      >
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center md:items-stretch gap-0 md:gap-6 min-h-[380px] relative px-4">
 
         {/* ── Left Content ── */}
@@ -105,7 +105,7 @@ export default function HeroSection({ onRegister, onGetCallback }: HeroSectionPr
               className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-[#ffd500] text-black whitespace-nowrap"
               onClick={onRegister}
             >
-              Book A Demo @ ₹9
+              Book A Free Demo
             </button>
             <button
               className="inline-flex items-center justify-center font-semibold text-[0.75rem] sm:text-[0.9rem] md:text-[1rem] lg:text-[1.125rem] leading-[1.2] rounded-2xl cursor-pointer z-10 flex-1 md:flex-none md:w-[230px] h-[44px] sm:h-[48px] md:h-[52px] px-3 sm:px-4 md:px-6 bg-white text-[#01317a] border border-white/70 hover:bg-white/90"
