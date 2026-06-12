@@ -13,6 +13,31 @@ type Review = {
 
 const payload: { data: Review[] } = {
   data: [
+    {
+      id: "rev-swapnil",
+      userName: "Swapnil Deshmukh",
+      userImage: "https://ui-avatars.com/api/?name=Swapnil+Deshmukh&background=00b67a&color=fff",
+      date: "2025-11-18T13:56:09.000Z",
+      score: 5,
+      text: "Very good teaching institute, important part is they accept the feedback and suggestions. I recently requested increasing quizzes, stop reading spam messages, ask students not to interrupt teaching and disturb classes. I can see positive changes in Shoury and he doesn’t want to miss any classes or even don’t want to be late. Definitely positive outcome within a month. Special thanks and appreciation to Science mam.",
+    },
+    {
+      id: "6a22802d965da20beb90e1b4",
+      userName: "Gomathy Hari",
+      userImage: "https://user-images.trustpilot.com/6a2280174a5f8143a883db77/73x73.png",
+      date: "2026-06-05T09:52:13.000Z",
+      score: 5,
+      text: "Mouli sir robotics class is very clear and easily understood. He explains complex robotics concepts with practical examples that keep kids engaged. The hands-on projects are amazing, and my child looks forward to every session! Highly recommended.",
+    },
+
+    {
+      id: "rev-sunita",
+      userName: "Sunita",
+      userImage: "https://ui-avatars.com/api/?name=Sunita&background=00b67a&color=fff",
+      date: "2026-06-05T13:56:09.000Z",
+      score: 5,
+      text: "We got to now about sisya from ChatGPT. Since than we had great experience about online lectures especially chemistry is THE BEST from all. Also maths lecture are totally from scratch upto advance. And physics they explain really good and we are left with 0 doubts ",
+    },
 
     {
       id: "6a22b9592dbbbb65fd091952",
@@ -30,17 +55,6 @@ const payload: { data: Review[] } = {
       score: 4,
       text: "They have taught me a very good lessons in every subject day by day.\nThey taught me easy methods which are harder and takes more time.  Now  by learning them I can solve the questions in 2 to 3 minutes. \n                 THANK YOU SISYA ",
     },
-
-
-    {
-      id: "6a22c6b59116cbee28b2af3e",
-      userName: "Nishtha Sethi",
-      userImage: "https://user-images.trustpilot.com/6a22c5fac1f59819641f6f06/73x73.png",
-      date: "2026-06-05T14:53:09.000Z",
-      score: 4,
-      text: "Hello sisya classes,  the classes are good and attractive for kids, my kid like to join the sessions but I have one issue for the summer camp batch, my son join the camp for robotics classes but from your side we have very less classes to understand the robotics topic. And we are also not received our robotics kit. But some students get it.\n",
-    },
-
     {
       id: "6a22b8024464a5867e50a214",
       userName: "Yamini Desu",
@@ -55,16 +69,9 @@ const payload: { data: Review[] } = {
       userImage: "https://user-images.trustpilot.com/6a22b4f3dd910ce7b082a141/73x73.png",
       date: "2026-06-05T13:37:39.000Z",
       score: 5,
-      text: "Staff is very nice and Co-operative... I love the way you teach every child and take response individually... ",
+      text: "Staff is very nice and Co-operative... I love the way you teach every child and take response individually... They ensure no doubts are left behind. Great experience overall!",
     },
-    {
-      id: "6a22802d965da20beb90e1b4",
-      userName: "Gomathy Hari",
-      userImage: "https://user-images.trustpilot.com/6a2280174a5f8143a883db77/73x73.png",
-      date: "2026-06-05T09:52:13.000Z",
-      score: 5,
-      text: "Mouli sir robotics class is very clear and easily understood. ",
-    },
+
     {
       id: "6a2185845575987f6fdc4dc1",
       userName: "sweetha subash",
@@ -79,7 +86,7 @@ const payload: { data: Review[] } = {
       userImage: "https://user-images.trustpilot.com/6981f1ecb51c708f0592b518/73x73.png",
       date: "2026-06-04T13:34:58.000Z",
       score: 5,
-      text: "Excellent performance \nBut require to explain more theory instead of quiz.",
+      text: "Excellent performance \nBut require to explain more theory instead of quiz. However, the teachers are very supportive and my child has improved a lot since joining.",
     }
   ]
 };
@@ -147,8 +154,14 @@ export default function TrustpilotReviewsSection() {
 
   return (
     <div className="w-full max-w-[1000px] mx-auto py-5 px-4 box-border">
+      <h2 className="text-center mb-1 font-bold text-[26px]">Trusted by Parents, Loved by Students</h2>
+      <div className="text-center text-[#6b7280] text-[13px] mb-[18px]">More than promises — results you can see</div>
+
       <div className="flex flex-col md:flex-row md:items-start md:gap-6 mt-8">
         <aside className="flex flex-col items-center justify-center rounded-[16px] p-4 w-full md:w-[220px] shrink-0" aria-label="summary">
+          <div className="flex flex-col items-center gap-1 mb-3">
+            <TrustpilotLogo />
+          </div>
           <h4 className="m-0 mb-2 tracking-wide text-[30px] text-[#111827]">EXCELLENT</h4>
           <div className="flex justify-center" aria-label="4.5 out of 5">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -157,9 +170,6 @@ export default function TrustpilotReviewsSection() {
           </div>
           <div className="font-extrabold text-[14px] text-[#111827] mt-1">4.5</div>
           <div className="text-[#6b7280] text-[12px] my-1 text-center">Based on 100+ reviews</div>
-          <div className="flex flex-col items-center gap-1 mt-2">
-            <TrustpilotLogo />
-          </div>
         </aside>
 
         <section className="relative w-full md:flex-1 overflow-hidden" aria-label="reviews">

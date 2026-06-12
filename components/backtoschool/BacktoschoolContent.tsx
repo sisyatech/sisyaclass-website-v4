@@ -225,8 +225,8 @@ export default function BacktoschoolContent() {
       {/* <WhatChildWillLearnSection /> */}
       <WeeklyPlanSection onBookDemo={() => setShowReservationPopup(true)} />
       <MonthlyWorkshops />
-      <ReviewsSection />
       <TrustpilotReviewsSection />
+      <ReviewsSection />
       <Teachers />
       <Testimonials />
       <CallToAction onBookDemo={() => setShowReservationPopup(true)} />

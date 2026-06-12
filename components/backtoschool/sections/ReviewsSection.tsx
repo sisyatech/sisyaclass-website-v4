@@ -142,11 +142,11 @@ export default function ReviewsSection() {
 
   return (
     <div className="w-full max-w-[1000px] mx-auto py-5 px-4 box-border">
-      <h2 className="text-center mb-1 font-bold text-[26px]">Trusted by Parents, Loved by Students</h2>
-      <div className="text-center text-[#6b7280] text-[13px] mb-[18px]">More than promises — results you can see</div>
-
       <div className="flex flex-col md:flex-row md:items-start md:gap-6">
         <aside className="flex flex-col items-center justify-center rounded-[16px] p-4 w-full md:w-[220px] shrink-0" aria-label="summary">
+          <div className="flex flex-col items-center gap-1 mb-3">
+            <img className="w-[150px] h-auto md:w-[110px]" src="/3daylp/google_b.svg" alt="Google Reviews" />
+          </div>
           <h4 className="m-0 mb-2 tracking-wide text-[30px] text-[#111827]">EXCELLENT</h4>
           <div className="flex gap-[2px] my-[2px]" aria-label="5 out of 5">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -155,9 +155,6 @@ export default function ReviewsSection() {
           </div>
           <div className="font-extrabold text-[14px] text-[#111827] mt-1">4.8</div>
           <div className="text-[#6b7280] text-[12px] my-1 text-center">Based on 300+ reviews</div>
-          <div className="flex flex-col items-center gap-1">
-            <img className="w-[150px] h-auto md:w-[95px]" src="/3daylp/google_b.svg" alt="Google Reviews" />
-          </div>
         </aside>
 
         <section className="relative w-full md:flex-1 overflow-hidden" aria-label="reviews">
