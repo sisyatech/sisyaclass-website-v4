@@ -9,12 +9,14 @@ import WhatChildWillLearnSection from "./sections/WhatChildWillLearnSection";
 import WeeklyPlanSection from "./sections/WeeklyPlanSection";
 import MonthlyWorkshops from "./sections/MonthlyWorkshops";
 import ReviewsSection from "./sections/ReviewsSection";
+import TrustpilotReviewsSection from "./sections/TrustpilotReviewsSection";
 import BlueStatsSection from "./sections/BlueStatsSection";
 import Testimonials from "../Testimonials";
 import ReservationPopup from "./components/ReservationPopup";
 import WhatsAppFab from "./components/WhatsAppFab";
 import SocialFab from "./components/SocialFab";
 import Teachers from "./sections/Teachers";
+import CallToAction from "./sections/CallToAction";
 
 export default function BacktoschoolContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
@@ -224,8 +226,10 @@ export default function BacktoschoolContent() {
       <WeeklyPlanSection onBookDemo={() => setShowReservationPopup(true)} />
       <MonthlyWorkshops />
       <ReviewsSection />
+      <TrustpilotReviewsSection />
       <Teachers />
       <Testimonials />
+      <CallToAction onBookDemo={() => setShowReservationPopup(true)} />
       <WhatsAppFab />
       <SocialFab />
       <ReservationPopup
