@@ -16,10 +16,10 @@ const SCHOOL_LOGOS = [
   { name: "Silver Oaks", src: "/school_logos/Silver Oaks.jpg", previewImage: "/preview_image/silver_oak.jpg",url:"https://silveroaksinternationalpreschool.com/" },
   { name: "Smart Kidz", src: "/school_logos/Smart Kidz.jpg", previewImage: "/preview_image/smart.jpg",url:"https://smartkidzglobal.org/our-branches/" },
   { name: "SLS Scholar School", src: "/school_logos/SLS.png", previewImage: "/preview_image/sls.jpg", url:"#" },
-  { name: "Bala Academy", src: "/school_logos/BalaAcademy.png", previewImage: "#", url: "#"},
+  { name: "Bala Academy", src: "/school_logos/BalaAcademy.png", previewImage: "/preview_image/balaacademy.jpg", url: "#"},
   { name: "Golden Oak", src: "/school_logos/goldenoak.png", previewImage: "/preview_image/goldenoak.jpg", url: "https://goldenoakschools.in/ "},
   { name: "Delhi Public School", src: "/school_logos/delhipublic.png", previewImage: "/preview_image/delhipublic.jpg", url: "https://idpssociety.com/"},
-  { name: "Laksh Blue", src: "/school_logos/laksh.png", previewImage: "#", url: "https://lakshbluebells.com/"},
+  { name: "Laksh Blue", src: "/school_logos/laksh.png", previewImage: "/preview_image/lakshblue.jpg", url: "https://lakshbluebells.com/"},
   { name: "Sri Kashyap", src: "/school_logos/srikashyap.png", previewImage: "/preview_image/srikashyap.jpg", url: "#"},
   { name: "Rainbow", src: "/school_logos/rainbow.png", previewImage: "/preview_image/rainbow.jpg", url: "#"}
 ];
