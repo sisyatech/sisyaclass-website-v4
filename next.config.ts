@@ -133,6 +133,18 @@ const nextConfig: NextConfig = {
         destination: '/ltc/payment/success',
       },
       {
+        source: '/backtoschool/payment/success.php',
+        destination: '/backtoschool/payment/success',
+      },
+      {
+        source: '/backtoschool/payment/failed.php',
+        destination: '/backtoschool/payment/failed',
+      },
+      {
+        source: '/backtoschool/success.php',
+        destination: '/backtoschool/payment/success',
+      },
+      {
         source: '/mathltc/payment/success.php',
         destination: '/mathltc/payment/success',
       },
