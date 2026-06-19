@@ -64,57 +64,6 @@ export default function LtcContent() {
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
 
-    let locationStr = "";
-    let stateStr = "";
-    try {
-      if (typeof navigator !== "undefined" && navigator.geolocation) {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            timeout: 6000,
-            enableHighAccuracy: false // Faster for general location
-          });
-        });
-        const { latitude, longitude } = position.coords;
-        locationStr = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-
-        try {
-          const geoRes = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const geoData = await geoRes.json();
-          console.log("[LTC] Raw Geo Data:", geoData);
-          if (geoData && geoData.address) {
-            const {
-              city,
-              town,
-              village,
-              suburb,
-              state,
-              country,
-              postcode,
-            } = geoData.address;
-
-            if (state) stateStr = state.trim();
-
-            const fetchedCity = city || town || village;
-            const parts = [fetchedCity, suburb, state, country, postcode]
-              .filter((part: string | undefined) => Boolean(part))
-              .map((part: string) => part.trim());
-
-            if (parts.length) {
-              locationStr = [...new Set(parts)].slice(0, 5).join(" ");
-            }
-          }
-        } catch (e) {
-          // Reverse geocode failed, keep coordinates
-        }
-      }
-    } catch (e) {
-      // Geolocation failed or denied, proceed without it
-    }
-
-    console.log("[LTC] Final Location for Lead:", locationStr);
-
     try {
       //console.log("[LTC] Starting flow", { selectedClass, phoneNumber });
       const urlParams = new URLSearchParams(window.location.search);
@@ -137,8 +86,6 @@ export default function LtcContent() {
           utm_network: urlParams.get("utm_network") || "",
           utm_matchtype: urlParams.get("utm_matchtype") || "",
           utm_placement: urlParams.get("utm_placement") || "",
-          cf_location: locationStr,
-          cf_state: stateStr,
         }),
       });
       const leadData = await leadResponse.json();
