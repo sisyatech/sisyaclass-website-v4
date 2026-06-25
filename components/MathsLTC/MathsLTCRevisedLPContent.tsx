@@ -18,6 +18,7 @@ export default function MathsLTCRevisedLPContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [showLoader, setShowLoader] = useState(false);
 
   const updatePaymentStatus = async (paymentStatus: "success" | "fail") => {
@@ -55,7 +56,7 @@ export default function MathsLTCRevisedLPContent() {
   };
 
   const handleReserveClick = async () => {
-    if (!phoneNumber || !selectedClass) return alert("Please enter your phone number and select a class.");
+    if (!phoneNumber || !selectedClass || !locationStr) return alert("Please enter your phone number, location, and select a class.");
     const isValid = /^[6-9]\d{9}$/.test(phoneNumber);
     if (!isValid) return alert("Please enter a valid 10-digit mobile number.");
     localStorage.setItem("mobileNumber", phoneNumber);
@@ -70,6 +71,7 @@ export default function MathsLTCRevisedLPContent() {
           name: "SISYA Maths LTC",
           phone: phoneNumber,
           cf_class: selectedClass,
+          cf_location: locationStr,
           status: "initiated",
           source: "web",
           medium: "web",
@@ -165,8 +167,10 @@ export default function MathsLTCRevisedLPContent() {
         open={showReservationPopup}
         selectedClass={selectedClass}
         phoneNumber={phoneNumber}
+        locationStr={locationStr}
         onChangeClass={setSelectedClass}
         onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
         onSubmit={handleReserveClick}
         onClose={() => setShowReservationPopup(false)}
       />

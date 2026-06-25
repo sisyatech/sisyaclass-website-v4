@@ -23,6 +23,7 @@ export default function IndividualSubjectLPContent() {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedClass, setSelectedClass] = useState("6");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [showLoader, setShowLoader] = useState(false);
   const [isSubjectLocked, setIsSubjectLocked] = useState(false);
 
@@ -59,7 +60,7 @@ export default function IndividualSubjectLPContent() {
   };
 
   const handleReserveClick = async () => {
-    if (!phoneNumber || !selectedClass) return alert("Please enter your phone number and select a class.");
+    if (!phoneNumber || !selectedClass || !locationStr) return alert("Please enter your phone number, location, and select a class.");
     const isValid = /^[6-9]\d{9}$/.test(phoneNumber);
     if (!isValid) return alert("Please enter a valid 10-digit mobile number.");
 
@@ -78,6 +79,7 @@ export default function IndividualSubjectLPContent() {
           name: `INDIVIDUAL SUBJECT ${selectedSubject.toUpperCase()}`,
           phone: phoneNumber,
           cf_class: selectedClass,
+          cf_location: locationStr,
           status: "initiated",
           source: urlParams.get("utm_source") || "web",
           medium: urlParams.get("utm_medium") || "web",
@@ -191,10 +193,12 @@ export default function IndividualSubjectLPContent() {
         selectedSubject={selectedSubject}
         selectedClass={selectedClass}
         phoneNumber={phoneNumber}
+        locationStr={locationStr}
         lockedSubject={isSubjectLocked}
         onChangeSubject={setSelectedSubject}
         onChangeClass={setSelectedClass}
         onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
         onSubmit={handleReserveClick}
         onClose={() => setShowReservationPopup(false)}
       />

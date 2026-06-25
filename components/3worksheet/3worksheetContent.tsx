@@ -13,6 +13,7 @@ export default function ThreeWorksheetContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [showLoader, setShowLoader] = useState(false);
   const [errorModal, setErrorModal] = useState<{ open: boolean; title: string; message: string }>({
     open: false,
@@ -67,6 +68,7 @@ export default function ThreeWorksheetContent() {
           name: "SISYA Five Worksheet Bundle",
           phone: phoneNumber,
           cf_class: selectedClass,
+          cf_location: locationStr,
           status: "initiated",
           source: urlParams.get("utm_source") || "web",
           medium: urlParams.get("utm_medium") || "web",
@@ -196,8 +198,10 @@ export default function ThreeWorksheetContent() {
         open={showReservationPopup}
         selectedClass={selectedClass}
         phoneNumber={phoneNumber}
+        locationStr={locationStr}
         onChangeClass={setSelectedClass}
         onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
         onSubmit={handleReserveClick}
         onClose={() => setShowReservationPopup(false)}
       />

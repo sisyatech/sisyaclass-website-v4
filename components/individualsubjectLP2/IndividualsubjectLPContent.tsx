@@ -17,6 +17,7 @@ export default function IndividualSubjectLPContent() {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedClass, setSelectedClass] = useState("6");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"input" | "otp">("input");
   const [showLoader, setShowLoader] = useState(false);
@@ -136,6 +137,7 @@ export default function IndividualSubjectLPContent() {
           name: `INDIVIDUAL SUBJECT ${selectedSubject.toUpperCase()}`,
           phone: phoneNumber,
           cf_class: selectedClass,
+          cf_location: locationStr,
           status: "initiated",
           source: urlParams.get("utm_source") || "web",
           medium: urlParams.get("utm_medium") || "web",
@@ -195,6 +197,7 @@ export default function IndividualSubjectLPContent() {
         selectedSubject={selectedSubject}
         selectedClass={selectedClass}
         phoneNumber={phoneNumber}
+        locationStr={locationStr}
         otp={otp}
         step={step}
         loading={showLoader}
@@ -205,6 +208,7 @@ export default function IndividualSubjectLPContent() {
         onChangeSubject={setSelectedSubject}
         onChangeClass={setSelectedClass}
         onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
         onChangeOTP={setOtp}
         onSendOTP={handleSendOTP}
         onVerifyOTP={handleVerifyOTP}

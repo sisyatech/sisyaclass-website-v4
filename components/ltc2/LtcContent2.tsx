@@ -20,6 +20,7 @@ export default function LtcContent2() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<"input" | "otp">("input");
   const [showLoader, setShowLoader] = useState(false);
@@ -142,6 +143,7 @@ export default function LtcContent2() {
           name: "SISYA LTC TWO",
           phone: phoneNumber,
           cf_class: selectedClass,
+          cf_location: locationStr,
           status: "initiated",
           source: urlParams.get("utm_source") || "web",
           medium: urlParams.get("utm_medium") || "web",
@@ -193,6 +195,7 @@ export default function LtcContent2() {
         open={showReservationPopup}
         selectedClass={selectedClass}
         phoneNumber={phoneNumber}
+        locationStr={locationStr}
         otp={otp}
         step={step}
         loading={showLoader}
@@ -201,6 +204,7 @@ export default function LtcContent2() {
         canResend={canResend}
         onChangeClass={setSelectedClass}
         onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
         onChangeOTP={setOtp}
         onSendOTP={handleSendOTP}
         onVerifyOTP={handleVerifyOTP}

@@ -16,6 +16,7 @@ export default function JeeFoundationContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("6");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [showLoader, setShowLoader] = useState(false);
 
   const updatePaymentStatus = async (paymentStatus: "success" | "fail") => {
@@ -53,56 +54,14 @@ export default function JeeFoundationContent() {
   };
 
   const handleReserveClick = async () => {
-    if (!phoneNumber || !selectedClass) return alert("Please enter your phone number and select a class.");
+    if (!phoneNumber || !selectedClass || !locationStr) return alert("Please enter your phone number, location, and select a class.");
     const isValid = /^[6-9]\d{9}$/.test(phoneNumber);
     if (!isValid) return alert("Please enter a valid 10-digit mobile number.");
     localStorage.setItem("mobileNumber", phoneNumber);
     localStorage.setItem("selectedClass", selectedClass);
     setShowLoader(true);
 
-    let locationStr = "";
     let stateStr = "";
-    try {
-      if (typeof navigator !== "undefined" && navigator.geolocation) {
-        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-          navigator.geolocation.getCurrentPosition(resolve, reject, {
-            timeout: 6000,
-            enableHighAccuracy: false
-          });
-        });
-        const { latitude, longitude } = position.coords;
-        locationStr = `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
-
-        try {
-          const geoRes = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-          );
-          const geoData = await geoRes.json();
-          if (geoData && geoData.address) {
-            const {
-              city,
-              town,
-              village,
-              suburb,
-              state,
-              country,
-              postcode,
-            } = geoData.address;
-
-            if (state) stateStr = state.trim();
-
-            const fetchedCity = city || town || village;
-            const parts = [fetchedCity, suburb, state, country, postcode]
-              .filter((part: string | undefined) => Boolean(part))
-              .map((part: string) => part.trim());
-
-            if (parts.length) {
-              locationStr = [...new Set(parts)].slice(0, 5).join(" ");
-            }
-          }
-        } catch (e) { }
-      }
-    } catch (e) { }
 
     try {
       const urlParams = new URLSearchParams(window.location.search);
@@ -163,8 +122,10 @@ export default function JeeFoundationContent() {
         open={showReservationPopup}
         selectedClass={selectedClass}
         phoneNumber={phoneNumber}
+        locationStr={locationStr}
         onChangeClass={setSelectedClass}
         onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
         onSubmit={handleReserveClick}
         onClose={() => setShowReservationPopup(false)}
       />

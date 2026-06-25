@@ -27,6 +27,7 @@ export default function TenXBoosterCourseContent() {
   const [showReservationPopup, setShowReservationPopup] = useState(false);
   const [selectedClass, setSelectedClass] = useState("1");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [locationStr, setLocationStr] = useState("");
   const [showLoader, setShowLoader] = useState(false);
   const [typewriterText, setTypewriterText] = useState("");
   const typewriterRef = useRef<NodeJS.Timeout | null>(null);
@@ -588,8 +589,10 @@ export default function TenXBoosterCourseContent() {
           open={showReservationPopup}
           selectedClass={selectedClass}
           phoneNumber={phoneNumber}
+        locationStr={locationStr}
           onChangeClass={setSelectedClass}
           onChangePhone={setPhoneNumber}
+        onChangeLocation={setLocationStr}
           onSubmit={handleReserveClick}
           onClose={() => setShowReservationPopup(false)}
         />

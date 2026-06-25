@@ -24,10 +24,12 @@ type ReservationPopupProps = {
   selectedSubject: string;
   selectedClass: string;
   phoneNumber: string;
+  locationStr: string;
   lockedSubject?: boolean;
   onChangeSubject: (value: string) => void;
   onChangeClass: (value: string) => void;
   onChangePhone: (value: string) => void;
+  onChangeLocation: (value: string) => void;
   onSubmit: () => void;
   onClose: () => void;
 };
@@ -41,6 +43,7 @@ export default function ReservationPopup({
   onChangeSubject,
   onChangeClass,
   onChangePhone,
+  onChangeLocation,
   onSubmit,
   onClose,
 }: ReservationPopupProps) {
@@ -202,7 +205,24 @@ export default function ReservationPopup({
               </div>
             </div>
 
-            <button
+                      <div className="relative w-full">
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-[#333] mb-2"
+            >
+              Enter your location
+            </label>
+            <input
+              type="text"
+              id="location"
+              required
+              className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white outline-none focus:border-[#01317a]"
+              placeholder="e.g. City, State"
+              value={locationStr}
+              onChange={(e) => onChangeLocation(e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""))}
+            />
+          </div>
+<button
               type="submit"
               className="bg-[#ffd500] text-black py-3 px-5 rounded-xl font-bold text-base cursor-pointer transition-all duration-300 hover:bg-[#f0c800] shadow-md"
             >

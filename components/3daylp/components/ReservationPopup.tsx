@@ -5,13 +5,19 @@ type ReservationPopupProps = {
   open: boolean;
   selectedClass: string;
   phoneNumber: string;
+  locationStr: string;
   onChangeClass: (value: string) => void;
   onChangePhone: (value: string) => void;
+  onChangeLocation: (value: string) => void;
   onSubmit: () => void;
   onClose: () => void;
 };
 
-export default function ReservationPopup({ open, selectedClass, phoneNumber, onChangeClass, onChangePhone, onSubmit, onClose }: ReservationPopupProps) {
+export default function ReservationPopup({ open, selectedClass, phoneNumber,
+  locationStr,
+  onChangeClass, onChangePhone,
+  onChangeLocation,
+  onSubmit, onClose }: ReservationPopupProps) {
   if (!open) return null;
   return (
     <div
@@ -74,6 +80,23 @@ export default function ReservationPopup({ open, selectedClass, phoneNumber, onC
                 onChange={(e) => onChangePhone(e.target.value)}
               />
             </div>
+          </div>
+          <div className="relative w-full">
+            <label
+              htmlFor="location"
+              className="block text-sm font-medium text-[#333] mb-2"
+            >
+              Enter your location
+            </label>
+            <input
+              type="text"
+              id="location"
+              required
+              className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white outline-none focus:border-[#01317a]"
+              placeholder="e.g. City, State"
+              value={locationStr}
+              onChange={(e) => onChangeLocation(e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""))}
+            />
           </div>
           <button type="submit" className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a]">
             Try 3 Classes @ ₹19 Only
