@@ -27,6 +27,7 @@ export default function ReservationPopup({
   open,
   selectedClass,
   phoneNumber,
+  locationStr,
   otp,
   step,
   loading,
@@ -35,6 +36,7 @@ export default function ReservationPopup({
   canResend,
   onChangeClass,
   onChangePhone,
+  onChangeLocation,
   onChangeOTP,
   onSendOTP,
   onVerifyOTP,
@@ -126,24 +128,24 @@ export default function ReservationPopup({
                 </div>
               </div>
               {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-                        <div className="relative w-full">
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium text-[#333] mb-2"
-            >
-              Enter your location
-            </label>
-            <input
-              type="text"
-              id="location"
-              required
-              className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white outline-none focus:border-[#01317a]"
-              placeholder="e.g. City, State"
-              value={locationStr}
-              onChange={(e) => onChangeLocation(e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""))}
-            />
-          </div>
-<button
+              <div className="relative w-full">
+                <label
+                  htmlFor="location"
+                  className="block text-sm font-medium text-[#333] mb-2"
+                >
+                  Enter your location
+                </label>
+                <input
+                  type="text"
+                  id="location"
+                  required
+                  className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white outline-none focus:border-[#01317a]"
+                  placeholder="e.g. City, State"
+                  value={locationStr}
+                  onChange={(e) => onChangeLocation(e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""))}
+                />
+              </div>
+              <button
                 type="submit"
                 disabled={loading || phoneNumber.length !== 10}
                 className="bg-[#01317a] text-white py-3 px-5 rounded-lg font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-[#001d4a] disabled:opacity-50 disabled:cursor-not-allowed mt-2"
@@ -218,7 +220,7 @@ export default function ReservationPopup({
                 >
                   {loading ? "Verifying..." : "Verify & Book Demo"}
                 </button>
-                
+
                 <div className="flex justify-between items-center px-1">
                   <button
                     type="button"
@@ -232,9 +234,8 @@ export default function ReservationPopup({
                     type="button"
                     onClick={onResendOTP}
                     disabled={!canResend || loading}
-                    className={`text-sm font-medium ${
-                      canResend ? "text-[#01317a] hover:underline" : "text-gray-400"
-                    }`}
+                    className={`text-sm font-medium ${canResend ? "text-[#01317a] hover:underline" : "text-gray-400"
+                      }`}
                   >
                     {canResend ? "Resend OTP" : `Resend in ${resendTimer}s`}
                   </button>

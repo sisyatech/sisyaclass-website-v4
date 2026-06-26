@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from "react";
 
 const SUBJECTS = [
-  { name: "English",   emoji: "📖" },
-  { name: "Maths",     emoji: "➗" },
-  { name: "Physics",   emoji: "⚛️" },
+  { name: "English", emoji: "📖" },
+  { name: "Maths", emoji: "➗" },
+  { name: "Physics", emoji: "⚛️" },
   { name: "Chemistry", emoji: "🧪" },
-  { name: "Science",   emoji: "🔬" },
-  { name: "Coding",    emoji: "💻" },
+  { name: "Science", emoji: "🔬" },
+  { name: "Coding", emoji: "💻" },
 ];
 
 function getClassesForSubject(subject: string): string[] {
@@ -39,6 +39,7 @@ export default function ReservationPopup({
   selectedSubject,
   selectedClass,
   phoneNumber,
+  locationStr,
   lockedSubject = false,
   onChangeSubject,
   onChangeClass,
@@ -127,17 +128,15 @@ export default function ReservationPopup({
                         key={s.name}
                         type="button"
                         onClick={() => { onChangeSubject(s.name); setSubjectError(false); }}
-                        className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl border-2 transition-all duration-150 cursor-pointer text-center ${
-                          selectedSubject === s.name
+                        className={`flex flex-col items-center justify-center gap-1.5 py-3 px-2 rounded-xl border-2 transition-all duration-150 cursor-pointer text-center ${selectedSubject === s.name
                             ? "border-[#01317a] bg-[#01317a]/5 shadow-sm"
                             : "border-gray-200 hover:border-[#01317a]/40 hover:bg-gray-50"
-                        }`}
+                          }`}
                       >
                         <span className="text-xl leading-none">{s.emoji}</span>
                         <span
-                          className={`text-[11px] font-semibold leading-tight ${
-                            selectedSubject === s.name ? "text-[#01317a]" : "text-gray-600"
-                          }`}
+                          className={`text-[11px] font-semibold leading-tight ${selectedSubject === s.name ? "text-[#01317a]" : "text-gray-600"
+                            }`}
                         >
                           {s.name}
                         </span>
@@ -205,24 +204,24 @@ export default function ReservationPopup({
               </div>
             </div>
 
-                      <div className="relative w-full">
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium text-[#333] mb-2"
-            >
-              Enter your location
-            </label>
-            <input
-              type="text"
-              id="location"
-              required
-              className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white outline-none focus:border-[#01317a]"
-              placeholder="e.g. City, State"
-              value={locationStr}
-              onChange={(e) => onChangeLocation(e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""))}
-            />
-          </div>
-<button
+            <div className="relative w-full">
+              <label
+                htmlFor="location"
+                className="block text-sm font-medium text-[#333] mb-2"
+              >
+                Enter your location
+              </label>
+              <input
+                type="text"
+                id="location"
+                required
+                className="w-full p-3 border border-[#c3d3ea] rounded-lg text-base bg-white outline-none focus:border-[#01317a]"
+                placeholder="e.g. City, State"
+                value={locationStr}
+                onChange={(e) => onChangeLocation(e.target.value.replace(/[^a-zA-Z0-9\s]/g, ""))}
+              />
+            </div>
+            <button
               type="submit"
               className="bg-[#ffd500] text-black py-3 px-5 rounded-xl font-bold text-base cursor-pointer transition-all duration-300 hover:bg-[#f0c800] shadow-md"
             >
